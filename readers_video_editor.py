@@ -27,7 +27,7 @@ from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 APP = "readers-video-editor"
-VERSION = "1.1.0"
+VERSION = "1.2.0"
 
 
 def _app_dirs():
@@ -55,7 +55,7 @@ PAUSE_GAP = 2.0
 EDGE_GAP = 0.3
 FADE_DEFAULT = 0.5
 FADE_MAX = 3.0
-FADES = [0.0, 0.3, 0.5, 1.0, 2.0, 3.0]
+FADES = [0.0, 0.2, 0.5, 1.0, 1.5]
 # A join that removes less than this (a word, a hesitation) is a straight cut in the picture: a
 # fade to black there would make the screen blink.
 IMAGE_FADE_MIN = 1.0
@@ -81,6 +81,62 @@ MODEL_DEFAULT = "small"
 
 _TR = {
  "fr": {
+  "Cancel": "Annuler",
+  "Choose a video or a recording, or give the address of a video online. The text appears, you highlight what you keep, or what you remove, and the edit is made for you.": "Choisissez une vidéo ou un enregistrement, ou donnez l'adresse d'une vidéo en ligne. Le texte s'affiche, vous surlignez ce que vous gardez, ou ce que vous retirez, et le montage se fait tout seul.",
+  "File location, or address of a video (YouTube, X…)": "Emplacement du fichier, ou adresse d'une vidéo (YouTube, X…)",
+  "Browse…": "Parcourir…",
+  "Open": "Ouvrir",
+  "Spoken language": "Langue parlée",
+  "Resume": "Reprendre",
+  "Give a file or an address.": "Indiquez un fichier ou une adresse.",
+  "Video": "Vidéo",
+  "Recording": "Enregistrement",
+  "I highlight": "Je surligne",
+  "what I keep": "ce que je garde",
+  "what I cut": "ce que je coupe",
+  "Highlighter": "Stabilo",
+  "Eraser": "Gomme",
+  "Undo": "Annuler",
+  "Redo": "Rétablir",
+  "Another file": "Autre fichier",
+  "Text": "Texte",
+  "Read": "Lire",
+  "Edit": "Monter",
+  "▶ Watch the edit": "▶ Voir le montage",
+  "▶ Listen to the edit": "▶ Écouter le montage",
+  "■ Stop": "■ Arrêter",
+  "Clear all": "Tout effacer",
+  "Strike the silence": "Rayer le silence",
+  "Strike the %1 silences": "Rayer les %1 silences",
+  "Produce": "Produire",
+  "Fade at each cut": "Fondu à chaque coupe",
+  "None": "Aucun",
+  "Brief (0.2 s)": "Bref (0,2 s)",
+  "Normal (0.5 s)": "Normal (0,5 s)",
+  "Slow (1 s)": "Lent (1 s)",
+  "Very slow (1.5 s)": "Très lent (1,5 s)",
+  "A video (MP4)": "Une vidéo (MP4)",
+  "The sound alone (%1)": "Le son seul (%1)",
+  "Produce the edit": "Produire le montage",
+  "Stop": "Arrêter",
+  "Edit finished": "Montage terminé",
+  "Watch": "Regarder",
+  "Listen": "Écouter",
+  "Open the folder": "Ouvrir le dossier",
+  "Close": "Fermer",
+  "The transcription failed.": "La transcription a échoué.",
+  "Start the transcription again": "Recommencer la transcription",
+  "Open subtitles…": "Ouvrir des sous-titres…",
+  "Transcribe again…": "Transcrire à nouveau…",
+  "Transcribe": "Transcrire",
+  "Save the text…": "Enregistrer le texte…",
+  "Installing the transcription (faster-whisper, once, about 300 MB)…": "Installation de la transcription (faster-whisper, une fois, environ 300 Mo)…",
+  "The transcription could not be installed: %1": "La transcription n'a pas pu être installée : %1",
+  "Shortcuts: Space play/pause · ← → 5 s · S highlighter · G eraser · Ctrl+Z undo · Ctrl+R read · Ctrl+= Ctrl+- text size · Ctrl+O file · Ctrl+L address": "Raccourcis : Espace lecture/pause · ← → 5 s · S stabilo · G gomme · Ctrl+Z annuler · Ctrl+R lire · Ctrl+= Ctrl+- taille du texte · Ctrl+O fichier · Ctrl+L adresse",
+  "Transcribing…": "Transcription en cours…",
+  "Beside it: the log of the cuts (.txt) and the edit list (.edl).": "À côté : le journal des coupes (.txt) et la liste de montage (.edl).",
+  "Looking for the words in the sound…": "Recherche des mots dans le son…",
+  "auto": "auto",
   "address…": "adresse…",
   "Open an address": "Ouvrir une adresse",
   "The address of a video (YouTube, X…). It is fetched here, with its subtitles when the site has them.": "L'adresse d'une vidéo (YouTube, X…). Elle est téléchargée ici, avec ses sous-titres quand le site en a.",
@@ -149,6 +205,62 @@ _TR = {
   "subtitles": "sous-titres", "transcription": "transcription",
  },
  "de": {
+  "Cancel": "Abbrechen",
+  "Choose a video or a recording, or give the address of a video online. The text appears, you highlight what you keep, or what you remove, and the edit is made for you.": "Wählen Sie ein Video oder eine Aufnahme, oder geben Sie die Adresse eines Videos im Netz an. Der Text erscheint, Sie markieren, was Sie behalten oder was wegfällt, und der Schnitt macht sich von selbst.",
+  "File location, or address of a video (YouTube, X…)": "Speicherort der Datei, oder Adresse eines Videos (YouTube, X…)",
+  "Browse…": "Durchsuchen…",
+  "Open": "Öffnen",
+  "Spoken language": "Gesprochene Sprache",
+  "Resume": "Weitermachen",
+  "Give a file or an address.": "Geben Sie eine Datei oder eine Adresse an.",
+  "Video": "Video",
+  "Recording": "Aufnahme",
+  "I highlight": "Ich markiere",
+  "what I keep": "was bleibt",
+  "what I cut": "was wegfällt",
+  "Highlighter": "Marker",
+  "Eraser": "Radierer",
+  "Undo": "Rückgängig",
+  "Redo": "Wiederholen",
+  "Another file": "Andere Datei",
+  "Text": "Text",
+  "Read": "Lesen",
+  "Edit": "Schneiden",
+  "▶ Watch the edit": "▶ Schnitt ansehen",
+  "▶ Listen to the edit": "▶ Schnitt anhören",
+  "■ Stop": "■ Stopp",
+  "Clear all": "Alles löschen",
+  "Strike the silence": "Die Stille streichen",
+  "Strike the %1 silences": "Die %1 Stillen streichen",
+  "Produce": "Erzeugen",
+  "Fade at each cut": "Blende an jedem Schnitt",
+  "None": "Keine",
+  "Brief (0.2 s)": "Kurz (0,2 s)",
+  "Normal (0.5 s)": "Normal (0,5 s)",
+  "Slow (1 s)": "Langsam (1 s)",
+  "Very slow (1.5 s)": "Sehr langsam (1,5 s)",
+  "A video (MP4)": "Ein Video (MP4)",
+  "The sound alone (%1)": "Nur der Ton (%1)",
+  "Produce the edit": "Schnitt erzeugen",
+  "Stop": "Stopp",
+  "Edit finished": "Schnitt fertig",
+  "Watch": "Ansehen",
+  "Listen": "Anhören",
+  "Open the folder": "Ordner öffnen",
+  "Close": "Schließen",
+  "The transcription failed.": "Die Transkription ist fehlgeschlagen.",
+  "Start the transcription again": "Transkription neu starten",
+  "Open subtitles…": "Untertitel öffnen…",
+  "Transcribe again…": "Neu transkribieren…",
+  "Transcribe": "Transkribieren",
+  "Save the text…": "Text speichern…",
+  "Installing the transcription (faster-whisper, once, about 300 MB)…": "Die Transkription wird installiert (faster-whisper, einmalig, etwa 300 MB)…",
+  "The transcription could not be installed: %1": "Die Transkription konnte nicht installiert werden: %1",
+  "Shortcuts: Space play/pause · ← → 5 s · S highlighter · G eraser · Ctrl+Z undo · Ctrl+R read · Ctrl+= Ctrl+- text size · Ctrl+O file · Ctrl+L address": "Tasten: Leertaste Wiedergabe/Pause · ← → 5 s · S Marker · G Radierer · Strg+Z rückgängig · Strg+R lesen · Strg+= Strg+- Textgröße · Strg+O Datei · Strg+L Adresse",
+  "Transcribing…": "Transkription läuft…",
+  "Beside it: the log of the cuts (.txt) and the edit list (.edl).": "Daneben: das Protokoll der Schnitte (.txt) und die Schnittliste (.edl).",
+  "Looking for the words in the sound…": "Die Wörter werden im Ton gesucht…",
+  "auto": "auto",
   "address…": "Adresse…",
   "Open an address": "Eine Adresse öffnen",
   "The address of a video (YouTube, X…). It is fetched here, with its subtitles when the site has them.": "Die Adresse eines Videos (YouTube, X…). Es wird hierher geladen, mit seinen Untertiteln, wenn die Seite welche hat.",
@@ -217,6 +329,62 @@ _TR = {
   "subtitles": "Untertitel", "transcription": "Transkription",
  },
  "es": {
+  "Cancel": "Cancelar",
+  "Choose a video or a recording, or give the address of a video online. The text appears, you highlight what you keep, or what you remove, and the edit is made for you.": "Elija un vídeo o una grabación, o dé la dirección de un vídeo en línea. El texto aparece, usted marca lo que conserva, o lo que quita, y el montaje se hace solo.",
+  "File location, or address of a video (YouTube, X…)": "Ubicación del archivo, o dirección de un vídeo (YouTube, X…)",
+  "Browse…": "Examinar…",
+  "Open": "Abrir",
+  "Spoken language": "Idioma hablado",
+  "Resume": "Retomar",
+  "Give a file or an address.": "Indique un archivo o una dirección.",
+  "Video": "Vídeo",
+  "Recording": "Grabación",
+  "I highlight": "Marco",
+  "what I keep": "lo que conservo",
+  "what I cut": "lo que quito",
+  "Highlighter": "Marcador",
+  "Eraser": "Goma",
+  "Undo": "Deshacer",
+  "Redo": "Rehacer",
+  "Another file": "Otro archivo",
+  "Text": "Texto",
+  "Read": "Leer",
+  "Edit": "Montar",
+  "▶ Watch the edit": "▶ Ver el montaje",
+  "▶ Listen to the edit": "▶ Escuchar el montaje",
+  "■ Stop": "■ Detener",
+  "Clear all": "Borrar todo",
+  "Strike the silence": "Tachar el silencio",
+  "Strike the %1 silences": "Tachar los %1 silencios",
+  "Produce": "Producir",
+  "Fade at each cut": "Fundido en cada corte",
+  "None": "Ninguno",
+  "Brief (0.2 s)": "Breve (0,2 s)",
+  "Normal (0.5 s)": "Normal (0,5 s)",
+  "Slow (1 s)": "Lento (1 s)",
+  "Very slow (1.5 s)": "Muy lento (1,5 s)",
+  "A video (MP4)": "Un vídeo (MP4)",
+  "The sound alone (%1)": "Solo el sonido (%1)",
+  "Produce the edit": "Producir el montaje",
+  "Stop": "Detener",
+  "Edit finished": "Montaje terminado",
+  "Watch": "Ver",
+  "Listen": "Escuchar",
+  "Open the folder": "Abrir la carpeta",
+  "Close": "Cerrar",
+  "The transcription failed.": "La transcripción ha fallado.",
+  "Start the transcription again": "Reiniciar la transcripción",
+  "Open subtitles…": "Abrir subtítulos…",
+  "Transcribe again…": "Transcribir de nuevo…",
+  "Transcribe": "Transcribir",
+  "Save the text…": "Guardar el texto…",
+  "Installing the transcription (faster-whisper, once, about 300 MB)…": "Instalando la transcripción (faster-whisper, una vez, unos 300 MB)…",
+  "The transcription could not be installed: %1": "No se pudo instalar la transcripción: %1",
+  "Shortcuts: Space play/pause · ← → 5 s · S highlighter · G eraser · Ctrl+Z undo · Ctrl+R read · Ctrl+= Ctrl+- text size · Ctrl+O file · Ctrl+L address": "Atajos: Espacio reproducir/pausa · ← → 5 s · S marcador · G goma · Ctrl+Z deshacer · Ctrl+R leer · Ctrl+= Ctrl+- tamaño del texto · Ctrl+O archivo · Ctrl+L dirección",
+  "Transcribing…": "Transcribiendo…",
+  "Beside it: the log of the cuts (.txt) and the edit list (.edl).": "Al lado: el registro de los cortes (.txt) y la lista de montaje (.edl).",
+  "Looking for the words in the sound…": "Buscando las palabras en el sonido…",
+  "auto": "auto",
   "address…": "dirección…",
   "Open an address": "Abrir una dirección",
   "The address of a video (YouTube, X…). It is fetched here, with its subtitles when the site has them.": "La dirección de un vídeo (YouTube, X…). Se descarga aquí, con sus subtítulos cuando el sitio los tiene.",
@@ -285,6 +453,62 @@ _TR = {
   "subtitles": "subtítulos", "transcription": "transcripción",
  },
  "pt": {
+  "Cancel": "Cancelar",
+  "Choose a video or a recording, or give the address of a video online. The text appears, you highlight what you keep, or what you remove, and the edit is made for you.": "Escolha um vídeo ou uma gravação, ou dê o endereço de um vídeo em linha. O texto aparece, você marca o que guarda, ou o que retira, e a montagem faz-se sozinha.",
+  "File location, or address of a video (YouTube, X…)": "Localização do ficheiro, ou endereço de um vídeo (YouTube, X…)",
+  "Browse…": "Procurar…",
+  "Open": "Abrir",
+  "Spoken language": "Língua falada",
+  "Resume": "Retomar",
+  "Give a file or an address.": "Indique um ficheiro ou um endereço.",
+  "Video": "Vídeo",
+  "Recording": "Gravação",
+  "I highlight": "Eu marco",
+  "what I keep": "o que guardo",
+  "what I cut": "o que retiro",
+  "Highlighter": "Marcador",
+  "Eraser": "Borracha",
+  "Undo": "Anular",
+  "Redo": "Refazer",
+  "Another file": "Outro ficheiro",
+  "Text": "Texto",
+  "Read": "Ler",
+  "Edit": "Montar",
+  "▶ Watch the edit": "▶ Ver a montagem",
+  "▶ Listen to the edit": "▶ Ouvir a montagem",
+  "■ Stop": "■ Parar",
+  "Clear all": "Apagar tudo",
+  "Strike the silence": "Riscar o silêncio",
+  "Strike the %1 silences": "Riscar os %1 silêncios",
+  "Produce": "Produzir",
+  "Fade at each cut": "Fundido em cada corte",
+  "None": "Nenhum",
+  "Brief (0.2 s)": "Breve (0,2 s)",
+  "Normal (0.5 s)": "Normal (0,5 s)",
+  "Slow (1 s)": "Lento (1 s)",
+  "Very slow (1.5 s)": "Muito lento (1,5 s)",
+  "A video (MP4)": "Um vídeo (MP4)",
+  "The sound alone (%1)": "Só o som (%1)",
+  "Produce the edit": "Produzir a montagem",
+  "Stop": "Parar",
+  "Edit finished": "Montagem terminada",
+  "Watch": "Ver",
+  "Listen": "Ouvir",
+  "Open the folder": "Abrir a pasta",
+  "Close": "Fechar",
+  "The transcription failed.": "A transcrição falhou.",
+  "Start the transcription again": "Recomeçar a transcrição",
+  "Open subtitles…": "Abrir legendas…",
+  "Transcribe again…": "Transcrever de novo…",
+  "Transcribe": "Transcrever",
+  "Save the text…": "Guardar o texto…",
+  "Installing the transcription (faster-whisper, once, about 300 MB)…": "A instalar a transcrição (faster-whisper, uma vez, cerca de 300 MB)…",
+  "The transcription could not be installed: %1": "Não foi possível instalar a transcrição: %1",
+  "Shortcuts: Space play/pause · ← → 5 s · S highlighter · G eraser · Ctrl+Z undo · Ctrl+R read · Ctrl+= Ctrl+- text size · Ctrl+O file · Ctrl+L address": "Atalhos: Espaço reproduzir/pausa · ← → 5 s · S marcador · G borracha · Ctrl+Z anular · Ctrl+R ler · Ctrl+= Ctrl+- tamanho do texto · Ctrl+O ficheiro · Ctrl+L endereço",
+  "Transcribing…": "A transcrever…",
+  "Beside it: the log of the cuts (.txt) and the edit list (.edl).": "Ao lado: o registo dos cortes (.txt) e a lista de montagem (.edl).",
+  "Looking for the words in the sound…": "A procurar as palavras no som…",
+  "auto": "auto",
   "address…": "endereço…",
   "Open an address": "Abrir um endereço",
   "The address of a video (YouTube, X…). It is fetched here, with its subtitles when the site has them.": "O endereço de um vídeo (YouTube, X…). É descarregado aqui, com as legendas quando o site as tem.",
@@ -353,6 +577,62 @@ _TR = {
   "subtitles": "legendas", "transcription": "transcrição",
  },
  "ru": {
+  "Cancel": "Отмена",
+  "Choose a video or a recording, or give the address of a video online. The text appears, you highlight what you keep, or what you remove, and the edit is made for you.": "Выберите видео или запись, или укажите адрес видео в сети. Появится текст, вы выделяете то, что оставить, или то, что убрать, и монтаж делается сам.",
+  "File location, or address of a video (YouTube, X…)": "Расположение файла или адрес видео (YouTube, X…)",
+  "Browse…": "Обзор…",
+  "Open": "Открыть",
+  "Spoken language": "Язык речи",
+  "Resume": "Продолжить",
+  "Give a file or an address.": "Укажите файл или адрес.",
+  "Video": "Видео",
+  "Recording": "Запись",
+  "I highlight": "Я выделяю",
+  "what I keep": "то, что оставляю",
+  "what I cut": "то, что убираю",
+  "Highlighter": "Маркер",
+  "Eraser": "Ластик",
+  "Undo": "Отменить",
+  "Redo": "Вернуть",
+  "Another file": "Другой файл",
+  "Text": "Текст",
+  "Read": "Читать",
+  "Edit": "Монтаж",
+  "▶ Watch the edit": "▶ Смотреть монтаж",
+  "▶ Listen to the edit": "▶ Слушать монтаж",
+  "■ Stop": "■ Стоп",
+  "Clear all": "Очистить всё",
+  "Strike the silence": "Вычеркнуть тишину",
+  "Strike the %1 silences": "Вычеркнуть паузы (%1)",
+  "Produce": "Создать",
+  "Fade at each cut": "Затухание на каждом стыке",
+  "None": "Нет",
+  "Brief (0.2 s)": "Короткое (0,2 с)",
+  "Normal (0.5 s)": "Обычное (0,5 с)",
+  "Slow (1 s)": "Медленное (1 с)",
+  "Very slow (1.5 s)": "Очень медленное (1,5 с)",
+  "A video (MP4)": "Видео (MP4)",
+  "The sound alone (%1)": "Только звук (%1)",
+  "Produce the edit": "Создать монтаж",
+  "Stop": "Стоп",
+  "Edit finished": "Монтаж готов",
+  "Watch": "Смотреть",
+  "Listen": "Слушать",
+  "Open the folder": "Открыть папку",
+  "Close": "Закрыть",
+  "The transcription failed.": "Расшифровка не удалась.",
+  "Start the transcription again": "Начать расшифровку заново",
+  "Open subtitles…": "Открыть субтитры…",
+  "Transcribe again…": "Расшифровать заново…",
+  "Transcribe": "Расшифровать",
+  "Save the text…": "Сохранить текст…",
+  "Installing the transcription (faster-whisper, once, about 300 MB)…": "Установка расшифровки (faster-whisper, один раз, около 300 МБ)…",
+  "The transcription could not be installed: %1": "Не удалось установить расшифровку: %1",
+  "Shortcuts: Space play/pause · ← → 5 s · S highlighter · G eraser · Ctrl+Z undo · Ctrl+R read · Ctrl+= Ctrl+- text size · Ctrl+O file · Ctrl+L address": "Клавиши: Пробел воспроизведение/пауза · ← → 5 с · S маркер · G ластик · Ctrl+Z отменить · Ctrl+R читать · Ctrl+= Ctrl+- размер текста · Ctrl+O файл · Ctrl+L адрес",
+  "Transcribing…": "Идёт расшифровка…",
+  "Beside it: the log of the cuts (.txt) and the edit list (.edl).": "Рядом: журнал склеек (.txt) и монтажный лист (.edl).",
+  "Looking for the words in the sound…": "Поиск слов в звуке…",
+  "auto": "авто",
   "address…": "адрес…",
   "Open an address": "Открыть адрес",
   "The address of a video (YouTube, X…). It is fetched here, with its subtitles when the site has them.": "Адрес видео (YouTube, X…). Оно загружается сюда вместе с субтитрами, если они есть на сайте.",
@@ -917,12 +1197,75 @@ def tokens_from_srt(cues, wav, duration):
 # Transcription on this computer (faster-whisper, CPU)
 # ------------------------------------------------------------------------------------------
 
+VENV_DIR = os.path.join(DATA_DIR, "venv")
+
+
+def _venv_python():
+    return os.path.join(VENV_DIR, "Scripts", "python.exe") if sys.platform == "win32" else os.path.join(VENV_DIR, "bin", "python")
+
+
+def _venv_site():
+    if sys.platform == "win32":
+        d = os.path.join(VENV_DIR, "Lib", "site-packages")
+        return d if os.path.isdir(d) else None
+    lib = os.path.join(VENV_DIR, "lib")
+    if not os.path.isdir(lib):
+        return None
+    for name in sorted(os.listdir(lib)):
+        d = os.path.join(lib, name, "site-packages")
+        if os.path.isdir(d):
+            return d
+    return None
+
+
 def whisper_available():
+    """faster-whisper from the Python at hand, or from the copy the app installed for itself."""
     try:
         import faster_whisper  # noqa: F401
         return True
     except Exception:
-        return False
+        pass
+    site = _venv_site()
+    if site and site not in sys.path:
+        sys.path.append(site)
+        try:
+            import faster_whisper  # noqa: F401
+            return True
+        except Exception:
+            sys.path.remove(site)
+    return False
+
+
+def install_whisper(progress, cancelled):
+    """pip installs faster-whisper into a small environment of the app's own (once, ~300 MB):
+    nothing to type for the person. The Windows and macOS builds carry it already."""
+    if getattr(sys, "frozen", False):
+        raise RuntimeError("faster-whisper is missing from this build")
+    os.makedirs(DATA_DIR, exist_ok=True)
+    vpy = _venv_python()
+    if not os.path.exists(vpy):
+        progress(_("Installing the transcription (faster-whisper, once, about 300 MB)…"))
+        r = subprocess.run([sys.executable, "-m", "venv", "--system-site-packages", VENV_DIR],
+                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, **_RUN_FLAGS)
+        if r.returncode != 0:
+            raise RuntimeError(_("The transcription could not be installed: %1", (r.stdout or "")[-300:].strip() or "venv"))
+    cmd = [vpy, "-m", "pip", "install", "--upgrade", "--disable-pip-version-check", "--progress-bar", "off", "faster-whisper"]
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, errors="replace", **_RUN_FLAGS)
+    tail = []
+    for line in proc.stdout:
+        if cancelled():
+            proc.kill()
+            raise Cancelled()
+        line = line.strip()
+        if line:
+            tail = (tail + [line])[-8:]
+            if line.startswith(("Collecting", "Downloading", "Installing")):
+                progress(_("Installing the transcription (faster-whisper, once, about 300 MB)…") + "  " + line[:60])
+    proc.wait()
+    if proc.returncode != 0:
+        raise RuntimeError(_("The transcription could not be installed: %1", " ".join(tail)[-300:]))
+    if not whisper_available():
+        raise RuntimeError(_("The transcription could not be installed: %1", "import"))
 
 
 def transcribe(wav, language, model_size, duration, progress, cancelled):
@@ -1438,8 +1781,7 @@ def ranges_from_times(tokens, times):
 
 def load_config():
     cfg = read_json(CONFIG_FILE, {}) or {}
-    cfg.setdefault("dark", True)
-    cfg.setdefault("font_size", 11)
+    cfg.setdefault("page_pt", 14)
     cfg.setdefault("model", MODEL_DEFAULT)
     cfg.setdefault("language", "")
     cfg.setdefault("fade", FADE_DEFAULT)
@@ -1491,8 +1833,25 @@ def rgba(hex_colour, alpha):
     return f"rgba({r},{g},{b},{alpha})"
 
 
-HIGHLIGHT = "#ffe84a"        # the highlighter
-STRIKE = "#ff5f8e"           # what is struck in the cut mode
+# The colours of the original stabilo page (monter.py in the traduction toolkit): a dark
+# chrome around a paper page, a yellow highlighter, pink strike-through in the cut mode.
+C_BG, C_PANEL, C_PANEL2, C_BORDER = "#14161a", "#1c1f26", "#0c0e12", "#2a2e38"
+C_TEXT, C_MUTED, C_ACCENT, C_ACCENT_H = "#e6e8ec", "#8a90a0", "#ff8a3d", "#ffa362"
+C_OK, C_DANGER, C_DANGER_T = "#4ad27e", "#e04b4b", "#ff9d9d"
+PAPER, INK, INK2, RULE = "#f6f2e8", "#23211d", "#8b8578", "#e2dccd"
+STABILO, STABILO_PRE, GOMME = "#ffe84a", "#fff3a0", "#e9e4d8"
+RAYE, RAYE_PRE, RAYE_INK = "#ffc9c2", "#ffe1dc", "#8f3a31"
+CURRENT = "#e0621a"
+PAUSE_BG = "#eee8d8"
+SERIF_CANDIDATES = ["Iowan Old Style", "Palatino Linotype", "Palatino", "Book Antiqua", "Georgia", "Noto Serif",
+                    "DejaVu Serif", "Liberation Serif", "FreeSerif"]
+MONO_CANDIDATES = ["Menlo", "SF Mono", "Consolas", "DejaVu Sans Mono", "Liberation Mono", "Noto Sans Mono", "Courier New"]
+GUTTER = 64                  # the time column in front of each paragraph, in pixels
+
+
+def pick_font(candidates, fallback):
+    families = set(QtGui.QFontDatabase().families())
+    return next((f for f in candidates if f in families), fallback)
 
 
 # ------------------------------------------------------------------------------------------
@@ -1557,20 +1916,30 @@ class Page(QtWidgets.QTextEdit):
         if not self.tokens:
             return
         doc = self.document()
+        opt = doc.defaultTextOption()
+        opt.setTabStopDistance(GUTTER)
+        doc.setDefaultTextOption(opt)
         cur = QtGui.QTextCursor(doc)
-        fg = self.palette().color(QtGui.QPalette.Text)
-        dim = QtGui.QColor(fg)
-        dim.setAlphaF(0.5)
+        pt = self.main.page_pt + (2 if self.main.reading else 0)
         time_fmt = QtGui.QTextCharFormat()
-        time_fmt.setForeground(dim)
-        time_fmt.setFontPointSize(max(7.0, self.main.font_size - 2))
+        time_fmt.setForeground(QtGui.QColor(INK2))
+        time_fmt.setFontFamily(self.main.mono)
+        time_fmt.setFontPointSize(max(7.0, pt * 0.62))
         word_fmt = QtGui.QTextCharFormat()
+        word_fmt.setFontFamily(self.main.serif)
+        word_fmt.setFontPointSize(pt)
+        word_fmt.setForeground(QtGui.QColor(INK))
         pause_fmt = QtGui.QTextCharFormat()
-        pause_fmt.setForeground(dim)
-        pause_fmt.setFontItalic(True)
+        pause_fmt.setForeground(QtGui.QColor(INK2))
+        pause_fmt.setFontFamily(SANS_FAMILY)
+        pause_fmt.setFontPointSize(max(7.0, pt * 0.68))
+        pause_fmt.setBackground(QtGui.QColor(PAUSE_BG))
+        # a hanging indent: the time sits in a column of its own, the lines of the paragraph align after it
         block_fmt = QtGui.QTextBlockFormat()
-        block_fmt.setBottomMargin(self.main.font_size * 1.2)
-        block_fmt.setLineHeight(150, QtGui.QTextBlockFormat.ProportionalHeight)
+        block_fmt.setLeftMargin(GUTTER)
+        block_fmt.setTextIndent(-GUTTER)
+        block_fmt.setBottomMargin(pt * 1.1)
+        block_fmt.setLineHeight(175, QtGui.QTextBlockFormat.ProportionalHeight)
         open_block = False
         chars, prev_sentence, prev_end = 0, None, 0.0
         label_without = {"subtitles": _("without words"), "transcription": _("without words")}.get(self.origin, _("without words"))
@@ -1581,10 +1950,12 @@ class Page(QtWidgets.QTextEdit):
                     cur.insertBlock(block_fmt)
                 first = False
                 open_block = False
-                cur.insertText(hmsm(d)[3:8] + "  ", time_fmt)
+                tf = QtGui.QTextCharFormat(time_fmt)
+                tf.setProperty(QtGui.QTextFormat.UserProperty, float(d))
+                cur.insertText(hmsm(d)[3:8] + "\t", tf)
                 where = _("Start") + " · " if i == 0 else (_("End") + " · " if i == len(self.tokens) - 1 else "")
                 start = cur.position()
-                cur.insertText(f"{where}{f - d:.1f} s {label_without}", pause_fmt)
+                cur.insertText(f" {where}{f - d:.1f} s {label_without} ", pause_fmt)
                 self.spans[i] = (start, cur.position())
                 continue
             gap = d - prev_end
@@ -1593,7 +1964,9 @@ class Page(QtWidgets.QTextEdit):
                 if not first:
                     cur.insertBlock(block_fmt)
                 first = False
-                cur.insertText(hmsm(d)[3:8] + "  ", time_fmt)
+                tf = QtGui.QTextCharFormat(time_fmt)
+                tf.setProperty(QtGui.QTextFormat.UserProperty, float(d))
+                cur.insertText(hmsm(d)[3:8] + "\t", tf)
                 open_block, chars = True, 0
             start = cur.position()
             cur.insertText(t, word_fmt)
@@ -1631,36 +2004,43 @@ class Page(QtWidgets.QTextEdit):
             return
         cur = QtGui.QTextCursor(self.document())
         pa, pb = self.preview
+        pt = self.main.page_pt + (2 if self.main.reading else 0)
+        cut = self.mode == "cut"
         for i in range(a, b + 1):
             span = self.spans[i]
             if not span:
                 continue
             fmt = QtGui.QTextCharFormat()
-            fg = self.palette().color(QtGui.QPalette.Text)
-            if self.tokens[i][0] is None:
-                dim = QtGui.QColor(fg)
-                dim.setAlphaF(0.5)
-                fmt.setForeground(dim)
-                fmt.setFontItalic(True)
+            pause = self.tokens[i][0] is None
+            if pause:
+                fmt.setForeground(QtGui.QColor(INK2))
+                fmt.setFontFamily(SANS_FAMILY)
+                fmt.setFontPointSize(max(7.0, pt * 0.68))
+                fmt.setBackground(QtGui.QColor(PAUSE_BG))
+            else:
+                fmt.setForeground(QtGui.QColor(INK))
+                fmt.setFontFamily(self.main.serif)
+                fmt.setFontPointSize(pt)
             selected = self.sel[i] == 1
             in_preview = pa <= i <= pb
             if in_preview:
-                col = QtGui.QColor(STRIKE if (self.mode == "cut") else HIGHLIGHT)
-                col.setAlphaF(0.45 if not self.erase_gesture else 0.15)
-                fmt.setBackground(col)
                 if self.erase_gesture:
-                    fmt.setBackground(QtGui.QColor(rgba("#808080", 0.3)))
-            elif selected:
-                if self.mode == "cut":
-                    fmt.setBackground(QtGui.QColor(STRIKE))
-                    fmt.setForeground(QtGui.QColor("#000000"))
-                    fmt.setFontStrikeOut(True)
+                    fmt.setBackground(QtGui.QColor(GOMME))
+                    fmt.setForeground(QtGui.QColor(INK2))
                 else:
-                    fmt.setBackground(QtGui.QColor(HIGHLIGHT))
-                    fmt.setForeground(QtGui.QColor("#000000"))
+                    fmt.setBackground(QtGui.QColor(RAYE_PRE if cut else STABILO_PRE))
+            elif selected:
+                if cut:
+                    fmt.setBackground(QtGui.QColor(RAYE))
+                    fmt.setForeground(QtGui.QColor(RAYE_INK))
+                    fmt.setFontStrikeOut(not pause)
+                else:
+                    fmt.setBackground(QtGui.QColor(STABILO))
+                    fmt.setForeground(QtGui.QColor(INK))
             if i == self.current:
                 fmt.setFontUnderline(True)
-                fmt.setFontWeight(QtGui.QFont.Bold)
+                fmt.setUnderlineStyle(QtGui.QTextCharFormat.SingleUnderline)
+                fmt.setUnderlineColor(QtGui.QColor(CURRENT))
             cur.setPosition(span[0])
             cur.setPosition(span[1], QtGui.QTextCursor.KeepAnchor)
             cur.setCharFormat(fmt)
@@ -1769,11 +2149,36 @@ class Page(QtWidgets.QTextEdit):
                 return m
         return -1
 
+    def strike_silences(self):
+        """Every passage without words marked at once (the cut mode)."""
+        free = [i for i, t in enumerate(self.tokens) if t[0] is None and not self.sel[i]]
+        if not free:
+            return
+        self.history.append(self.sel.copy())
+        self.future = []
+        for i in free:
+            self.sel[i] = 1
+        self.paint(0, len(self.tokens) - 1)
+        self.changed.emit()
+
+    def clear_all(self):
+        if not self.tokens or not self.sel.any():
+            return
+        self.history.append(self.sel.copy())
+        self.future = []
+        self.sel[:] = 0
+        self.paint(0, len(self.tokens) - 1)
+        self.changed.emit()
+
     def mousePressEvent(self, e):
         if e.button() != QtCore.Qt.LeftButton or not self.tokens:
             return
         i = self.token_at(e.pos())
         if i < 0:
+            # the time in front of a paragraph: the sound goes there
+            fmt = self.cursorForPosition(e.pos()).charFormat()
+            if fmt.hasProperty(QtGui.QTextFormat.UserProperty):
+                self.seek.emit(fmt.doubleProperty(QtGui.QTextFormat.UserProperty))
             return
         self.erase_gesture = (self.tool == "erase") != bool(e.modifiers() & QtCore.Qt.AltModifier)
         if e.modifiers() & QtCore.Qt.ShiftModifier and self.last >= 0:
@@ -1887,12 +2292,103 @@ class Worker(QtCore.QObject):
 # The window
 # ------------------------------------------------------------------------------------------
 
+class Passages(QtWidgets.QListWidget):
+    """The passages of the edit: time, words, length, and a × to drop one."""
+    dropped = QtCore.pyqtSignal(int)
+    chosen = QtCore.pyqtSignal(int)
+
+    def __init__(self):
+        super().__init__()
+        self.setObjectName("passages")
+        self.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
+        self.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
+        self.setMouseTracking(True)
+        self.setItemDelegate(PassageDelegate(self))
+        self.setCursor(QtCore.Qt.PointingHandCursor)
+
+    def mousePressEvent(self, e):
+        item = self.itemAt(e.pos())
+        if item is None or e.button() != QtCore.Qt.LeftButton:
+            return
+        row = self.row(item)
+        if e.pos().x() > self.viewport().width() - 30 or QtWidgets.QApplication.keyboardModifiers() & QtCore.Qt.ControlModifier:
+            self.dropped.emit(row)
+        else:
+            self.chosen.emit(row)
+
+
+class PassageDelegate(QtWidgets.QStyledItemDelegate):
+    def __init__(self, view):
+        super().__init__(view)
+        self.view = view
+
+    def sizeHint(self, option, index):
+        fm = QtGui.QFontMetrics(option.font)
+        return QtCore.QSize(option.rect.width(), fm.lineSpacing() * 2 + 18)
+
+    def paint(self, painter, option, index):
+        t, dur, text, hover = index.data(QtCore.Qt.UserRole + 1)
+        r = option.rect.adjusted(10, 6, -8, -6)
+        painter.save()
+        if option.state & QtWidgets.QStyle.State_MouseOver:
+            painter.setPen(QtCore.Qt.NoPen)
+            painter.setBrush(QtGui.QColor("#181b22"))
+            painter.drawRoundedRect(option.rect.adjusted(4, 1, -4, -1), 9, 9)
+        mono = QtGui.QFont(self.view.window().mono, max(7, int(option.font.pointSize() * 0.9)))
+        painter.setFont(mono)
+        painter.setPen(QtGui.QColor(C_ACCENT))
+        painter.drawText(QtCore.QRect(r.left(), r.top(), 52, r.height()), QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop, hmsm(t)[3:8])
+        small = QtGui.QFont(option.font)
+        small.setPointSizeF(max(7.0, option.font.pointSizeF() * 0.85))
+        painter.setFont(small)
+        painter.setPen(QtGui.QColor(C_MUTED))
+        painter.drawText(QtCore.QRect(r.right() - 90, r.top(), 60, r.height()), QtCore.Qt.AlignRight | QtCore.Qt.AlignTop, plain(dur))
+        painter.setFont(QtGui.QFont(option.font.family(), option.font.pointSize() + 2))
+        painter.drawText(QtCore.QRect(r.right() - 20, r.top() - 2, 20, r.height()), QtCore.Qt.AlignRight | QtCore.Qt.AlignTop, "×")
+        painter.setFont(option.font)
+        painter.setPen(QtGui.QColor(C_TEXT))
+        box = QtCore.QRect(r.left() + 58, r.top(), r.width() - 58 - 96, r.height())
+        painter.setClipRect(box)
+        painter.drawText(box, QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop | QtCore.Qt.TextWordWrap, text)
+        painter.restore()
+
+
+class Recent(QtWidgets.QFrame):
+    """One line of the « Resume » list on the home page."""
+    clicked = QtCore.pyqtSignal(str)
+
+    def __init__(self, source, kind, duration, present):
+        super().__init__()
+        self.source = source
+        self.setObjectName("recent")
+        self.setProperty("absent", not present)
+        h = QtWidgets.QHBoxLayout(self)
+        h.setContentsMargins(14, 9, 14, 9)
+        h.setSpacing(12)
+        name = QtWidgets.QLabel(Path(source).name)
+        name.setObjectName("recentName")
+        name.setSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Preferred)
+        detail = QtWidgets.QLabel((_("Video") if kind == "video" else _("Recording")) + " · " + plain(duration))
+        detail.setObjectName("muted")
+        h.addWidget(name, 1)
+        h.addWidget(detail)
+        self.setToolTip(source)
+        if present:
+            self.setCursor(QtCore.Qt.PointingHandCursor)
+
+    def mousePressEvent(self, e):
+        if e.button() == QtCore.Qt.LeftButton and not self.property("absent"):
+            self.clicked.emit(self.source)
+
+
 class Main(QtWidgets.QMainWindow):
     def __init__(self, source=None, srt=None):
         super().__init__()
         self.cfg = load_config()
-        self.font_size = int(self.cfg.get("font_size", 11))
-        self.dark = bool(self.cfg.get("dark", True))
+        self.page_pt = int(self.cfg.get("page_pt", 14))
+        self.serif = pick_font(SERIF_CANDIDATES, "serif")
+        self.mono = pick_font(MONO_CANDIDATES, "monospace")
         self.project = None         # {source, type, duration, video, audio, dir}
         self.tokens = []
         self.cuts = []
@@ -1904,77 +2400,50 @@ class Main(QtWidgets.QMainWindow):
         self.previewing = -1
         self.wanted_seek = False
         self.media_ok = True
+        self.reading = False
+        self.mode_value = "keep"
         self.setWindowTitle("Reader's Video Editor")
         self.setAcceptDrops(True)
-        self.resize(1180, 760)
+        self.resize(1200, 780)
         self._build()
         self.apply_style()
-        self.update_summary()
+        self.show_home()
         if source:
             QtCore.QTimer.singleShot(0, lambda: self.open_source(source, srt))
 
-    # ---- widgets ----
+    # ---- building ----
+    def _btn(self, text, fn=None, kind=None, tip=None):
+        b = QtWidgets.QPushButton(text)
+        b.setAutoDefault(False)
+        b.setCursor(QtCore.Qt.PointingHandCursor)
+        if kind:
+            b.setProperty("kind", kind)
+        if tip:
+            b.setToolTip(tip)
+        if fn:
+            b.clicked.connect(fn)
+        return b
+
+    def _segment(self, buttons):
+        """Two or three buttons in one rounded frame, one of them active."""
+        box = QtWidgets.QWidget()
+        box.setObjectName("seg")
+        h = QtWidgets.QHBoxLayout(box)
+        h.setContentsMargins(0, 0, 0, 0)
+        h.setSpacing(0)
+        for k, b in enumerate(buttons):
+            b.setCheckable(True)
+            b.setObjectName("segbtn")
+            b.setProperty("side", "first" if k == 0 else ("last" if k == len(buttons) - 1 else "mid"))
+            h.addWidget(b)
+        return box
+
     def _build(self):
-        root = QtWidgets.QWidget()
-        self.setCentralWidget(root)
-        outer = QtWidgets.QVBoxLayout(root)
-        outer.setContentsMargins(0, 0, 0, 0)
-        outer.setSpacing(0)
-
-        top = QtWidgets.QHBoxLayout()
-        top.setContentsMargins(14, 10, 14, 10)
-        top.setSpacing(10)
-        self.b_open = QtWidgets.QPushButton(_("open…"))
-        self.b_open.clicked.connect(self.ask_open)
-        self.b_url = QtWidgets.QPushButton(_("address…"))
-        self.b_url.clicked.connect(self.ask_url)
-        self.b_srt = QtWidgets.QPushButton(_("subtitles…"))
-        self.b_srt.clicked.connect(self.ask_srt)
-        self.lang = QtWidgets.QComboBox()
-        for code, name in LANGUAGES:
-            self.lang.addItem(name, code)
-        self.lang.setCurrentIndex(max(0, [c for c, _n in LANGUAGES].index(self.cfg.get("language", "")) if self.cfg.get("language", "") in [c for c, _n in LANGUAGES] else 0))
-        self.model = QtWidgets.QComboBox()
-        self.model.addItems(MODELS)
-        self.model.setCurrentText(self.cfg.get("model", MODEL_DEFAULT))
-        self.b_transcribe = QtWidgets.QPushButton(_("transcribe"))
-        self.b_transcribe.clicked.connect(self.transcribe_or_stop)
-        self.b_read = QtWidgets.QPushButton(_("read"))
-        self.b_read.setCheckable(True)
-        self.b_read.setAutoDefault(False)
-        self.b_read.clicked.connect(lambda c: self.set_reading(c))
-        self.b_text = QtWidgets.QPushButton(_("save the text…"))
-        self.b_text.setAutoDefault(False)
-        self.b_text.clicked.connect(self.save_text)
-        self.title = QtWidgets.QLabel("")
-        self.title.setObjectName("dim")
-        self.title.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
-        for w in (self.b_open, self.b_url, self.b_srt, self.b_transcribe):
-            w.setAutoDefault(False)
-        top.addWidget(self.b_open)
-        top.addWidget(self.b_url)
-        top.addWidget(self.b_srt)
-        top.addWidget(QtWidgets.QLabel(_("language")))
-        top.addWidget(self.lang)
-        top.addWidget(QtWidgets.QLabel(_("model")))
-        top.addWidget(self.model)
-        top.addWidget(self.b_transcribe)
-        top.addWidget(self.b_read)
-        top.addWidget(self.b_text)
-        top.addWidget(self.title, 1)
-        outer.addLayout(top)
-
-        split = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
-        outer.addWidget(split, 1)
-
-        # left: the picture, the controls, the settings, the summary
-        left = QtWidgets.QWidget()
-        lv = QtWidgets.QVBoxLayout(left)
-        lv.setContentsMargins(14, 0, 8, 10)
-        lv.setSpacing(8)
-        self.video = QVideoWidget()
-        self.video.setMinimumHeight(160)
-        self.video.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        self.views = QtWidgets.QStackedWidget()
+        self.setCentralWidget(self.views)
+        self._build_home()
+        self._build_workshop()
+        # the player
         self.player = QMediaPlayer(self, QMediaPlayer.VideoSurface)
         self.player.setVideoOutput(self.video)
         self.player.setNotifyInterval(50)
@@ -1982,139 +2451,8 @@ class Main(QtWidgets.QMainWindow):
         self.player.stateChanged.connect(lambda _s: self.update_play_button())
         self.player.error.connect(self.on_media_error)
         self.player.durationChanged.connect(lambda d: self.slider.setMaximum(max(0, int(d))))
-        self.drop_hint = QtWidgets.QLabel(_("Drop a video, a recording or a link here, or press Ctrl+O / Ctrl+L."))
-        self.drop_hint.setAlignment(QtCore.Qt.AlignCenter)
-        self.drop_hint.setWordWrap(True)
-        self.drop_hint.setObjectName("dim")
-        stack = QtWidgets.QStackedLayout()
-        stack.setStackingMode(QtWidgets.QStackedLayout.StackOne)
-        self.stack_host = QtWidgets.QWidget()
-        self.stack_host.setLayout(stack)
-        stack.addWidget(self.drop_hint)
-        stack.addWidget(self.video)
-        self.stack = stack
-        lv.addWidget(self.stack_host, 1)
-
-        self.controls = QtWidgets.QWidget()
-        ctl = QtWidgets.QHBoxLayout(self.controls)
-        ctl.setContentsMargins(0, 0, 0, 0)
-        self.b_back = QtWidgets.QPushButton("−5")
-        self.b_back.setObjectName("glyph")
-        self.b_back.setAutoDefault(False)
-        self.b_back.clicked.connect(lambda: self.go(self.player.position() / 1000.0 - 5, None))
-        self.b_fwd = QtWidgets.QPushButton("+10")
-        self.b_fwd.setObjectName("glyph")
-        self.b_fwd.setAutoDefault(False)
-        self.b_fwd.clicked.connect(lambda: self.go(self.player.position() / 1000.0 + 10, None))
-        self.speed = QtWidgets.QComboBox()
-        for r in (0.8, 1.0, 1.25, 1.5, 2.0):
-            self.speed.addItem(f"{r:g}×", r)
-        self.speed.setCurrentIndex(1)
-        self.speed.currentIndexChanged.connect(lambda _i: self.player.setPlaybackRate(float(self.speed.currentData())))
-        self.b_play = QtWidgets.QPushButton("▶")
-        self.b_play.setObjectName("glyph")
-        self.b_play.setAutoDefault(False)
-        self.b_play.clicked.connect(self.toggle_play)
-        self.slider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider.sliderMoved.connect(lambda v: self.go(v / 1000.0, None))
-        self.time_label = QtWidgets.QLabel("0:00 / 0:00")
-        self.time_label.setObjectName("mono")
-        ctl.addWidget(self.b_back)
-        ctl.addWidget(self.b_play)
-        ctl.addWidget(self.b_fwd)
-        ctl.addWidget(self.slider, 1)
-        ctl.addWidget(self.time_label)
-        ctl.addWidget(self.speed)
-        lv.addWidget(self.controls)
-        self.left = left
-
-        tools = QtWidgets.QHBoxLayout()
-        self.b_highlight = QtWidgets.QPushButton(_("highlight"))
-        self.b_erase = QtWidgets.QPushButton(_("erase"))
-        for b, tool in ((self.b_highlight, "highlight"), (self.b_erase, "erase")):
-            b.setCheckable(True)
-            b.setAutoDefault(False)
-            b.clicked.connect(lambda _c, t=tool: self.choose_tool(t))
-        self.b_highlight.setChecked(True)
-        self.mode = QtWidgets.QComboBox()
-        self.mode.addItem(_("I highlight what I keep"), "keep")
-        self.mode.addItem(_("I highlight what I cut"), "cut")
-        self.mode.currentIndexChanged.connect(self.on_mode)
-        tools.addWidget(self.b_highlight)
-        tools.addWidget(self.b_erase)
-        tools.addWidget(self.mode, 1)
-        lv.addLayout(tools)
-
-        opts = QtWidgets.QHBoxLayout()
-        opts.addWidget(QtWidgets.QLabel(_("fade")))
-        self.fade = QtWidgets.QComboBox()
-        for f in FADES:
-            self.fade.addItem(_("none") if f == 0 else f"{f:g} " + _("s"), f)
-        idx = [i for i in range(self.fade.count()) if abs(self.fade.itemData(i) - float(self.cfg.get("fade", FADE_DEFAULT))) < 1e-6]
-        self.fade.setCurrentIndex(idx[0] if idx else FADES.index(FADE_DEFAULT))
-        self.fade.currentIndexChanged.connect(lambda _i: self.on_selection())
-        self.image_fade = QtWidgets.QCheckBox(_("fade the picture to black"))
-        self.image_fade.setChecked(bool(self.cfg.get("image_fade", True)))
-        self.format = QtWidgets.QComboBox()
-        opts.addWidget(self.fade)
-        opts.addWidget(self.image_fade)
-        opts.addStretch(1)
-        opts.addWidget(self.format)
-        lv.addLayout(opts)
-
-        self.summary = QtWidgets.QLabel("")
-        self.summary.setWordWrap(True)
-        self.summary.setObjectName("summary")
-        lv.addWidget(self.summary)
-        self.passages = QtWidgets.QListWidget()
-        self.passages.setObjectName("passages")
-        self.passages.itemClicked.connect(self.on_passage)
-        self.passages.setMaximumHeight(170)
-        lv.addWidget(self.passages)
-
-        act = QtWidgets.QHBoxLayout()
-        self.b_preview = QtWidgets.QPushButton(_("preview the edit"))
-        self.b_preview.setAutoDefault(False)
-        self.b_preview.clicked.connect(self.toggle_preview)
-        self.b_export = QtWidgets.QPushButton(_("export…"))
-        self.b_export.setAutoDefault(False)
-        self.b_export.clicked.connect(self.export_or_stop)
-        act.addWidget(self.b_preview)
-        act.addStretch(1)
-        act.addWidget(self.b_export)
-        lv.addLayout(act)
-        self.progress = QtWidgets.QProgressBar()
-        self.progress.setRange(0, 1000)
-        self.progress.setTextVisible(False)
-        self.progress.setMaximumHeight(6)
-        self.progress.hide()
-        lv.addWidget(self.progress)
-        self.status = QtWidgets.QLabel("")
-        self.status.setWordWrap(True)
-        self.status.setObjectName("dim")
-        lv.addWidget(self.status)
-        split.addWidget(left)
-
-        # right: the page
-        self.page = Page(self)
-        self.page.changed.connect(self.on_selection)
-        self.page.seek.connect(lambda t: self.go(t, True))
-        right = QtWidgets.QWidget()
-        rv = QtWidgets.QVBoxLayout(right)
-        rv.setContentsMargins(8, 0, 14, 10)
-        rv.addWidget(self.page, 1)
-        self.rv = rv
-        self.reading = False
-        self.help = QtWidgets.QLabel(_("Shortcuts: Space play/pause · ← → 5 s · S highlight · G erase · Ctrl+Z undo · Ctrl+Y redo · Ctrl+T ink · Ctrl+= Ctrl+- text size") + " · Ctrl+R " + _("read") + " · Ctrl+S " + _("save the text…") + " · " + _("Ctrl+L address"))
-        self.help.setWordWrap(True)
-        self.help.setObjectName("dim")
-        rv.addWidget(self.help)
-        split.addWidget(right)
-        split.setStretchFactor(0, 2)
-        split.setStretchFactor(1, 3)
-        split.setSizes([460, 700])
-
         # shortcuts
+
         def sc(keys, fn):
             s = QtWidgets.QShortcut(QtGui.QKeySequence(keys), self)
             s.setContext(QtCore.Qt.ApplicationShortcut)
@@ -2124,7 +2462,6 @@ class Main(QtWidgets.QMainWindow):
         sc("Ctrl+Z", self.page.undo)
         sc("Ctrl+Y", self.page.redo)
         sc("Ctrl+Shift+Z", self.page.redo)
-        sc("Ctrl+T", self.toggle_ink)
         sc("Ctrl+=", lambda: self.resize_text(1))
         sc("Ctrl++", lambda: self.resize_text(1))
         sc("Ctrl+-", lambda: self.resize_text(-1))
@@ -2133,7 +2470,7 @@ class Main(QtWidgets.QMainWindow):
         sc("Right", lambda: self.go(self.player.position() / 1000.0 + 5, None))
         sc("S", lambda: self.choose_tool("highlight"))
         sc("G", lambda: self.choose_tool("erase"))
-        sc("Ctrl+E", self.export_or_stop)
+        sc("Ctrl+E", self.produce_or_stop)
         sc("Ctrl+R", lambda: self.b_read.click())
         sc("Ctrl+S", self.save_text)
         sc("Ctrl+Shift+C", self.copy_text)
@@ -2143,64 +2480,555 @@ class Main(QtWidgets.QMainWindow):
         self.update_play_button()
         self.enable(False)
 
+    def _build_home(self):
+        home = QtWidgets.QScrollArea()
+        home.setWidgetResizable(True)
+        home.setFrameShape(QtWidgets.QFrame.NoFrame)
+        inner = QtWidgets.QWidget()
+        outer = QtWidgets.QVBoxLayout(inner)
+        outer.setContentsMargins(24, 0, 24, 40)
+        outer.addStretch(9)
+        card = QtWidgets.QWidget()
+        card.setObjectName("card")
+        card.setMaximumWidth(680)
+        v = QtWidgets.QVBoxLayout(card)
+        v.setContentsMargins(0, 0, 0, 0)
+        v.setSpacing(10)
+        title = QtWidgets.QLabel("Reader's <span style=\"background:#ffe84a; color:#1b1a12\">&nbsp;Video&nbsp;</span> Editor")
+        title.setObjectName("h1")
+        title.setTextFormat(QtCore.Qt.RichText)
+        v.addWidget(title)
+        lead = QtWidgets.QLabel(_("Choose a video or a recording, or give the address of a video online. The text appears, you highlight what you keep, or what you remove, and the edit is made for you."))
+        lead.setObjectName("lead")
+        lead.setWordWrap(True)
+        v.addWidget(lead)
+        row = QtWidgets.QHBoxLayout()
+        row.setSpacing(8)
+        self.h_field = QtWidgets.QLineEdit()
+        self.h_field.setPlaceholderText(_("File location, or address of a video (YouTube, X…)"))
+        self.h_field.returnPressed.connect(self.home_open)
+        row.addWidget(self.h_field, 1)
+        row.addWidget(self._btn(_("Browse…"), self.ask_open))
+        v.addLayout(row)
+        row = QtWidgets.QHBoxLayout()
+        row.setSpacing(8)
+        self.h_lang = QtWidgets.QComboBox()
+        for code, name in LANGUAGES:
+            self.h_lang.addItem(_("auto") if not code else name, code)
+        codes = [c for c, _n in LANGUAGES]
+        self.h_lang.setCurrentIndex(codes.index(self.cfg.get("language", "")) if self.cfg.get("language", "") in codes else 0)
+        self.h_lang.setToolTip(_("Spoken language"))
+        self.h_model = QtWidgets.QComboBox()
+        self.h_model.addItems(MODELS)
+        self.h_model.setCurrentText(self.cfg.get("model", MODEL_DEFAULT))
+        self.h_model.setToolTip(_("model"))
+        lab = QtWidgets.QLabel(_("Spoken language"))
+        lab.setObjectName("muted")
+        row.addWidget(lab)
+        row.addWidget(self.h_lang)
+        lab = QtWidgets.QLabel(_("model"))
+        lab.setObjectName("muted")
+        row.addWidget(lab)
+        row.addWidget(self.h_model)
+        row.addStretch(1)
+        self.h_open = self._btn(_("Open"), self.home_open, kind="strong")
+        row.addWidget(self.h_open)
+        v.addLayout(row)
+        self.h_error = QtWidgets.QLabel("")
+        self.h_error.setObjectName("danger")
+        self.h_error.setWordWrap(True)
+        v.addWidget(self.h_error)
+        # a download in progress
+        self.h_follow = QtWidgets.QWidget()
+        fv = QtWidgets.QVBoxLayout(self.h_follow)
+        fv.setContentsMargins(0, 0, 0, 0)
+        fv.setSpacing(6)
+        self.h_gauge = QtWidgets.QProgressBar()
+        self.h_gauge.setRange(0, 1000)
+        self.h_gauge.setTextVisible(False)
+        self.h_gauge.setFixedHeight(6)
+        fv.addWidget(self.h_gauge)
+        fr = QtWidgets.QHBoxLayout()
+        self.h_msg = QtWidgets.QLabel("")
+        self.h_msg.setObjectName("muted")
+        self.h_msg.setWordWrap(True)
+        fr.addWidget(self.h_msg, 1)
+        fr.addWidget(self._btn(_("Stop"), self.produce_or_stop, kind="danger"))
+        fv.addLayout(fr)
+        self.h_follow.hide()
+        v.addWidget(self.h_follow)
+        self.h_resume = QtWidgets.QLabel(_("Resume"))
+        self.h_resume.setObjectName("label")
+        v.addWidget(self.h_resume)
+        self.h_recents = QtWidgets.QVBoxLayout()
+        self.h_recents.setSpacing(6)
+        v.addLayout(self.h_recents)
+        keys = QtWidgets.QLabel(_("Shortcuts: Space play/pause · ← → 5 s · S highlighter · G eraser · Ctrl+Z undo · Ctrl+R read · Ctrl+= Ctrl+- text size · Ctrl+O file · Ctrl+L address"))
+        keys.setObjectName("muted")
+        keys.setWordWrap(True)
+        v.addSpacing(16)
+        v.addWidget(keys)
+        hc = QtWidgets.QHBoxLayout()
+        hc.addStretch(1)
+        hc.addWidget(card, 20)
+        hc.addStretch(1)
+        outer.addLayout(hc)
+        outer.addStretch(40)
+        home.setWidget(inner)
+        self.home = home
+        self.views.addWidget(home)
+
+    def _build_workshop(self):
+        shop = QtWidgets.QWidget()
+        outer = QtWidgets.QVBoxLayout(shop)
+        outer.setContentsMargins(0, 0, 0, 0)
+        outer.setSpacing(0)
+
+        # the bar
+        bar = QtWidgets.QWidget()
+        bar.setObjectName("bar")
+        h = QtWidgets.QHBoxLayout(bar)
+        h.setContentsMargins(16, 10, 16, 10)
+        h.setSpacing(10)
+        tbox = QtWidgets.QVBoxLayout()
+        tbox.setSpacing(0)
+        self.a_name = QtWidgets.QLabel("")
+        self.a_name.setObjectName("name")
+        self.a_name.setSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Preferred)
+        self.a_detail = QtWidgets.QLabel("")
+        self.a_detail.setObjectName("muted")
+        tbox.addWidget(self.a_name)
+        tbox.addWidget(self.a_detail)
+        h.addLayout(tbox, 1)
+        lab = QtWidgets.QLabel(_("I highlight"))
+        lab.setObjectName("muted")
+        h.addWidget(lab)
+        self.b_keep = self._btn(_("what I keep"), lambda: self.set_mode("keep"), tip=_("I highlight what I keep"))
+        self.b_cut = self._btn(_("what I cut"), lambda: self.set_mode("cut"), kind="cut", tip=_("I highlight what I cut"))
+        self.b_keep.setChecked(True)
+        h.addWidget(self._segment([self.b_keep, self.b_cut]))
+        self.b_highlight = self._btn(_("Highlighter"), lambda: self.choose_tool("highlight"), tip="S")
+        self.b_erase = self._btn(_("Eraser"), lambda: self.choose_tool("erase"), kind="erase", tip="G")
+        self.b_highlight.setChecked(True)
+        h.addWidget(self._segment([self.b_highlight, self.b_erase]))
+        self.b_undo = self._btn(_("Undo"), lambda: self.page.undo(), tip="Ctrl+Z")
+        self.b_redo = self._btn(_("Redo"), lambda: self.page.redo(), tip="Ctrl+Y")
+        h.addWidget(self.b_undo)
+        h.addWidget(self.b_redo)
+        self.b_read = self._btn(_("Read"), None, tip="Ctrl+R")
+        self.b_read.setCheckable(True)
+        self.b_read.clicked.connect(lambda c: self.set_reading(c))
+        h.addWidget(self.b_read)
+        self.b_text = QtWidgets.QToolButton()
+        self.b_text.setText(_("Text") + " ▾")
+        self.b_text.setPopupMode(QtWidgets.QToolButton.InstantPopup)
+        self.b_text.setCursor(QtCore.Qt.PointingHandCursor)
+        menu = QtWidgets.QMenu(self.b_text)
+        menu.addAction(_("Save the text…"), self.save_text)
+        menu.addAction(_("copy the text"), self.copy_text)
+        menu.addSeparator()
+        menu.addAction(_("Open subtitles…"), self.ask_srt)
+        menu.addAction(_("Transcribe again…"), self.ask_transcribe)
+        self.b_text.setMenu(menu)
+        h.addWidget(self.b_text)
+        h.addWidget(self._btn(_("Another file"), self.show_home))
+        outer.addWidget(bar)
+
+        split = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
+        split.setChildrenCollapsible(False)
+        outer.addWidget(split, 1)
+
+        # the side column
+        side = QtWidgets.QWidget()
+        side.setObjectName("side")
+        sv = QtWidgets.QVBoxLayout(side)
+        sv.setContentsMargins(0, 0, 0, 0)
+        sv.setSpacing(0)
+        self.video = QVideoWidget()
+        self.video.setMinimumHeight(140)
+        self.video.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        self.screen = QtWidgets.QWidget()
+        self.screen.setObjectName("screen")
+        sl = QtWidgets.QVBoxLayout(self.screen)
+        sl.setContentsMargins(0, 0, 0, 0)
+        sl.addWidget(self.video)
+        sv.addWidget(self.screen, 3)
+        self.controls = QtWidgets.QWidget()
+        self.controls.setObjectName("controls")
+        ctl = QtWidgets.QHBoxLayout(self.controls)
+        ctl.setContentsMargins(12, 8, 12, 8)
+        ctl.setSpacing(6)
+        self.b_back = self._btn("−5", lambda: self.go(self.player.position() / 1000.0 - 5, None), kind="glyph")
+        self.b_play = self._btn("▶", self.toggle_play, kind="glyph")
+        self.b_fwd = self._btn("+10", lambda: self.go(self.player.position() / 1000.0 + 10, None), kind="glyph")
+        self.slider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
+        self.slider.sliderMoved.connect(lambda v: self.go(v / 1000.0, None))
+        self.time_label = QtWidgets.QLabel("0:00 / 0:00")
+        self.time_label.setObjectName("mono")
+        self.speed = QtWidgets.QComboBox()
+        for r in (0.8, 1.0, 1.25, 1.5, 2.0):
+            self.speed.addItem(f"{r:g}×", r)
+        self.speed.setCurrentIndex(1)
+        self.speed.currentIndexChanged.connect(lambda _i: self.player.setPlaybackRate(float(self.speed.currentData())))
+        for w in (self.b_back, self.b_play, self.b_fwd):
+            ctl.addWidget(w)
+        ctl.addWidget(self.slider, 1)
+        ctl.addWidget(self.time_label)
+        ctl.addWidget(self.speed)
+        sv.addWidget(self.controls)
+
+        bilan = QtWidgets.QWidget()
+        bilan.setObjectName("bilan")
+        bv = QtWidgets.QVBoxLayout(bilan)
+        bv.setContentsMargins(16, 12, 16, 10)
+        bv.setSpacing(2)
+        self.l_big = QtWidgets.QLabel(_("Nothing highlighted"))
+        self.l_big.setObjectName("big")
+        self.l_small = QtWidgets.QLabel("")
+        self.l_small.setObjectName("muted")
+        bv.addWidget(self.l_big)
+        bv.addWidget(self.l_small)
+        br = QtWidgets.QHBoxLayout()
+        br.setContentsMargins(0, 8, 0, 0)
+        br.setSpacing(8)
+        self.b_preview = self._btn(_("▶ Watch the edit"), self.toggle_preview)
+        self.b_clear = self._btn(_("Clear all"), lambda: self.page.clear_all())
+        self.b_silences = self._btn(_("Strike the silence"), lambda: self.page.strike_silences())
+        self.b_silences.hide()
+        br.addWidget(self.b_preview)
+        br.addWidget(self.b_clear)
+        br.addWidget(self.b_silences)
+        br.addStretch(1)
+        bv.addLayout(br)
+        sv.addWidget(bilan)
+
+        self.passages = Passages()
+        self.passages.dropped.connect(self.drop_passage)
+        self.passages.chosen.connect(self.go_passage)
+        self.hint = QtWidgets.QLabel("")
+        self.hint.setObjectName("hint")
+        self.hint.setWordWrap(True)
+        self.hint.setAlignment(QtCore.Qt.AlignTop)
+        self.list_stack = QtWidgets.QStackedWidget()
+        self.list_stack.addWidget(self.hint)
+        self.list_stack.addWidget(self.passages)
+        sv.addWidget(self.list_stack, 4)
+
+        prod = QtWidgets.QWidget()
+        prod.setObjectName("production")
+        pv = QtWidgets.QVBoxLayout(prod)
+        pv.setContentsMargins(16, 12, 16, 12)
+        pv.setSpacing(8)
+        self.settings = QtWidgets.QWidget()
+        self.settings.setObjectName("settings")
+        g = QtWidgets.QGridLayout(self.settings)
+        g.setContentsMargins(0, 0, 0, 0)
+        g.setHorizontalSpacing(10)
+        g.setVerticalSpacing(4)
+        lab = QtWidgets.QLabel(_("Produce"))
+        lab.setObjectName("label")
+        g.addWidget(lab, 0, 0)
+        self.format = QtWidgets.QComboBox()
+        g.addWidget(self.format, 1, 0)
+        lab = QtWidgets.QLabel(_("Fade at each cut"))
+        lab.setObjectName("label")
+        g.addWidget(lab, 0, 1)
+        self.fade = QtWidgets.QComboBox()
+        for f, name in zip(FADES, (_("None"), _("Brief (0.2 s)"), _("Normal (0.5 s)"), _("Slow (1 s)"), _("Very slow (1.5 s)"))):
+            self.fade.addItem(name, f)
+        idx = [i for i in range(self.fade.count()) if abs(self.fade.itemData(i) - float(self.cfg.get("fade", FADE_DEFAULT))) < 1e-6]
+        self.fade.setCurrentIndex(idx[0] if idx else FADES.index(FADE_DEFAULT))
+        self.fade.currentIndexChanged.connect(lambda _i: self.on_selection())
+        g.addWidget(self.fade, 1, 1)
+        self.image_fade = QtWidgets.QCheckBox(_("fade the picture to black"))
+        self.image_fade.setChecked(bool(self.cfg.get("image_fade", True)))
+        self.image_fade.toggled.connect(lambda _c: self.on_selection())
+        g.addWidget(self.image_fade, 2, 0, 1, 2)
+        self.b_produce = self._btn(_("Produce the edit"), self.produce_or_stop, kind="strong", tip="Ctrl+E")
+        g.addWidget(self.b_produce, 3, 0, 1, 2)
+        pv.addWidget(self.settings)
+        self.following = QtWidgets.QWidget()
+        self.following.setObjectName("following")
+        fv = QtWidgets.QVBoxLayout(self.following)
+        fv.setContentsMargins(0, 0, 0, 0)
+        fv.setSpacing(6)
+        self.progress = QtWidgets.QProgressBar()
+        self.progress.setRange(0, 1000)
+        self.progress.setTextVisible(False)
+        self.progress.setFixedHeight(6)
+        fv.addWidget(self.progress)
+        fr = QtWidgets.QHBoxLayout()
+        self.f_text = QtWidgets.QLabel("")
+        self.f_text.setObjectName("muted")
+        self.f_text.setWordWrap(True)
+        fr.addWidget(self.f_text, 1)
+        fr.addWidget(self._btn(_("Stop"), self.produce_or_stop, kind="danger"))
+        fv.addLayout(fr)
+        self.following.hide()
+        pv.addWidget(self.following)
+        self.finished = QtWidgets.QWidget()
+        self.finished.setObjectName("finished")
+        dv = QtWidgets.QVBoxLayout(self.finished)
+        dv.setContentsMargins(0, 0, 0, 0)
+        dv.setSpacing(4)
+        self.fin_detail = QtWidgets.QLabel("")
+        self.fin_detail.setTextFormat(QtCore.Qt.RichText)
+        self.fin_path = QtWidgets.QLabel("")
+        self.fin_path.setObjectName("path")
+        self.fin_path.setWordWrap(True)
+        self.fin_logs = QtWidgets.QLabel(_("Beside it: the log of the cuts (.txt) and the edit list (.edl)."))
+        self.fin_logs.setObjectName("muted")
+        self.fin_logs.setWordWrap(True)
+        dv.addWidget(self.fin_detail)
+        dv.addWidget(self.fin_path)
+        dv.addWidget(self.fin_logs)
+        dr = QtWidgets.QHBoxLayout()
+        dr.setContentsMargins(0, 6, 0, 0)
+        dr.setSpacing(8)
+        self.b_watch = self._btn(_("Watch"), lambda: QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(self.last_out)), kind="strong")
+        dr.addWidget(self.b_watch)
+        dr.addWidget(self._btn(_("Open the folder"), lambda: QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(str(Path(self.last_out).parent)))))
+        dr.addWidget(self._btn(_("Close"), lambda: self.show_production("settings")))
+        dr.addStretch(1)
+        dv.addLayout(dr)
+        self.finished.hide()
+        pv.addWidget(self.finished)
+        self.fail = QtWidgets.QLabel("")
+        self.fail.setObjectName("danger")
+        self.fail.setWordWrap(True)
+        self.fail.hide()
+        pv.addWidget(self.fail)
+        self.status = QtWidgets.QLabel("")
+        self.status.setObjectName("muted")
+        self.status.setWordWrap(True)
+        self.status.hide()
+        pv.addWidget(self.status)
+        sv.addWidget(prod)
+        self.side = side
+        self.sv = sv
+        split.addWidget(side)
+
+        # the page, and the waiting view that takes its place while the text is made
+        self.page = Page(self)
+        self.page.changed.connect(self.on_selection)
+        self.page.seek.connect(lambda t: self.go(t, True))
+        right = QtWidgets.QWidget()
+        right.setObjectName("paper")
+        rv = QtWidgets.QVBoxLayout(right)
+        rv.setContentsMargins(0, 0, 0, 0)
+        rv.setSpacing(0)
+        self.page_stack = QtWidgets.QStackedWidget()
+        self.page_stack.addWidget(self.page)
+        patience = QtWidgets.QWidget()
+        patience.setObjectName("paper")
+        pl = QtWidgets.QVBoxLayout(patience)
+        pl.setContentsMargins(28, 0, 28, 0)
+        pl.addStretch(16)
+        self.p_msg = QtWidgets.QLabel("")
+        self.p_msg.setObjectName("patience")
+        self.p_msg.setAlignment(QtCore.Qt.AlignCenter)
+        self.p_msg.setWordWrap(True)
+        pl.addWidget(self.p_msg)
+        self.p_gauge = QtWidgets.QProgressBar()
+        self.p_gauge.setRange(0, 1000)
+        self.p_gauge.setTextVisible(False)
+        self.p_gauge.setFixedHeight(6)
+        self.p_gauge.setMaximumWidth(420)
+        pl.addWidget(self.p_gauge, 0, QtCore.Qt.AlignHCenter)
+        self.p_detail = QtWidgets.QLabel("")
+        self.p_detail.setObjectName("patienceDetail")
+        self.p_detail.setAlignment(QtCore.Qt.AlignCenter)
+        self.p_detail.setWordWrap(True)
+        pl.addWidget(self.p_detail)
+        self.p_retry = QtWidgets.QWidget()
+        rr = QtWidgets.QHBoxLayout(self.p_retry)
+        rr.setContentsMargins(0, 18, 0, 0)
+        rr.setSpacing(8)
+        rr.addStretch(1)
+        self.p_lang = QtWidgets.QComboBox()
+        for code, name in LANGUAGES:
+            self.p_lang.addItem(_("auto") if not code else name, code)
+        self.p_model = QtWidgets.QComboBox()
+        self.p_model.addItems(MODELS)
+        rr.addWidget(self.p_lang)
+        rr.addWidget(self.p_model)
+        rr.addWidget(self._btn(_("Start the transcription again"), self.retry_transcription, kind="paper"))
+        rr.addWidget(self._btn(_("Open subtitles…"), self.ask_srt, kind="paper"))
+        rr.addStretch(1)
+        self.p_retry.hide()
+        pl.addWidget(self.p_retry)
+        pl.addStretch(84)
+        self.page_stack.addWidget(patience)
+        self.patience = patience
+        rv.addWidget(self.page_stack, 1)
+        self.rv = rv
+        split.addWidget(right)
+        split.setStretchFactor(0, 0)
+        split.setStretchFactor(1, 1)
+        split.setSizes([400, 800])
+        self.split = split
+        self.views.addWidget(shop)
+        self.shop = shop
+        self.last_out = ""
+
     def apply_style(self):
-        bg, fg = ("#000000", "#ffffff") if self.dark else ("#ffffff", "#000000")
-        dim, rule = rgba(fg, 0.55), rgba(fg, 0.25)
-        s = self.font_size
+        pt = self.page_pt + (2 if self.reading else 0)
         self.setStyleSheet(f"""
-            QMainWindow, QWidget {{ background: {bg}; color: {fg}; font-family: "{SANS_FAMILY}"; font-size: {s}pt; font-weight: 300; }}
-            QLabel#dim {{ color: {dim}; }}
-            QLabel#mono {{ font-family: monospace; }}
-            QLabel#summary {{ font-size: {s + 2}pt; padding: 4px 0; }}
-            QTextEdit {{ background: {bg}; color: {fg}; border: none; font-family: "{SANS_FAMILY}"; font-size: {s + (5 if getattr(self, "reading", False) else 3)}pt; padding: 6px; }}
-            QListWidget#passages {{ background: {bg}; border: 1px solid {rule}; outline: none; }}
-            QListWidget#passages::item {{ padding: 4px 6px; }} QListWidget#passages::item:selected {{ background: {fg}; color: {bg}; }}
-            QScrollBar:vertical {{ background: {bg}; width: 8px; }} QScrollBar::handle:vertical {{ background: {rule}; min-height: 24px; }}
-            QScrollBar::add-line, QScrollBar::sub-line {{ height: 0; }} QScrollBar::add-page, QScrollBar::sub-page {{ background: {bg}; }}
-            QComboBox {{ background: {bg}; color: {fg}; border: 1px solid {rule}; padding: 5px 8px; }}
-            QComboBox QAbstractItemView {{ background: {bg}; color: {fg}; selection-background-color: {fg}; selection-color: {bg}; }}
-            QPushButton {{ background: {bg}; color: {fg}; border: 1px solid {fg}; padding: 6px 16px; }}
-            QPushButton:checked {{ background: {fg}; color: {bg}; }}
-            QPushButton:disabled {{ color: {dim}; border-color: {rule}; }}
-            QPushButton#glyph {{ min-width: 36px; padding: 6px 10px; }}
-            QCheckBox {{ spacing: 6px; }} QCheckBox::indicator {{ width: 14px; height: 14px; border: 1px solid {fg}; }}
-            QCheckBox::indicator:checked {{ background: {fg}; }}
-            QSlider::groove:horizontal {{ height: 4px; background: {rule}; }} QSlider::handle:horizontal {{ width: 12px; margin: -6px 0; background: {fg}; }}
-            QSlider::sub-page:horizontal {{ background: {fg}; }}
-            QProgressBar {{ border: none; background: {rule}; }} QProgressBar::chunk {{ background: {fg}; }}
-            QSplitter::handle {{ background: {rule}; width: 1px; }}
-            QToolTip {{ background: {bg}; color: {fg}; border: 1px solid {rule}; }}
+            QMainWindow, QWidget {{ background: {C_BG}; color: {C_TEXT}; font-family: "{SANS_FAMILY}"; font-size: 10.5pt; }}
+            QLabel, QCheckBox, QStackedWidget, QScrollArea {{ background: transparent; }}
+            QToolTip {{ background: {C_PANEL}; color: {C_TEXT}; border: 1px solid {C_BORDER}; padding: 4px 6px; }}
+            QLabel#muted, QLabel#hint, QLabel#patienceDetail {{ color: {C_MUTED}; }}
+            QLabel#label {{ color: {C_MUTED}; font-weight: 600; font-size: 9pt; }}
+            QLabel#danger {{ color: {C_DANGER_T}; }}
+            QLabel#mono, QLabel#path {{ font-family: "{self.mono}"; font-size: 9pt; }}
+            QLabel#path {{ color: {C_MUTED}; }}
+            QLabel#h1 {{ font-size: 20pt; font-weight: 700; }}
+            QLabel#lead {{ color: {C_MUTED}; font-size: 11.5pt; }}
+            QLabel#name {{ font-weight: 700; }}
+            QLabel#big {{ font-size: 15pt; font-weight: 700; }}
+            QLabel#hint {{ padding: 14px 16px; font-size: 10pt; }}
+            QLabel#patience {{ background: {PAPER}; color: {INK}; font-family: "{self.serif}"; font-size: 13pt; }}
+            QLabel#patienceDetail {{ background: {PAPER}; color: {INK2}; font-family: "{self.mono}"; font-size: 9pt; }}
+            QWidget#bar, QWidget#side {{ background: {C_PANEL2}; }}
+            QWidget#bar {{ border-bottom: 1px solid {C_BORDER}; }}
+            QWidget#side {{ border-right: 1px solid {C_BORDER}; }}
+            QWidget#screen {{ background: #000000; }}
+            QWidget#controls {{ background: {C_PANEL2}; }}
+            QWidget#bilan {{ background: {C_PANEL2}; border-bottom: 1px solid {C_BORDER}; }}
+            QWidget#production {{ background: {C_PANEL2}; border-top: 1px solid {C_BORDER}; }}
+            QWidget#settings, QWidget#following, QWidget#finished {{ background: {C_PANEL2}; }}
+            QWidget#paper, QWidget#paper QWidget {{ background: {PAPER}; }}
+            QTextEdit {{ background: {PAPER}; color: {INK}; border: none; font-family: "{self.serif}"; font-size: {pt}pt; padding: 26px 20px; selection-background-color: {STABILO}; }}
+            QListWidget#passages {{ background: {C_PANEL2}; border: none; outline: none; padding: 4px; }}
+            QScrollBar:vertical {{ background: transparent; width: 10px; margin: 0; }} QScrollBar::handle:vertical {{ background: {C_BORDER}; min-height: 24px; border-radius: 5px; }}
+            QTextEdit QScrollBar::handle:vertical {{ background: {RULE}; }}
+            QScrollBar::add-line, QScrollBar::sub-line {{ height: 0; }} QScrollBar::add-page, QScrollBar::sub-page {{ background: transparent; }}
+            QLineEdit, QComboBox {{ background: {C_PANEL}; color: {C_TEXT}; border: 1px solid {C_BORDER}; border-radius: 9px; padding: 7px 11px; }}
+            QLineEdit:focus, QComboBox:focus {{ border-color: {C_ACCENT}; }}
+            QComboBox::drop-down {{ border: none; width: 22px; }} QComboBox::down-arrow {{ image: none; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid {C_MUTED}; margin-right: 8px; }}
+            QComboBox QAbstractItemView {{ background: {C_PANEL}; color: {C_TEXT}; border: 1px solid {C_BORDER}; selection-background-color: {C_BORDER}; selection-color: {C_TEXT}; outline: none; }}
+            QPushButton, QToolButton {{ background: {C_PANEL}; color: {C_TEXT}; border: 1px solid {C_BORDER}; border-radius: 9px; padding: 7px 14px; font-weight: 600; }}
+            QToolButton::menu-indicator {{ image: none; width: 0; }}
+            QPushButton:hover, QToolButton:hover {{ border-color: #454b5a; }}
+            QPushButton:disabled {{ color: {C_MUTED}; border-color: {C_BORDER}; background: {C_PANEL}; }}
+            QPushButton[kind="strong"] {{ background: {C_ACCENT}; border-color: {C_ACCENT}; color: #1b1205; padding: 10px 16px; }}
+            QPushButton[kind="strong"]:hover {{ background: {C_ACCENT_H}; }}
+            QPushButton[kind="strong"]:disabled {{ background: {C_PANEL}; border-color: {C_BORDER}; color: {C_MUTED}; }}
+            QPushButton[kind="danger"] {{ background: transparent; border-color: {C_DANGER}; color: {C_DANGER_T}; }}
+            QPushButton[kind="glyph"] {{ min-width: 30px; padding: 6px 8px; }}
+            QPushButton[kind="paper"] {{ background: #ffffff; color: {INK}; border-color: #d5cebd; }}
+            QWidget#seg {{ border: 1px solid {C_BORDER}; border-radius: 9px; background: {C_PANEL}; }}
+            QPushButton#segbtn {{ border: none; border-radius: 0; background: {C_PANEL}; color: {C_MUTED}; padding: 7px 14px; }}
+            QPushButton#segbtn[side="first"] {{ border-top-left-radius: 9px; border-bottom-left-radius: 9px; }}
+            QPushButton#segbtn[side="last"] {{ border-top-right-radius: 9px; border-bottom-right-radius: 9px; }}
+            QPushButton#segbtn:checked {{ background: {STABILO}; color: #1b1a12; }}
+            QPushButton#segbtn[kind="erase"]:checked {{ background: #d9d4c7; color: #1b1a12; }}
+            QPushButton#segbtn[kind="cut"]:checked {{ background: {RAYE}; color: #4a1712; }}
+            QFrame#recent {{ background: {C_PANEL}; border: 1px solid {C_BORDER}; border-radius: 10px; }}
+            QFrame#recent:hover {{ border-color: {C_ACCENT}; }}
+            QFrame#recent[absent="true"] {{ color: {C_MUTED}; }}
+            QFrame#recent QLabel {{ background: transparent; }}
+            QLabel#recentName {{ font-weight: 600; }}
+            QCheckBox {{ spacing: 8px; }} QCheckBox::indicator {{ width: 15px; height: 15px; border: 1px solid {C_MUTED}; border-radius: 4px; background: {C_PANEL}; }}
+            QCheckBox::indicator:checked {{ background: {C_ACCENT}; border-color: {C_ACCENT}; }}
+            QSlider::groove:horizontal {{ height: 4px; background: {C_BORDER}; border-radius: 2px; }} QSlider::handle:horizontal {{ width: 12px; margin: -5px 0; background: {C_TEXT}; border-radius: 6px; }}
+            QSlider::sub-page:horizontal {{ background: {C_ACCENT}; border-radius: 2px; }}
+            QProgressBar {{ border: none; background: #262a34; border-radius: 3px; }} QProgressBar::chunk {{ background: {C_ACCENT}; border-radius: 3px; }}
+            QWidget#paper QProgressBar {{ background: {RULE}; }}
+            QWidget#paper QPushButton, QWidget#paper QComboBox {{ background: #ffffff; color: {INK}; border-color: #d5cebd; }}
+            QWidget#paper QComboBox QAbstractItemView {{ background: #ffffff; color: {INK}; selection-background-color: {RULE}; selection-color: {INK}; }}
+            QSplitter::handle {{ background: {C_BORDER}; width: 1px; }}
+            QWidget#controls, QWidget#paper QWidget#controls, QWidget#controls QWidget {{ background: {C_PANEL2}; }}
+            QWidget#controls QPushButton, QWidget#controls QComboBox {{ background: {C_PANEL}; color: {C_TEXT}; border-color: {C_BORDER}; }}
+            QWidget#controls QLabel {{ background: transparent; color: {C_TEXT}; }}
+            QMenu {{ background: {C_PANEL}; color: {C_TEXT}; border: 1px solid {C_BORDER}; padding: 4px; }}
+            QMenu::item {{ padding: 6px 18px; border-radius: 6px; }} QMenu::item:selected {{ background: {C_BORDER}; }}
+            QMenu::separator {{ height: 1px; background: {C_BORDER}; margin: 4px 8px; }}
         """)
         if self.tokens:
             self.page.rebuild()
+        self.fit_measure()
+
+    # ---- the two views ----
+    def show_home(self):
+        if self.thread and not (self.task and self.task.get("download")):
+            return
+        self.stop_preview()
+        self.player.stop()
+        self.player.setMedia(QMediaContent())
+        self.project, self.tokens, self.cuts = None, [], []
+        self.page.set_tokens([], [])
+        self.views.setCurrentWidget(self.home)
+        self.h_error.setText("")
+        self.refresh_recents()
+        self.h_field.setFocus()
+
+    def refresh_recents(self):
+        while self.h_recents.count():
+            item = self.h_recents.takeAt(0)
+            if item.widget():
+                item.widget().deleteLater()
+        rows = []
+        try:
+            for d in Path(PROJECTS_DIR).iterdir():
+                pj = read_json(d / "project.json")
+                if pj and pj.get("source"):
+                    stamp = max((f.stat().st_mtime for f in d.iterdir() if f.is_file()), default=0)
+                    rows.append((stamp, pj))
+        except OSError:
+            pass
+        rows.sort(key=lambda r: -r[0])
+        seen = set()
+        for _stamp, pj in rows:
+            if pj["source"] in seen:
+                continue
+            seen.add(pj["source"])
+            w = Recent(pj["source"], pj.get("type", "video"), float(pj.get("duration", 0)), os.path.exists(pj["source"]))
+            w.clicked.connect(lambda path: self.open_source(path, None))
+            self.h_recents.addWidget(w)
+            if len(seen) >= 8:
+                break
+        self.h_resume.setVisible(bool(seen))
+
+    def home_open(self):
+        text = self.h_field.text().strip()
+        if not text:
+            self.h_error.setText(_("Give a file or an address."))
+            return
+        if is_url(text):
+            self.open_url(text)
+        elif os.path.isfile(text):
+            self.open_source(text, None)
+        else:
+            self.h_error.setText(_("This file cannot be read."))
 
     def set_reading(self, on):
-        """Reading: the page alone across the window, a measure of about 70 characters, the
-        picture hidden and the player's controls under the text. The highlighting stays."""
+        """Reading: the page alone across the window, the picture hidden and the player's
+        controls under the text. The highlighting stays."""
         self.reading = bool(on)
         self.b_read.setChecked(self.reading)
-        self.b_read.setText(_("edit") if self.reading else _("read"))
+        self.b_read.setText(_("Edit") if self.reading else _("Read"))
         if self.reading:
-            self.left.hide()
-            self.rv.insertWidget(1, self.controls)
+            self.side.hide()
+            self.rv.addWidget(self.controls)
         else:
             self.rv.removeWidget(self.controls)
-            self.left.layout().insertWidget(1, self.controls)
-            self.left.show()
+            self.sv.insertWidget(1, self.controls)
+            self.side.show()
         self.apply_style()
-        self.fit_measure()
 
     def resizeEvent(self, e):
         super().resizeEvent(e)
         self.fit_measure()
 
     def fit_measure(self):
-        if not self.reading:
-            self.page.setViewportMargins(0, 0, 0, 0)
+        """The text no wider than about 72 characters, centred on the page (as the original page)."""
+        if not hasattr(self, "page"):
             return
-        chars = self.page.fontMetrics().averageCharWidth() * 72
-        margin = max(24, (self.page.width() - chars) // 2)
-        self.page.setViewportMargins(margin, 12, margin, 12)
+        fm = QtGui.QFontMetrics(QtGui.QFont(self.serif, self.page_pt + (2 if self.reading else 0)))
+        chars = fm.averageCharWidth() * 72 + GUTTER + 48
+        margin = max(0, (self.page.width() - chars) // 2)
+        self.page.setViewportMargins(margin, 8, margin, 8)
 
     def save_text(self):
         if not self.tokens or not self.project:
@@ -2219,26 +3047,16 @@ class Main(QtWidgets.QMainWindow):
         QtWidgets.QApplication.clipboard().setText(self.page.plain_text())
         self.say(_("Text copied."))
 
-    def toggle_ink(self):
-        self.dark = not self.dark
-        self.cfg["dark"] = self.dark
-        save_config(self.cfg)
-        self.apply_style()
-
     def resize_text(self, d):
-        self.font_size = max(7, min(24, self.font_size + d))
-        self.cfg["font_size"] = self.font_size
+        self.page_pt = max(9, min(28, self.page_pt + d))
+        self.cfg["page_pt"] = self.page_pt
         save_config(self.cfg)
         self.apply_style()
 
     def enable(self, loaded):
-        for w in (self.b_highlight, self.b_erase, self.mode, self.fade, self.image_fade, self.format, self.b_preview):
+        for w in (self.b_highlight, self.b_erase, self.b_keep, self.b_cut, self.fade, self.image_fade, self.format, self.b_preview, self.b_clear, self.b_silences, self.b_read, self.b_text, self.b_undo, self.b_redo):
             w.setEnabled(loaded)
-        self.b_export.setEnabled(loaded and bool(self.cuts))
-        self.b_text.setEnabled(loaded)
-        self.b_read.setEnabled(loaded)
-        self.b_srt.setEnabled(self.project is not None)
-        self.b_transcribe.setEnabled(self.project is not None)
+        self.b_produce.setEnabled(loaded and bool(self.cuts) and self.thread is None)
 
     # ---- opening ----
     def dragEnterEvent(self, e):
@@ -2260,28 +3078,13 @@ class Main(QtWidgets.QMainWindow):
 
     def ask_url(self):
         if self.thread:
-            if self.task is not None and self.task.get("download"):
-                self.export_or_stop()       # the same stop: the task is cancelled, its process killed
             return
+        self.show_home()
         clip = QtWidgets.QApplication.clipboard().text().strip()
-        dlg = QtWidgets.QDialog(self)
-        dlg.setWindowTitle(_("Open an address"))
-        v = QtWidgets.QVBoxLayout(dlg)
-        v.setContentsMargins(18, 16, 18, 14)
-        v.setSpacing(10)
-        hint = QtWidgets.QLabel(_("The address of a video (YouTube, X…). It is fetched here, with its subtitles when the site has them."))
-        hint.setWordWrap(True)
-        v.addWidget(hint)
-        field = QtWidgets.QLineEdit(clip if is_url(clip) else "")
-        field.setMinimumWidth(field.fontMetrics().averageCharWidth() * 64)
-        field.selectAll()
-        v.addWidget(field)
-        buttons = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel)
-        buttons.accepted.connect(dlg.accept)
-        buttons.rejected.connect(dlg.reject)
-        v.addWidget(buttons)
-        if dlg.exec_() == QtWidgets.QDialog.Accepted and is_url(field.text()):
-            self.open_url(field.text().strip())
+        if is_url(clip):
+            self.h_field.setText(clip)
+        self.h_field.setFocus()
+        self.h_field.selectAll()
 
     def open_url(self, url):
         if self.thread or not is_url(url):
@@ -2289,8 +3092,11 @@ class Main(QtWidgets.QMainWindow):
         if not ffmpeg_exe():
             self.say(_("ffmpeg was not found. Install it (ffmpeg.org) and start again."))
             return
+        self.views.setCurrentWidget(self.home)
+        self.h_field.setText(url)
+        self.h_error.setText("")
         folder = downloads_dir()
-        language = self.lang.currentData() or ""
+        language = self.h_lang.currentData() or ""
         self.task = {"cancelled": False, "proc": None, "download": True}
         task = self.task
 
@@ -2308,22 +3114,25 @@ class Main(QtWidgets.QMainWindow):
 
         def done(result):
             self.task = None
-            self.progress.hide()
-            self.b_url.setText(_("address…"))
+            self.h_follow.hide()
+            self.h_open.setEnabled(True)
             media, srt = result
             self.open_source(media, srt)
-            self.say(_("Downloaded: %1", media))
 
         def failed(msg):
             self.task = None
-            self.progress.hide()
-            self.b_url.setText(_("address…"))
-            self.say(msg or _("Cancelled."))
-        self.b_url.setText(_("stop"))
-        self.say(_("Downloading…"))
+            self.h_follow.hide()
+            self.h_open.setEnabled(True)
+            self.h_error.setText(msg or _("Cancelled."))
+        self.h_open.setEnabled(False)
+        self.h_follow.show()
+        self.h_gauge.setValue(0)
+        self.h_msg.setText(_("Downloading…"))
         self.run_in_background(work, done, failed)
 
     def ask_open(self):
+        if self.thread:
+            return
         start = self.cfg.get("last_dir") or os.path.expanduser("~")
         exts = " ".join("*" + e for e in sorted(EXT_VIDEO | EXT_AUDIO))
         path, _f = QtWidgets.QFileDialog.getOpenFileName(self, _("Open a video or a recording"), start, _("Video and audio files") + f" ({exts})")
@@ -2331,12 +3140,53 @@ class Main(QtWidgets.QMainWindow):
             self.open_source(path, None)
 
     def ask_srt(self):
-        if not self.project:
+        if not self.project or self.thread:
             return
         start = str(Path(self.project["source"]).parent)
         path, _f = QtWidgets.QFileDialog.getOpenFileName(self, _("Open the subtitles of this file"), start, _("Subtitles (*.srt)"))
         if path:
             self.load_srt(path)
+
+    def ask_transcribe(self):
+        """The language and the model, then the text is made again (the highlighting stays, by time)."""
+        if not self.project or self.thread:
+            return
+        dlg = QtWidgets.QDialog(self)
+        dlg.setWindowTitle(_("Transcribe again…"))
+        v = QtWidgets.QVBoxLayout(dlg)
+        v.setContentsMargins(18, 16, 18, 14)
+        v.setSpacing(10)
+        row = QtWidgets.QHBoxLayout()
+        lang = QtWidgets.QComboBox()
+        for code, name in LANGUAGES:
+            lang.addItem(_("auto") if not code else name, code)
+        lang.setCurrentIndex(self.h_lang.currentIndex())
+        model = QtWidgets.QComboBox()
+        model.addItems(MODELS)
+        model.setCurrentText(self.h_model.currentText())
+        lab = QtWidgets.QLabel(_("Spoken language"))
+        lab.setObjectName("muted")
+        row.addWidget(lab)
+        row.addWidget(lang)
+        lab = QtWidgets.QLabel(_("model"))
+        lab.setObjectName("muted")
+        row.addWidget(lab)
+        row.addWidget(model)
+        v.addLayout(row)
+        buttons = QtWidgets.QHBoxLayout()
+        buttons.addStretch(1)
+        buttons.addWidget(self._btn(_("Cancel"), dlg.reject))
+        buttons.addWidget(self._btn(_("Transcribe"), dlg.accept, kind="strong"))
+        v.addLayout(buttons)
+        if dlg.exec_() == QtWidgets.QDialog.Accepted:
+            self.h_lang.setCurrentIndex(lang.currentIndex())
+            self.h_model.setCurrentText(model.currentText())
+            self.start_transcription()
+
+    def retry_transcription(self):
+        self.h_lang.setCurrentIndex(self.p_lang.currentIndex())
+        self.h_model.setCurrentText(self.p_model.currentText())
+        self.start_transcription()
 
     def open_source(self, path, srt):
         if self.thread:
@@ -2355,24 +3205,26 @@ class Main(QtWidgets.QMainWindow):
         d = project_dir(path)
         self.project = dict(info, source=os.path.abspath(path), dir=str(d))
         write_json(d / "project.json", {k: v for k, v in self.project.items() if k != "dir"})
-        self.title.setText(Path(path).name + "  ·  " + plain(info["duration"]))
+        self.a_name.setText(Path(path).name)
+        self.a_detail.setText((_("Video") if info["type"] == "video" else _("Recording")) + " · " + plain(info["duration"]))
         self.tokens, self.cuts = [], []
         self.page.set_tokens([], [])
         self.format.clear()
         if info["type"] == "video":
-            self.format.addItem("MP4", "mp4")
-            self.stack.setCurrentWidget(self.video)
-        else:
-            self.stack.setCurrentWidget(self.drop_hint)
-            self.drop_hint.setText(Path(path).name)
+            self.format.addItem(_("A video (MP4)"), "mp4")
+        self.screen.setVisible(info["type"] == "video")
         for fmt in ("mp3", "m4a", "wav"):
-            self.format.addItem(fmt.upper(), fmt)
+            self.format.addItem(_("The sound alone (%1)", fmt.upper()), fmt)
+        self.b_preview.setText(_("▶ Watch the edit") if info["type"] == "video" else _("▶ Listen to the edit"))
+        self.b_watch.setText(_("Watch") if info["type"] == "video" else _("Listen"))
         self.media_ok = True
         self.player.setMedia(QMediaContent(QtCore.QUrl.fromLocalFile(os.path.abspath(path))))
         self.slider.setMaximum(int(info["duration"] * 1000))
+        self.views.setCurrentWidget(self.shop)
+        self.show_production("settings")
+        self.status.hide()
         self.enable(False)
-        self.b_srt.setEnabled(True)
-        self.b_transcribe.setEnabled(True)
+        self.set_reading(False)
         # a text already made for this file, or subtitles beside it
         saved = read_json(d / "transcription.json")
         beside = Path(path).with_suffix(".srt")
@@ -2380,15 +3232,28 @@ class Main(QtWidgets.QMainWindow):
             self.load_srt(srt)
         elif saved and saved.get("tokens"):
             self.show_tokens(saved["tokens"], saved.get("origin", "transcription"), bool(saved.get("estimated")))
-            self.say(_("Text ready: %1 words", sum(1 for t in self.tokens if t[0] is not None)))
         elif beside.exists():
             self.load_srt(str(beside))
         else:
-            self.say(_("Drop a video, a recording or a link here, or press Ctrl+O / Ctrl+L.") if False else "")
             self.start_transcription()
 
     def say(self, text):
-        self.status.setText(text)
+        if self.views.currentWidget() is self.home:
+            self.h_error.setText(text)
+        else:
+            self.status.setText(text)
+            self.status.setVisible(bool(text))
+
+    # ---- the waiting view ----
+    def wait(self, message, detail="", failed=False):
+        self.page_stack.setCurrentWidget(self.patience)
+        self.p_msg.setText(message)
+        self.p_detail.setText(detail)
+        self.p_gauge.setVisible(not failed)
+        self.p_retry.setVisible(failed)
+        if failed:
+            self.p_lang.setCurrentIndex(self.h_lang.currentIndex())
+            self.p_model.setCurrentText(self.h_model.currentText())
 
     # ---- text: subtitles or transcription ----
     def run_in_background(self, fn, on_done, on_failed):
@@ -2415,10 +3280,15 @@ class Main(QtWidgets.QMainWindow):
         self.thread.start()
 
     def on_progress(self, fraction, text):
-        self.progress.show()
-        self.progress.setValue(int(fraction * 1000))
-        if text:
-            self.say(text)
+        if self.task and self.task.get("download"):
+            self.h_gauge.setValue(int(fraction * 1000))
+            self.h_msg.setText(text)
+        elif self.task is not None:
+            self.progress.setValue(int(fraction * 1000))
+            self.f_text.setText(text)
+        else:
+            self.p_gauge.setValue(int(fraction * 1000))
+            self.p_detail.setText(text)
 
     def load_srt(self, path):
         if self.thread or not self.project:
@@ -2435,39 +3305,27 @@ class Main(QtWidgets.QMainWindow):
         def work(w):
             w.progress.emit(0.1, _("Extracting the sound…"))
             extract_audio(src, wav)
-            w.progress.emit(0.6, _("Reading the file…"))
+            w.progress.emit(0.6, _("Looking for the words in the sound…"))
             return tokens_from_srt(cues, wav, duration)
 
         def done(tokens):
-            self.progress.hide()
             write_json(d / "transcription.json", {"tokens": tokens, "origin": "subtitles", "estimated": True, "language": ""})
             self.show_tokens(tokens, "subtitles", True)
-            self.say(_("Text read from the subtitles: %1 words", sum(1 for t in tokens if t[0] is not None)))
 
         def failed(msg):
-            self.progress.hide()
-            self.say(msg or _("Cancelled."))
-        self.say(_("Reading the file…"))
+            self.wait(_("The transcription failed."), msg or _("Cancelled."), failed=True)
+        self.wait(_("Reading the file…"))
         self.run_in_background(work, done, failed)
-
-    def transcribe_or_stop(self):
-        if self.thread and self.worker and self.task is None:
-            self.worker.cancelled = True
-            return
-        self.start_transcription()
 
     def start_transcription(self):
         if self.thread or not self.project:
-            return
-        if not whisper_available():
-            self.say(_("The transcription needs faster-whisper: pip install faster-whisper — or open a subtitle file."))
             return
         d = Path(self.project["dir"])
         wav = d / "audio16k.wav"
         duration = self.project["duration"]
         src = self.project["source"]
-        language = self.lang.currentData() or ""
-        model_size = self.model.currentText()
+        language = self.h_lang.currentData() or ""
+        model_size = self.h_model.currentText()
         self.cfg["language"], self.cfg["model"] = language, model_size
         save_config(self.cfg)
         # what was highlighted stays, by time, when the text is made again
@@ -2479,6 +3337,8 @@ class Main(QtWidgets.QMainWindow):
             write_json(d / "selection.json", sel)
 
         def work(w):
+            if not whisper_available():
+                install_whisper(lambda t: w.progress.emit(0.01, t), lambda: w.cancelled)
             w.progress.emit(0.02, _("Extracting the sound…"))
             extract_audio(src, wav)
             w.progress.emit(0.05, _("Loading the model %1 (downloaded once)…", model_size))
@@ -2491,17 +3351,12 @@ class Main(QtWidgets.QMainWindow):
 
         def done(result):
             tokens, lang = result
-            self.progress.hide()
             write_json(d / "transcription.json", {"tokens": tokens, "origin": "transcription", "estimated": False, "language": lang})
             self.show_tokens(tokens, "transcription", False)
-            self.say(_("Text ready: %1 words", sum(1 for t in tokens if t[0] is not None)))
-            self.b_transcribe.setText(_("transcribe"))
 
         def failed(msg):
-            self.progress.hide()
-            self.say(msg or _("Cancelled."))
-            self.b_transcribe.setText(_("transcribe"))
-        self.b_transcribe.setText(_("stop"))
+            self.wait(_("The transcription failed."), msg or _("Cancelled."), failed=True)
+        self.wait(_("Transcribing…"))
         self.run_in_background(work, done, failed)
 
     def show_tokens(self, tokens, origin, estimated):
@@ -2511,10 +3366,9 @@ class Main(QtWidgets.QMainWindow):
         if sel.get("times") and "ranges" not in sel:
             sel["ranges"] = ranges_from_times(tokens, sel.pop("times"))
             write_json(d / "selection.json", sel)
-        mode = sel.get("mode", "keep")
-        self.mode.setCurrentIndex(1 if mode == "cut" else 0)
-        self.page.mode = mode
+        self.set_mode(sel.get("mode", "keep"), quiet=True)
         self.page.set_tokens(tokens, sel.get("ranges", []), origin)
+        self.page_stack.setCurrentWidget(self.page)
         self.enable(True)
         self.on_selection()
 
@@ -2524,18 +3378,25 @@ class Main(QtWidgets.QMainWindow):
         self.b_highlight.setChecked(tool == "highlight")
         self.b_erase.setChecked(tool == "erase")
 
-    def on_mode(self, _i):
-        self.page.set_mode(self.mode.currentData())
-        self.on_selection()
+    def set_mode(self, mode, quiet=False):
+        self.mode_value = mode
+        self.b_keep.setChecked(mode == "keep")
+        self.b_cut.setChecked(mode == "cut")
+        self.b_silences.setVisible(mode == "cut")
+        self.page.set_mode(mode)
+        if not quiet:
+            self.on_selection()
 
     def on_selection(self):
+        self.b_undo.setEnabled(bool(self.page.history))
+        self.b_redo.setEnabled(bool(self.page.future))
         if not self.project or not self.tokens:
             self.update_summary()
             return
         d = Path(self.project["dir"])
         ranges = self.page.ranges()
         fade = float(self.fade.currentData())
-        mode = self.mode.currentData()
+        mode = self.mode_value
         self.cfg["fade"], self.cfg["image_fade"] = fade, self.image_fade.isChecked()
         write_json(d / "selection.json", {"ranges": ranges, "fade": fade, "mode": mode})
         if mode == "cut" and not clean_ranges(ranges, len(self.tokens)):
@@ -2548,46 +3409,64 @@ class Main(QtWidgets.QMainWindow):
 
     def update_summary(self):
         self.passages.clear()
-        self.b_export.setEnabled(bool(self.cuts) and self.thread is None)
+        self.b_produce.setEnabled(bool(self.cuts) and self.thread is None)
+        self.b_preview.setEnabled(bool(self.cuts) and self.thread is None)
+        mode = self.mode_value
         if not self.tokens:
-            self.summary.setText("")
+            self.l_big.setText("—")
+            self.l_small.setText("")
+            self.hint.setText("")
+            self.list_stack.setCurrentWidget(self.hint)
+            self.b_clear.setEnabled(False)
             return
-        mode = self.mode.currentData()
         ranges = self.page.ranges()
         total = self.project["duration"]
+        free = sum(1 for i, t in enumerate(self.tokens) if t[0] is None and not self.page.sel[i])
+        self.b_silences.setText(_("Strike the %1 silences", free) if free > 1 else _("Strike the silence"))
+        self.b_silences.setEnabled(free > 0)
+        self.b_clear.setEnabled(bool(ranges))
         if not ranges:
-            self.summary.setText(_("Nothing struck") if mode == "cut" else _("Nothing highlighted"))
-            self.say((_("Drag over the text to strike what you remove: the edit keeps all the rest.") if mode == "cut"
-                      else _("Drag over the text to highlight what you keep.")) + " "
-                     + _("A click on a word plays from there. A click on a passage without words marks it. A double click takes the whole sentence. For a long passage, click its first word, then its last one with Shift held."))
+            self.l_big.setText(_("Nothing struck") if mode == "cut" else _("Nothing highlighted"))
+            self.l_small.setText("")
+            self.hint.setText((_("Drag over the text to strike what you remove: the edit keeps all the rest.") if mode == "cut"
+                               else _("Drag over the text to highlight what you keep.")) + " "
+                              + _("A click on a word plays from there. A click on a passage without words marks it. A double click takes the whole sentence. For a long passage, click its first word, then its last one with Shift held."))
+            self.list_stack.setCurrentWidget(self.hint)
             return
+        self.list_stack.setCurrentWidget(self.passages)
         kept = sum(c["f"] - c["d"] for c in self.cuts)
         n = len(self.cuts)
         if mode != "cut":
-            self.summary.setText(_("Edit of %1", plain(kept)) + "  ·  " + (_("%1 passages", n) if n != 1 else _("%1 passage", n)) + " " + _("out of %1", plain(total)))
+            self.l_big.setText(_("Edit of %1", plain(kept)))
+            self.l_small.setText((_("%1 passages", n) if n != 1 else _("%1 passage", n)) + " " + _("out of %1", plain(total)))
             for c in self.cuts:
-                self._add_passage(c["range"][0], c["range"][1], c["d"], c["f"] - c["d"], _("remove"))
+                self._add_passage(c["range"][0], c["range"][1], c["d"], c["f"] - c["d"])
         else:
-            self.summary.setText((_("Edit of %1", plain(kept)) if n else _("Nothing is left")) + "  ·  "
-                                 + (_("%1 cuts", len(ranges)) if len(ranges) != 1 else _("%1 cut", len(ranges))) + " · "
+            self.l_big.setText(_("Edit of %1", plain(kept)) if n else _("Nothing is left"))
+            self.l_small.setText((_("%1 cuts", len(ranges)) if len(ranges) != 1 else _("%1 cut", len(ranges))) + " · "
                                  + _("%1 less out of %2", plain(max(0.0, total - kept)), plain(total)))
             for a, b in ranges:
-                self._add_passage(a, b, self.tokens[a][1], self.tokens[b][2] - self.tokens[a][1], _("keep"))
-        self.say("")
+                self._add_passage(a, b, self.tokens[a][1], self.tokens[b][2] - self.tokens[a][1])
 
-    def _add_passage(self, a, b, t, dur, action):
-        words = [self.tokens[i][0] for i in range(a, b + 1) if self.tokens[i][0] is not None][:14]
+    def _add_passage(self, a, b, t, dur):
+        words = [self.tokens[i][0] for i in range(a, b + 1) if self.tokens[i][0] is not None][:30]
         text = " ".join(words) or _("Without words")
-        item = QtWidgets.QListWidgetItem(f"{hmsm(t)[3:8]}  {plain(dur):>5}   {text}")
+        item = QtWidgets.QListWidgetItem()
         item.setData(QtCore.Qt.UserRole, (a, b, t))
-        item.setToolTip(action)
+        item.setData(QtCore.Qt.UserRole + 1, (t, dur, text, False))
         self.passages.addItem(item)
 
-    def on_passage(self, item):
-        a, b, t = item.data(QtCore.Qt.UserRole)
-        if QtWidgets.QApplication.keyboardModifiers() & QtCore.Qt.ControlModifier:
+    def drop_passage(self, row):
+        item = self.passages.item(row)
+        if item:
+            a, b, _t = item.data(QtCore.Qt.UserRole)
             self.page.change(a, b, 0)
+
+    def go_passage(self, row):
+        item = self.passages.item(row)
+        if not item:
             return
+        a, b, t = item.data(QtCore.Qt.UserRole)
         if self.page.spans[a]:
             cur = QtGui.QTextCursor(self.page.document())
             cur.setPosition(self.page.spans[a][0])
@@ -2652,19 +3531,28 @@ class Main(QtWidgets.QMainWindow):
         if not self.cuts:
             return
         self.previewing = 0
-        self.b_preview.setText(_("stop the preview"))
+        self.b_preview.setText(_("■ Stop"))
         self.player.setPosition(int(self.cuts[0]["d"] * 1000))
         self.player.play()
 
     def stop_preview(self):
         if self.previewing >= 0:
             self.previewing = -1
-        self.b_preview.setText(_("preview the edit"))
+        if self.project:
+            self.b_preview.setText(_("▶ Watch the edit") if self.project["type"] == "video" else _("▶ Listen to the edit"))
 
-    # ---- exporting ----
-    def export_or_stop(self):
+    # ---- producing the edit ----
+    def show_production(self, state):
+        self.settings.setVisible(state == "settings")
+        self.following.setVisible(state == "following")
+        self.finished.setVisible(state == "finished")
+        self.fail.setVisible(state == "failed")
+
+    def produce_or_stop(self):
         if self.task is not None:
             self.task["cancelled"] = True
+            if self.worker:
+                self.worker.cancelled = True
             proc = self.task.get("proc")
             if proc:
                 try:
@@ -2676,21 +3564,15 @@ class Main(QtWidgets.QMainWindow):
             return
         fmt = self.format.currentData() or "mp4"
         src = Path(self.project["source"])
-        suggested = src.with_name(f"{src.stem}_edit.{fmt}")
+        out = src.with_name(f"{src.stem}_edit.{fmt}")
         k = 1
-        while suggested.exists() or any(suggested.with_suffix("." + e).exists() for e in ("txt", "edl")):
+        while out.exists() or any(out.with_suffix("." + e).exists() for e in ("txt", "edl")):
             k += 1
-            suggested = src.with_name(f"{src.stem}_edit-{k}.{fmt}")
-        out, _f = QtWidgets.QFileDialog.getSaveFileName(self, _("Export the edit"), str(suggested), f"{fmt.upper()} (*.{fmt})")
-        if not out:
-            return
-        out = Path(out)
-        if out.suffix.lower() != "." + fmt:
-            out = out.with_suffix("." + fmt)
+            out = src.with_name(f"{src.stem}_edit-{k}.{fmt}")
         cuts = [dict(c) for c in self.cuts]
         fade = float(self.fade.currentData())
         image_fade = self.image_fade.isChecked()
-        mode = self.mode.currentData()
+        mode = self.mode_value
         project = dict(self.project)
         tokens = list(self.tokens)
         self.task = {"cancelled": False, "progress": 0.0, "message": "", "proc": None}
@@ -2716,19 +3598,27 @@ class Main(QtWidgets.QMainWindow):
 
         def done(path):
             self.task = None
-            self.progress.hide()
-            self.b_export.setText(_("export…"))
+            self.last_out = str(path)
             size = os.path.getsize(path)
-            self.say(_("Done: %1 (%2). Beside it, the log of the cuts (.txt) and the edit list (.edl).", path, f"{size / 1e6:.1f} MB"))
+            kept = sum(c["f"] - c["d"] for c in cuts)
+            self.fin_detail.setText(f'<span style="color:{C_OK}; font-weight:700">' + _("Edit finished") + "</span> · " + plain(kept) + f" · {size / 1e6:.1f} MB")
+            self.fin_path.setText(str(path))
+            self.show_production("finished")
             self.enable(True)
 
         def failed(msg):
             self.task = None
-            self.progress.hide()
-            self.b_export.setText(_("export…"))
-            self.say(_("Cancelled.") if not msg else _("The edit could not be made: %1", msg))
+            if msg:
+                self.fail.setText(_("The edit could not be made: %1", msg))
+                self.show_production("failed")
+                QtCore.QTimer.singleShot(8000, lambda: self.show_production("settings") if self.fail.isVisible() else None)
+            else:
+                self.show_production("settings")
             self.enable(True)
-        self.b_export.setText(_("stop"))
+        self.progress.setValue(0)
+        self.f_text.setText(_("Exporting… %1 %", 0))
+        self.show_production("following")
+        self.b_produce.setEnabled(False)
         self.run_in_background(work, done, failed)
 
     def closeEvent(self, e):

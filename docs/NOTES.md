@@ -63,3 +63,31 @@ copy was never fetched. Since yt-dlp 2025.11 a JavaScript runtime (Deno) is reco
 YouTube; checked 2026-10-28 with 2026.10.26: no warning and the full format list (1080p) without
 any runtime, so none is managed. If YouTube downloads start to fail with a runtime warning, the
 next step is to fetch Deno the same way and pass `--js-runtimes deno:<path>`.
+
+## The look (1.2.0)
+
+The window follows the original stabilo page of monter.py (traduction toolkit) rather than the
+Reader's white-on-black register: dark chrome (#14161a, panels #1c1f26, orange #ff8a3d for the
+one strong action), a paper page (#f6f2e8, serif from the system: Iowan Old Style, Palatino,
+Book Antiqua, Georgia, Noto Serif, DejaVu Serif, in that order) with the times in a column of
+their own (a hanging indent: block left margin = GUTTER, text indent = −GUTTER, one tab stop),
+yellow highlighter (#ffe84a), pink strike-through (#ffc9c2, ink #8f3a31) in the cut mode, a grey
+eraser preview, an orange underline under the word being spoken. Home page = title, lead, file
+or address field + Browse, spoken language + model + Open, the projects to resume (project.json
+of each project folder, newest first, absent files dimmed). Workshop = bar (name, « I highlight
+[what I keep | what I cut] », [Highlighter | Eraser], Undo, Redo, Read, Text ▾, Another file),
+side column 400 px (picture, controls, the edit's length + passages with × to drop one, the
+production block: Produce / Fade at each cut / fade to black / the orange button; while running
+a gauge + Stop; afterwards « Edit finished · length · size », the path, Watch / Open the folder
+/ Close), and the page. While the text is made, the page shows a waiting view (message, gauge,
+detail); on failure, the language and model combos and « Start the transcription again » /
+« Open subtitles… » take its place. The edit is produced beside the original without asking a
+name (`<stem>_edit.<ext>`, numbered when taken), as the original page did.
+
+## faster-whisper installed by the app (1.2.0)
+
+`install_whisper`: `python3 -m venv --system-site-packages <data>/venv`, then
+`pip install faster-whisper` there (pip's Collecting/Downloading/Installing lines in the waiting
+view), then the venv's site-packages is appended to `sys.path` and the import tried again
+(`whisper_available`). Needs `python3-venv` + `python3-pip` on Debian (Depends), `python-pip`
+on Arch. The Windows/macOS builds (frozen) carry faster-whisper and never install anything.
