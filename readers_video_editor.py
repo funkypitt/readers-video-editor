@@ -27,7 +27,7 @@ from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 APP = "readers-video-editor"
-VERSION = "1.2.0"
+VERSION = "1.2.1"
 
 
 def _app_dirs():
@@ -1293,7 +1293,13 @@ def transcribe(wav, language, model_size, duration, progress, cancelled):
                       for i, p in enumerate(parts)]
         for w in ws:
             text = (w.word or "").strip()
-            if text:
+            if not text:
+                continue
+            glued = words and words[-1][3] == k and (text[0] in "'’-" or words[-1][0][-1] in "'’")
+            if glued:
+                words[-1][0] += text
+                words[-1][2] = float(w.end)
+            else:
                 words.append([text, float(w.start), float(w.end), k])
     return words, info.language
 
@@ -1815,7 +1821,7 @@ def load_bundled_fonts():
             n += 1
     if n:
         SANS_FAMILY = "Roboto"
-    return n
+    return n       # Literata (the serif of Reader's Books) comes from the same folder
 
 
 def _icon():
@@ -1843,7 +1849,7 @@ STABILO, STABILO_PRE, GOMME = "#ffe84a", "#fff3a0", "#e9e4d8"
 RAYE, RAYE_PRE, RAYE_INK = "#ffc9c2", "#ffe1dc", "#8f3a31"
 CURRENT = "#e0621a"
 PAUSE_BG = "#eee8d8"
-SERIF_CANDIDATES = ["Iowan Old Style", "Palatino Linotype", "Palatino", "Book Antiqua", "Georgia", "Noto Serif",
+SERIF_CANDIDATES = ["Literata", "Iowan Old Style", "Palatino Linotype", "Palatino", "Book Antiqua", "Georgia", "Noto Serif",
                     "DejaVu Serif", "Liberation Serif", "FreeSerif"]
 MONO_CANDIDATES = ["Menlo", "SF Mono", "Consolas", "DejaVu Sans Mono", "Liberation Mono", "Noto Sans Mono", "Courier New"]
 GUTTER = 64                  # the time column in front of each paragraph, in pixels
@@ -1939,7 +1945,8 @@ class Page(QtWidgets.QTextEdit):
         block_fmt.setLeftMargin(GUTTER)
         block_fmt.setTextIndent(-GUTTER)
         block_fmt.setBottomMargin(pt * 1.1)
-        block_fmt.setLineHeight(175, QtGui.QTextBlockFormat.ProportionalHeight)
+        block_fmt.setLineHeight(150 if "Literata" in self.main.serif else 175, QtGui.QTextBlockFormat.ProportionalHeight)
+        cur.setBlockFormat(block_fmt)
         open_block = False
         chars, prev_sentence, prev_end = 0, None, 0.0
         label_without = {"subtitles": _("without words"), "transcription": _("without words")}.get(self.origin, _("without words"))

@@ -1,7 +1,7 @@
 # Reader's Video Editor
 
 Cut a video or a recording by highlighting its text. The words are transcribed on this
-computer (or read from a subtitle file) and shown on a paper page; what you highlight in
+computer (or read from a subtitle file) and shown on a paper page, set in Literata; what you highlight in
 yellow is kept, or struck in pink and cut; the cuts land in the quiet between two words, each
 piece gets its fades, and ffmpeg writes the new file with a log of the cuts and an edit list.
 The same page reads well on its own: a transcript in airy paragraphs that follows the sound, to
@@ -60,4 +60,6 @@ Actions at every `v*` tag. Single file, PyQt5 + numpy + soundfile + ffmpeg; fast
 
 © 2026 Pierre Gallaz. Développé avec [Claude Code](https://claude.com/claude-code) (Anthropic).
 Licence MIT, voir `LICENSE`. The cutting method comes from the author's `monter.py`
-(traduction toolkit); transcription by [faster-whisper](https://github.com/SYSTRAN/faster-whisper).
+(traduction toolkit); transcription by [faster-whisper](https://github.com/SYSTRAN/faster-whisper);
+videos from addresses by [yt-dlp](https://github.com/yt-dlp/yt-dlp). Fonts: Roboto (Apache 2.0)
+and Literata (SIL OFL 1.1), bundled in `packaging/fonts`.
