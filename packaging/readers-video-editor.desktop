@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Reader's Video Editor
+Comment=Cut a video or a recording by highlighting its text
+Exec=readers-video-editor %f
+Icon=readers-video-editor
+Terminal=false
+Categories=AudioVideo;Video;AudioVideoEditing;Qt;
+MimeType=video/mp4;video/x-matroska;video/quicktime;video/webm;audio/mpeg;audio/mp4;audio/x-wav;audio/flac;
+Keywords=video;cut;edit;transcript;subtitles;srt;

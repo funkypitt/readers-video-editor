@@ -1,0 +1,185 @@
+# Windows and macOS builds of Reader's Video Editor, and the Debian package.
+#
+# Runs on a v* tag (the files are attached to the release of that tag) and on demand from the
+# Actions tab (kept as artifacts for a few days). Windows and macOS bundles carry ffmpeg
+# (imageio-ffmpeg) and faster-whisper, so they transcribe out of the box; the .deb depends on the
+# distribution's ffmpeg and asks for `pip install faster-whisper` for the transcription.
+#
+# Neither binary is signed: Windows shows a SmartScreen warning, macOS says the app "cannot be
+# opened" until it is opened once with a right click. The README says so to the reader.
+
+name: Windows, macOS and Debian builds
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.target == 'macos-intel' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            target: windows
+          - os: macos-15
+            target: macos-apple-silicon
+          - os: macos-15-intel
+            target: macos-intel
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: The app's own version number
+        shell: bash
+        run: echo "VERSION=$(sed -n 's/^VERSION = "\(.*\)"/\1/p' readers_video_editor.py)" >> "$GITHUB_ENV"
+
+      - name: Install the dependencies and PyInstaller
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          pip install "PyQt5==5.15.11" numpy soundfile imageio-ffmpeg faster-whisper pyinstaller
+
+      # ---------------------------------------------------------------- Windows: one .exe
+      - name: Build the .exe
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          pyinstaller --noconfirm --onefile --windowed \
+            --name "Readers Video Editor" \
+            --icon packaging/readers-video-editor.ico \
+            --add-data "packaging/readers-video-editor.png;." \
+            --add-data "packaging/fonts;fonts" \
+            --collect-all imageio_ffmpeg --collect-all faster_whisper --collect-all ctranslate2 \
+            --collect-all tokenizers --collect-all huggingface_hub --collect-all onnxruntime --collect-all soundfile \
+            --hidden-import PyQt5.QtMultimedia --hidden-import PyQt5.QtMultimediaWidgets \
+            readers_video_editor.py
+          mkdir -p out
+          mv "dist/Readers Video Editor.exe" "out/readers-video-editor_${VERSION}_windows_x64.exe"
+
+      # ---------------------------------------------------------------- macOS: a .app in a .dmg
+      - name: Build the .icns
+        if: runner.os == 'macOS'
+        run: |
+          mkdir -p icon.iconset
+          for s in 16 32 128 256 512; do
+            sips -z $s $s packaging/readers-video-editor.png --out "icon.iconset/icon_${s}x${s}.png"
+            sips -z $((s * 2)) $((s * 2)) packaging/readers-video-editor.png --out "icon.iconset/icon_${s}x${s}@2x.png"
+          done
+          iconutil -c icns icon.iconset -o packaging/readers-video-editor.icns
+
+      - name: Build the .app and the .dmg
+        if: runner.os == 'macOS'
+        run: |
+          pyinstaller --noconfirm --windowed \
+            --name "Readers Video Editor" \
+            --icon packaging/readers-video-editor.icns \
+            --osx-bundle-identifier ch.gallaz.readersvideoeditor \
+            --add-data "packaging/readers-video-editor.png:." \
+            --add-data "packaging/fonts:fonts" \
+            --collect-all imageio_ffmpeg --collect-all faster_whisper --collect-all ctranslate2 \
+            --collect-all tokenizers --collect-all huggingface_hub --collect-all onnxruntime --collect-all soundfile \
+            --hidden-import PyQt5.QtMultimedia --hidden-import PyQt5.QtMultimediaWidgets \
+            readers_video_editor.py
+          codesign --force --deep --sign - "dist/Readers Video Editor.app"
+          codesign --verify --deep --strict "dist/Readers Video Editor.app"
+          mkdir -p dmg out
+          cp -R "dist/Readers Video Editor.app" dmg/
+          ln -s /Applications dmg/Applications
+          ARCH=$([ "${{ matrix.target }}" = "macos-intel" ] && echo intel || echo apple-silicon)
+          made=
+          for try in 1 2 3; do
+            if hdiutil create -volname "Readers Video Editor" -srcfolder dmg -ov -format UDZO \
+                 "out/readers-video-editor_${VERSION}_macos_${ARCH}.dmg"; then made=yes; break; fi
+            echo "the folder was busy, waiting before try $((try + 1))"
+            sleep 15
+          done
+          [ -n "$made" ]
+
+      - name: Does it start? (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          QT_QPA_PLATFORM=offscreen "dist/Readers Video Editor.app/Contents/MacOS/Readers Video Editor" &
+          PID=$!
+          sleep 30
+          kill "$PID" && echo "it started and was still running"
+
+      - name: Does it start? (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $exe = Get-ChildItem out\*.exe | Select-Object -First 1
+          $p = Start-Process -FilePath $exe.FullName -PassThru
+          Start-Sleep -Seconds 40
+          if ($p.HasExited) { throw "the app quit on its own (exit code $($p.ExitCode))" }
+          Stop-Process -Id $p.Id
+          Write-Host "it started and was still running"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: readers-video-editor-${{ matrix.target }}
+          path: out/*
+
+      - name: Attach to the release
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          if ! gh release view "$TAG" >/dev/null 2>&1; then
+            gh release create "$TAG" --title "Reader's Video Editor $VERSION" --notes "Reader's Video Editor $VERSION" || sleep 5
+          fi
+          gh release upload "$TAG" out/* --clobber
+
+  deb:
+    name: linux (.deb)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: The app's own version number
+        run: echo "VERSION=$(sed -n 's/^VERSION = "\(.*\)"/\1/p' readers_video_editor.py)" >> "$GITHUB_ENV"
+
+      - name: Build the .deb
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fakeroot xvfb
+          packaging/build-deb.sh
+          mkdir -p out
+          mv "packaging/readers-video-editor_${VERSION}_all.deb" out/
+
+      - name: Does it install and start?
+        run: |
+          sudo apt-get install -y -qq ./out/readers-video-editor_${VERSION}_all.deb
+          xvfb-run -a readers-video-editor &
+          PID=$!
+          sleep 30
+          kill "$PID" && echo "it installed, started and was still running"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: readers-video-editor-linux
+          path: out/*
+
+      - name: Attach to the release
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          if ! gh release view "$TAG" >/dev/null 2>&1; then
+            gh release create "$TAG" --title "Reader's Video Editor $VERSION" --notes "Reader's Video Editor $VERSION" || sleep 5
+          fi
+          gh release upload "$TAG" out/* --clobber

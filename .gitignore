@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+/packaging/deb-root/
+/packaging/*.deb
+/build/
+/dist/
+/out/
+*.spec
