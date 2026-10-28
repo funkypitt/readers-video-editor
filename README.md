@@ -13,6 +13,11 @@ the computer.
 - **Open** a video or a recording (MP4, MKV, MOV, WebM, MP3, M4A, WAV, FLAC…), or drop it on the
   window. A `.srt` beside it with the same name is read at once; otherwise the words are
   transcribed here (faster-whisper, CPU; the model is downloaded once).
+- **Address…** (Ctrl+L) takes the address of a video on YouTube, X (Twitter) or any site
+  [yt-dlp](https://github.com/yt-dlp/yt-dlp) knows, or a link dropped on the window: the video
+  lands in your Videos folder (MP4, 1080p at most) with the site's subtitles in the chosen
+  language when it has them, and opens. yt-dlp is fetched on first use (40 MB) and updates
+  itself once a day, since the sites change often.
 - **Highlight** by dragging over the words. A click on a word plays from there; a double click
   takes the sentence; Shift + click extends from the last word; Alt or the eraser removes. The
   passages without words (music, silence, a dropped bit) are tokens too, marked by one click.
@@ -39,6 +44,7 @@ More detail: [docs/NOTES.md](docs/NOTES.md).
 - Arch, Manjaro: `git clone https://github.com/funkypitt/readers-video-editor && cd readers-video-editor/packaging && makepkg -si`.
 - Windows (`.exe`) and macOS (`.dmg`, `apple-silicon` or `intel`): from the latest release; they carry ffmpeg and the transcription. They are unsigned: on Windows *More info* › *Run anyway*, on macOS right click on the app › *Open* the first time.
 - Anywhere else: `python3 readers_video_editor.py [video] [subtitles.srt]` with PyQt5 (with QtMultimedia), numpy, soundfile and ffmpeg installed; faster-whisper for the transcription.
+- The address feature needs nothing installed: the app keeps its own copy of yt-dlp in its data folder (`~/.local/share/readers-video-editor/bin`, `%APPDATA%\Readers Video Editor\bin`, `~/Library/Application Support/readers-video-editor/bin`).
 
 ## Build
 

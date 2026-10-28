@@ -10,6 +10,7 @@ import json
 import locale
 import math
 import os
+import platform
 import re
 import shutil
 import subprocess
@@ -26,7 +27,7 @@ from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 APP = "readers-video-editor"
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 
 
 def _app_dirs():
@@ -80,6 +81,19 @@ MODEL_DEFAULT = "small"
 
 _TR = {
  "fr": {
+  "address…": "adresse…",
+  "Open an address": "Ouvrir une adresse",
+  "The address of a video (YouTube, X…). It is fetched here, with its subtitles when the site has them.": "L'adresse d'une vidéo (YouTube, X…). Elle est téléchargée ici, avec ses sous-titres quand le site en a.",
+  "Fetching yt-dlp (once)…": "Téléchargement de yt-dlp (une fois)…",
+  "Updating yt-dlp…": "Mise à jour de yt-dlp…",
+  "Downloading…": "Téléchargement…",
+  "Downloading… %1 %": "Téléchargement… %1 %",
+  "Joining the picture and the sound…": "Assemblage de l'image et du son…",
+  "The download failed: %1": "Le téléchargement a échoué : %1",
+  "no video in the answer": "pas de vidéo dans la réponse",
+  "yt-dlp could not be fetched (no network?): %1": "yt-dlp n'a pas pu être téléchargé (pas de réseau ?) : %1",
+  "Downloaded: %1": "Téléchargé : %1",
+  "Ctrl+L address": "Ctrl+L adresse",
   "read": "lire",
   "edit": "monter",
   "save the text…": "enregistrer le texte…",
@@ -97,7 +111,7 @@ _TR = {
   "Open a video or a recording": "Ouvrir une vidéo ou un enregistrement",
   "Video and audio files": "Fichiers vidéo et audio", "Subtitles (*.srt)": "Sous-titres (*.srt)",
   "Open the subtitles of this file": "Ouvrir les sous-titres de ce fichier",
-  "Drop a video or a recording here, or press Ctrl+O.": "Déposez ici une vidéo ou un enregistrement, ou appuyez sur Ctrl+O.",
+  "Drop a video, a recording or a link here, or press Ctrl+O / Ctrl+L.": "Déposez ici une vidéo, un enregistrement ou un lien, ou appuyez sur Ctrl+O / Ctrl+L.",
   "Reading the file…": "Lecture du fichier…", "Extracting the sound…": "Extraction du son…",
   "Loading the model %1 (downloaded once)…": "Chargement du modèle %1 (téléchargé une fois)…",
   "Transcribing… %1 %": "Transcription… %1 %", "Text ready: %1 words": "Texte prêt : %1 mots",
@@ -135,6 +149,19 @@ _TR = {
   "subtitles": "sous-titres", "transcription": "transcription",
  },
  "de": {
+  "address…": "Adresse…",
+  "Open an address": "Eine Adresse öffnen",
+  "The address of a video (YouTube, X…). It is fetched here, with its subtitles when the site has them.": "Die Adresse eines Videos (YouTube, X…). Es wird hierher geladen, mit seinen Untertiteln, wenn die Seite welche hat.",
+  "Fetching yt-dlp (once)…": "yt-dlp wird geladen (einmalig)…",
+  "Updating yt-dlp…": "yt-dlp wird aktualisiert…",
+  "Downloading…": "Wird heruntergeladen…",
+  "Downloading… %1 %": "Wird heruntergeladen… %1 %",
+  "Joining the picture and the sound…": "Bild und Ton werden zusammengefügt…",
+  "The download failed: %1": "Der Download ist fehlgeschlagen: %1",
+  "no video in the answer": "kein Video in der Antwort",
+  "yt-dlp could not be fetched (no network?): %1": "yt-dlp konnte nicht geladen werden (kein Netz?): %1",
+  "Downloaded: %1": "Heruntergeladen: %1",
+  "Ctrl+L address": "Strg+L Adresse",
   "read": "lesen",
   "edit": "schneiden",
   "save the text…": "Text speichern…",
@@ -152,7 +179,7 @@ _TR = {
   "Open a video or a recording": "Ein Video oder eine Aufnahme öffnen",
   "Video and audio files": "Video- und Audiodateien", "Subtitles (*.srt)": "Untertitel (*.srt)",
   "Open the subtitles of this file": "Die Untertitel dieser Datei öffnen",
-  "Drop a video or a recording here, or press Ctrl+O.": "Ein Video oder eine Aufnahme hierher ziehen, oder Strg+O drücken.",
+  "Drop a video, a recording or a link here, or press Ctrl+O / Ctrl+L.": "Ein Video, eine Aufnahme oder einen Link hierher ziehen, oder Strg+O / Strg+L drücken.",
   "Reading the file…": "Datei wird gelesen…", "Extracting the sound…": "Ton wird ausgelesen…",
   "Loading the model %1 (downloaded once)…": "Modell %1 wird geladen (einmal heruntergeladen)…",
   "Transcribing… %1 %": "Transkription… %1 %", "Text ready: %1 words": "Text bereit: %1 Wörter",
@@ -190,6 +217,19 @@ _TR = {
   "subtitles": "Untertitel", "transcription": "Transkription",
  },
  "es": {
+  "address…": "dirección…",
+  "Open an address": "Abrir una dirección",
+  "The address of a video (YouTube, X…). It is fetched here, with its subtitles when the site has them.": "La dirección de un vídeo (YouTube, X…). Se descarga aquí, con sus subtítulos cuando el sitio los tiene.",
+  "Fetching yt-dlp (once)…": "Descargando yt-dlp (una vez)…",
+  "Updating yt-dlp…": "Actualizando yt-dlp…",
+  "Downloading…": "Descargando…",
+  "Downloading… %1 %": "Descargando… %1 %",
+  "Joining the picture and the sound…": "Uniendo la imagen y el sonido…",
+  "The download failed: %1": "La descarga ha fallado: %1",
+  "no video in the answer": "ningún vídeo en la respuesta",
+  "yt-dlp could not be fetched (no network?): %1": "No se pudo descargar yt-dlp (¿sin red?): %1",
+  "Downloaded: %1": "Descargado: %1",
+  "Ctrl+L address": "Ctrl+L dirección",
   "read": "leer",
   "edit": "montar",
   "save the text…": "guardar el texto…",
@@ -207,7 +247,7 @@ _TR = {
   "Open a video or a recording": "Abrir un vídeo o una grabación",
   "Video and audio files": "Archivos de vídeo y audio", "Subtitles (*.srt)": "Subtítulos (*.srt)",
   "Open the subtitles of this file": "Abrir los subtítulos de este archivo",
-  "Drop a video or a recording here, or press Ctrl+O.": "Suelte aquí un vídeo o una grabación, o pulse Ctrl+O.",
+  "Drop a video, a recording or a link here, or press Ctrl+O / Ctrl+L.": "Suelte aquí un vídeo, una grabación o un enlace, o pulse Ctrl+O / Ctrl+L.",
   "Reading the file…": "Leyendo el archivo…", "Extracting the sound…": "Extrayendo el sonido…",
   "Loading the model %1 (downloaded once)…": "Cargando el modelo %1 (descargado una vez)…",
   "Transcribing… %1 %": "Transcribiendo… %1 %", "Text ready: %1 words": "Texto listo: %1 palabras",
@@ -245,6 +285,19 @@ _TR = {
   "subtitles": "subtítulos", "transcription": "transcripción",
  },
  "pt": {
+  "address…": "endereço…",
+  "Open an address": "Abrir um endereço",
+  "The address of a video (YouTube, X…). It is fetched here, with its subtitles when the site has them.": "O endereço de um vídeo (YouTube, X…). É descarregado aqui, com as legendas quando o site as tem.",
+  "Fetching yt-dlp (once)…": "A descarregar o yt-dlp (uma vez)…",
+  "Updating yt-dlp…": "A atualizar o yt-dlp…",
+  "Downloading…": "A descarregar…",
+  "Downloading… %1 %": "A descarregar… %1 %",
+  "Joining the picture and the sound…": "A juntar a imagem e o som…",
+  "The download failed: %1": "A transferência falhou: %1",
+  "no video in the answer": "nenhum vídeo na resposta",
+  "yt-dlp could not be fetched (no network?): %1": "Não foi possível descarregar o yt-dlp (sem rede?): %1",
+  "Downloaded: %1": "Descarregado: %1",
+  "Ctrl+L address": "Ctrl+L endereço",
   "read": "ler",
   "edit": "montar",
   "save the text…": "guardar o texto…",
@@ -262,7 +315,7 @@ _TR = {
   "Open a video or a recording": "Abrir um vídeo ou uma gravação",
   "Video and audio files": "Ficheiros de vídeo e áudio", "Subtitles (*.srt)": "Legendas (*.srt)",
   "Open the subtitles of this file": "Abrir as legendas deste ficheiro",
-  "Drop a video or a recording here, or press Ctrl+O.": "Largue aqui um vídeo ou uma gravação, ou prima Ctrl+O.",
+  "Drop a video, a recording or a link here, or press Ctrl+O / Ctrl+L.": "Largue aqui um vídeo, uma gravação ou uma ligação, ou prima Ctrl+O / Ctrl+L.",
   "Reading the file…": "A ler o ficheiro…", "Extracting the sound…": "A extrair o som…",
   "Loading the model %1 (downloaded once)…": "A carregar o modelo %1 (descarregado uma vez)…",
   "Transcribing… %1 %": "A transcrever… %1 %", "Text ready: %1 words": "Texto pronto: %1 palavras",
@@ -300,6 +353,19 @@ _TR = {
   "subtitles": "legendas", "transcription": "transcrição",
  },
  "ru": {
+  "address…": "адрес…",
+  "Open an address": "Открыть адрес",
+  "The address of a video (YouTube, X…). It is fetched here, with its subtitles when the site has them.": "Адрес видео (YouTube, X…). Оно загружается сюда вместе с субтитрами, если они есть на сайте.",
+  "Fetching yt-dlp (once)…": "Загрузка yt-dlp (один раз)…",
+  "Updating yt-dlp…": "Обновление yt-dlp…",
+  "Downloading…": "Загрузка…",
+  "Downloading… %1 %": "Загрузка… %1 %",
+  "Joining the picture and the sound…": "Объединение изображения и звука…",
+  "The download failed: %1": "Загрузка не удалась: %1",
+  "no video in the answer": "в ответе нет видео",
+  "yt-dlp could not be fetched (no network?): %1": "Не удалось загрузить yt-dlp (нет сети?): %1",
+  "Downloaded: %1": "Загружено: %1",
+  "Ctrl+L address": "Ctrl+L адрес",
   "read": "читать",
   "edit": "монтаж",
   "save the text…": "сохранить текст…",
@@ -317,7 +383,7 @@ _TR = {
   "Open a video or a recording": "Открыть видео или запись",
   "Video and audio files": "Видео- и аудиофайлы", "Subtitles (*.srt)": "Субтитры (*.srt)",
   "Open the subtitles of this file": "Открыть субтитры этого файла",
-  "Drop a video or a recording here, or press Ctrl+O.": "Перетащите сюда видео или запись, или нажмите Ctrl+O.",
+  "Drop a video, a recording or a link here, or press Ctrl+O / Ctrl+L.": "Перетащите сюда видео, запись или ссылку, или нажмите Ctrl+O / Ctrl+L.",
   "Reading the file…": "Чтение файла…", "Extracting the sound…": "Извлечение звука…",
   "Loading the model %1 (downloaded once)…": "Загрузка модели %1 (скачивается один раз)…",
   "Transcribing… %1 %": "Расшифровка… %1 %", "Text ready: %1 words": "Текст готов: %1 слов",
@@ -409,6 +475,165 @@ def ffprobe_exe():
 
 
 _RUN_FLAGS = {"creationflags": 0x08000000} if sys.platform == "win32" else {}   # no console window on Windows
+
+
+# ------------------------------------------------------------------------------------------
+# A video from an address: YouTube, X (Twitter) and the other sites yt-dlp knows. The app keeps
+# its own copy of the standalone yt-dlp in the data folder (fetched once, 40 MB) and lets it
+# update itself once a day: the sites change every few weeks and yt-dlp follows.
+# ------------------------------------------------------------------------------------------
+
+BIN_DIR = os.path.join(DATA_DIR, "bin")
+YTDLP_RELEASES = "https://github.com/yt-dlp/yt-dlp/releases/latest/download/"
+YTDLP_CHECK_EVERY = 24 * 3600
+YTDLP_FORMAT = "bv*[height<=1080][ext=mp4]+ba[ext=m4a]/bv*[height<=1080]+ba/b[height<=1080]/b"
+
+
+def _ytdlp_asset():
+    """The yt-dlp release file for this machine (a standalone build that updates itself)."""
+    if sys.platform == "win32":
+        return "yt-dlp.exe"
+    if sys.platform == "darwin":
+        return "yt-dlp_macos"
+    return "yt-dlp_linux_aarch64" if platform.machine().lower() in ("aarch64", "arm64") else "yt-dlp_linux"
+
+
+def ytdlp_managed():
+    return os.path.join(BIN_DIR, "yt-dlp.exe" if sys.platform == "win32" else "yt-dlp")
+
+
+def ytdlp_exe():
+    """The app's own yt-dlp first; the system's one if the app's was never fetched."""
+    managed = ytdlp_managed()
+    if os.path.exists(managed):
+        return managed
+    return shutil.which("yt-dlp")
+
+
+def is_url(text):
+    return bool(re.match(r"^https?://\S+$", (text or "").strip()))
+
+
+def fetch_ytdlp(progress, cancelled):
+    """Downloads the standalone yt-dlp into the data folder. Afterwards it updates itself."""
+    import urllib.request
+    os.makedirs(BIN_DIR, exist_ok=True)
+    target = ytdlp_managed()
+    part = target + ".part"
+    req = urllib.request.Request(YTDLP_RELEASES + _ytdlp_asset(), headers={"User-Agent": APP + "/" + VERSION})
+    with urllib.request.urlopen(req, timeout=60) as r, open(part, "wb") as f:
+        total = int(r.headers.get("Content-Length") or 0)
+        got = 0
+        while True:
+            if cancelled():
+                raise Cancelled()
+            chunk = r.read(256 * 1024)
+            if not chunk:
+                break
+            f.write(chunk)
+            got += len(chunk)
+            progress(got / total if total else 0.0)
+    os.chmod(part, 0o755)
+    os.replace(part, target)
+    write_json(os.path.join(BIN_DIR, "yt-dlp-checked.json"), {"time": time.time()})
+    return target
+
+
+def update_ytdlp(exe, progress):
+    """`yt-dlp -U` on the app's copy, at most once a day. A failure (no network) is not an error."""
+    if exe != ytdlp_managed():
+        return
+    stamp = os.path.join(BIN_DIR, "yt-dlp-checked.json")
+    last = (read_json(stamp, {}) or {}).get("time", 0)
+    if time.time() - last < YTDLP_CHECK_EVERY:
+        return
+    progress()
+    try:
+        subprocess.run([exe, "-U"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=600, **_RUN_FLAGS)
+    except (OSError, subprocess.TimeoutExpired):
+        return
+    write_json(stamp, {"time": time.time()})
+
+
+def downloads_dir():
+    """Where the fetched videos land: the Videos folder, in a folder of the app."""
+    base = QtCore.QStandardPaths.writableLocation(QtCore.QStandardPaths.MoviesLocation)
+    if not base:
+        base = os.path.join(DATA_DIR, "downloads")
+    folder = os.path.join(base, "Reader's Video Editor")
+    os.makedirs(folder, exist_ok=True)
+    return folder
+
+
+def _sub_lang(path, stem):
+    """'name.fr.srt' beside 'name' → 'fr'; '' when the file carries no language."""
+    name = Path(path).name
+    if not name.startswith(stem + "."):
+        return ""
+    return name[len(stem) + 1:-4]
+
+
+def download_media(task, exe, url, folder, language, progress):
+    """Fetches the video (MP4, 1080p at most) and its subtitles in the wanted language, if the site
+    has them; returns (media path, srt path or None). The files land in `folder` under the video's
+    title; what the site added for other languages is dropped."""
+    work = Path(folder) / (".part-" + format(int(time.time() * 1000), "x"))
+    work.mkdir(parents=True, exist_ok=True)
+    cmd = [exe, "--no-playlist", "--newline", "--no-colors", "-f", YTDLP_FORMAT, "--merge-output-format", "mp4",
+           "--write-subs", "--sub-langs", "all", "--sub-format", "srt/best", "--convert-subs", "srt",
+           "--write-info-json", "--windows-filenames", "-o", str(work / "%(title).120B [%(id)s].%(ext)s")]
+    ff = ffmpeg_exe()
+    if ff:
+        cmd += ["--ffmpeg-location", ff]
+    cmd.append(url)
+    tail = []
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, errors="replace", **_RUN_FLAGS)
+    task["proc"] = proc
+    try:
+        for line in proc.stdout:
+            if task.get("cancelled"):
+                proc.kill()
+                break
+            line = line.rstrip()
+            tail = (tail + [line])[-12:]
+            m = re.match(r"\[download\]\s+([\d.]+)%", line)
+            if m:
+                progress(float(m.group(1)) / 100, _("Downloading… %1 %", int(float(m.group(1)))))
+            elif line.startswith("[Merger]"):
+                progress(1.0, _("Joining the picture and the sound…"))
+            elif line.startswith("[download] Destination:") or line.startswith("[info]"):
+                progress(0.0, _("Downloading…"))
+        proc.wait()
+    finally:
+        task["proc"] = None
+    if task.get("cancelled"):
+        shutil.rmtree(work, ignore_errors=True)
+        raise Cancelled()
+    if proc.returncode != 0:
+        shutil.rmtree(work, ignore_errors=True)
+        errors = [l for l in tail if l.startswith("ERROR:")]
+        raise RuntimeError(_("The download failed: %1", (errors[-1] if errors else " ".join(tail))[:400]))
+    files = list(work.iterdir())
+    media = max((f for f in files if f.suffix.lower() in EXT_VIDEO | EXT_AUDIO), key=lambda f: f.stat().st_size, default=None)
+    if media is None:
+        shutil.rmtree(work, ignore_errors=True)
+        raise RuntimeError(_("The download failed: %1", _("no video in the answer")))
+    info = next((read_json(f, {}) for f in files if f.name.endswith(".info.json")), {}) or {}
+    wanted = (language or (info.get("language") or "")).lower()
+    stem = media.stem
+    srt = None
+    if wanted:
+        subs = [f for f in files if f.suffix == ".srt"]
+        srt = next((f for f in subs if _sub_lang(f, stem).lower() == wanted), None) or \
+              next((f for f in subs if _sub_lang(f, stem).lower().startswith(wanted + "-")), None)
+    final = Path(folder) / media.name
+    os.replace(media, final)
+    final_srt = None
+    if srt is not None:
+        final_srt = final.with_suffix(".srt")
+        os.replace(srt, final_srt)
+    shutil.rmtree(work, ignore_errors=True)
+    return str(final), (str(final_srt) if final_srt else None)
 
 
 def probe(path):
@@ -1701,6 +1926,8 @@ class Main(QtWidgets.QMainWindow):
         top.setSpacing(10)
         self.b_open = QtWidgets.QPushButton(_("open…"))
         self.b_open.clicked.connect(self.ask_open)
+        self.b_url = QtWidgets.QPushButton(_("address…"))
+        self.b_url.clicked.connect(self.ask_url)
         self.b_srt = QtWidgets.QPushButton(_("subtitles…"))
         self.b_srt.clicked.connect(self.ask_srt)
         self.lang = QtWidgets.QComboBox()
@@ -1722,10 +1949,10 @@ class Main(QtWidgets.QMainWindow):
         self.title = QtWidgets.QLabel("")
         self.title.setObjectName("dim")
         self.title.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
-        for w in (self.b_open, self.b_srt, self.lang, self.model, self.b_transcribe):
-            if isinstance(w, QtWidgets.QPushButton):
-                w.setAutoDefault(False)
+        for w in (self.b_open, self.b_url, self.b_srt, self.b_transcribe):
+            w.setAutoDefault(False)
         top.addWidget(self.b_open)
+        top.addWidget(self.b_url)
         top.addWidget(self.b_srt)
         top.addWidget(QtWidgets.QLabel(_("language")))
         top.addWidget(self.lang)
@@ -1755,7 +1982,7 @@ class Main(QtWidgets.QMainWindow):
         self.player.stateChanged.connect(lambda _s: self.update_play_button())
         self.player.error.connect(self.on_media_error)
         self.player.durationChanged.connect(lambda d: self.slider.setMaximum(max(0, int(d))))
-        self.drop_hint = QtWidgets.QLabel(_("Drop a video or a recording here, or press Ctrl+O."))
+        self.drop_hint = QtWidgets.QLabel(_("Drop a video, a recording or a link here, or press Ctrl+O / Ctrl+L."))
         self.drop_hint.setAlignment(QtCore.Qt.AlignCenter)
         self.drop_hint.setWordWrap(True)
         self.drop_hint.setObjectName("dim")
@@ -1878,7 +2105,7 @@ class Main(QtWidgets.QMainWindow):
         rv.addWidget(self.page, 1)
         self.rv = rv
         self.reading = False
-        self.help = QtWidgets.QLabel(_("Shortcuts: Space play/pause · ← → 5 s · S highlight · G erase · Ctrl+Z undo · Ctrl+Y redo · Ctrl+T ink · Ctrl+= Ctrl+- text size") + " · Ctrl+R " + _("read") + " · Ctrl+S " + _("save the text…"))
+        self.help = QtWidgets.QLabel(_("Shortcuts: Space play/pause · ← → 5 s · S highlight · G erase · Ctrl+Z undo · Ctrl+Y redo · Ctrl+T ink · Ctrl+= Ctrl+- text size") + " · Ctrl+R " + _("read") + " · Ctrl+S " + _("save the text…") + " · " + _("Ctrl+L address"))
         self.help.setWordWrap(True)
         self.help.setObjectName("dim")
         rv.addWidget(self.help)
@@ -1893,6 +2120,7 @@ class Main(QtWidgets.QMainWindow):
             s.setContext(QtCore.Qt.ApplicationShortcut)
             s.activated.connect(fn)
         sc("Ctrl+O", self.ask_open)
+        sc("Ctrl+L", self.ask_url)
         sc("Ctrl+Z", self.page.undo)
         sc("Ctrl+Y", self.page.redo)
         sc("Ctrl+Shift+Z", self.page.redo)
@@ -2018,13 +2246,82 @@ class Main(QtWidgets.QMainWindow):
             e.acceptProposedAction()
 
     def dropEvent(self, e):
-        paths = [u.toLocalFile() for u in e.mimeData().urls() if u.isLocalFile()]
+        urls = e.mimeData().urls()
+        paths = [u.toLocalFile() for u in urls if u.isLocalFile()]
         srt = next((p for p in paths if p.lower().endswith(".srt")), None)
         media = next((p for p in paths if Path(p).suffix.lower() in EXT_VIDEO | EXT_AUDIO), None)
+        link = next((u.toString() for u in urls if not u.isLocalFile() and is_url(u.toString())), None)
         if media:
             self.open_source(media, srt)
         elif srt and self.project:
             self.load_srt(srt)
+        elif link:
+            self.open_url(link)
+
+    def ask_url(self):
+        if self.thread:
+            if self.task is not None and self.task.get("download"):
+                self.export_or_stop()       # the same stop: the task is cancelled, its process killed
+            return
+        clip = QtWidgets.QApplication.clipboard().text().strip()
+        dlg = QtWidgets.QDialog(self)
+        dlg.setWindowTitle(_("Open an address"))
+        v = QtWidgets.QVBoxLayout(dlg)
+        v.setContentsMargins(18, 16, 18, 14)
+        v.setSpacing(10)
+        hint = QtWidgets.QLabel(_("The address of a video (YouTube, X…). It is fetched here, with its subtitles when the site has them."))
+        hint.setWordWrap(True)
+        v.addWidget(hint)
+        field = QtWidgets.QLineEdit(clip if is_url(clip) else "")
+        field.setMinimumWidth(field.fontMetrics().averageCharWidth() * 64)
+        field.selectAll()
+        v.addWidget(field)
+        buttons = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel)
+        buttons.accepted.connect(dlg.accept)
+        buttons.rejected.connect(dlg.reject)
+        v.addWidget(buttons)
+        if dlg.exec_() == QtWidgets.QDialog.Accepted and is_url(field.text()):
+            self.open_url(field.text().strip())
+
+    def open_url(self, url):
+        if self.thread or not is_url(url):
+            return
+        if not ffmpeg_exe():
+            self.say(_("ffmpeg was not found. Install it (ffmpeg.org) and start again."))
+            return
+        folder = downloads_dir()
+        language = self.lang.currentData() or ""
+        self.task = {"cancelled": False, "proc": None, "download": True}
+        task = self.task
+
+        def work(w):
+            exe = ytdlp_exe()
+            if not exe:
+                try:
+                    exe = fetch_ytdlp(lambda f: w.progress.emit(0.1 * f, _("Fetching yt-dlp (once)…")), lambda: w.cancelled or task["cancelled"])
+                except Cancelled:
+                    raise
+                except Exception as ex:      # noqa: BLE001
+                    raise RuntimeError(_("yt-dlp could not be fetched (no network?): %1", str(ex)[:200]))
+            update_ytdlp(exe, lambda: w.progress.emit(0.1, _("Updating yt-dlp…")))
+            return download_media(task, exe, url, folder, language, lambda f, t: w.progress.emit(0.1 + 0.9 * f, t))
+
+        def done(result):
+            self.task = None
+            self.progress.hide()
+            self.b_url.setText(_("address…"))
+            media, srt = result
+            self.open_source(media, srt)
+            self.say(_("Downloaded: %1", media))
+
+        def failed(msg):
+            self.task = None
+            self.progress.hide()
+            self.b_url.setText(_("address…"))
+            self.say(msg or _("Cancelled."))
+        self.b_url.setText(_("stop"))
+        self.say(_("Downloading…"))
+        self.run_in_background(work, done, failed)
 
     def ask_open(self):
         start = self.cfg.get("last_dir") or os.path.expanduser("~")
@@ -2087,7 +2384,7 @@ class Main(QtWidgets.QMainWindow):
         elif beside.exists():
             self.load_srt(str(beside))
         else:
-            self.say(_("Drop a video or a recording here, or press Ctrl+O.") if False else "")
+            self.say(_("Drop a video, a recording or a link here, or press Ctrl+O / Ctrl+L.") if False else "")
             self.start_transcription()
 
     def say(self, text):

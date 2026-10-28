@@ -43,3 +43,23 @@ The saved text has those paragraphs and no timings.
 QtMultimedia: GStreamer on Linux (`gstreamer1.0-plugins-good` + `gstreamer1.0-libav` for H.264
 and AAC), Media Foundation on Windows, AVFoundation on macOS. When a file cannot be played, the
 page and the export still work.
+
+## Addresses (yt-dlp)
+
+`download_media` runs the standalone yt-dlp as a subprocess: `--no-playlist`, MP4 up to 1080p
+(`bv*[height<=1080][ext=mp4]+ba[ext=m4a]/…`), `--write-subs --sub-langs all` converted to SRT,
+`--write-info-json`, everything into a `.part-<hex>` folder inside the Videos folder of the app.
+Afterwards the biggest media file is moved up under the video's title; the SRT kept is the one
+whose language is the language chosen in the window, or the language the site declares for the
+video when the window says « auto » (no guess: a French video with only English subtitles is
+transcribed instead). The info json and the other subtitle files are dropped. Progress comes
+from the `[download]  12.3%` lines (`--newline`); an `ERROR:` line becomes the message.
+
+The binary is the app's own copy in `<data>/bin` (`yt-dlp_linux`, `yt-dlp_linux_aarch64`,
+`yt-dlp.exe`, `yt-dlp_macos` from the latest GitHub release, fetched with urllib on first use),
+and `yt-dlp -U` runs on it at most once a day (`yt-dlp-checked.json`), quietly; without network
+the download simply proceeds with the copy at hand. A system `yt-dlp` is used only when the app's
+copy was never fetched. Since yt-dlp 2025.11 a JavaScript runtime (Deno) is recommended for
+YouTube; checked 2026-10-28 with 2026.10.26: no warning and the full format list (1080p) without
+any runtime, so none is managed. If YouTube downloads start to fail with a runtime warning, the
+next step is to fetch Deno the same way and pass `--js-runtimes deno:<path>`.
