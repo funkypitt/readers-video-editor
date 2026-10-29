@@ -5,6 +5,7 @@ is kept (or cut), the cuts land in the quiet between two words, each piece gets 
 ffmpeg writes the new file with a log of the cuts and an edit list. One file, PyQt5 + numpy +
 soundfile; faster-whisper for the transcription. MIT licence."""
 
+import glob
 import hashlib
 import json
 import locale
@@ -27,7 +28,7 @@ from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 APP = "readers-video-editor"
-VERSION = "1.2.1"
+VERSION = "1.3.0"
 
 
 def _app_dirs():
@@ -702,6 +703,137 @@ _TR = {
  },
 }
 
+# The strings of 1.3.0: translation, subtitles, project files
+_TR_MORE = {
+ "fr": {
+  "Translate…": "Traduire…", "Translation": "Traduction", "Original": "Original", "From": "De", "Into": "Vers",
+  "Translation by": "Traduction par", "On this computer (Ollama)": "Sur cet ordinateur (Ollama)", "Claude (API)": "Claude (API)",
+  "Ollama model": "Modèle Ollama",
+  "Context for the translator: names, subject, register (optional)": "Contexte pour le traducteur : noms, sujet, registre (facultatif)",
+  "Proofreading pass (a second reading by the model)": "Passe de relecture (une seconde lecture par le modèle)",
+  "Translating into %1…": "Traduction en %1…", "The translation failed: %1": "La traduction a échoué : %1",
+  "Translated: %1 words": "Traduit : %1 mots", "The translation came back empty.": "La traduction est revenue vide.",
+  "The traduction toolkit does the translation (traduire.py). It was not found: give its folder, or install it from %1.":
+    "La traduction est faite par le traduction toolkit (traduire.py). Il n'a pas été trouvé : indiquez son dossier, ou installez-le depuis %1.",
+  "Folder of the traduction toolkit": "Dossier du traduction toolkit", "traduire.py is not in this folder.": "traduire.py n'est pas dans ce dossier.",
+  "Same as the source language.": "C'est la langue d'origine.",
+  "ANTHROPIC_API_KEY is not set.": "ANTHROPIC_API_KEY n'est pas définie.", "Ollama does not answer at %1.": "Ollama ne répond pas à %1.",
+  "Analysing the text…": "Analyse du texte…", "Translating…": "Traduction…", "Translating… %1 of %2": "Traduction… %1 sur %2",
+  "Proofreading…": "Relecture…", "Checking the consistency…": "Vérification de la cohérence…", "Checking the glossary…": "Vérification du glossaire…",
+  "Save the subtitles…": "Enregistrer les sous-titres…", "Save the subtitles": "Enregistrer les sous-titres",
+  "Subtitles saved: %1": "Sous-titres enregistrés : %1", "Making the subtitles…": "Préparation des sous-titres…",
+  "Subtitles": "Sous-titres", "In the picture: %1": "Dans l'image : %1",
+  "Subtitle files beside the edit (.srt)": "Fichiers de sous-titres à côté du montage (.srt)",
+  "Project": "Projet", "Save the project": "Enregistrer le projet", "Save the project…": "Enregistrer le projet…",
+  "Save the project as…": "Enregistrer le projet sous…", "Open a project…": "Ouvrir un projet…", "Open a project": "Ouvrir un projet",
+  "Project (*.rve.json)": "Projet (*.rve.json)", "Project saved: %1": "Projet enregistré : %1",
+  "The file of this project was not found: %1": "Le fichier de ce projet est introuvable : %1", "This is not a project file.": "Ce n'est pas un fichier de projet.",
+  "Beside it: the log of the cuts (.txt), the edit list (.edl) and the subtitles (.srt).": "À côté : le journal des coupes (.txt), la liste de montage (.edl) et les sous-titres (.srt).",
+ },
+ "de": {
+  "Translate…": "Übersetzen…", "Translation": "Übersetzung", "Original": "Original", "From": "Von", "Into": "Nach",
+  "Translation by": "Übersetzung durch", "On this computer (Ollama)": "Auf diesem Rechner (Ollama)", "Claude (API)": "Claude (API)",
+  "Ollama model": "Ollama-Modell",
+  "Context for the translator: names, subject, register (optional)": "Kontext für den Übersetzer: Namen, Thema, Register (optional)",
+  "Proofreading pass (a second reading by the model)": "Korrekturdurchgang (ein zweites Lesen durch das Modell)",
+  "Translating into %1…": "Übersetzung nach %1…", "The translation failed: %1": "Die Übersetzung ist fehlgeschlagen: %1",
+  "Translated: %1 words": "Übersetzt: %1 Wörter", "The translation came back empty.": "Die Übersetzung kam leer zurück.",
+  "The traduction toolkit does the translation (traduire.py). It was not found: give its folder, or install it from %1.":
+    "Die Übersetzung macht das traduction toolkit (traduire.py). Es wurde nicht gefunden: geben Sie seinen Ordner an, oder installieren Sie es von %1.",
+  "Folder of the traduction toolkit": "Ordner des traduction toolkit", "traduire.py is not in this folder.": "traduire.py liegt nicht in diesem Ordner.",
+  "Same as the source language.": "Das ist die Ausgangssprache.",
+  "ANTHROPIC_API_KEY is not set.": "ANTHROPIC_API_KEY ist nicht gesetzt.", "Ollama does not answer at %1.": "Ollama antwortet nicht unter %1.",
+  "Analysing the text…": "Der Text wird analysiert…", "Translating…": "Übersetzung…", "Translating… %1 of %2": "Übersetzung… %1 von %2",
+  "Proofreading…": "Korrekturlesen…", "Checking the consistency…": "Prüfung der Einheitlichkeit…", "Checking the glossary…": "Prüfung des Glossars…",
+  "Save the subtitles…": "Untertitel speichern…", "Save the subtitles": "Untertitel speichern",
+  "Subtitles saved: %1": "Untertitel gespeichert: %1", "Making the subtitles…": "Untertitel werden erstellt…",
+  "Subtitles": "Untertitel", "In the picture: %1": "Im Bild: %1",
+  "Subtitle files beside the edit (.srt)": "Untertiteldateien neben dem Schnitt (.srt)",
+  "Project": "Projekt", "Save the project": "Projekt speichern", "Save the project…": "Projekt speichern…",
+  "Save the project as…": "Projekt speichern unter…", "Open a project…": "Ein Projekt öffnen…", "Open a project": "Ein Projekt öffnen",
+  "Project (*.rve.json)": "Projekt (*.rve.json)", "Project saved: %1": "Projekt gespeichert: %1",
+  "The file of this project was not found: %1": "Die Datei dieses Projekts wurde nicht gefunden: %1", "This is not a project file.": "Das ist keine Projektdatei.",
+  "Beside it: the log of the cuts (.txt), the edit list (.edl) and the subtitles (.srt).": "Daneben: das Protokoll der Schnitte (.txt), die Schnittliste (.edl) und die Untertitel (.srt).",
+ },
+ "es": {
+  "Translate…": "Traducir…", "Translation": "Traducción", "Original": "Original", "From": "De", "Into": "A",
+  "Translation by": "Traducción por", "On this computer (Ollama)": "En este ordenador (Ollama)", "Claude (API)": "Claude (API)",
+  "Ollama model": "Modelo Ollama",
+  "Context for the translator: names, subject, register (optional)": "Contexto para el traductor: nombres, tema, registro (opcional)",
+  "Proofreading pass (a second reading by the model)": "Pasada de relectura (una segunda lectura por el modelo)",
+  "Translating into %1…": "Traduciendo al %1…", "The translation failed: %1": "La traducción ha fallado: %1",
+  "Translated: %1 words": "Traducido: %1 palabras", "The translation came back empty.": "La traducción ha vuelto vacía.",
+  "The traduction toolkit does the translation (traduire.py). It was not found: give its folder, or install it from %1.":
+    "La traducción la hace el traduction toolkit (traduire.py). No se ha encontrado: indique su carpeta, o instálelo desde %1.",
+  "Folder of the traduction toolkit": "Carpeta del traduction toolkit", "traduire.py is not in this folder.": "traduire.py no está en esta carpeta.",
+  "Same as the source language.": "Es la lengua de origen.",
+  "ANTHROPIC_API_KEY is not set.": "ANTHROPIC_API_KEY no está definida.", "Ollama does not answer at %1.": "Ollama no responde en %1.",
+  "Analysing the text…": "Analizando el texto…", "Translating…": "Traduciendo…", "Translating… %1 of %2": "Traduciendo… %1 de %2",
+  "Proofreading…": "Relectura…", "Checking the consistency…": "Comprobando la coherencia…", "Checking the glossary…": "Comprobando el glosario…",
+  "Save the subtitles…": "Guardar los subtítulos…", "Save the subtitles": "Guardar los subtítulos",
+  "Subtitles saved: %1": "Subtítulos guardados: %1", "Making the subtitles…": "Preparando los subtítulos…",
+  "Subtitles": "Subtítulos", "In the picture: %1": "En la imagen: %1",
+  "Subtitle files beside the edit (.srt)": "Archivos de subtítulos junto al montaje (.srt)",
+  "Project": "Proyecto", "Save the project": "Guardar el proyecto", "Save the project…": "Guardar el proyecto…",
+  "Save the project as…": "Guardar el proyecto como…", "Open a project…": "Abrir un proyecto…", "Open a project": "Abrir un proyecto",
+  "Project (*.rve.json)": "Proyecto (*.rve.json)", "Project saved: %1": "Proyecto guardado: %1",
+  "The file of this project was not found: %1": "No se encuentra el archivo de este proyecto: %1", "This is not a project file.": "Esto no es un archivo de proyecto.",
+  "Beside it: the log of the cuts (.txt), the edit list (.edl) and the subtitles (.srt).": "Al lado: el registro de los cortes (.txt), la lista de montaje (.edl) y los subtítulos (.srt).",
+ },
+ "pt": {
+  "Translate…": "Traduzir…", "Translation": "Tradução", "Original": "Original", "From": "De", "Into": "Para",
+  "Translation by": "Tradução por", "On this computer (Ollama)": "Neste computador (Ollama)", "Claude (API)": "Claude (API)",
+  "Ollama model": "Modelo Ollama",
+  "Context for the translator: names, subject, register (optional)": "Contexto para o tradutor: nomes, assunto, registo (opcional)",
+  "Proofreading pass (a second reading by the model)": "Passagem de revisão (uma segunda leitura pelo modelo)",
+  "Translating into %1…": "A traduzir para %1…", "The translation failed: %1": "A tradução falhou: %1",
+  "Translated: %1 words": "Traduzido: %1 palavras", "The translation came back empty.": "A tradução voltou vazia.",
+  "The traduction toolkit does the translation (traduire.py). It was not found: give its folder, or install it from %1.":
+    "A tradução é feita pelo traduction toolkit (traduire.py). Não foi encontrado: indique a sua pasta, ou instale-o a partir de %1.",
+  "Folder of the traduction toolkit": "Pasta do traduction toolkit", "traduire.py is not in this folder.": "traduire.py não está nesta pasta.",
+  "Same as the source language.": "É a língua de origem.",
+  "ANTHROPIC_API_KEY is not set.": "ANTHROPIC_API_KEY não está definida.", "Ollama does not answer at %1.": "Ollama não responde em %1.",
+  "Analysing the text…": "A analisar o texto…", "Translating…": "A traduzir…", "Translating… %1 of %2": "A traduzir… %1 de %2",
+  "Proofreading…": "Revisão…", "Checking the consistency…": "A verificar a coerência…", "Checking the glossary…": "A verificar o glossário…",
+  "Save the subtitles…": "Guardar as legendas…", "Save the subtitles": "Guardar as legendas",
+  "Subtitles saved: %1": "Legendas guardadas: %1", "Making the subtitles…": "A preparar as legendas…",
+  "Subtitles": "Legendas", "In the picture: %1": "Na imagem: %1",
+  "Subtitle files beside the edit (.srt)": "Ficheiros de legendas ao lado da montagem (.srt)",
+  "Project": "Projeto", "Save the project": "Guardar o projeto", "Save the project…": "Guardar o projeto…",
+  "Save the project as…": "Guardar o projeto como…", "Open a project…": "Abrir um projeto…", "Open a project": "Abrir um projeto",
+  "Project (*.rve.json)": "Projeto (*.rve.json)", "Project saved: %1": "Projeto guardado: %1",
+  "The file of this project was not found: %1": "O ficheiro deste projeto não foi encontrado: %1", "This is not a project file.": "Isto não é um ficheiro de projeto.",
+  "Beside it: the log of the cuts (.txt), the edit list (.edl) and the subtitles (.srt).": "Ao lado: o registo dos cortes (.txt), a lista de montagem (.edl) e as legendas (.srt).",
+ },
+ "ru": {
+  "Translate…": "Перевести…", "Translation": "Перевод", "Original": "Оригинал", "From": "С", "Into": "На",
+  "Translation by": "Переводчик", "On this computer (Ollama)": "На этом компьютере (Ollama)", "Claude (API)": "Claude (API)",
+  "Ollama model": "Модель Ollama",
+  "Context for the translator: names, subject, register (optional)": "Контекст для переводчика: имена, тема, стиль (необязательно)",
+  "Proofreading pass (a second reading by the model)": "Проход вычитки (второе чтение моделью)",
+  "Translating into %1…": "Перевод на %1…", "The translation failed: %1": "Перевод не удался: %1",
+  "Translated: %1 words": "Переведено: %1 слов", "The translation came back empty.": "Перевод вернулся пустым.",
+  "The traduction toolkit does the translation (traduire.py). It was not found: give its folder, or install it from %1.":
+    "Перевод выполняет traduction toolkit (traduire.py). Он не найден: укажите его папку или установите с %1.",
+  "Folder of the traduction toolkit": "Папка traduction toolkit", "traduire.py is not in this folder.": "В этой папке нет traduire.py.",
+  "Same as the source language.": "Это язык оригинала.",
+  "ANTHROPIC_API_KEY is not set.": "ANTHROPIC_API_KEY не задан.", "Ollama does not answer at %1.": "Ollama не отвечает по адресу %1.",
+  "Analysing the text…": "Анализ текста…", "Translating…": "Перевод…", "Translating… %1 of %2": "Перевод… %1 из %2",
+  "Proofreading…": "Вычитка…", "Checking the consistency…": "Проверка согласованности…", "Checking the glossary…": "Проверка глоссария…",
+  "Save the subtitles…": "Сохранить субтитры…", "Save the subtitles": "Сохранить субтитры",
+  "Subtitles saved: %1": "Субтитры сохранены: %1", "Making the subtitles…": "Подготовка субтитров…",
+  "Subtitles": "Субтитры", "In the picture: %1": "В кадре: %1",
+  "Subtitle files beside the edit (.srt)": "Файлы субтитров рядом с монтажом (.srt)",
+  "Project": "Проект", "Save the project": "Сохранить проект", "Save the project…": "Сохранить проект…",
+  "Save the project as…": "Сохранить проект как…", "Open a project…": "Открыть проект…", "Open a project": "Открыть проект",
+  "Project (*.rve.json)": "Проект (*.rve.json)", "Project saved: %1": "Проект сохранён: %1",
+  "The file of this project was not found: %1": "Файл этого проекта не найден: %1", "This is not a project file.": "Это не файл проекта.",
+  "Beside it: the log of the cuts (.txt), the edit list (.edl) and the subtitles (.srt).": "Рядом: журнал склеек (.txt), монтажный лист (.edl) и субтитры (.srt).",
+ },
+}
+for _code, _more in _TR_MORE.items():
+    _TR.setdefault(_code, {}).update(_more)
+
 
 def _lang():
     for var in ("LC_ALL", "LC_MESSAGES", "LANG"):
@@ -1305,6 +1437,338 @@ def transcribe(wav, language, model_size, duration, progress, cancelled):
 
 
 # ------------------------------------------------------------------------------------------
+# Translation and subtitles: the traduction toolkit (traduire.py) does that work, nothing is
+# written twice. The app finds it where its own launcher looks (TRADUCTION_DIR, ~/code/traduction,
+# ~/code/traduction-toolkit), runs it with the toolkit's Python (TRADUCTION_PYTHON, the conda
+# env interview or traduction: the rule of gui.py and monter.py) in a subprocess, and reads
+# small JSON lines from it. The translation itself is traduire.py's pipeline: analysis of the
+# content (summary, glossary), translation by chunks, proofreading, consistency and glossary
+# checks, with a local model (Ollama) or Claude. The subtitles are its re-segmentation
+# (two lines of 42 characters, 17 characters a second, the cuts on the speaker's pauses).
+# ------------------------------------------------------------------------------------------
+
+TOOLKIT_URL = "https://github.com/funkypitt/traduction-toolkit"
+OLLAMA_URL = "http://localhost:11434"
+LLM_LOCAL_MODEL = "gemma4:31b"          # traduire.OLLAMA_MODEL (bench 2026-06-22 of the toolkit)
+LLM_CLAUDE_MODEL = "claude-opus-5"      # traduire.CLAUDE_MODEL
+# The default burn-in style of traduire.py (SUBTITLE_STYLES["default"]) and its rule for a
+# picture narrower than 16:9: the lines of 42 characters must still fit.
+SUBTITLE_STYLE = ("FontName=Arial,FontSize=24,PrimaryColour=&H00FFFFFF,OutlineColour=&H00000000,"
+                  "BorderStyle=1,Outline=2,Shadow=1,MarginV=16")
+MAX_LINE = 42                 # traduire.MAX_CHARS_PER_LINE
+MAX_CUE = 7.0                 # traduire.MAX_DURATION_SEC
+ISO3 = {"fr": "fra", "en": "eng", "de": "deu", "es": "spa", "it": "ita", "pt": "por", "nl": "nld", "ru": "rus",
+        "pl": "pol", "ja": "jpn", "zh": "zho"}
+PROJECT_EXT = ".rve.json"
+
+
+def lang_label(code):
+    """'fr' → 'Français'; a code the app does not list stays as it is; '' is the original text."""
+    if not code:
+        return _("Original")
+    return next((name for c, name in LANGUAGES if c == code), code.upper())
+
+
+def toolkit_dir(cfg=None):
+    for d in (os.environ.get("TRADUCTION_DIR"), (cfg or {}).get("toolkit_dir"),
+              os.path.expanduser("~/code/traduction"), os.path.expanduser("~/code/traduction-toolkit")):
+        if d and os.path.isfile(os.path.join(d, "traduire.py")):
+            return d
+    return None
+
+
+def toolkit_python():
+    """The toolkit's interpreter (the rule of gui.py and monter.py); traduire.py itself needs only
+    the standard library, anthropic when Claude is asked for."""
+    cands = [os.environ.get("TRADUCTION_PYTHON")] + [os.path.expanduser(f"~/miniconda3/envs/{e}/bin/python") for e in ("interview", "traduction")]
+    for c in cands:
+        if c and os.path.exists(c):
+            return c
+    if getattr(sys, "frozen", False):
+        return shutil.which("python3") or shutil.which("python")
+    return sys.executable
+
+
+# What runs in the toolkit's Python: traduire.py's passes, in the order of its main(). Its own
+# messages go to stderr, the app reads them for its gauge; the answers come as "@@ {json}".
+TOOLKIT_BRIDGE = r"""
+import json, os, sys, traceback
+from dataclasses import asdict
+job = json.load(open(sys.argv[1], encoding="utf-8"))
+sys.path.insert(0, job["toolkit"])
+channel = sys.stdout
+sys.stdout = sys.stderr
+
+
+def say(**kw):
+    channel.write("@@ " + json.dumps(kw, ensure_ascii=False) + "\n")
+    channel.flush()
+
+
+try:
+    import traduire as t
+    segments = [t.Segment(d["index"], d["start"], d["end"], d["text"], d.get("text_tgt", ""),
+                          words=d.get("words", []), lang=d.get("lang", "")) for d in job["segments"]]
+    if job["task"] == "translate":
+        src, tgt, context = job["source_lang"], job["target_lang"], job.get("context", "")
+        if job.get("llm") == "claude":
+            if not os.environ.get("ANTHROPIC_API_KEY"):
+                say(error="ANTHROPIC_API_KEY")
+                sys.exit(1)
+            import anthropic
+            client = anthropic.Anthropic()
+            if job.get("claude_model"):
+                t.CLAUDE_MODEL = job["claude_model"]
+        else:
+            client = t._OllamaClient(job.get("ollama_url") or t.OLLAMA_URL, job.get("ollama_model") or t.OLLAMA_MODEL)
+        # traduire.py's "auto": the analysis (names, glossary, domain) by Claude when a key is there
+        analysis_client = client
+        if job.get("llm") != "claude" and os.environ.get("ANTHROPIC_API_KEY"):
+            try:
+                import anthropic
+                analysis_client = anthropic.Anthropic()
+            except Exception:
+                pass
+        say(step="analysis")
+        analysis = t.analyze_content(segments, analysis_client, src, tgt, context)
+        say(step="translate")
+        segments = t.translate_chunks(segments, analysis, client, src, tgt, context)
+        if job.get("review", True):
+            say(step="review")
+            segments = t.review_translation(segments, analysis, client, src, tgt, context)
+        say(step="consistency")
+        segments = t.check_consistency(segments, analysis, client, src, tgt)
+        say(step="glossary")
+        segments = t.verify_glossary(segments, analysis, client, src, tgt)
+        segments = t._clean_translation_artifacts(segments)
+        segments = t._clear_same_lang_translations(segments, src, tgt)
+        say(result={"segments": [asdict(s) for s in segments], "analysis": asdict(analysis)})
+    elif job["task"] == "subtitles":
+        subs = t.resegment(segments, job.get("target_lang") or "en")
+        say(result={"cues": [[s.start, s.end, s.text] for s in subs]})
+except SystemExit:
+    raise
+except Exception as ex:
+    traceback.print_exc()
+    say(error=f"{type(ex).__name__}: {ex}"[:400])
+    sys.exit(1)
+"""
+
+
+def run_bridge(task, job, folder, on_message=None):
+    """Runs the toolkit on `job` (a dict) in a subprocess and returns its result dict.
+    on_message(dict) receives each "@@" message and each printed line ({"line": …})."""
+    folder = Path(folder)
+    script = folder / "toolkit_bridge.py"
+    script.write_text(TOOLKIT_BRIDGE, encoding="utf-8")
+    job_file = folder / "toolkit_job.json"
+    write_json(job_file, job)
+    env = dict(os.environ, PYTHONIOENCODING="utf-8", PYTHONUNBUFFERED="1")
+    proc = subprocess.Popen([toolkit_python(), str(script), str(job_file)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                            text=True, errors="replace", env=env, **_RUN_FLAGS)
+    task["proc"] = proc
+    result, error, tail = None, "", []
+    try:
+        for line in proc.stdout:
+            if task.get("cancelled"):
+                proc.kill()
+                break
+            line = line.rstrip()
+            if line.startswith("@@ "):
+                try:
+                    msg = json.loads(line[3:])
+                except ValueError:
+                    continue
+                if "result" in msg:
+                    result = msg["result"]
+                elif "error" in msg:
+                    error = msg["error"]
+                elif on_message:
+                    on_message(msg)
+            else:
+                if line.strip():
+                    tail = (tail + [line.strip()])[-12:]
+                if on_message:
+                    on_message({"line": line})
+        proc.wait()
+    finally:
+        task["proc"] = None
+    if task.get("cancelled"):
+        raise Cancelled()
+    if error == "ANTHROPIC_API_KEY":
+        raise RuntimeError(_("ANTHROPIC_API_KEY is not set."))
+    if proc.returncode != 0 or result is None:
+        raise RuntimeError(error or " · ".join(tail)[-400:] or "traduire.py")
+    return result
+
+
+def ollama_answers(url):
+    import urllib.request
+    try:
+        with urllib.request.urlopen(url.rstrip("/") + "/api/tags", timeout=5) as r:
+            return r.status == 200
+    except Exception:
+        return False
+
+
+def segments_from_tokens(tokens):
+    """The tokens grouped by sentence, in the shape of traduire.py's segments:
+    {index, start, end, text, text_tgt, words: [{word, start, end}]}. A passage without words
+    closes the sentence."""
+    segs, after_pause = [], True
+    for t, d, f, s in tokens:
+        if t is None:
+            after_pause = True
+            continue
+        if segs and not after_pause and segs[-1]["_s"] == s:
+            seg = segs[-1]
+        else:
+            seg = {"index": len(segs) + 1, "start": d, "end": f, "text": "", "text_tgt": "", "words": [], "_s": s}
+            segs.append(seg)
+        seg["words"].append({"word": t, "start": d, "end": f})
+        seg["end"] = f
+        after_pause = False
+    for seg in segs:
+        seg["text"] = " ".join(w["word"] for w in seg["words"])
+        del seg["_s"]
+    return segs
+
+
+def tokens_from_translation(segments, duration):
+    """The translated text as tokens. The words of each segment are spread over the moments its
+    original words are spoken (a share of the time by their length, the ends of sentences on
+    the pauses), as monter.py reuses a translation: the positions are estimated."""
+    words, sentence = [], 0
+    for seg in segments:
+        text = (seg.get("text_tgt") or "").strip()
+        if not text:
+            continue
+        spans = []
+        for w in seg.get("words") or []:
+            try:
+                a, b = float(w["start"]), float(w["end"])
+            except (KeyError, TypeError, ValueError):
+                continue
+            if b > a:
+                spans.append((a, b))
+        moments = []
+        for a, b in sorted(spans):
+            if moments and a - moments[-1][1] < PAUSE_SPEECH:
+                moments[-1][1] = max(moments[-1][1], b)
+            else:
+                moments.append([a, b])
+        if not moments:
+            moments = [[float(seg["start"]), float(seg["end"])]]
+        for w, d, f in spread_words(words_of(text), moments):
+            words.append([w, d, f, sentence])
+            if _strength(w) == 2:
+                sentence += 1
+        sentence += 1
+    words.sort(key=lambda w: w[1])
+    return tokens_from_words(words, duration)
+
+
+def tokens_in_edit(tokens, cuts):
+    """The tokens of the edit on its own timeline: those inside a kept piece, shifted; a
+    passage without words marks each join."""
+    out, position = [], 0.0
+    for k, c in enumerate(cuts):
+        if k:
+            out.append([None, round(position, 3), round(position, 3), -1])
+        for t, d, f, s in tokens:
+            if t is None:
+                continue
+            mid = (d + f) / 2.0
+            if c["d"] <= mid <= c["f"]:
+                out.append([t, round(max(d, c["d"]) - c["d"] + position, 3), round(min(f, c["f"]) - c["d"] + position, 3), s])
+        position += c["f"] - c["d"]
+    return out
+
+
+def two_lines(text):
+    """A cue of more than one line is cut at the space nearest its middle, after a punctuation
+    mark when one is near."""
+    if len(text) <= MAX_LINE:
+        return text
+    mid = len(text) / 2.0
+    spaces = [i for i, c in enumerate(text) if c == " "]
+    if not spaces:
+        return text
+    best = min(spaces, key=lambda i: abs(i - mid) - (6 if text[i - 1] in PUNCTUATION else 0))
+    return text[:best].rstrip() + "\n" + text[best + 1:].lstrip()
+
+
+def simple_cues(tokens):
+    """Subtitles when the toolkit is not there: a cue ends on a sentence end followed by a
+    pause, on a pause of 2 s, at two lines of 42 characters or at 7 seconds."""
+    cues, cur = [], None
+    for t, d, f, s in tokens:
+        if t is None:
+            if cur:
+                cues.append(cur)
+            cur = None
+            continue
+        if cur:
+            text = cur[2] + " " + t
+            fresh = (d - cur[1] >= 2.0 or len(text) > 2 * MAX_LINE or f - cur[0] > MAX_CUE
+                     or (s != cur[3] and (d - cur[1] >= 0.9 or len(cur[2]) >= 2 * MAX_LINE - 12)))
+            if not fresh:
+                cur[1], cur[2] = f, text
+                continue
+            cues.append(cur)
+        cur = [d, f, t, s]
+    if cur:
+        cues.append(cur)
+    out = []
+    for k, (a, b, text, _s) in enumerate(cues):
+        b = max(b, a + 1.0)
+        if k + 1 < len(cues):
+            b = min(b, cues[k + 1][0] - 0.08)
+        out.append([round(a, 3), round(max(b, a + 0.3), 3), two_lines(text)])
+    return out
+
+
+def make_cues(tokens, language, toolkit, task, folder):
+    """[[start, end, text], …]: traduire.py's re-segmentation when the toolkit is there, the
+    plain cutting otherwise."""
+    if toolkit:
+        segments = segments_from_tokens(tokens)
+        for seg in segments:
+            seg["text_tgt"] = seg["text"]
+        if segments:
+            try:
+                cues = run_bridge(task, {"task": "subtitles", "toolkit": toolkit, "segments": segments, "target_lang": language or "en"}, folder)["cues"]
+                return [[float(a), float(b), str(text)] for a, b, text in cues if b > a and str(text).strip()]
+            except Cancelled:
+                raise
+            except Exception:
+                pass
+    return simple_cues(tokens)
+
+
+def srt_text(cues):
+    return "".join(f"{k + 1}\n{hmsm(a).replace('.', ',')} --> {hmsm(b).replace('.', ',')}\n{text}\n\n" for k, (a, b, text) in enumerate(cues))
+
+
+def scale_style(style, width, height):
+    """traduire._scale_style_for_video: libass scales with the picture, but a picture narrower
+    than 16:9 (square, vertical) needs smaller letters for its lines to fit."""
+    if width <= 0 or height <= 0 or width / height >= 16 / 9 - 0.05:
+        return style
+    ratio = width / (height * 16 / 9)
+
+    def scale(m):
+        name, val = m.group(1), int(m.group(2))
+        return f"{name}={max(14 if name == 'FontSize' else 8, round(val * ratio))}"
+    return re.sub(r"(FontSize|MarginV)=(\d+)", scale, style)
+
+
+def filter_path(path):
+    """A path inside an ffmpeg filter: forward slashes, the colon and the quote escaped."""
+    return str(path).replace("\\", "/").replace(":", "\\:").replace("'", "\\'")
+
+
+# ------------------------------------------------------------------------------------------
 # The cuts
 # ------------------------------------------------------------------------------------------
 
@@ -1476,12 +1940,16 @@ def _run_ffmpeg(cmd, task, log, on_time=None):
         raise RuntimeError(detail or "ffmpeg failed")
 
 
-def produce_video(task, source, cuts, fade, image_fade, out):
+def produce_video(task, source, cuts, fade, image_fade, out, burn=None, tracks=()):
     """One intermediate file per piece (x264 picture + raw sound), then one join: the picture is
-    copied as it is, the sound encoded once."""
+    copied as it is, the sound encoded once. With `burn` = (srt, style) the subtitles are drawn
+    into the picture at the join (encoded once more, as traduire.py burns them); `tracks` =
+    [(language, srt), …] go into the MP4 as subtitle tracks one can switch on."""
     ff = ffmpeg_exe()
     total = sum(c["f"] - c["d"] for c in cuts)
     tmp = Path(tempfile.mkdtemp(prefix="edit_", dir=str(out.parent)))
+    share = 0.6 if burn else 0.96
+    sub = None
     try:
         done, pieces = 0.0, []
         for k, c in enumerate(cuts):
@@ -1505,7 +1973,7 @@ def produce_video(task, source, cuts, fade, image_fade, out):
             base = done
 
             def advance(t, base=base, dur=dur):
-                task["progress"] = 0.96 * (base + min(t, dur)) / total
+                task["progress"] = share * (base + min(t, dur)) / total
 
             _run_ffmpeg(cmd, task, str(tmp / "ffmpeg.log"), advance)
             pieces.append(piece)
@@ -1516,16 +1984,36 @@ def produce_video(task, source, cuts, fade, image_fade, out):
             for p in pieces:
                 f.write("file '" + str(p).replace("'", "'\\''") + "'\n")
         partial = out.with_name(out.stem + ".partial" + out.suffix)
-        cmd = [ff, "-y", "-f", "concat", "-safe", "0", "-i", str(lst), "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
-               "-movflags", "+faststart", str(partial)]
+        cmd = [ff, "-y", "-f", "concat", "-safe", "0", "-i", str(lst)]
+        for _lang, srt in tracks:
+            cmd += ["-i", str(srt)]
+        cmd += ["-map", "0:v:0", "-map", "0:a:0"]
+        for k in range(len(tracks)):
+            cmd += ["-map", f"{k + 1}:0"]
+        if burn:
+            # ffmpeg's filter parser is picky about paths: a copy with a plain name (as traduire.py)
+            sub = Path(tempfile.mkdtemp(prefix="subs_")) / "subs.srt"
+            shutil.copy2(burn[0], sub)
+            cmd += ["-vf", f"subtitles='{filter_path(sub)}':force_style='{burn[1]}'",
+                    "-c:v", "libx264", "-crf", "18", "-preset", "medium", "-pix_fmt", "yuv420p"]
+        else:
+            cmd += ["-c:v", "copy"]
+        cmd += ["-c:a", "aac", "-b:a", "192k"]
+        if tracks:
+            cmd += ["-c:s", "mov_text"]
+            for k, (lang, _srt) in enumerate(tracks):
+                cmd += [f"-metadata:s:s:{k}", "language=" + ISO3.get(lang, "und")]
+        cmd += ["-movflags", "+faststart", str(partial)]
         try:
-            _run_ffmpeg(cmd, task, str(tmp / "ffmpeg.log"), lambda t: task.update(progress=0.96 + 0.04 * min(t / total, 1.0)))
+            _run_ffmpeg(cmd, task, str(tmp / "ffmpeg.log"), lambda t: task.update(progress=share + (1.0 - share) * min(t / total, 1.0)))
             os.replace(partial, out)
         finally:
             if partial.exists():
                 partial.unlink()
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+        if sub is not None:
+            shutil.rmtree(sub.parent, ignore_errors=True)
 
 
 def produce_audio(task, source, cuts, audio, fmt, out):
@@ -1792,6 +2280,13 @@ def load_config():
     cfg.setdefault("language", "")
     cfg.setdefault("fade", FADE_DEFAULT)
     cfg.setdefault("image_fade", True)
+    cfg.setdefault("llm", "local")             # the translation: a local model (Ollama) or Claude
+    cfg.setdefault("ollama_model", LLM_LOCAL_MODEL)
+    cfg.setdefault("review", True)
+    cfg.setdefault("target_lang", "fr")
+    cfg.setdefault("burn", "none")             # subtitles drawn into the picture of the edit: "none", "src" or a language
+    cfg.setdefault("srt_files", False)
+    cfg.setdefault("toolkit_dir", "")
     return cfg
 
 
@@ -2401,6 +2896,11 @@ class Main(QtWidgets.QMainWindow):
         self.cuts = []
         self.origin = ""
         self.estimated = False
+        self.texts = {}             # "src" and each translated language → {tokens, origin, estimated, language}
+        self.view = "src"           # the text on the page: "src" or a language code
+        self.src_lang = ""
+        self.project_file = None    # the .rve.json this project was opened from or saved to
+        self.detail = ""
         self.thread = None
         self.worker = None
         self.task = None
@@ -2415,7 +2915,9 @@ class Main(QtWidgets.QMainWindow):
         self._build()
         self.apply_style()
         self.show_home()
-        if source:
+        if source and source.endswith(PROJECT_EXT):
+            QtCore.QTimer.singleShot(0, lambda: self.open_project_file(source))
+        elif source:
             QtCore.QTimer.singleShot(0, lambda: self.open_source(source, srt))
 
     # ---- building ----
@@ -2430,6 +2932,16 @@ class Main(QtWidgets.QMainWindow):
         if fn:
             b.clicked.connect(fn)
         return b
+
+    def _menu_action(self, menu, text, fn, keys=None):
+        """An entry of a menu; with `keys` its shortcut works everywhere in the window (the
+        action is the window's too), and the menu shows it."""
+        act = menu.addAction(text, fn)
+        if keys:
+            act.setShortcut(QtGui.QKeySequence(keys))
+            act.setShortcutContext(QtCore.Qt.ApplicationShortcut)
+            self.addAction(act)
+        return act
 
     def _segment(self, buttons):
         """Two or three buttons in one rounded frame, one of them active."""
@@ -2607,6 +3119,13 @@ class Main(QtWidgets.QMainWindow):
         tbox.addWidget(self.a_name)
         tbox.addWidget(self.a_detail)
         h.addLayout(tbox, 1)
+        # the original and the translated texts: one button each, when there is a translation
+        self.lang_box = QtWidgets.QWidget()
+        lb = QtWidgets.QHBoxLayout(self.lang_box)
+        lb.setContentsMargins(0, 0, 0, 0)
+        lb.setSpacing(0)
+        self.lang_box.hide()
+        h.addWidget(self.lang_box)
         lab = QtWidgets.QLabel(_("I highlight"))
         lab.setObjectName("muted")
         h.addWidget(lab)
@@ -2633,11 +3152,24 @@ class Main(QtWidgets.QMainWindow):
         menu = QtWidgets.QMenu(self.b_text)
         menu.addAction(_("Save the text…"), self.save_text)
         menu.addAction(_("copy the text"), self.copy_text)
+        menu.addAction(_("Save the subtitles…"), self.save_srt)
+        menu.addSeparator()
+        self._menu_action(menu, _("Translate…"), self.ask_translate, "Ctrl+T")
         menu.addSeparator()
         menu.addAction(_("Open subtitles…"), self.ask_srt)
         menu.addAction(_("Transcribe again…"), self.ask_transcribe)
         self.b_text.setMenu(menu)
         h.addWidget(self.b_text)
+        self.b_project = QtWidgets.QToolButton()
+        self.b_project.setText(_("Project") + " ▾")
+        self.b_project.setPopupMode(QtWidgets.QToolButton.InstantPopup)
+        self.b_project.setCursor(QtCore.Qt.PointingHandCursor)
+        pm = QtWidgets.QMenu(self.b_project)
+        self._menu_action(pm, _("Save the project…"), lambda: self.save_project(ask=False), "Ctrl+Shift+S")
+        self._menu_action(pm, _("Save the project as…"), lambda: self.save_project(ask=True))
+        self._menu_action(pm, _("Open a project…"), self.ask_project, "Ctrl+Shift+O")
+        self.b_project.setMenu(pm)
+        h.addWidget(self.b_project)
         h.addWidget(self._btn(_("Another file"), self.show_home))
         outer.addWidget(bar)
 
@@ -2751,8 +3283,18 @@ class Main(QtWidgets.QMainWindow):
         self.image_fade.setChecked(bool(self.cfg.get("image_fade", True)))
         self.image_fade.toggled.connect(lambda _c: self.on_selection())
         g.addWidget(self.image_fade, 2, 0, 1, 2)
+        self.l_subs = QtWidgets.QLabel(_("Subtitles"))
+        self.l_subs.setObjectName("label")
+        g.addWidget(self.l_subs, 3, 0, 1, 2)
+        self.subs = QtWidgets.QComboBox()
+        self.subs.currentIndexChanged.connect(lambda _i: self.remember_output())
+        g.addWidget(self.subs, 4, 0)
+        self.srt_files = QtWidgets.QCheckBox(_("Subtitle files beside the edit (.srt)"))
+        self.srt_files.setChecked(bool(self.cfg.get("srt_files", False)))
+        self.srt_files.toggled.connect(lambda _c: self.remember_output())
+        g.addWidget(self.srt_files, 4, 1)
         self.b_produce = self._btn(_("Produce the edit"), self.produce_or_stop, kind="strong", tip="Ctrl+E")
-        g.addWidget(self.b_produce, 3, 0, 1, 2)
+        g.addWidget(self.b_produce, 5, 0, 1, 2)
         pv.addWidget(self.settings)
         self.following = QtWidgets.QWidget()
         self.following.setObjectName("following")
@@ -2864,6 +3406,14 @@ class Main(QtWidgets.QMainWindow):
         rr.addStretch(1)
         self.p_retry.hide()
         pl.addWidget(self.p_retry)
+        self.p_cancel = QtWidgets.QWidget()
+        cr = QtWidgets.QHBoxLayout(self.p_cancel)
+        cr.setContentsMargins(0, 18, 0, 0)
+        cr.addStretch(1)
+        cr.addWidget(self._btn(_("Stop"), self.produce_or_stop, kind="paper"))
+        cr.addStretch(1)
+        self.p_cancel.hide()
+        pl.addWidget(self.p_cancel)
         pl.addStretch(84)
         self.page_stack.addWidget(patience)
         self.patience = patience
@@ -2964,6 +3514,7 @@ class Main(QtWidgets.QMainWindow):
         self.player.stop()
         self.player.setMedia(QMediaContent())
         self.project, self.tokens, self.cuts = None, [], []
+        self.texts, self.view, self.project_file = {}, "src", None
         self.page.set_tokens([], [])
         self.views.setCurrentWidget(self.home)
         self.h_error.setText("")
@@ -3004,6 +3555,8 @@ class Main(QtWidgets.QMainWindow):
             return
         if is_url(text):
             self.open_url(text)
+        elif os.path.isfile(text) and text.endswith(PROJECT_EXT):
+            self.open_project_file(text)
         elif os.path.isfile(text):
             self.open_source(text, None)
         else:
@@ -3061,7 +3614,8 @@ class Main(QtWidgets.QMainWindow):
         self.apply_style()
 
     def enable(self, loaded):
-        for w in (self.b_highlight, self.b_erase, self.b_keep, self.b_cut, self.fade, self.image_fade, self.format, self.b_preview, self.b_clear, self.b_silences, self.b_read, self.b_text, self.b_undo, self.b_redo):
+        for w in (self.b_highlight, self.b_erase, self.b_keep, self.b_cut, self.fade, self.image_fade, self.format, self.b_preview, self.b_clear, self.b_silences, self.b_read, self.b_text, self.b_undo, self.b_redo,
+                  self.b_project, self.subs, self.srt_files, self.lang_box):
             w.setEnabled(loaded)
         self.b_produce.setEnabled(loaded and bool(self.cuts) and self.thread is None)
 
@@ -3076,7 +3630,10 @@ class Main(QtWidgets.QMainWindow):
         srt = next((p for p in paths if p.lower().endswith(".srt")), None)
         media = next((p for p in paths if Path(p).suffix.lower() in EXT_VIDEO | EXT_AUDIO), None)
         link = next((u.toString() for u in urls if not u.isLocalFile() and is_url(u.toString())), None)
-        if media:
+        project = next((p for p in paths if p.endswith(PROJECT_EXT)), None)
+        if project:
+            self.open_project_file(project)
+        elif media:
             self.open_source(media, srt)
         elif srt and self.project:
             self.load_srt(srt)
@@ -3142,8 +3699,11 @@ class Main(QtWidgets.QMainWindow):
             return
         start = self.cfg.get("last_dir") or os.path.expanduser("~")
         exts = " ".join("*" + e for e in sorted(EXT_VIDEO | EXT_AUDIO))
-        path, _f = QtWidgets.QFileDialog.getOpenFileName(self, _("Open a video or a recording"), start, _("Video and audio files") + f" ({exts})")
-        if path:
+        path, _f = QtWidgets.QFileDialog.getOpenFileName(self, _("Open a video or a recording"), start,
+                                                         _("Video and audio files") + f" ({exts});;" + _("Project (*.rve.json)"))
+        if path and path.endswith(PROJECT_EXT):
+            self.open_project_file(path)
+        elif path:
             self.open_source(path, None)
 
     def ask_srt(self):
@@ -3195,7 +3755,9 @@ class Main(QtWidgets.QMainWindow):
         self.h_model.setCurrentText(self.p_model.currentText())
         self.start_transcription()
 
-    def open_source(self, path, srt):
+    def open_source(self, path, srt, project=None):
+        """Opens a video or a recording; with `project` (the content of a project file) its text,
+        translations and highlighting take the place of what the project folder holds."""
         if self.thread:
             return
         if not ffmpeg_exe():
@@ -3212,16 +3774,25 @@ class Main(QtWidgets.QMainWindow):
         d = project_dir(path)
         self.project = dict(info, source=os.path.abspath(path), dir=str(d))
         write_json(d / "project.json", {k: v for k, v in self.project.items() if k != "dir"})
+        self.project_file = None
+        if project:
+            self.install_project(d, project)
         self.a_name.setText(Path(path).name)
-        self.a_detail.setText((_("Video") if info["type"] == "video" else _("Recording")) + " · " + plain(info["duration"]))
-        self.tokens, self.cuts = [], []
+        self.detail = (_("Video") if info["type"] == "video" else _("Recording")) + " · " + plain(info["duration"])
+        self.show_project_name()
+        self.tokens, self.cuts, self.texts, self.view = [], [], {}, "src"
         self.page.set_tokens([], [])
+        self.lang_box.hide()
         self.format.clear()
         if info["type"] == "video":
             self.format.addItem(_("A video (MP4)"), "mp4")
         self.screen.setVisible(info["type"] == "video")
         for fmt in ("mp3", "m4a", "wav"):
             self.format.addItem(_("The sound alone (%1)", fmt.upper()), fmt)
+        if project and (project.get("output") or {}).get("format"):
+            k = self.format.findData(project["output"]["format"])
+            if k >= 0:
+                self.format.setCurrentIndex(k)
         self.b_preview.setText(_("▶ Watch the edit") if info["type"] == "video" else _("▶ Listen to the edit"))
         self.b_watch.setText(_("Watch") if info["type"] == "video" else _("Listen"))
         self.media_ok = True
@@ -3238,7 +3809,7 @@ class Main(QtWidgets.QMainWindow):
         if srt:
             self.load_srt(srt)
         elif saved and saved.get("tokens"):
-            self.show_tokens(saved["tokens"], saved.get("origin", "transcription"), bool(saved.get("estimated")))
+            self.show_tokens(saved["tokens"], saved.get("origin", "transcription"), bool(saved.get("estimated")), saved.get("language", ""))
         elif beside.exists():
             self.load_srt(str(beside))
         else:
@@ -3290,7 +3861,7 @@ class Main(QtWidgets.QMainWindow):
         if self.task and self.task.get("download"):
             self.h_gauge.setValue(int(fraction * 1000))
             self.h_msg.setText(text)
-        elif self.task is not None:
+        elif self.task is not None and not self.task.get("page"):
             self.progress.setValue(int(fraction * 1000))
             self.f_text.setText(text)
         else:
@@ -3359,25 +3930,373 @@ class Main(QtWidgets.QMainWindow):
         def done(result):
             tokens, lang = result
             write_json(d / "transcription.json", {"tokens": tokens, "origin": "transcription", "estimated": False, "language": lang})
-            self.show_tokens(tokens, "transcription", False)
+            self.show_tokens(tokens, "transcription", False, lang)
 
         def failed(msg):
             self.wait(_("The transcription failed."), msg or _("Cancelled."), failed=True)
         self.wait(_("Transcribing…"))
         self.run_in_background(work, done, failed)
 
-    def show_tokens(self, tokens, origin, estimated):
-        self.tokens, self.origin, self.estimated = tokens, origin, estimated
+    def show_tokens(self, tokens, origin, estimated, language=""):
+        """The original text is ready: it and the translations of the project folder become the
+        views, and the page shows the one the project was on."""
+        d = Path(self.project["dir"])
+        self.src_lang = language or ""
+        self.texts = {"src": {"tokens": tokens, "origin": origin, "estimated": estimated, "language": self.src_lang}}
+        for f in sorted(d.glob("translation-*.json")):
+            tr = read_json(f)
+            if tr and tr.get("tokens") and tr.get("language"):
+                self.texts[tr["language"]] = {"tokens": tr["tokens"], "origin": "translation", "estimated": True, "language": tr["language"]}
+        sel = read_json(d / "selection.json", {}) or {}
+        view = sel.get("view", "src")
+        self.show_view(view if view in self.texts else "src", first=True)
+
+    def show_view(self, key, first=False):
+        """The page shows the original text or a translation. The highlighting is kept in
+        seconds and finds its words in the other text (the rule of monter.py)."""
+        if key not in self.texts or self.thread:
+            return
         d = Path(self.project["dir"])
         sel = read_json(d / "selection.json", {}) or {}
+        if not first and self.tokens:
+            clean = clean_ranges(self.page.ranges(), len(self.tokens))
+            sel["times"] = [[self.tokens[i][1], self.tokens[j][2]] for i, j in clean]
+            sel.pop("ranges", None)
+        text = self.texts[key]
+        tokens = text["tokens"]
         if sel.get("times") and "ranges" not in sel:
             sel["ranges"] = ranges_from_times(tokens, sel.pop("times"))
-            write_json(d / "selection.json", sel)
+        sel["view"] = key
+        write_json(d / "selection.json", sel)
+        self.view = key
+        self.tokens, self.origin, self.estimated = tokens, text["origin"], text["estimated"]
         self.set_mode(sel.get("mode", "keep"), quiet=True)
-        self.page.set_tokens(tokens, sel.get("ranges", []), origin)
+        self.page.set_tokens(tokens, sel.get("ranges", []), text["origin"])
         self.page_stack.setCurrentWidget(self.page)
+        self.rebuild_language_switch()
+        self.rebuild_subtitle_options()
         self.enable(True)
         self.on_selection()
+
+    def view_code(self):
+        """The language of the text on the page ('' when the original's is unknown)."""
+        return self.src_lang if self.view == "src" else self.view
+
+    def rebuild_language_switch(self):
+        lay = self.lang_box.layout()
+        while lay.count():
+            item = lay.takeAt(0)
+            if item.widget():
+                item.widget().hide()
+                item.widget().deleteLater()
+        keys = ["src"] + sorted(k for k in self.texts if k != "src")
+        self.lang_box.setVisible(len(keys) > 1)
+        if len(keys) < 2:
+            return
+        buttons = []
+        for k in keys:
+            b = self._btn(lang_label(self.src_lang if k == "src" else k), lambda _c=False, k=k: self.show_view(k),
+                          tip=_("Original") if k == "src" else _("Translation"))
+            buttons.append(b)
+        lay.addWidget(self._segment(buttons))
+        for k, b in zip(keys, buttons):
+            b.setChecked(k == self.view)
+
+    def rebuild_subtitle_options(self):
+        """The subtitles that can go into the picture: none, the original, each translation."""
+        if not self.project:
+            return
+        video = self.project["type"] == "video"
+        wanted = self.subs.currentData() or self.cfg.get("burn", "none")
+        self.subs.blockSignals(True)
+        self.subs.clear()
+        self.subs.addItem(_("None"), "none")
+        for k in ["src"] + sorted(k for k in self.texts if k != "src"):
+            self.subs.addItem(_("In the picture: %1", lang_label(self.src_lang if k == "src" else k)), k)
+        i = self.subs.findData(wanted)
+        self.subs.setCurrentIndex(i if i >= 0 else 0)
+        self.subs.blockSignals(False)
+        self.subs.setVisible(video)
+        self.l_subs.setVisible(video)
+
+    def remember_output(self):
+        if self.subs.currentData():
+            self.cfg["burn"] = self.subs.currentData()
+        self.cfg["srt_files"] = self.srt_files.isChecked()
+        save_config(self.cfg)
+
+    def show_project_name(self):
+        name = Path(self.project_file).name if self.project_file else ""
+        self.a_detail.setText(self.detail + (" · " + name if name else ""))
+
+    # ---- the translation (traduire.py, through the toolkit's Python) ----
+    def ask_translate(self):
+        if not self.project or self.thread or not self.texts.get("src"):
+            return
+        dlg = QtWidgets.QDialog(self)
+        dlg.setWindowTitle(_("Translate…"))
+        dlg.setMinimumWidth(560)
+        v = QtWidgets.QVBoxLayout(dlg)
+        v.setContentsMargins(18, 16, 18, 14)
+        v.setSpacing(10)
+        tk = toolkit_dir(self.cfg)
+        folder = None
+        if not tk:
+            lab = QtWidgets.QLabel(_("The traduction toolkit does the translation (traduire.py). It was not found: give its folder, or install it from %1.", TOOLKIT_URL))
+            lab.setObjectName("danger")
+            lab.setWordWrap(True)
+            v.addWidget(lab)
+            row = QtWidgets.QHBoxLayout()
+            folder = QtWidgets.QLineEdit(self.cfg.get("toolkit_dir") or "")
+            folder.setPlaceholderText(_("Folder of the traduction toolkit"))
+            row.addWidget(folder, 1)
+
+            def browse():
+                d = QtWidgets.QFileDialog.getExistingDirectory(dlg, _("Folder of the traduction toolkit"), folder.text() or os.path.expanduser("~"))
+                if d:
+                    folder.setText(d)
+            row.addWidget(self._btn(_("Browse…"), browse))
+            v.addLayout(row)
+        g = QtWidgets.QGridLayout()
+        g.setHorizontalSpacing(10)
+        g.setVerticalSpacing(6)
+        langs = [(c, n) for c, n in LANGUAGES if c]
+        src = QtWidgets.QComboBox()
+        tgt = QtWidgets.QComboBox()
+        for code, name in langs:
+            src.addItem(name, code)
+            tgt.addItem(name, code)
+        src_code = self.src_lang or self.h_lang.currentData() or "en"
+        src.setCurrentIndex(max(0, src.findData(src_code)))
+        tgt_code = self.cfg.get("target_lang", "fr")
+        if tgt_code == src_code:
+            tgt_code = "en" if src_code != "en" else "fr"
+        tgt.setCurrentIndex(max(0, tgt.findData(tgt_code)))
+        for col, (label, w) in enumerate(((_("From"), src), (_("Into"), tgt))):
+            lab = QtWidgets.QLabel(label)
+            lab.setObjectName("label")
+            g.addWidget(lab, 0, col)
+            g.addWidget(w, 1, col)
+        llm = QtWidgets.QComboBox()
+        llm.addItem(_("On this computer (Ollama)"), "local")
+        llm.addItem(_("Claude (API)"), "claude")
+        llm.setCurrentIndex(1 if self.cfg.get("llm") == "claude" else 0)
+        model = QtWidgets.QLineEdit(self.cfg.get("ollama_model") or LLM_LOCAL_MODEL)
+        model.setPlaceholderText(LLM_LOCAL_MODEL)
+        llm.currentIndexChanged.connect(lambda i: model.setEnabled(i == 0))
+        model.setEnabled(llm.currentIndex() == 0)
+        for col, (label, w) in enumerate(((_("Translation by"), llm), (_("Ollama model"), model))):
+            lab = QtWidgets.QLabel(label)
+            lab.setObjectName("label")
+            g.addWidget(lab, 2, col)
+            g.addWidget(w, 3, col)
+        v.addLayout(g)
+        context = QtWidgets.QPlainTextEdit()
+        context.setPlaceholderText(_("Context for the translator: names, subject, register (optional)"))
+        context.setFixedHeight(70)
+        v.addWidget(context)
+        review = QtWidgets.QCheckBox(_("Proofreading pass (a second reading by the model)"))
+        review.setChecked(bool(self.cfg.get("review", True)))
+        v.addWidget(review)
+        error = QtWidgets.QLabel("")
+        error.setObjectName("danger")
+        error.setWordWrap(True)
+        v.addWidget(error)
+        buttons = QtWidgets.QHBoxLayout()
+        buttons.addStretch(1)
+        buttons.addWidget(self._btn(_("Cancel"), dlg.reject))
+        go = self._btn(_("Translate…").rstrip("…"), None, kind="strong")
+        buttons.addWidget(go)
+        v.addLayout(buttons)
+
+        def accept():
+            where = tk
+            if folder is not None:
+                where = folder.text().strip()
+                if not os.path.isfile(os.path.join(where, "traduire.py")):
+                    error.setText(_("traduire.py is not in this folder."))
+                    return
+                self.cfg["toolkit_dir"] = where
+            if src.currentData() == tgt.currentData():
+                error.setText(_("Same as the source language."))
+                return
+            self.cfg["llm"], self.cfg["ollama_model"] = llm.currentData(), model.text().strip() or LLM_LOCAL_MODEL
+            self.cfg["review"], self.cfg["target_lang"] = review.isChecked(), tgt.currentData()
+            save_config(self.cfg)
+            dlg.accept()
+            self.start_translation(where, src.currentData(), tgt.currentData(), llm.currentData(), self.cfg["ollama_model"],
+                                   context.toPlainText().strip(), review.isChecked())
+        go.clicked.connect(accept)
+        dlg.exec_()
+
+    def start_translation(self, tk, src, tgt, llm, model, context, review):
+        d = Path(self.project["dir"])
+        segments = segments_from_tokens(self.texts["src"]["tokens"])
+        if not segments:
+            return
+        duration = self.project["duration"]
+        job = {"task": "translate", "toolkit": tk, "segments": segments, "source_lang": src, "target_lang": tgt,
+               "llm": llm, "ollama_model": model, "ollama_url": OLLAMA_URL, "claude_model": LLM_CLAUDE_MODEL,
+               "context": context, "review": review}
+        # the passes of traduire.py and where each one starts on the gauge
+        steps = [("analysis", 0.02, _("Analysing the text…")), ("translate", 0.08, _("Translating…")),
+                 ("review", 0.62, _("Proofreading…")), ("consistency", 0.86, _("Checking the consistency…")),
+                 ("glossary", 0.94, _("Checking the glossary…"))]
+        self.task = {"cancelled": False, "proc": None, "page": True}
+        task = self.task
+
+        def work(w):
+            if llm == "local" and not ollama_answers(OLLAMA_URL):
+                raise RuntimeError(_("Ollama does not answer at %1.", OLLAMA_URL))
+            state = {"base": 0.0, "next": 0.08, "text": ""}
+
+            def on_message(msg):
+                if "step" in msg:
+                    for k, (name, base, text) in enumerate(steps):
+                        if name == msg["step"]:
+                            state.update(base=base, text=text, next=steps[k + 1][1] if k + 1 < len(steps) else 1.0)
+                            w.progress.emit(base, text)
+                elif "line" in msg:
+                    m = re.search(r"Chunk (\d+)/(\d+)", msg["line"])
+                    if m:
+                        i, n = int(m.group(1)), int(m.group(2))
+                        w.progress.emit(state["base"] + (state["next"] - state["base"]) * (i - 1) / max(n, 1),
+                                        state["text"] + "  " + _("Translating… %1 of %2", i, n).split("…")[-1].strip())
+            result = run_bridge(task, job, d, on_message)
+            tokens = tokens_from_translation(result["segments"], duration)
+            if not any(t[0] for t in tokens):
+                raise RuntimeError(_("The translation came back empty."))
+            return {"language": tgt, "source_language": src, "segments": result["segments"], "analysis": result.get("analysis"),
+                    "tokens": tokens, "llm": llm if llm == "claude" else "ollama " + model, "date": time.strftime("%Y-%m-%d %H:%M")}
+
+        def done(tr):
+            self.task = None
+            self.p_cancel.hide()
+            write_json(d / f"translation-{tgt}.json", tr)
+            self.texts[tgt] = {"tokens": tr["tokens"], "origin": "translation", "estimated": True, "language": tgt}
+            if not self.src_lang:
+                # subtitles carry no language: the one given for the translation names the original from now on
+                self.src_lang = src
+                self.texts["src"]["language"] = src
+                saved = read_json(d / "transcription.json", {}) or {}
+                if saved.get("tokens"):
+                    saved["language"] = src
+                    write_json(d / "transcription.json", saved)
+            self.show_view(tgt)
+            self.say(_("Translated: %1 words", sum(1 for t in tr["tokens"] if t[0] is not None)))
+
+        def failed(msg):
+            self.task = None
+            self.p_cancel.hide()
+            self.page_stack.setCurrentWidget(self.page)
+            self.enable(True)
+            self.on_selection()
+            self.say(_("The translation failed: %1", msg) if msg else _("Cancelled."))
+        self.wait(_("Translating into %1…", lang_label(tgt)), _("Analysing the text…"))
+        self.p_cancel.show()
+        self.enable(False)
+        self.run_in_background(work, done, failed)
+
+    # ---- the subtitles of the whole file (the text on the page) ----
+    def save_srt(self):
+        if not self.tokens or not self.project or self.thread:
+            return
+        src = Path(self.project["source"])
+        code = self.view_code()
+        out, _f = QtWidgets.QFileDialog.getSaveFileName(self, _("Save the subtitles"), str(src.with_name(f"{src.stem}.{code or 'src'}.srt")), _("Subtitles (*.srt)"))
+        if not out:
+            return
+        tokens, tk, d = list(self.tokens), toolkit_dir(self.cfg), Path(self.project["dir"])
+        task = {"cancelled": False, "proc": None}
+
+        def work(w):
+            cues = make_cues(tokens, code, tk, task, d)
+            with open(out, "w", encoding="utf-8") as f:
+                f.write(srt_text(cues))
+            return out
+
+        def failed(msg):
+            self.say(msg or _("Cancelled."))
+        self.say(_("Making the subtitles…"))
+        self.run_in_background(work, lambda p: self.say(_("Subtitles saved: %1", p)), failed)
+
+    # ---- project files: the same video, one file per edit ----
+    def install_project(self, d, project):
+        """What a project file holds goes into the project folder, in place of what was there."""
+        write_json(d / "transcription.json", project["transcription"])
+        for f in d.glob("translation-*.json"):
+            f.unlink()
+        for k, tr in (project.get("translations") or {}).items():
+            if tr and tr.get("tokens"):
+                write_json(d / f"translation-{k}.json", tr)
+        sel = dict(project.get("selection") or {})
+        sel.pop("times", None)
+        write_json(d / "selection.json", sel)
+        if "fade" in sel:
+            idx = [i for i in range(self.fade.count()) if abs(self.fade.itemData(i) - float(sel["fade"])) < 1e-6]
+            if idx:
+                self.fade.setCurrentIndex(idx[0])
+        if "image_fade" in sel:
+            self.image_fade.setChecked(bool(sel["image_fade"]))
+        out = project.get("output") or {}
+        if "burn" in out:
+            self.cfg["burn"] = out["burn"]
+        if "srt_files" in out:
+            self.srt_files.setChecked(bool(out["srt_files"]))
+
+    def save_project(self, ask=False):
+        if not self.project or not self.tokens or self.thread:
+            return
+        path = self.project_file
+        if ask or not path:
+            src = Path(self.project["source"])
+            path, _f = QtWidgets.QFileDialog.getSaveFileName(self, _("Save the project"), path or str(src.with_name(src.stem + PROJECT_EXT)), _("Project (*.rve.json)"))
+            if not path:
+                return
+            if not path.endswith(".json"):
+                path += PROJECT_EXT
+        d = Path(self.project["dir"])
+        clean = clean_ranges(self.page.ranges(), len(self.tokens))
+        data = {"app": APP, "version": 1, "saved": time.strftime("%Y-%m-%d %H:%M"),
+                "source": self.project["source"], "source_name": Path(self.project["source"]).name,
+                "type": self.project["type"], "duration": self.project["duration"],
+                "transcription": read_json(d / "transcription.json"),
+                "translations": {k: read_json(d / f"translation-{k}.json") for k in self.texts if k != "src"},
+                "selection": {"view": self.view, "ranges": [list(p) for p in clean], "mode": self.mode_value,
+                              "fade": float(self.fade.currentData()), "image_fade": self.image_fade.isChecked()},
+                "output": {"format": self.format.currentData(), "burn": self.subs.currentData() or "none", "srt_files": self.srt_files.isChecked()}}
+        write_json(path, data)
+        self.project_file = path
+        self.show_project_name()
+        self.say(_("Project saved: %1", path))
+
+    def ask_project(self):
+        if self.thread:
+            return
+        start = self.cfg.get("last_dir") or os.path.expanduser("~")
+        path, _f = QtWidgets.QFileDialog.getOpenFileName(self, _("Open a project"), start, _("Project (*.rve.json)"))
+        if path:
+            self.open_project_file(path)
+
+    def open_project_file(self, path):
+        if self.thread:
+            return
+        data = read_json(path)
+        if not isinstance(data, dict) or data.get("app") != APP or not (data.get("transcription") or {}).get("tokens"):
+            self.say(_("This is not a project file."))
+            return
+        source = data.get("source") or ""
+        if not os.path.isfile(source):
+            beside = Path(path).with_name(data.get("source_name") or "")
+            if data.get("source_name") and beside.is_file():
+                source = str(beside)
+            else:
+                self.say(_("The file of this project was not found: %1", source))
+                return
+        self.open_source(source, None, project=data)
+        if self.project and os.path.abspath(self.project["source"]) == os.path.abspath(source):
+            self.project_file = path
+            self.show_project_name()
 
     # ---- the selection and the cuts ----
     def choose_tool(self, tool):
@@ -3405,7 +4324,7 @@ class Main(QtWidgets.QMainWindow):
         fade = float(self.fade.currentData())
         mode = self.mode_value
         self.cfg["fade"], self.cfg["image_fade"] = fade, self.image_fade.isChecked()
-        write_json(d / "selection.json", {"ranges": ranges, "fade": fade, "mode": mode})
+        write_json(d / "selection.json", {"ranges": ranges, "fade": fade, "mode": mode, "view": self.view})
         if mode == "cut" and not clean_ranges(ranges, len(self.tokens)):
             self.cuts = []
         else:
@@ -3573,7 +4492,7 @@ class Main(QtWidgets.QMainWindow):
         src = Path(self.project["source"])
         out = src.with_name(f"{src.stem}_edit.{fmt}")
         k = 1
-        while out.exists() or any(out.with_suffix("." + e).exists() for e in ("txt", "edl")):
+        while out.exists() or any(out.with_suffix("." + e).exists() for e in ("txt", "edl")) or glob.glob(glob.escape(str(out.with_suffix(""))) + ".*.srt"):
             k += 1
             out = src.with_name(f"{src.stem}_edit-{k}.{fmt}")
         cuts = [dict(c) for c in self.cuts]
@@ -3582,6 +4501,17 @@ class Main(QtWidgets.QMainWindow):
         mode = self.mode_value
         project = dict(self.project)
         tokens = list(self.tokens)
+        d = Path(project["dir"])
+        # the subtitles of the edit: the ones drawn into the picture, the files beside it
+        burn = self.subs.currentData() if fmt == "mp4" and project["type"] == "video" else "none"
+        srt_files = self.srt_files.isChecked()
+        keys = sorted(self.texts) if srt_files else ([burn] if burn in self.texts else [])
+        texts = {k: list(self.texts[k]["tokens"]) for k in keys}
+        codes = {k: (self.src_lang if k == "src" else k) for k in keys}
+        tk = toolkit_dir(self.cfg)
+        style = SUBTITLE_STYLE
+        if project.get("video"):
+            style = scale_style(SUBTITLE_STYLE, project["video"].get("width", 0), project["video"].get("height", 0))
         self.task = {"cancelled": False, "progress": 0.0, "message": "", "proc": None}
         task = self.task
 
@@ -3594,8 +4524,20 @@ class Main(QtWidgets.QMainWindow):
                     stop.wait(0.4)
             threading.Thread(target=pump, daemon=True).start()
             try:
+                paths = {}
+                if texts:
+                    task["message"] = _("Making the subtitles…")
+                for key, toks in texts.items():
+                    cues = make_cues(tokens_in_edit(toks, cuts), codes[key], tk, task, d)
+                    path = out.with_name(f"{out.stem}.{codes[key] or 'src'}.srt") if srt_files else d / "burn.srt"
+                    with open(path, "w", encoding="utf-8") as f:
+                        f.write(srt_text(cues))
+                    paths[key] = path
+                task["message"] = ""
                 if fmt == "mp4":
-                    produce_video(task, project["source"], cuts, fade, image_fade, out)
+                    produce_video(task, project["source"], cuts, fade, image_fade, out,
+                                  burn=(paths[burn], style) if burn in paths else None,
+                                  tracks=[(codes[k], paths[k]) for k in keys if srt_files])
                 else:
                     produce_audio(task, project["source"], cuts, project["audio"], fmt, out)
             finally:
@@ -3610,6 +4552,8 @@ class Main(QtWidgets.QMainWindow):
             kept = sum(c["f"] - c["d"] for c in cuts)
             self.fin_detail.setText(f'<span style="color:{C_OK}; font-weight:700">' + _("Edit finished") + "</span> · " + plain(kept) + f" · {size / 1e6:.1f} MB")
             self.fin_path.setText(str(path))
+            self.fin_logs.setText(_("Beside it: the log of the cuts (.txt), the edit list (.edl) and the subtitles (.srt).") if srt_files
+                                  else _("Beside it: the log of the cuts (.txt) and the edit list (.edl)."))
             self.show_production("finished")
             self.enable(True)
 
@@ -3631,6 +4575,12 @@ class Main(QtWidgets.QMainWindow):
     def closeEvent(self, e):
         if self.task is not None:
             self.task["cancelled"] = True
+            proc = self.task.get("proc")
+            if proc:
+                try:
+                    proc.kill()
+                except OSError:
+                    pass
         if self.worker:
             self.worker.cancelled = True
         self.player.stop()
@@ -3656,7 +4606,7 @@ def main():
     if any(qt_tr.load("qtbase_" + name, qt_dir) for name in (_LANG, {"pt": "pt_BR"}.get(_LANG, _LANG))):
         app.installTranslator(qt_tr)
     args = [a for a in sys.argv[1:] if not a.startswith("-")]
-    source = next((a for a in args if Path(a).suffix.lower() in EXT_VIDEO | EXT_AUDIO), None)
+    source = next((a for a in args if Path(a).suffix.lower() in EXT_VIDEO | EXT_AUDIO or a.endswith(PROJECT_EXT)), None)
     srt = next((a for a in args if a.lower().endswith(".srt")), None)
     w = Main(source, srt)
     w.show()

@@ -6,8 +6,10 @@
   (Windows), `~/Library/Application Support/readers-video-editor` (macOS).
 - Projects: `projects/<name>-<id>/` in the data folder (`~/.local/share/readers-video-editor` on
   Linux): `audio16k.wav` (the sound as the transcription hears it), `transcription.json`
-  (the tokens), `selection.json` (the highlighting, by token ranges; by times when the text is
-  made again), `project.json`. The id is a hash of the path, size and date of the source.
+  (the tokens, the language), `translation-<lang>.json` (traduire.py's segments with `text_tgt`,
+  the translated tokens, the analysis), `selection.json` (the highlighting, by token ranges of
+  the `view` shown; by times when the text changes), `project.json`, and the toolkit's job files
+  while it runs. The id is a hash of the path, size and date of the source.
 - Models of faster-whisper: `models/` in the same data folder (tiny 75 MB … large-v3 3 GB).
 
 ## Tokens
@@ -98,3 +100,47 @@ gutter, no line height) — seen on a real screenshot 2026-10-28. faster-whisper
 elisions into two words (« d » + « 'autres », « l' » + « usage », « Est » + « -ce »); `transcribe`
 glues a word starting with an apostrophe or a hyphen, or following a word ending with an
 apostrophe, to its neighbour (end time of the pair), so no cut ever lands inside « n'y ».
+
+## Translation and subtitles (1.3.0)
+
+Nothing of the translation is written here: `traduire.py` of the traduction toolkit does it.
+The app finds the toolkit as its launcher does (`TRADUCTION_DIR`, `toolkit_dir` in the config,
+`~/code/traduction`, `~/code/traduction-toolkit`), takes its Python by the rule of `gui.py` and
+`monter.py` (`TRADUCTION_PYTHON`, the conda env `interview` or `traduction`, else the app's own:
+`traduire.py` imports only the standard library, `anthropic` when Claude is asked), writes
+`TOOLKIT_BRIDGE` as `toolkit_bridge.py` in the project folder and runs it on `toolkit_job.json`.
+The bridge moves the toolkit's prints to stderr and answers on stdout with `@@ {json}` lines
+(`step`, `result`, `error`); the app reads the merged stream, the `📦 Chunk i/n` lines move the
+gauge. The passes are those of `traduire.main()`: `analyze_content` (by Claude when a key is
+there, the toolkit's « auto »), `translate_chunks`, `review_translation` (the « proofreading »
+box), `check_consistency`, `verify_glossary`, `_clean_translation_artifacts`,
+`_clear_same_lang_translations`. Segments are the tokens grouped by sentence index
+(`segments_from_tokens`: faster-whisper's segments, or one per cue from subtitles), with the
+word timings as `words`.
+
+The translated page (`tokens_from_translation`) is monter.py's reuse of a translation: the words
+of each segment's `text_tgt` are spread over the moments its original words are spoken
+(`spread_words`: a share of the time by length, sentence ends on the pauses ≥ 0.25 s), so their
+positions are *estimated* and the cuts search the quiet point on both sides, as for subtitles.
+Switching views (`show_view`) keeps the highlighting in seconds (`times` in `selection.json`) and
+maps it back by token midpoints (`ranges_from_times`), monter.py's `/api/retranscrire` rule.
+
+Subtitles: `make_cues` asks the bridge for `resegment()` (the toolkit's re-segmentation, task
+`subtitles`, `text_tgt` = the text wanted) and falls back on `simple_cues` (sentence end + pause,
+2 s, two lines of 42, 7 s) without the toolkit. For the edit, the tokens are first moved onto the
+edit's timeline (`tokens_in_edit`: those inside a kept piece, shifted; a wordless token marks a
+join so no cue straddles it), then cut into cues; the files are `<edit>.<lang>.srt`
+(`src` when the original's language is unknown). Burning happens at the join of `produce_video`
+(`subtitles=` filter with `SUBTITLE_STYLE`, traduire.py's default style scaled for pictures
+narrower than 16:9 as `_scale_style_for_video` does, picture encoded once more, x264 crf 18); the
+srt files also go into the MP4 as `mov_text` tracks with their ISO 639-2 language.
+
+## Project files (1.3.0)
+
+`<stem>.rve.json` beside the video (or wherever asked): `source`, `source_name`, the
+`transcription.json` content, the `translation-*.json` contents, the selection (view, ranges,
+mode, fade, picture fade) and the output settings (format, burnt subtitles, srt files). Opening
+one (`open_project_file`, by drop, Ctrl+Shift+O, the home field, the command line) installs
+those files into the project folder of the source (`install_project`) and opens the source; a
+source not found at its path is looked for beside the project file by name. The folder keeps
+autosaving as before; the file changes only on Save. Several files for one video = several clips.

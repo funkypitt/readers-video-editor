@@ -37,6 +37,23 @@ that download.
 - **Read**: the page alone across the window, about seventy characters a line, the word being
   spoken underlined, −5 s / +10 s, speed 0.8 to 2×. **Save the text…** writes the transcript as
   paragraphs; Ctrl+Shift+C copies it.
+- **Translate…** (Ctrl+T) hands the text to the
+  [traduction toolkit](https://github.com/funkypitt/traduction-toolkit)'s `traduire.py`: analysis
+  of the content (names, glossary), translation by chunks, proofreading, consistency and glossary
+  checks, by a local model (Ollama, `gemma4:31b`) or Claude (`ANTHROPIC_API_KEY`). The
+  translation becomes a second page: a switch in the bar shows the original or the translation,
+  and you highlight on either one, the highlighting follows by time. The app looks for the
+  toolkit in `TRADUCTION_DIR`, `~/code/traduction` or `~/code/traduction-toolkit`, and asks for
+  its folder otherwise.
+- **Subtitles**: **Save the subtitles…** writes the text on the page as `.srt` (the toolkit's
+  re-segmentation when it is there: two lines of 42 characters, 17 characters a second, cuts
+  on the pauses). At the output, « Subtitles » draws the original or a translation into the
+  picture of the edit (the toolkit's style), and « Subtitle files beside the edit » writes an
+  `.srt` per language on the edit's timeline, carried in the MP4 as tracks too.
+- **Project files**: Project ▾ › **Save the project…** (Ctrl+Shift+S) writes a `.rve.json`
+  beside the video with the text, the translations, the highlighting and the output settings;
+  one file per clip from the same video, opened again by Ctrl+Shift+O, a drop, the home page
+  field or the command line.
 - Projects are kept (sound, text, highlighting): the same file opens again with its text.
 - Ctrl+= and Ctrl+- change the text size. English, French, German, Spanish, Portuguese and
   Russian, following the system language.
@@ -48,7 +65,8 @@ More detail: [docs/NOTES.md](docs/NOTES.md).
 - Debian, Ubuntu, Pop!_OS: add the [apt repository](https://funkypitt.github.io/apt-repo/), then `sudo apt install readers-video-editor`. Or take the `.deb` from the [latest release](https://github.com/funkypitt/readers-video-editor/releases/latest): `sudo apt install ./readers-video-editor_*_all.deb`. The transcription installs itself the first time (a subtitle file works without it).
 - Arch, Manjaro: `git clone https://github.com/funkypitt/readers-video-editor && cd readers-video-editor/packaging && makepkg -si`.
 - Windows (`.exe`) and macOS (`.dmg`, `apple-silicon` or `intel`): from the latest release; they carry ffmpeg and the transcription. They are unsigned: on Windows *More info* › *Run anyway*, on macOS right click on the app › *Open* the first time.
-- Anywhere else: `python3 readers_video_editor.py [video] [subtitles.srt]` with PyQt5 (with QtMultimedia), numpy, soundfile and ffmpeg installed; faster-whisper is installed by the app on first use (python3 -m venv must work).
+- Anywhere else: `python3 readers_video_editor.py [video | project.rve.json] [subtitles.srt]` with PyQt5 (with QtMultimedia), numpy, soundfile and ffmpeg installed; faster-whisper is installed by the app on first use (python3 -m venv must work).
+- The translation needs the [traduction toolkit](https://github.com/funkypitt/traduction-toolkit) (its `traduire.py` is run by the app, in its own Python) and Ollama with a model, or an Anthropic key. Burning subtitles needs an ffmpeg with libass (the usual builds).
 - The address feature needs nothing installed: the app keeps its own copy of yt-dlp in its data folder (`~/.local/share/readers-video-editor/bin`, `%APPDATA%\Readers Video Editor\bin`, `~/Library/Application Support/readers-video-editor/bin`).
 
 ## Build
@@ -61,5 +79,6 @@ Actions at every `v*` tag. Single file, PyQt5 + numpy + soundfile + ffmpeg; fast
 © 2026 Pierre Gallaz. Développé avec [Claude Code](https://claude.com/claude-code) (Anthropic).
 Licence MIT, voir `LICENSE`. The cutting method comes from the author's `monter.py`
 (traduction toolkit); transcription by [faster-whisper](https://github.com/SYSTRAN/faster-whisper);
-videos from addresses by [yt-dlp](https://github.com/yt-dlp/yt-dlp). Fonts: Roboto (Apache 2.0)
+videos from addresses by [yt-dlp](https://github.com/yt-dlp/yt-dlp); translation and subtitle
+re-segmentation by the author's `traduire.py` (traduction toolkit). Fonts: Roboto (Apache 2.0)
 and Literata (SIL OFL 1.1), bundled in `packaging/fonts`.
