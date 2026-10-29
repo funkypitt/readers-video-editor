@@ -28,7 +28,7 @@ from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 APP = "readers-video-editor"
-VERSION = "1.3.0"
+VERSION = "1.4.0"
 
 
 def _app_dirs():
@@ -834,6 +834,127 @@ _TR_MORE = {
 for _code, _more in _TR_MORE.items():
     _TR.setdefault(_code, {}).update(_more)
 
+# The strings of 1.4.0: the subtitle editor
+_TR_SUBS = {
+ "fr": {
+  "Re-cut from the text": "Redécouper depuis le texte",
+  "The subtitles were edited by hand. Cut them again from the text and lose these changes?":
+    "Les sous-titres ont été retouchés à la main. Les redécouper depuis le texte et perdre ces retouches ?",
+  "Shorten what reads too fast…": "Raccourcir ce qui se lit trop vite…", "Shorten": "Raccourcir",
+  "The model rereads these subtitles and shortens the ones that read too fast, with the proofreading pass of traduire.py.":
+    "Le modèle relit ces sous-titres et raccourcit ceux qui se lisent trop vite, avec la passe de relecture de traduire.py.",
+  "The subtitles that read too fast (%1)": "Les sous-titres qui se lisent trop vite (%1)", "The selected subtitles (%1)": "Les sous-titres sélectionnés (%1)",
+  "All the subtitles (%1)": "Tous les sous-titres (%1)", "Proofreading by": "Relecture par", "Nothing to shorten.": "Rien à raccourcir.",
+  "Proofreading… %1 of %2": "Relecture… %1 sur %2", "Shortened: %1 subtitles": "Raccourcis : %1 sous-titres",
+  "The model changed nothing.": "Le modèle n'a rien changé.", "The shortening failed: %1": "Le raccourcissement a échoué : %1",
+  "Split": "Scinder", "Merge with the next": "Fusionner avec le suivant", "Delete": "Supprimer",
+  "Start": "Début", "End": "Fin", "Text": "Texte", "here": "ici", "Start here": "Début ici", "End here": "Fin ici",
+  "Too fast: %1 characters a second (the limit is %2)": "Trop rapide : %1 caractères par seconde (la limite est %2)",
+  "A line of %1 characters (the limit is %2)": "Une ligne de %1 caractères (la limite est %2)", "%1 lines": "%1 lignes",
+  "Longer than %1 s": "Plus long que %1 s", "Shorter than %1 s": "Plus court que %1 s", "Overlaps the next subtitle": "Chevauche le sous-titre suivant",
+  "%1 subtitles": "%1 sous-titres", "edited by hand": "retouchés à la main",
+  "Enter splits the subtitle at the cursor, Shift+Enter breaks the line, Tab goes to the next one. A click on a subtitle plays from there; the buttons move its edges by a tenth of a second, or to the instant being played.":
+    "Entrée scinde le sous-titre au curseur, Maj+Entrée passe à la ligne, Tab passe au suivant. Un clic sur un sous-titre lit à partir de là ; les boutons déplacent ses bords d'un dixième de seconde, ou à l'instant en cours de lecture.",
+  "Fast: %1 characters a second (comfortable up to %2)": "Rapide : %1 caractères par seconde (confortable jusqu'à %2)",
+  "characters a second": "caractères par seconde",
+  "Analysis of the content (names, glossary) by Claude rather than the local model": "Analyse du contenu (noms, glossaire) par Claude plutôt que par le modèle local",
+ },
+ "de": {
+  "Re-cut from the text": "Aus dem Text neu schneiden",
+  "The subtitles were edited by hand. Cut them again from the text and lose these changes?":
+    "Die Untertitel wurden von Hand bearbeitet. Aus dem Text neu schneiden und diese Änderungen verlieren?",
+  "Shorten what reads too fast…": "Kürzen, was zu schnell zu lesen ist…", "Shorten": "Kürzen",
+  "The model rereads these subtitles and shortens the ones that read too fast, with the proofreading pass of traduire.py.":
+    "Das Modell liest diese Untertitel erneut und kürzt die zu schnellen, mit dem Korrekturdurchgang von traduire.py.",
+  "The subtitles that read too fast (%1)": "Die zu schnellen Untertitel (%1)", "The selected subtitles (%1)": "Die ausgewählten Untertitel (%1)",
+  "All the subtitles (%1)": "Alle Untertitel (%1)", "Proofreading by": "Korrektur durch", "Nothing to shorten.": "Nichts zu kürzen.",
+  "Proofreading… %1 of %2": "Korrektur… %1 von %2", "Shortened: %1 subtitles": "Gekürzt: %1 Untertitel",
+  "The model changed nothing.": "Das Modell hat nichts geändert.", "The shortening failed: %1": "Das Kürzen ist fehlgeschlagen: %1",
+  "Split": "Teilen", "Merge with the next": "Mit dem nächsten verbinden", "Delete": "Löschen",
+  "Start": "Anfang", "End": "Ende", "Text": "Text", "here": "hier", "Start here": "Anfang hier", "End here": "Ende hier",
+  "Too fast: %1 characters a second (the limit is %2)": "Zu schnell: %1 Zeichen pro Sekunde (Grenze %2)",
+  "A line of %1 characters (the limit is %2)": "Eine Zeile mit %1 Zeichen (Grenze %2)", "%1 lines": "%1 Zeilen",
+  "Longer than %1 s": "Länger als %1 s", "Shorter than %1 s": "Kürzer als %1 s", "Overlaps the next subtitle": "Überschneidet den nächsten Untertitel",
+  "%1 subtitles": "%1 Untertitel", "edited by hand": "von Hand bearbeitet",
+  "Enter splits the subtitle at the cursor, Shift+Enter breaks the line, Tab goes to the next one. A click on a subtitle plays from there; the buttons move its edges by a tenth of a second, or to the instant being played.":
+    "Eingabe teilt den Untertitel am Cursor, Umschalt+Eingabe bricht die Zeile um, Tab geht zum nächsten. Ein Klick auf einen Untertitel spielt von dort; die Knöpfe verschieben seine Ränder um eine Zehntelsekunde oder auf den gerade gespielten Augenblick.",
+  "Fast: %1 characters a second (comfortable up to %2)": "Schnell: %1 Zeichen pro Sekunde (bequem bis %2)",
+  "characters a second": "Zeichen pro Sekunde",
+  "Analysis of the content (names, glossary) by Claude rather than the local model": "Analyse des Inhalts (Namen, Glossar) durch Claude statt durch das lokale Modell",
+ },
+ "es": {
+  "Re-cut from the text": "Volver a cortar desde el texto",
+  "The subtitles were edited by hand. Cut them again from the text and lose these changes?":
+    "Los subtítulos fueron retocados a mano. ¿Volver a cortarlos desde el texto y perder esos retoques?",
+  "Shorten what reads too fast…": "Acortar lo que se lee demasiado rápido…", "Shorten": "Acortar",
+  "The model rereads these subtitles and shortens the ones that read too fast, with the proofreading pass of traduire.py.":
+    "El modelo relee estos subtítulos y acorta los que se leen demasiado rápido, con la pasada de revisión de traduire.py.",
+  "The subtitles that read too fast (%1)": "Los subtítulos que se leen demasiado rápido (%1)", "The selected subtitles (%1)": "Los subtítulos seleccionados (%1)",
+  "All the subtitles (%1)": "Todos los subtítulos (%1)", "Proofreading by": "Revisión por", "Nothing to shorten.": "Nada que acortar.",
+  "Proofreading… %1 of %2": "Revisión… %1 de %2", "Shortened: %1 subtitles": "Acortados: %1 subtítulos",
+  "The model changed nothing.": "El modelo no cambió nada.", "The shortening failed: %1": "El acortamiento falló: %1",
+  "Split": "Dividir", "Merge with the next": "Unir con el siguiente", "Delete": "Eliminar",
+  "Start": "Inicio", "End": "Fin", "Text": "Texto", "here": "aquí", "Start here": "Inicio aquí", "End here": "Fin aquí",
+  "Too fast: %1 characters a second (the limit is %2)": "Demasiado rápido: %1 caracteres por segundo (el límite es %2)",
+  "A line of %1 characters (the limit is %2)": "Una línea de %1 caracteres (el límite es %2)", "%1 lines": "%1 líneas",
+  "Longer than %1 s": "Más largo que %1 s", "Shorter than %1 s": "Más corto que %1 s", "Overlaps the next subtitle": "Se solapa con el subtítulo siguiente",
+  "%1 subtitles": "%1 subtítulos", "edited by hand": "retocados a mano",
+  "Enter splits the subtitle at the cursor, Shift+Enter breaks the line, Tab goes to the next one. A click on a subtitle plays from there; the buttons move its edges by a tenth of a second, or to the instant being played.":
+    "Intro divide el subtítulo en el cursor, Mayús+Intro salta de línea, Tab pasa al siguiente. Un clic en un subtítulo reproduce desde ahí; los botones mueven sus bordes una décima de segundo, o al instante que se está reproduciendo.",
+  "Fast: %1 characters a second (comfortable up to %2)": "Rápido: %1 caracteres por segundo (cómodo hasta %2)",
+  "characters a second": "caracteres por segundo",
+  "Analysis of the content (names, glossary) by Claude rather than the local model": "Análisis del contenido (nombres, glosario) por Claude en lugar del modelo local",
+ },
+ "pt": {
+  "Re-cut from the text": "Voltar a cortar a partir do texto",
+  "The subtitles were edited by hand. Cut them again from the text and lose these changes?":
+    "As legendas foram retocadas à mão. Voltar a cortá-las a partir do texto e perder esses retoques?",
+  "Shorten what reads too fast…": "Encurtar o que se lê depressa demais…", "Shorten": "Encurtar",
+  "The model rereads these subtitles and shortens the ones that read too fast, with the proofreading pass of traduire.py.":
+    "O modelo relê estas legendas e encurta as que se leem depressa demais, com a passagem de revisão do traduire.py.",
+  "The subtitles that read too fast (%1)": "As legendas que se leem depressa demais (%1)", "The selected subtitles (%1)": "As legendas selecionadas (%1)",
+  "All the subtitles (%1)": "Todas as legendas (%1)", "Proofreading by": "Revisão por", "Nothing to shorten.": "Nada a encurtar.",
+  "Proofreading… %1 of %2": "Revisão… %1 de %2", "Shortened: %1 subtitles": "Encurtadas: %1 legendas",
+  "The model changed nothing.": "O modelo não mudou nada.", "The shortening failed: %1": "O encurtamento falhou: %1",
+  "Split": "Dividir", "Merge with the next": "Juntar à seguinte", "Delete": "Apagar",
+  "Start": "Início", "End": "Fim", "Text": "Texto", "here": "aqui", "Start here": "Início aqui", "End here": "Fim aqui",
+  "Too fast: %1 characters a second (the limit is %2)": "Depressa demais: %1 caracteres por segundo (o limite é %2)",
+  "A line of %1 characters (the limit is %2)": "Uma linha de %1 caracteres (o limite é %2)", "%1 lines": "%1 linhas",
+  "Longer than %1 s": "Mais longa que %1 s", "Shorter than %1 s": "Mais curta que %1 s", "Overlaps the next subtitle": "Sobrepõe-se à legenda seguinte",
+  "%1 subtitles": "%1 legendas", "edited by hand": "retocadas à mão",
+  "Enter splits the subtitle at the cursor, Shift+Enter breaks the line, Tab goes to the next one. A click on a subtitle plays from there; the buttons move its edges by a tenth of a second, or to the instant being played.":
+    "Enter divide a legenda no cursor, Shift+Enter muda de linha, Tab passa à seguinte. Um clique numa legenda reproduz a partir daí; os botões movem os seus limites um décimo de segundo, ou para o instante em reprodução.",
+  "Fast: %1 characters a second (comfortable up to %2)": "Rápido: %1 caracteres por segundo (confortável até %2)",
+  "characters a second": "caracteres por segundo",
+  "Analysis of the content (names, glossary) by Claude rather than the local model": "Análise do conteúdo (nomes, glossário) pelo Claude em vez do modelo local",
+ },
+ "ru": {
+  "Re-cut from the text": "Нарезать заново из текста",
+  "The subtitles were edited by hand. Cut them again from the text and lose these changes?":
+    "Субтитры правились вручную. Нарезать их заново из текста и потерять эти правки?",
+  "Shorten what reads too fast…": "Сократить то, что читается слишком быстро…", "Shorten": "Сократить",
+  "The model rereads these subtitles and shortens the ones that read too fast, with the proofreading pass of traduire.py.":
+    "Модель перечитывает эти субтитры и сокращает те, что читаются слишком быстро, проходом вычитки traduire.py.",
+  "The subtitles that read too fast (%1)": "Субтитры, которые читаются слишком быстро (%1)", "The selected subtitles (%1)": "Выделенные субтитры (%1)",
+  "All the subtitles (%1)": "Все субтитры (%1)", "Proofreading by": "Вычитка", "Nothing to shorten.": "Нечего сокращать.",
+  "Proofreading… %1 of %2": "Вычитка… %1 из %2", "Shortened: %1 subtitles": "Сокращено: %1 субтитров",
+  "The model changed nothing.": "Модель ничего не изменила.", "The shortening failed: %1": "Сокращение не удалось: %1",
+  "Split": "Разделить", "Merge with the next": "Объединить со следующим", "Delete": "Удалить",
+  "Start": "Начало", "End": "Конец", "Text": "Текст", "here": "здесь", "Start here": "Начало здесь", "End here": "Конец здесь",
+  "Too fast: %1 characters a second (the limit is %2)": "Слишком быстро: %1 знаков в секунду (предел %2)",
+  "A line of %1 characters (the limit is %2)": "Строка в %1 знаков (предел %2)", "%1 lines": "%1 строк",
+  "Longer than %1 s": "Длиннее %1 с", "Shorter than %1 s": "Короче %1 с", "Overlaps the next subtitle": "Перекрывает следующий субтитр",
+  "%1 subtitles": "%1 субтитров", "edited by hand": "правлены вручную",
+  "Enter splits the subtitle at the cursor, Shift+Enter breaks the line, Tab goes to the next one. A click on a subtitle plays from there; the buttons move its edges by a tenth of a second, or to the instant being played.":
+    "Enter делит субтитр по курсору, Shift+Enter переносит строку, Tab переходит к следующему. Щелчок по субтитру воспроизводит с этого места; кнопки сдвигают его границы на десятую секунды или к текущему моменту воспроизведения.",
+  "Fast: %1 characters a second (comfortable up to %2)": "Быстро: %1 знаков в секунду (удобно до %2)",
+  "characters a second": "знаков в секунду",
+  "Analysis of the content (names, glossary) by Claude rather than the local model": "Анализ содержания (имена, глоссарий) делает Claude, а не локальная модель",
+ },
+}
+for _code, _more in _TR_SUBS.items():
+    _TR.setdefault(_code, {}).update(_more)
+
 
 def _lang():
     for var in ("LC_ALL", "LC_MESSAGES", "LANG"):
@@ -1462,6 +1583,11 @@ ISO3 = {"fr": "fra", "en": "eng", "de": "deu", "es": "spa", "it": "ita", "pt": "
 PROJECT_EXT = ".rve.json"
 
 
+def model_label(llm, model=""):
+    """Who does the work, named on the patience page: Claude and its model, or Ollama and its."""
+    return "Claude " + LLM_CLAUDE_MODEL if llm == "claude" else "Ollama " + (model or LLM_LOCAL_MODEL)
+
+
 def lang_label(code):
     """'fr' → 'Français'; a code the app does not list stays as it is; '' is the original text."""
     if not code:
@@ -1509,26 +1635,25 @@ try:
     import traduire as t
     segments = [t.Segment(d["index"], d["start"], d["end"], d["text"], d.get("text_tgt", ""),
                           words=d.get("words", []), lang=d.get("lang", "")) for d in job["segments"]]
-    if job["task"] == "translate":
-        src, tgt, context = job["source_lang"], job["target_lang"], job.get("context", "")
+
+    def make_client(job):
         if job.get("llm") == "claude":
             if not os.environ.get("ANTHROPIC_API_KEY"):
                 say(error="ANTHROPIC_API_KEY")
                 sys.exit(1)
             import anthropic
-            client = anthropic.Anthropic()
             if job.get("claude_model"):
                 t.CLAUDE_MODEL = job["claude_model"]
-        else:
-            client = t._OllamaClient(job.get("ollama_url") or t.OLLAMA_URL, job.get("ollama_model") or t.OLLAMA_MODEL)
-        # traduire.py's "auto": the analysis (names, glossary, domain) by Claude when a key is there
+            return anthropic.Anthropic()
+        return t._OllamaClient(job.get("ollama_url") or t.OLLAMA_URL, job.get("ollama_model") or t.OLLAMA_MODEL)
+
+    if job["task"] == "translate":
+        src, tgt, context = job["source_lang"], job["target_lang"], job.get("context", "")
+        client = make_client(job)
+        # the analysis (names, glossary, domain) by Claude when the user asked for it (traduire.py's "auto")
         analysis_client = client
-        if job.get("llm") != "claude" and os.environ.get("ANTHROPIC_API_KEY"):
-            try:
-                import anthropic
-                analysis_client = anthropic.Anthropic()
-            except Exception:
-                pass
+        if job.get("llm") != "claude" and job.get("analysis_by_claude"):
+            analysis_client = make_client(dict(job, llm="claude"))
         say(step="analysis")
         analysis = t.analyze_content(segments, analysis_client, src, tgt, context)
         say(step="translate")
@@ -1546,6 +1671,16 @@ try:
     elif job["task"] == "subtitles":
         subs = t.resegment(segments, job.get("target_lang") or "en")
         say(result={"cues": [[s.start, s.end, s.text] for s in subs]})
+    elif job["task"] == "review":
+        # the proofreading pass alone, on subtitles already cut: it shortens the ones marked too fast
+        client = make_client(job)
+        if job.get("max_cps"):
+            t.MAX_CPS = job["max_cps"]      # the toolkit marks ⚠️ (to shorten) above this pace
+        fields = ("summary", "glossary", "speakers_description", "tone", "domain")
+        analysis = t.ContentAnalysis(**{k: v for k, v in (job.get("analysis") or {}).items() if k in fields})
+        segments = t.review_translation(segments, analysis, client, job["source_lang"], job["target_lang"], job.get("context", ""))
+        segments = t._clean_translation_artifacts(segments)
+        say(result={"segments": [asdict(s) for s in segments]})
 except SystemExit:
     raise
 except Exception as ex:
@@ -1766,6 +1901,109 @@ def scale_style(style, width, height):
 def filter_path(path):
     """A path inside an ffmpeg filter: forward slashes, the colon and the quote escaped."""
     return str(path).replace("\\", "/").replace(":", "\\:").replace("'", "\\'")
+
+
+# ---- the subtitle editor: cues on the timeline of the whole file, kept in the project ----
+MAX_CPS = 22                  # characters a second a subtitle must not exceed (the toolkit's 17 is its target, harsh as a limit)
+CPS_TARGET = 17               # traduire.MAX_CPS: comfortable reading; above it the pace is shown amber, above MAX_CPS red
+MIN_CUE = 1.0                 # traduire.MIN_DURATION_SEC
+NUDGE = 0.1                   # what one press of a timing button moves, in seconds
+
+
+def clock(t):
+    """A time for the editor: 1:02.345, with the hours when there are some."""
+    ms = int(round(max(0.0, t) * 1000))
+    h, r = divmod(ms, 3600000)
+    m, r = divmod(r, 60000)
+    s, ms = divmod(r, 1000)
+    return f"{h}:{m:02d}:{s:02d}.{ms:03d}" if h else f"{m}:{s:02d}.{ms:03d}"
+
+
+def parse_clock(text):
+    """1:02.345, 62.3 or 0:01:02,345 → seconds; None when it is not a time."""
+    text = text.strip().replace(",", ".")
+    if not re.fullmatch(r"(\d+:){0,2}\d+(\.\d*)?", text):
+        return None
+    value = 0.0
+    for part in text.split(":"):
+        value = value * 60 + float(part or 0)
+    return value
+
+
+def cue_issues(cues, k):
+    """What is wrong with a subtitle's shape and timing, for the editor: [(level, text)], the
+    level "bad" or "warn". The pace has its own colour (pace_level)."""
+    a, b, text = cues[k]
+    lines = text.split("\n")
+    longest = max(len(line) for line in lines)
+    dur = b - a
+    out = []
+    if longest > MAX_LINE:
+        out.append(("bad", _("A line of %1 characters (the limit is %2)", longest, MAX_LINE)))
+    if len(lines) > 2:
+        out.append(("bad", _("%1 lines", len(lines))))
+    if k + 1 < len(cues) and b > cues[k + 1][0] + 0.001:
+        out.append(("bad", _("Overlaps the next subtitle")))
+    if dur > MAX_CUE + 0.05:
+        out.append(("warn", _("Longer than %1 s", int(MAX_CUE))))
+    if dur < MIN_CUE - 0.05:
+        out.append(("warn", _("Shorter than %1 s", int(MIN_CUE))))
+    return out
+
+
+def cue_pace(cue):
+    a, b, text = cue
+    return len(" ".join(text.split("\n"))) / (b - a) if b > a else 0.0
+
+
+def pace_level(cue):
+    """0 comfortable (up to CPS_TARGET), 1 fast (up to MAX_CPS), 2 too fast."""
+    pace = cue_pace(cue)
+    return 2 if pace > MAX_CPS + 0.5 else (1 if pace > CPS_TARGET + 0.5 else 0)
+
+
+def pace_note(cue):
+    pace, level = cue_pace(cue), pace_level(cue)
+    if level == 2:
+        return _("Too fast: %1 characters a second (the limit is %2)", round(pace), MAX_CPS)
+    if level == 1:
+        return _("Fast: %1 characters a second (comfortable up to %2)", round(pace), CPS_TARGET)
+    return ""
+
+
+PACE_COLOURS = ("#2e7d32", "#b26a00", "#b3261e")     # green, amber, red, on the paper
+
+
+def cue_at(cues, t):
+    """The subtitle shown at an instant, or -1."""
+    for k, (a, b, _text) in enumerate(cues):
+        if a <= t < b:
+            return k
+    return -1
+
+
+def words_during(tokens, a, b):
+    """The words spoken between two instants (their middle inside): the original beside a cue."""
+    return " ".join(t for t, d, f, _s in tokens if t is not None and a <= (d + f) / 2.0 <= b)
+
+
+def cues_in_edit(cues, cuts):
+    """The subtitles of the edit on its own timeline: each one trimmed to the kept pieces and
+    shifted; what a cut leaves of a cue is dropped when it is less than half of it and under a
+    second, the two halves of a cue around a join are made one again."""
+    out, position = [], 0.0
+    cues = sorted(cues)
+    for c in cuts:
+        for a, b, text in cues:
+            lo, hi = max(a, c["d"]), min(b, c["f"])
+            if hi > lo and hi - lo >= min(1.0, (b - a) * 0.5):
+                start, end = round(lo - c["d"] + position, 3), round(hi - c["d"] + position, 3)
+                if out and out[-1][2] == text and start - out[-1][1] < 0.15:
+                    out[-1][1] = end
+                else:
+                    out.append([start, end, text])
+        position += c["f"] - c["d"]
+    return out
 
 
 # ------------------------------------------------------------------------------------------
@@ -2884,6 +3122,432 @@ class Recent(QtWidgets.QFrame):
             self.clicked.emit(self.source)
 
 
+# ------------------------------------------------------------------------------------------
+# The subtitle editor: a table of cues, the text of each one edited in place
+# ------------------------------------------------------------------------------------------
+class CueModel(QtCore.QAbstractTableModel):
+    START, END, PACE, TEXT, ORIGINAL = range(5)
+
+    def __init__(self, editor):
+        super().__init__()
+        self.editor = editor
+        self.cues = []
+        self.original = None        # the tokens of the original text, beside a translation's cues
+        self.current = -1
+        self.cache = {}
+
+    def reset(self, cues, original):
+        self.beginResetModel()
+        self.cues, self.original, self.cache, self.current = cues, original, {}, -1
+        self.endResetModel()
+
+    def rowCount(self, parent=QtCore.QModelIndex()):
+        return 0 if parent.isValid() else len(self.cues)
+
+    def columnCount(self, parent=QtCore.QModelIndex()):
+        return 5 if self.original is not None else 4
+
+    def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
+        if role == QtCore.Qt.DisplayRole:
+            if orientation == QtCore.Qt.Horizontal:
+                return [_("Start"), _("End"), "c/s", _("Text"), _("Original")][section]
+            return str(section + 1)
+        if role == QtCore.Qt.ToolTipRole and orientation == QtCore.Qt.Horizontal and section == self.PACE:
+            return _("characters a second")
+        return None
+
+    def flags(self, index):
+        f = QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        if index.column() in (self.START, self.END, self.TEXT):
+            f |= QtCore.Qt.ItemIsEditable
+        return f
+
+    def data(self, index, role=QtCore.Qt.DisplayRole):
+        r, c = index.row(), index.column()
+        if not 0 <= r < len(self.cues):
+            return None
+        a, b, text = self.cues[r]
+        if role in (QtCore.Qt.DisplayRole, QtCore.Qt.EditRole):
+            if c == self.START:
+                return clock(a)
+            if c == self.END:
+                return clock(b)
+            if c == self.PACE:
+                return f"{cue_pace(self.cues[r]):.0f}" if b > a else "—"
+            if c == self.TEXT:
+                return text
+            if r not in self.cache:
+                self.cache[r] = words_during(self.original, a, b)
+            return self.cache[r]
+        if role == QtCore.Qt.BackgroundRole:
+            if r == self.current:
+                return QtGui.QColor(STABILO_PRE)
+            issues = self.editor.issues(r)
+            if any(level == "bad" for level, _t in issues):
+                return QtGui.QColor(RAYE_PRE)
+            if issues:
+                return QtGui.QColor("#fbe4ad")
+            return None
+        if role == QtCore.Qt.ToolTipRole:
+            notes = [t for _l, t in self.editor.issues(r)] + [pace_note(self.cues[r])]
+            return "\n".join(t for t in notes if t) or None
+        if role == QtCore.Qt.TextAlignmentRole:
+            return int((QtCore.Qt.AlignRight if c in (self.START, self.END, self.PACE) else QtCore.Qt.AlignLeft) | QtCore.Qt.AlignTop)
+        if role == QtCore.Qt.ForegroundRole and c == self.PACE:
+            return QtGui.QColor(PACE_COLOURS[pace_level(self.cues[r])])
+        if role == QtCore.Qt.ForegroundRole and c == self.ORIGINAL:
+            return QtGui.QColor(INK2)
+        if role == QtCore.Qt.FontRole and c in (self.START, self.END, self.PACE):
+            if c == self.PACE and pace_level(self.cues[r]):
+                font = QtGui.QFont(self.editor.mono_font)
+                font.setBold(True)
+                return font
+            return self.editor.mono_font
+        return None
+
+    def setData(self, index, value, role=QtCore.Qt.EditRole):
+        if role != QtCore.Qt.EditRole:
+            return False
+        r, c = index.row(), index.column()
+        a, b, text = self.cues[r]
+        if c == self.TEXT:
+            new = "\n".join(" ".join(line.split()) for line in str(value).split("\n") if line.strip())
+            if not new or new == text:
+                return False
+            self.editor.snapshot()
+            self.cues[r][2] = new
+        else:
+            t = parse_clock(str(value))
+            if t is None:
+                return False
+            t = round(t, 3)
+            if c == self.START and (t == a or t >= b):
+                return False
+            if c == self.END and (t == b or t <= a):
+                return False
+            self.editor.snapshot()
+            self.cues[r][0 if c == self.START else 1] = t
+        self.editor.after_change()
+        return True
+
+
+class CueTextEditor(QtWidgets.QPlainTextEdit):
+    """The text of one cue, edited in its cell: Enter splits the cue at the cursor, Shift+Enter
+    breaks the line."""
+    split = QtCore.pyqtSignal(str, int)
+
+    def keyPressEvent(self, e):
+        if e.key() in (QtCore.Qt.Key_Return, QtCore.Qt.Key_Enter):
+            if e.modifiers() & QtCore.Qt.ShiftModifier:
+                self.insertPlainText("\n")
+            else:
+                self.split.emit(self.toPlainText(), self.textCursor().position())
+            return
+        super().keyPressEvent(e)
+
+
+class CueDelegate(QtWidgets.QStyledItemDelegate):
+    split = QtCore.pyqtSignal(int, str, int)      # row, the text being typed, the cursor
+    jump = QtCore.pyqtSignal(int)                  # edit this row next (Tab)
+
+    def createEditor(self, parent, option, index):
+        if index.column() != CueModel.TEXT:
+            return super().createEditor(parent, option, index)
+        ed = CueTextEditor(parent)
+        ed.setFrameShape(QtWidgets.QFrame.NoFrame)
+        ed.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        ed.row = index.row()
+        ed.split.connect(lambda text, pos, ed=ed: self._split(ed, text, pos))
+        return ed
+
+    def _split(self, ed, text, pos):
+        self.closeEditor.emit(ed, QtWidgets.QAbstractItemDelegate.NoHint)
+        self.split.emit(ed.row, text, pos)
+
+    def setEditorData(self, ed, index):
+        if isinstance(ed, CueTextEditor):
+            ed.setPlainText(index.data(QtCore.Qt.EditRole) or "")
+            ed.moveCursor(QtGui.QTextCursor.End)
+        else:
+            super().setEditorData(ed, index)
+
+    def setModelData(self, ed, model, index):
+        if isinstance(ed, CueTextEditor):
+            model.setData(index, ed.toPlainText(), QtCore.Qt.EditRole)
+        else:
+            super().setModelData(ed, model, index)
+
+    def eventFilter(self, ed, ev):
+        if isinstance(ed, CueTextEditor) and ev.type() == QtCore.QEvent.KeyPress and ev.key() in (QtCore.Qt.Key_Tab, QtCore.Qt.Key_Backtab):
+            self.commitData.emit(ed)
+            self.closeEditor.emit(ed, QtWidgets.QAbstractItemDelegate.NoHint)
+            self.jump.emit(ed.row + (1 if ev.key() == QtCore.Qt.Key_Tab else -1))
+            return True
+        return super().eventFilter(ed, ev)
+
+
+class CueEditor(QtWidgets.QWidget):
+    changed = QtCore.pyqtSignal()
+    seek = QtCore.pyqtSignal(float)
+    recut = QtCore.pyqtSignal()
+    shorten = QtCore.pyqtSignal()
+
+    def __init__(self, main):
+        super().__init__()
+        self.main = main
+        self.history, self.future = [], []
+        self.edited = False
+        self.duration = 0.0
+        self.mono_font = QtGui.QFont(main.mono, 10)
+        self.model = CueModel(self)
+        v = QtWidgets.QVBoxLayout(self)
+        v.setContentsMargins(20, 14, 20, 10)
+        v.setSpacing(8)
+        row = QtWidgets.QHBoxLayout()
+        row.setSpacing(8)
+        row.addWidget(main._btn(_("Re-cut from the text"), self.recut.emit, kind="paper"))
+        row.addWidget(main._btn(_("Shorten what reads too fast…"), self.shorten.emit, kind="paper"))
+        row.addStretch(1)
+        self.count = QtWidgets.QLabel("")
+        self.count.setObjectName("muted")
+        row.addWidget(self.count)
+        v.addLayout(row)
+        row = QtWidgets.QHBoxLayout()
+        row.setSpacing(6)
+        row.addWidget(main._btn(_("Split"), lambda: self.split_at(self.row()), kind="paper", tip=_("Split")))
+        row.addWidget(main._btn(_("Merge with the next"), self.merge_next, kind="paper", tip="Ctrl+J"))
+        row.addWidget(main._btn(_("Delete"), self.delete_cues, kind="paper", tip="Del"))
+        row.addStretch(1)
+        for which, name in ((0, _("Start")), (1, _("End"))):
+            row.addWidget(main._btn(name + " −", lambda _c=False, w=which: self.nudge(w, -NUDGE), kind="paper", tip=f"{name} −{NUDGE:g} s"))
+            row.addWidget(main._btn(name + " +", lambda _c=False, w=which: self.nudge(w, NUDGE), kind="paper", tip=f"{name} +{NUDGE:g} s"))
+            row.addWidget(main._btn(name + " " + _("here"), lambda _c=False, w=which: self.set_edge(w, self.main.player.position() / 1000.0),
+                                    kind="paper", tip=_("Start here") if which == 0 else _("End here")))
+            if which == 0:
+                row.addSpacing(10)
+        v.addLayout(row)
+        hint = QtWidgets.QLabel(_("Enter splits the subtitle at the cursor, Shift+Enter breaks the line, Tab goes to the next one. A click on a subtitle plays from there; the buttons move its edges by a tenth of a second, or to the instant being played."))
+        hint.setObjectName("muted")
+        hint.setWordWrap(True)
+        v.addWidget(hint)
+        self.table = QtWidgets.QTableView()
+        self.table.setModel(self.model)
+        self.delegate = CueDelegate(self.table)
+        self.table.setItemDelegate(self.delegate)
+        self.delegate.split.connect(self.split_at)
+        self.delegate.jump.connect(self.edit_row)
+        self.table.setWordWrap(True)
+        self.table.setShowGrid(False)
+        self.table.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.table.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
+        self.table.setEditTriggers(QtWidgets.QAbstractItemView.DoubleClicked | QtWidgets.QAbstractItemView.SelectedClicked | QtWidgets.QAbstractItemView.EditKeyPressed)
+        self.table.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
+        self.table.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
+        self.table.horizontalHeader().setHighlightSections(False)
+        self.table.clicked.connect(self._clicked)
+        v.addWidget(self.table, 1)
+        for keys, fn in (("Delete", self.delete_cues), ("Ctrl+J", self.merge_next),
+                         ("Alt+Left", lambda: self.nudge(0, -NUDGE)), ("Alt+Right", lambda: self.nudge(0, NUDGE)),
+                         ("Alt+Shift+Left", lambda: self.nudge(1, -NUDGE)), ("Alt+Shift+Right", lambda: self.nudge(1, NUDGE))):
+            s = QtWidgets.QShortcut(QtGui.QKeySequence(keys), self.table)
+            s.setContext(QtCore.Qt.WidgetWithChildrenShortcut)
+            s.activated.connect(fn)
+        self.refont()
+
+    # ---- what is shown ----
+    def set_cues(self, cues, original, edited):
+        self.history, self.future = [], []
+        self.edited = bool(edited)
+        self.model.reset([list(c) for c in cues], original)
+        self._columns()
+        self.refresh_count()
+
+    def cues(self):
+        return [list(c) for c in self.model.cues]
+
+    def issues(self, r):
+        return cue_issues(self.model.cues, r)
+
+    def too_fast_rows(self):
+        return [r for r, c in enumerate(self.model.cues) if pace_level(c) == 2]
+
+    def refont(self):
+        """The font of the page, a little smaller; two lines of text to a row."""
+        pt = max(8, self.main.page_pt - 1)
+        self.mono_font = QtGui.QFont(self.main.mono, max(8, pt - 3))
+        fm = QtGui.QFontMetrics(QtGui.QFont(SANS_FAMILY, pt))
+        self.table.verticalHeader().setDefaultSectionSize(fm.lineSpacing() * 2 + 14)
+        self._columns()
+
+    def _columns(self):
+        head = self.table.horizontalHeader()
+        fm = QtGui.QFontMetrics(self.mono_font)
+        for col, chars in ((CueModel.START, 11), (CueModel.END, 11), (CueModel.PACE, 4)):
+            head.setSectionResizeMode(col, QtWidgets.QHeaderView.Fixed)
+            self.table.setColumnWidth(col, fm.horizontalAdvance("0") * chars + 16)
+        head.setSectionResizeMode(CueModel.TEXT, QtWidgets.QHeaderView.Stretch)
+        if self.model.columnCount() > CueModel.ORIGINAL:
+            head.setSectionResizeMode(CueModel.ORIGINAL, QtWidgets.QHeaderView.Stretch)
+
+    def refresh_count(self):
+        n = len(self.model.cues)
+        self.count.setText(_("%1 subtitles", n) + (" · " + _("edited by hand") if self.edited else ""))
+
+    # ---- the history ----
+    def snapshot(self):
+        self.history.append(self.cues())
+        del self.history[:-200]
+        self.future.clear()
+
+    def after_change(self):
+        self.model.cache.clear()
+        self.edited = True
+        n = self.model.rowCount()
+        if n:
+            self.model.dataChanged.emit(self.model.index(0, 0), self.model.index(n - 1, self.model.columnCount() - 1))
+        self.refresh_count()
+        self.changed.emit()
+
+    def _restore(self, cues):
+        row = self.row()
+        self.model.reset(cues, self.model.original)
+        self.edited = True
+        self.select(min(row, len(cues) - 1))
+        self.refresh_count()
+        self.changed.emit()
+
+    def undo(self):
+        if self.history:
+            self.future.append(self.cues())
+            self._restore(self.history.pop())
+
+    def redo(self):
+        if self.future:
+            self.history.append(self.cues())
+            self._restore(self.future.pop())
+
+    # ---- the rows ----
+    def row(self):
+        idx = self.table.currentIndex()
+        return idx.row() if idx.isValid() else -1
+
+    def selected_rows(self):
+        rows = sorted({i.row() for i in self.table.selectionModel().selectedRows()})
+        return rows or ([self.row()] if self.row() >= 0 else [])
+
+    def select(self, r):
+        if 0 <= r < len(self.model.cues):
+            idx = self.model.index(r, CueModel.TEXT)
+            self.table.setCurrentIndex(idx)
+            self.table.scrollTo(idx)
+
+    def _clicked(self, idx):
+        if self.table.state() != QtWidgets.QAbstractItemView.EditingState and idx.isValid():
+            self.seek.emit(self.model.cues[idx.row()][0])
+
+    def edit_row(self, r):
+        if 0 <= r < len(self.model.cues):
+            self.select(r)
+            self.table.edit(self.model.index(r, CueModel.TEXT))
+
+    def set_current(self, t):
+        """The subtitle being played, marked and kept in view (unless one is being edited)."""
+        k = cue_at(self.model.cues, t)
+        if k == self.model.current:
+            return
+        old, self.model.current = self.model.current, k
+        for r in (old, k):
+            if r >= 0:
+                self.model.dataChanged.emit(self.model.index(r, 0), self.model.index(r, self.model.columnCount() - 1), [QtCore.Qt.BackgroundRole])
+        if k >= 0 and self.table.state() != QtWidgets.QAbstractItemView.EditingState:
+            self.table.scrollTo(self.model.index(k, 0))
+
+    # ---- the changes ----
+    def apply_texts(self, texts):
+        """New texts for some rows (the model's shortening)."""
+        self.snapshot()
+        for r, text in texts.items():
+            if 0 <= r < len(self.model.cues):
+                self.model.cues[r][2] = text
+        self.after_change()
+
+    def split_at(self, row, text=None, pos=None):
+        """Two cues out of one: at the cursor while typing, at the space nearest the middle otherwise;
+        the time is shared in proportion to the letters."""
+        cues = self.model.cues
+        if not 0 <= row < len(cues):
+            return
+        a, b, cur = cues[row]
+        if text is None:
+            text = " ".join(cur.split())
+            spaces = [i for i, ch in enumerate(text) if ch == " "]
+            if not spaces:
+                return
+            pos = min(spaces, key=lambda i: abs(i - len(text) / 2.0))
+        if 0 < pos < len(text) and not text[pos - 1].isspace() and not text[pos].isspace():
+            # inside a word: the cut goes to the nearest space before it (after it when there is none)
+            before = max(text.rfind(" ", 0, pos), text.rfind("\n", 0, pos))
+            after = min(i for i in (text.find(" ", pos), text.find("\n", pos), len(text)) if i >= 0)
+            pos = before + 1 if before >= 0 else after
+        left, right = " ".join(text[:pos].split()), " ".join(text[pos:].split())
+        if not left or not right:
+            return
+        self.snapshot()
+        cut = a + (b - a) * len(left) / (len(left) + len(right))
+        end = round(max(a + 0.3, cut - 0.05), 3)
+        self.model.beginInsertRows(QtCore.QModelIndex(), row + 1, row + 1)
+        cues[row] = [a, end, two_lines(left)]
+        cues.insert(row + 1, [round(max(end + 0.05, cut), 3), b, two_lines(right)])
+        self.model.endInsertRows()
+        self.after_change()
+        self.select(row + 1)
+
+    def merge_next(self):
+        row, cues = self.row(), self.model.cues
+        if row < 0 or row + 1 >= len(cues):
+            return
+        self.snapshot()
+        a, _b, t1 = cues[row]
+        _a2, b, t2 = cues[row + 1]
+        self.model.beginRemoveRows(QtCore.QModelIndex(), row + 1, row + 1)
+        cues[row] = [a, b, two_lines(" ".join((t1 + " " + t2).split()))]
+        del cues[row + 1]
+        self.model.endRemoveRows()
+        self.after_change()
+        self.select(row)
+
+    def delete_cues(self):
+        rows = self.selected_rows()
+        if not rows:
+            return
+        self.snapshot()
+        for r in reversed(rows):
+            self.model.beginRemoveRows(QtCore.QModelIndex(), r, r)
+            del self.model.cues[r]
+            self.model.endRemoveRows()
+        self.after_change()
+        self.select(min(rows[0], len(self.model.cues) - 1))
+
+    def set_edge(self, which, t):
+        row = self.row()
+        if row < 0:
+            return
+        a, b, _text = self.model.cues[row]
+        t = round(max(0.0, min(t, self.duration or t)), 3)
+        new = max(0.0, min(t, b - 0.3)) if which == 0 else max(a + 0.3, t)
+        if new == (a if which == 0 else b):
+            return
+        self.snapshot()
+        self.model.cues[row][which] = round(new, 3)
+        self.after_change()
+
+    def nudge(self, which, delta):
+        row = self.row()
+        if row >= 0:
+            self.set_edge(which, self.model.cues[row][which] + delta)
+
+
 class Main(QtWidgets.QMainWindow):
     def __init__(self, source=None, srt=None):
         super().__init__()
@@ -2899,6 +3563,9 @@ class Main(QtWidgets.QMainWindow):
         self.texts = {}             # "src" and each translated language → {tokens, origin, estimated, language}
         self.view = "src"           # the text on the page: "src" or a language code
         self.src_lang = ""
+        self.cues = {}              # "src" and each language → {language, cues, edited}: the subtitles, once made or edited
+        self.subs_mode = False      # the subtitle editor in place of the page
+        self.overlay_src, self.overlay_idx = None, -1
         self.project_file = None    # the .rve.json this project was opened from or saved to
         self.detail = ""
         self.thread = None
@@ -2978,9 +3645,10 @@ class Main(QtWidgets.QMainWindow):
             s.activated.connect(fn)
         sc("Ctrl+O", self.ask_open)
         sc("Ctrl+L", self.ask_url)
-        sc("Ctrl+Z", self.page.undo)
-        sc("Ctrl+Y", self.page.redo)
-        sc("Ctrl+Shift+Z", self.page.redo)
+        sc("Ctrl+Z", self.undo)
+        sc("Ctrl+Y", self.redo)
+        sc("Ctrl+Shift+Z", self.redo)
+        sc("Ctrl+U", lambda: self.b_subs.click())
         sc("Ctrl+=", lambda: self.resize_text(1))
         sc("Ctrl++", lambda: self.resize_text(1))
         sc("Ctrl+-", lambda: self.resize_text(-1))
@@ -3137,14 +3805,18 @@ class Main(QtWidgets.QMainWindow):
         self.b_erase = self._btn(_("Eraser"), lambda: self.choose_tool("erase"), kind="erase", tip="G")
         self.b_highlight.setChecked(True)
         h.addWidget(self._segment([self.b_highlight, self.b_erase]))
-        self.b_undo = self._btn(_("Undo"), lambda: self.page.undo(), tip="Ctrl+Z")
-        self.b_redo = self._btn(_("Redo"), lambda: self.page.redo(), tip="Ctrl+Y")
+        self.b_undo = self._btn(_("Undo"), self.undo, tip="Ctrl+Z")
+        self.b_redo = self._btn(_("Redo"), self.redo, tip="Ctrl+Y")
         h.addWidget(self.b_undo)
         h.addWidget(self.b_redo)
         self.b_read = self._btn(_("Read"), None, tip="Ctrl+R")
         self.b_read.setCheckable(True)
         self.b_read.clicked.connect(lambda c: self.set_reading(c))
         h.addWidget(self.b_read)
+        self.b_subs = self._btn(_("Subtitles"), None, tip="Ctrl+U")
+        self.b_subs.setCheckable(True)
+        self.b_subs.clicked.connect(lambda c: self.set_subtitles(c))
+        h.addWidget(self.b_subs)
         self.b_text = QtWidgets.QToolButton()
         self.b_text.setText(_("Text") + " ▾")
         self.b_text.setPopupMode(QtWidgets.QToolButton.InstantPopup)
@@ -3191,6 +3863,13 @@ class Main(QtWidgets.QMainWindow):
         sl = QtWidgets.QVBoxLayout(self.screen)
         sl.setContentsMargins(0, 0, 0, 0)
         sl.addWidget(self.video)
+        self.overlay = QtWidgets.QLabel(self.screen)
+        self.overlay.setObjectName("overlay")
+        self.overlay.setAlignment(QtCore.Qt.AlignCenter)
+        self.overlay.setWordWrap(True)
+        self.overlay.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents)
+        self.overlay.hide()
+        self.screen.installEventFilter(self)
         sv.addWidget(self.screen, 3)
         self.controls = QtWidgets.QWidget()
         self.controls.setObjectName("controls")
@@ -3368,6 +4047,12 @@ class Main(QtWidgets.QMainWindow):
         rv.setSpacing(0)
         self.page_stack = QtWidgets.QStackedWidget()
         self.page_stack.addWidget(self.page)
+        self.editor = CueEditor(self)
+        self.editor.changed.connect(self.on_cues_changed)
+        self.editor.seek.connect(lambda t: self.go(t, None))
+        self.editor.recut.connect(self.recut_cues)
+        self.editor.shorten.connect(self.ask_shorten)
+        self.page_stack.addWidget(self.editor)
         patience = QtWidgets.QWidget()
         patience.setObjectName("paper")
         pl = QtWidgets.QVBoxLayout(patience)
@@ -3495,6 +4180,15 @@ class Main(QtWidgets.QMainWindow):
             QWidget#paper QPushButton, QWidget#paper QComboBox {{ background: #ffffff; color: {INK}; border-color: #d5cebd; }}
             QWidget#paper QComboBox QAbstractItemView {{ background: #ffffff; color: {INK}; selection-background-color: {RULE}; selection-color: {INK}; }}
             QSplitter::handle {{ background: {C_BORDER}; width: 1px; }}
+            QWidget#paper QTableView {{ background: {PAPER}; color: {INK}; border: none; font-size: {max(8, pt - 1)}pt; selection-background-color: {RULE}; selection-color: {INK}; outline: none; }}
+            QWidget#paper QTableView::item {{ padding: 4px 8px; border-bottom: 1px solid {RULE}; }}
+            QWidget#paper QTableView::item:selected {{ background: {RULE}; color: {INK}; }}
+            QWidget#paper QHeaderView {{ background: {PAPER}; }}
+            QWidget#paper QHeaderView::section {{ background: {PAPER}; color: {INK2}; border: none; border-bottom: 1px solid {RULE}; padding: 4px 8px; font-weight: 600; font-size: 9pt; }}
+            QWidget#paper QTableView QPlainTextEdit {{ background: #ffffff; color: {INK}; border: 1px solid {C_ACCENT}; font-size: {max(8, pt - 1)}pt; padding: 2px 6px; }}
+            QWidget#paper QTableView QLineEdit {{ background: #ffffff; color: {INK}; border: 1px solid {C_ACCENT}; border-radius: 0; padding: 2px 6px; font-family: "{self.mono}"; }}
+            QTableCornerButton::section {{ background: {PAPER}; border: none; }}
+            QLabel#overlay {{ background: rgba(0, 0, 0, 0.55); color: #ffffff; font-family: Arial, "{SANS_FAMILY}"; font-weight: 600; padding: 2px 10px; border-radius: 4px; }}
             QWidget#controls, QWidget#paper QWidget#controls, QWidget#controls QWidget {{ background: {C_PANEL2}; }}
             QWidget#controls QPushButton, QWidget#controls QComboBox {{ background: {C_PANEL}; color: {C_TEXT}; border-color: {C_BORDER}; }}
             QWidget#controls QLabel {{ background: transparent; color: {C_TEXT}; }}
@@ -3505,6 +4199,9 @@ class Main(QtWidgets.QMainWindow):
         if self.tokens:
             self.page.rebuild()
         self.fit_measure()
+        if hasattr(self, "editor"):
+            self.editor.refont()
+            self.place_overlay()
 
     # ---- the two views ----
     def show_home(self):
@@ -3514,7 +4211,11 @@ class Main(QtWidgets.QMainWindow):
         self.player.stop()
         self.player.setMedia(QMediaContent())
         self.project, self.tokens, self.cuts = None, [], []
-        self.texts, self.view, self.project_file = {}, "src", None
+        self.texts, self.view, self.project_file, self.cues = {}, "src", None, {}
+        self.subs_mode = False
+        self.b_subs.setChecked(False)
+        self.page_stack.setCurrentWidget(self.page)
+        self.refresh_overlay()
         self.page.set_tokens([], [])
         self.views.setCurrentWidget(self.home)
         self.h_error.setText("")
@@ -3566,6 +4267,8 @@ class Main(QtWidgets.QMainWindow):
         """Reading: the page alone across the window, the picture hidden and the player's
         controls under the text. The highlighting stays."""
         self.reading = bool(on)
+        if self.reading and self.subs_mode:
+            self.set_subtitles(False)
         self.b_read.setChecked(self.reading)
         self.b_read.setText(_("Edit") if self.reading else _("Read"))
         if self.reading:
@@ -3614,9 +4317,11 @@ class Main(QtWidgets.QMainWindow):
         self.apply_style()
 
     def enable(self, loaded):
-        for w in (self.b_highlight, self.b_erase, self.b_keep, self.b_cut, self.fade, self.image_fade, self.format, self.b_preview, self.b_clear, self.b_silences, self.b_read, self.b_text, self.b_undo, self.b_redo,
+        for w in (self.fade, self.image_fade, self.format, self.b_preview, self.b_clear, self.b_silences, self.b_read, self.b_subs, self.b_text, self.b_undo, self.b_redo,
                   self.b_project, self.subs, self.srt_files, self.lang_box):
             w.setEnabled(loaded)
+        for w in (self.b_highlight, self.b_erase, self.b_keep, self.b_cut):
+            w.setEnabled(loaded and not self.subs_mode)
         self.b_produce.setEnabled(loaded and bool(self.cuts) and self.thread is None)
 
     # ---- opening ----
@@ -3780,7 +4485,11 @@ class Main(QtWidgets.QMainWindow):
         self.a_name.setText(Path(path).name)
         self.detail = (_("Video") if info["type"] == "video" else _("Recording")) + " · " + plain(info["duration"])
         self.show_project_name()
-        self.tokens, self.cuts, self.texts, self.view = [], [], {}, "src"
+        self.tokens, self.cuts, self.texts, self.view, self.cues = [], [], {}, "src", {}
+        self.subs_mode = False
+        self.b_subs.setChecked(False)
+        self.page_stack.setCurrentWidget(self.page)
+        self.refresh_overlay()
         self.page.set_tokens([], [])
         self.lang_box.hide()
         self.format.clear()
@@ -3887,6 +4596,7 @@ class Main(QtWidgets.QMainWindow):
             return tokens_from_srt(cues, wav, duration)
 
         def done(tokens):
+            self.forget_cues("src")
             write_json(d / "transcription.json", {"tokens": tokens, "origin": "subtitles", "estimated": True, "language": ""})
             self.show_tokens(tokens, "subtitles", True)
 
@@ -3929,6 +4639,7 @@ class Main(QtWidgets.QMainWindow):
 
         def done(result):
             tokens, lang = result
+            self.forget_cues("src")
             write_json(d / "transcription.json", {"tokens": tokens, "origin": "transcription", "estimated": False, "language": lang})
             self.show_tokens(tokens, "transcription", False, lang)
 
@@ -3947,6 +4658,12 @@ class Main(QtWidgets.QMainWindow):
             tr = read_json(f)
             if tr and tr.get("tokens") and tr.get("language"):
                 self.texts[tr["language"]] = {"tokens": tr["tokens"], "origin": "translation", "estimated": True, "language": tr["language"]}
+        self.cues = {}
+        for f in sorted(d.glob("cues-*.json")):
+            c = read_json(f)
+            key = f.stem[5:]
+            if c and isinstance(c.get("cues"), list) and (key == "src" or key in self.texts):
+                self.cues[key] = {"language": c.get("language", ""), "cues": [list(x) for x in c["cues"]], "edited": bool(c.get("edited"))}
         sel = read_json(d / "selection.json", {}) or {}
         view = sel.get("view", "src")
         self.show_view(view if view in self.texts else "src", first=True)
@@ -3972,11 +4689,15 @@ class Main(QtWidgets.QMainWindow):
         self.tokens, self.origin, self.estimated = tokens, text["origin"], text["estimated"]
         self.set_mode(sel.get("mode", "keep"), quiet=True)
         self.page.set_tokens(tokens, sel.get("ranges", []), text["origin"])
-        self.page_stack.setCurrentWidget(self.page)
         self.rebuild_language_switch()
         self.rebuild_subtitle_options()
         self.enable(True)
         self.on_selection()
+        if self.subs_mode:
+            self.show_editor()
+        else:
+            self.page_stack.setCurrentWidget(self.page)
+            self.refresh_overlay()
 
     def view_code(self):
         """The language of the text on the page ('' when the original's is unknown)."""
@@ -4018,45 +4739,81 @@ class Main(QtWidgets.QMainWindow):
         self.subs.blockSignals(False)
         self.subs.setVisible(video)
         self.l_subs.setVisible(video)
+        self.refresh_overlay()
 
     def remember_output(self):
         if self.subs.currentData():
             self.cfg["burn"] = self.subs.currentData()
         self.cfg["srt_files"] = self.srt_files.isChecked()
         save_config(self.cfg)
+        self.refresh_overlay()
 
     def show_project_name(self):
         name = Path(self.project_file).name if self.project_file else ""
         self.a_detail.setText(self.detail + (" · " + name if name else ""))
 
     # ---- the translation (traduire.py, through the toolkit's Python) ----
+    def _toolkit_row(self, dlg, v):
+        """When the toolkit is not found: the message and a field for its folder, in a dialog.
+        Returns the field, or None when the toolkit is there."""
+        if toolkit_dir(self.cfg):
+            return None
+        lab = QtWidgets.QLabel(_("The traduction toolkit does the translation (traduire.py). It was not found: give its folder, or install it from %1.", TOOLKIT_URL))
+        lab.setObjectName("danger")
+        lab.setWordWrap(True)
+        v.addWidget(lab)
+        row = QtWidgets.QHBoxLayout()
+        folder = QtWidgets.QLineEdit(self.cfg.get("toolkit_dir") or "")
+        folder.setPlaceholderText(_("Folder of the traduction toolkit"))
+        row.addWidget(folder, 1)
+
+        def browse():
+            d = QtWidgets.QFileDialog.getExistingDirectory(dlg, _("Folder of the traduction toolkit"), folder.text() or os.path.expanduser("~"))
+            if d:
+                folder.setText(d)
+        row.addWidget(self._btn(_("Browse…"), browse))
+        v.addLayout(row)
+        return folder
+
+    def _toolkit_from(self, folder, error):
+        """The toolkit folder a dialog settled on, or None after the error is shown."""
+        where = toolkit_dir(self.cfg)
+        if folder is not None:
+            where = folder.text().strip()
+            if not os.path.isfile(os.path.join(where, "traduire.py")):
+                error.setText(_("traduire.py is not in this folder."))
+                return None
+            self.cfg["toolkit_dir"] = where
+        return where
+
+    def _llm_rows(self, g, row, label):
+        """Two fields of a dialog: who does the work, the model on this computer (Ollama) or
+        Claude, and which Ollama model. Returns the two widgets."""
+        llm = QtWidgets.QComboBox()
+        llm.addItem(_("On this computer (Ollama)"), "local")
+        llm.addItem(_("Claude (API)") + " · " + LLM_CLAUDE_MODEL, "claude")
+        llm.setCurrentIndex(1 if self.cfg.get("llm") == "claude" else 0)
+        model = QtWidgets.QLineEdit(self.cfg.get("ollama_model") or LLM_LOCAL_MODEL)
+        model.setPlaceholderText(LLM_LOCAL_MODEL)
+        llm.currentIndexChanged.connect(lambda i: model.setEnabled(i == 0))
+        model.setEnabled(llm.currentIndex() == 0)
+        for col, (text, w) in enumerate(((label, llm), (_("Ollama model"), model))):
+            lab = QtWidgets.QLabel(text)
+            lab.setObjectName("label")
+            g.addWidget(lab, row, col)
+            g.addWidget(w, row + 1, col)
+        return llm, model
+
     def ask_translate(self):
         if not self.project or self.thread or not self.texts.get("src"):
             return
         dlg = QtWidgets.QDialog(self)
         dlg.setWindowTitle(_("Translate…"))
-        dlg.setMinimumWidth(560)
+        dlg.setMinimumWidth(660)
         v = QtWidgets.QVBoxLayout(dlg)
         v.setContentsMargins(18, 16, 18, 14)
         v.setSpacing(10)
-        tk = toolkit_dir(self.cfg)
-        folder = None
-        if not tk:
-            lab = QtWidgets.QLabel(_("The traduction toolkit does the translation (traduire.py). It was not found: give its folder, or install it from %1.", TOOLKIT_URL))
-            lab.setObjectName("danger")
-            lab.setWordWrap(True)
-            v.addWidget(lab)
-            row = QtWidgets.QHBoxLayout()
-            folder = QtWidgets.QLineEdit(self.cfg.get("toolkit_dir") or "")
-            folder.setPlaceholderText(_("Folder of the traduction toolkit"))
-            row.addWidget(folder, 1)
-
-            def browse():
-                d = QtWidgets.QFileDialog.getExistingDirectory(dlg, _("Folder of the traduction toolkit"), folder.text() or os.path.expanduser("~"))
-                if d:
-                    folder.setText(d)
-            row.addWidget(self._btn(_("Browse…"), browse))
-            v.addLayout(row)
+        folder = self._toolkit_row(dlg, v)
         g = QtWidgets.QGridLayout()
         g.setHorizontalSpacing(10)
         g.setVerticalSpacing(6)
@@ -4077,19 +4834,7 @@ class Main(QtWidgets.QMainWindow):
             lab.setObjectName("label")
             g.addWidget(lab, 0, col)
             g.addWidget(w, 1, col)
-        llm = QtWidgets.QComboBox()
-        llm.addItem(_("On this computer (Ollama)"), "local")
-        llm.addItem(_("Claude (API)"), "claude")
-        llm.setCurrentIndex(1 if self.cfg.get("llm") == "claude" else 0)
-        model = QtWidgets.QLineEdit(self.cfg.get("ollama_model") or LLM_LOCAL_MODEL)
-        model.setPlaceholderText(LLM_LOCAL_MODEL)
-        llm.currentIndexChanged.connect(lambda i: model.setEnabled(i == 0))
-        model.setEnabled(llm.currentIndex() == 0)
-        for col, (label, w) in enumerate(((_("Translation by"), llm), (_("Ollama model"), model))):
-            lab = QtWidgets.QLabel(label)
-            lab.setObjectName("label")
-            g.addWidget(lab, 2, col)
-            g.addWidget(w, 3, col)
+        llm, model = self._llm_rows(g, 2, _("Translation by"))
         v.addLayout(g)
         context = QtWidgets.QPlainTextEdit()
         context.setPlaceholderText(_("Context for the translator: names, subject, register (optional)"))
@@ -4098,6 +4843,12 @@ class Main(QtWidgets.QMainWindow):
         review = QtWidgets.QCheckBox(_("Proofreading pass (a second reading by the model)"))
         review.setChecked(bool(self.cfg.get("review", True)))
         v.addWidget(review)
+        # with the local model, the analysis pass can still go to Claude (traduire.py's "auto"): said and chosen here
+        analysis = QtWidgets.QCheckBox(_("Analysis of the content (names, glossary) by Claude rather than the local model"))
+        analysis.setChecked(bool(self.cfg.get("analysis_by_claude", False)))
+        analysis.setVisible(llm.currentData() == "local" and bool(os.environ.get("ANTHROPIC_API_KEY")))
+        llm.currentIndexChanged.connect(lambda i: analysis.setVisible(i == 0 and bool(os.environ.get("ANTHROPIC_API_KEY"))))
+        v.addWidget(analysis)
         error = QtWidgets.QLabel("")
         error.setObjectName("danger")
         error.setWordWrap(True)
@@ -4110,26 +4861,23 @@ class Main(QtWidgets.QMainWindow):
         v.addLayout(buttons)
 
         def accept():
-            where = tk
-            if folder is not None:
-                where = folder.text().strip()
-                if not os.path.isfile(os.path.join(where, "traduire.py")):
-                    error.setText(_("traduire.py is not in this folder."))
-                    return
-                self.cfg["toolkit_dir"] = where
+            where = self._toolkit_from(folder, error)
+            if not where:
+                return
             if src.currentData() == tgt.currentData():
                 error.setText(_("Same as the source language."))
                 return
             self.cfg["llm"], self.cfg["ollama_model"] = llm.currentData(), model.text().strip() or LLM_LOCAL_MODEL
             self.cfg["review"], self.cfg["target_lang"] = review.isChecked(), tgt.currentData()
+            self.cfg["analysis_by_claude"] = analysis.isChecked()
             save_config(self.cfg)
             dlg.accept()
             self.start_translation(where, src.currentData(), tgt.currentData(), llm.currentData(), self.cfg["ollama_model"],
-                                   context.toPlainText().strip(), review.isChecked())
+                                   context.toPlainText().strip(), review.isChecked(), analysis.isVisible() and analysis.isChecked())
         go.clicked.connect(accept)
         dlg.exec_()
 
-    def start_translation(self, tk, src, tgt, llm, model, context, review):
+    def start_translation(self, tk, src, tgt, llm, model, context, review, analysis_by_claude=False):
         d = Path(self.project["dir"])
         segments = segments_from_tokens(self.texts["src"]["tokens"])
         if not segments:
@@ -4137,11 +4885,12 @@ class Main(QtWidgets.QMainWindow):
         duration = self.project["duration"]
         job = {"task": "translate", "toolkit": tk, "segments": segments, "source_lang": src, "target_lang": tgt,
                "llm": llm, "ollama_model": model, "ollama_url": OLLAMA_URL, "claude_model": LLM_CLAUDE_MODEL,
-               "context": context, "review": review}
-        # the passes of traduire.py and where each one starts on the gauge
-        steps = [("analysis", 0.02, _("Analysing the text…")), ("translate", 0.08, _("Translating…")),
-                 ("review", 0.62, _("Proofreading…")), ("consistency", 0.86, _("Checking the consistency…")),
-                 ("glossary", 0.94, _("Checking the glossary…"))]
+               "context": context, "review": review, "analysis_by_claude": analysis_by_claude}
+        # the passes of traduire.py, where each one starts on the gauge, and who does it
+        who = model_label(llm, model)
+        steps = [("analysis", 0.02, _("Analysing the text…") + " · " + (model_label("claude") if analysis_by_claude else who)),
+                 ("translate", 0.08, _("Translating…") + " · " + who), ("review", 0.62, _("Proofreading…") + " · " + who),
+                 ("consistency", 0.86, _("Checking the consistency…") + " · " + who), ("glossary", 0.94, _("Checking the glossary…") + " · " + who)]
         self.task = {"cancelled": False, "proc": None, "page": True}
         task = self.task
 
@@ -4173,6 +4922,7 @@ class Main(QtWidgets.QMainWindow):
             self.task = None
             self.p_cancel.hide()
             write_json(d / f"translation-{tgt}.json", tr)
+            self.forget_cues(tgt)
             self.texts[tgt] = {"tokens": tr["tokens"], "origin": "translation", "estimated": True, "language": tgt}
             if not self.src_lang:
                 # subtitles carry no language: the one given for the translation names the original from now on
@@ -4192,7 +4942,7 @@ class Main(QtWidgets.QMainWindow):
             self.enable(True)
             self.on_selection()
             self.say(_("The translation failed: %1", msg) if msg else _("Cancelled."))
-        self.wait(_("Translating into %1…", lang_label(tgt)), _("Analysing the text…"))
+        self.wait(_("Translating into %1…", lang_label(tgt)), steps[0][2])
         self.p_cancel.show()
         self.enable(False)
         self.run_in_background(work, done, failed)
@@ -4207,10 +4957,11 @@ class Main(QtWidgets.QMainWindow):
         if not out:
             return
         tokens, tk, d = list(self.tokens), toolkit_dir(self.cfg), Path(self.project["dir"])
+        stored = self.cues.get(self.view)
         task = {"cancelled": False, "proc": None}
 
         def work(w):
-            cues = make_cues(tokens, code, tk, task, d)
+            cues = sorted(stored["cues"]) if stored else make_cues(tokens, code, tk, task, d)
             with open(out, "w", encoding="utf-8") as f:
                 f.write(srt_text(cues))
             return out
@@ -4229,6 +4980,11 @@ class Main(QtWidgets.QMainWindow):
         for k, tr in (project.get("translations") or {}).items():
             if tr and tr.get("tokens"):
                 write_json(d / f"translation-{k}.json", tr)
+        for f in d.glob("cues-*.json"):
+            f.unlink()
+        for k, c in (project.get("cues") or {}).items():
+            if c and isinstance(c.get("cues"), list):
+                write_json(d / f"cues-{k}.json", c)
         sel = dict(project.get("selection") or {})
         sel.pop("times", None)
         write_json(d / "selection.json", sel)
@@ -4262,6 +5018,7 @@ class Main(QtWidgets.QMainWindow):
                 "type": self.project["type"], "duration": self.project["duration"],
                 "transcription": read_json(d / "transcription.json"),
                 "translations": {k: read_json(d / f"translation-{k}.json") for k in self.texts if k != "src"},
+                "cues": {k: c for k, c in self.cues.items() if k == "src" or k in self.texts},
                 "selection": {"view": self.view, "ranges": [list(p) for p in clean], "mode": self.mode_value,
                               "fade": float(self.fade.currentData()), "image_fade": self.image_fade.isChecked()},
                 "output": {"format": self.format.currentData(), "burn": self.subs.currentData() or "none", "srt_files": self.srt_files.isChecked()}}
@@ -4298,6 +5055,275 @@ class Main(QtWidgets.QMainWindow):
             self.project_file = path
             self.show_project_name()
 
+    # ---- the subtitle editor ----
+    def undo(self):
+        (self.editor if self.subs_mode else self.page).undo()
+
+    def redo(self):
+        (self.editor if self.subs_mode else self.page).redo()
+
+    def update_undo_buttons(self):
+        who = self.editor if self.subs_mode else self.page
+        self.b_undo.setEnabled(bool(who.history))
+        self.b_redo.setEnabled(bool(who.future))
+
+    def set_subtitles(self, on):
+        """Subtitles: the cues of the text on the page take its place, to be read, timed and
+        corrected; the picture shows the one being played. The highlighting stays."""
+        on = bool(on) and bool(self.tokens) and self.thread is None
+        if on and self.reading:
+            self.set_reading(False)
+        self.subs_mode = on
+        self.b_subs.setChecked(on)
+        self.enable(bool(self.tokens))
+        if on:
+            self.show_editor()
+        else:
+            self.page_stack.setCurrentWidget(self.page)
+            self.refresh_overlay()
+            self.update_undo_buttons()
+
+    def show_editor(self):
+        key = self.view
+
+        def ready():
+            if not self.subs_mode or key != self.view or key not in self.cues:
+                return
+            c = self.cues[key]
+            self.editor.duration = self.project["duration"]
+            self.editor.set_cues(c["cues"], self.texts["src"]["tokens"] if key != "src" else None, c.get("edited"))
+            self.page_stack.setCurrentWidget(self.editor)
+            self.refresh_overlay()
+            self.update_undo_buttons()
+            self.editor.set_current(self.player.position() / 1000.0 + 0.05)
+        self.ensure_cues(key, ready)
+
+    def ensure_cues(self, key, then, fresh=False):
+        """The subtitles of a text: made once (traduire.py's re-segmentation, in the background),
+        then kept in the project folder as they are left."""
+        if key in self.cues and not fresh:
+            then()
+            return
+        if self.thread or key not in self.texts:
+            return
+        tokens, code = list(self.texts[key]["tokens"]), (self.src_lang if key == "src" else key)
+        tk, d = toolkit_dir(self.cfg), Path(self.project["dir"])
+        self.task = {"cancelled": False, "proc": None, "page": True}
+        task = self.task
+
+        def work(w):
+            return make_cues(tokens, code, tk, task, d)
+
+        def back():
+            self.task = None
+            self.p_cancel.hide()
+            self.p_gauge.setRange(0, 1000)
+            self.enable(True)
+
+        def done(cues):
+            back()
+            self.store_cues(key, cues, False)
+            then()
+
+        def failed(msg):
+            back()
+            self.set_subtitles(False)
+            self.say(msg or _("Cancelled."))
+        self.wait(_("Making the subtitles…"))
+        self.p_gauge.setRange(0, 0)
+        self.p_cancel.show()
+        self.enable(False)
+        self.run_in_background(work, done, failed)
+
+    def store_cues(self, key, cues, edited):
+        code = self.src_lang if key == "src" else key
+        self.cues[key] = {"language": code, "cues": [list(c) for c in cues], "edited": bool(edited)}
+        write_json(Path(self.project["dir"]) / f"cues-{key}.json", self.cues[key])
+        self.refresh_overlay()
+
+    def forget_cues(self, key):
+        self.cues.pop(key, None)
+        if self.project:
+            f = Path(self.project["dir"]) / f"cues-{key}.json"
+            if f.exists():
+                f.unlink()
+
+    def on_cues_changed(self):
+        if self.subs_mode and self.view in self.cues:
+            self.store_cues(self.view, self.editor.cues(), True)
+        self.update_undo_buttons()
+
+    def recut_cues(self):
+        if self.thread or not self.subs_mode:
+            return
+        c = self.cues.get(self.view)
+        if c and c.get("edited"):
+            answer = QtWidgets.QMessageBox.question(self, _("Re-cut from the text"),
+                                                    _("The subtitles were edited by hand. Cut them again from the text and lose these changes?"))
+            if answer != QtWidgets.QMessageBox.Yes:
+                return
+        self.ensure_cues(self.view, self.show_editor, fresh=True)
+
+    # the picture shows the subtitle being played: the editor's, or the one chosen for the output
+    def refresh_overlay(self):
+        cues = None
+        if self.project and self.project["type"] == "video" and hasattr(self, "subs"):
+            key = self.view if self.subs_mode else (self.subs.currentData() or "none")
+            if key in self.cues:
+                cues = self.cues[key]["cues"]
+        self.overlay_src, self.overlay_idx = cues, -2
+        self.update_overlay(self.player.position() / 1000.0 + 0.05 if hasattr(self, "player") else 0.0)
+
+    def update_overlay(self, t):
+        k = cue_at(self.overlay_src, t) if self.overlay_src else -1
+        if k == self.overlay_idx:
+            return
+        self.overlay_idx = k
+        if k < 0:
+            self.overlay.hide()
+            return
+        self.overlay.setText(self.overlay_src[k][2])
+        self.place_overlay()
+        self.overlay.show()
+
+    def place_overlay(self):
+        """Where the picture is inside the black screen, the letters about as big as the burn-in
+        makes them (traduire's style: 24 for a height of 288, smaller for a narrow picture)."""
+        if not self.project or not hasattr(self, "overlay"):
+            return
+        W, H = self.screen.width(), self.screen.height()
+        vid = self.project.get("video") or {}
+        vw, vh = vid.get("width") or 16, vid.get("height") or 9
+        scale = min(W / vw, H / vh)
+        pw, ph = vw * scale, vh * scale
+        px, py = (W - pw) / 2, (H - ph) / 2
+        size = ph * 24 / 288
+        if pw / ph < 16 / 9 - 0.05:
+            size *= pw / (ph * 16 / 9)
+        self.overlay.setStyleSheet(f"QLabel#overlay {{ font-size: {max(9, int(size))}px; }}")
+        self.overlay.setFixedWidth(max(40, int(pw * 0.92)))
+        self.overlay.adjustSize()
+        self.overlay.move(int(px + (pw - self.overlay.width()) / 2), int(py + ph - self.overlay.height() - ph * 16 / 288))
+        self.overlay.raise_()
+
+    def eventFilter(self, obj, ev):
+        if obj is getattr(self, "screen", None) and ev.type() == QtCore.QEvent.Resize and self.overlay.isVisible():
+            self.place_overlay()
+        return super().eventFilter(obj, ev)
+
+    # the model shortens what reads too fast: traduire.py's proofreading pass on the cues
+    def ask_shorten(self):
+        if not self.subs_mode or self.thread or self.view not in self.cues:
+            return
+        cues = self.editor.cues()
+        fast, chosen = self.editor.too_fast_rows(), self.editor.selected_rows()
+        dlg = QtWidgets.QDialog(self)
+        dlg.setWindowTitle(_("Shorten what reads too fast…").rstrip("…"))
+        dlg.setMinimumWidth(520)
+        v = QtWidgets.QVBoxLayout(dlg)
+        v.setContentsMargins(18, 16, 18, 14)
+        v.setSpacing(10)
+        folder = self._toolkit_row(dlg, v)
+        lab = QtWidgets.QLabel(_("The model rereads these subtitles and shortens the ones that read too fast, with the proofreading pass of traduire.py."))
+        lab.setWordWrap(True)
+        v.addWidget(lab)
+        scope = QtWidgets.QComboBox()
+        scope.addItem(_("The subtitles that read too fast (%1)", len(fast)), "fast")
+        scope.addItem(_("The selected subtitles (%1)", len(chosen)), "selected")
+        scope.addItem(_("All the subtitles (%1)", len(cues)), "all")
+        scope.setCurrentIndex(1 if len(chosen) > 1 else 0)
+        v.addWidget(scope)
+        g = QtWidgets.QGridLayout()
+        g.setHorizontalSpacing(10)
+        g.setVerticalSpacing(6)
+        llm, model = self._llm_rows(g, 0, _("Proofreading by"))
+        v.addLayout(g)
+        error = QtWidgets.QLabel("")
+        error.setObjectName("danger")
+        error.setWordWrap(True)
+        v.addWidget(error)
+        buttons = QtWidgets.QHBoxLayout()
+        buttons.addStretch(1)
+        buttons.addWidget(self._btn(_("Cancel"), dlg.reject))
+        go = self._btn(_("Shorten"), None, kind="strong")
+        buttons.addWidget(go)
+        v.addLayout(buttons)
+
+        def accept():
+            where = self._toolkit_from(folder, error)
+            if not where:
+                return
+            rows = {"fast": fast, "selected": chosen, "all": list(range(len(cues)))}[scope.currentData()]
+            if not rows:
+                error.setText(_("Nothing to shorten."))
+                return
+            self.cfg["llm"], self.cfg["ollama_model"] = llm.currentData(), model.text().strip() or LLM_LOCAL_MODEL
+            save_config(self.cfg)
+            dlg.accept()
+            self.start_shorten(where, rows, llm.currentData(), self.cfg["ollama_model"])
+        go.clicked.connect(accept)
+        dlg.exec_()
+
+    def start_shorten(self, tk, rows, llm, model):
+        key, d, cues = self.view, Path(self.project["dir"]), self.editor.cues()
+        src = self.src_lang or "en"
+        tgt = (self.src_lang if key == "src" else key) or "en"
+        scope = set(rows)
+        send = sorted({r for k in rows for r in range(k - 2, k + 3) if 0 <= r < len(cues)})
+        src_tokens = self.texts["src"]["tokens"]
+        segments = []
+        for r in send:
+            a, b, text = cues[r]
+            flat = " ".join(text.split())
+            original = words_during(src_tokens, a, b) if key != "src" else flat
+            segments.append({"index": r, "start": a, "end": b, "text": original or flat, "text_tgt": flat, "words": [], "lang": src})
+        analysis = (read_json(d / f"translation-{key}.json", {}) or {}).get("analysis") if key != "src" else None
+        job = {"task": "review", "toolkit": tk, "segments": segments, "source_lang": src, "target_lang": tgt,
+               "llm": llm, "ollama_model": model, "ollama_url": OLLAMA_URL, "claude_model": LLM_CLAUDE_MODEL,
+               "analysis": analysis or {}, "context": "", "max_cps": MAX_CPS}
+        self.task = {"cancelled": False, "proc": None, "page": True}
+        task = self.task
+
+        def work(w):
+            if llm == "local" and not ollama_answers(OLLAMA_URL):
+                raise RuntimeError(_("Ollama does not answer at %1.", OLLAMA_URL))
+
+            def on_message(msg):
+                m = re.search(r"Fen[êe]tre (\d+)/(\d+)", msg.get("line", ""))
+                if m:
+                    i, n = int(m.group(1)), int(m.group(2))
+                    w.progress.emit((i - 1) / max(n, 1), _("Proofreading… %1 of %2", i, n) + " · " + model_label(llm, model))
+            result = run_bridge(task, job, d, on_message)
+            changes = {}
+            for s in result["segments"]:
+                r, new = int(s["index"]), " ".join((s.get("text_tgt") or "").split())
+                if r in scope and new and new != " ".join(cues[r][2].split()):
+                    changes[r] = two_lines(new)
+            return changes
+
+        def back():
+            self.task = None
+            self.p_cancel.hide()
+            self.enable(True)
+            self.page_stack.setCurrentWidget(self.editor if self.subs_mode else self.page)
+
+        def done(changes):
+            back()
+            if changes and self.subs_mode and self.view == key:
+                self.editor.apply_texts(changes)
+                self.say(_("Shortened: %1 subtitles", len(changes)))
+            else:
+                self.say(_("The model changed nothing."))
+
+        def failed(msg):
+            back()
+            self.say(_("The shortening failed: %1", msg) if msg else _("Cancelled."))
+        self.wait(_("Proofreading…"), model_label(llm, model))
+        self.p_gauge.setValue(0)
+        self.p_cancel.show()
+        self.enable(False)
+        self.run_in_background(work, done, failed)
+
     # ---- the selection and the cuts ----
     def choose_tool(self, tool):
         self.page.tool = tool
@@ -4314,8 +5340,7 @@ class Main(QtWidgets.QMainWindow):
             self.on_selection()
 
     def on_selection(self):
-        self.b_undo.setEnabled(bool(self.page.history))
-        self.b_redo.setEnabled(bool(self.page.future))
+        self.update_undo_buttons()
         if not self.project or not self.tokens:
             self.update_summary()
             return
@@ -4431,6 +5456,9 @@ class Main(QtWidgets.QMainWindow):
             self.slider.setValue(int(ms))
         self.time_label.setText(plain(ms / 1000.0) + " / " + plain(self.project["duration"] if self.project else 0))
         self.page.set_current(ms / 1000.0 + 0.05)
+        if self.subs_mode:
+            self.editor.set_current(ms / 1000.0 + 0.05)
+        self.update_overlay(ms / 1000.0 + 0.05)
 
     def tick(self):
         """The preview of the edit: at the end of a kept piece, jump to the next one."""
@@ -4509,6 +5537,7 @@ class Main(QtWidgets.QMainWindow):
         texts = {k: list(self.texts[k]["tokens"]) for k in keys}
         codes = {k: (self.src_lang if k == "src" else k) for k in keys}
         tk = toolkit_dir(self.cfg)
+        stored = {k: sorted(self.cues[k]["cues"]) for k in keys if k in self.cues}
         style = SUBTITLE_STYLE
         if project.get("video"):
             style = scale_style(SUBTITLE_STYLE, project["video"].get("width", 0), project["video"].get("height", 0))
@@ -4528,7 +5557,7 @@ class Main(QtWidgets.QMainWindow):
                 if texts:
                     task["message"] = _("Making the subtitles…")
                 for key, toks in texts.items():
-                    cues = make_cues(tokens_in_edit(toks, cuts), codes[key], tk, task, d)
+                    cues = cues_in_edit(stored[key], cuts) if key in stored else make_cues(tokens_in_edit(toks, cuts), codes[key], tk, task, d)
                     path = out.with_name(f"{out.stem}.{codes[key] or 'src'}.srt") if srt_files else d / "burn.srt"
                     with open(path, "w", encoding="utf-8") as f:
                         f.write(srt_text(cues))

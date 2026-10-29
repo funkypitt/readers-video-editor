@@ -40,7 +40,9 @@ that download.
 - **Translate…** (Ctrl+T) hands the text to the
   [traduction toolkit](https://github.com/funkypitt/traduction-toolkit)'s `traduire.py`: analysis
   of the content (names, glossary), translation by chunks, proofreading, consistency and glossary
-  checks, by a local model (Ollama, `gemma4:31b`) or Claude (`ANTHROPIC_API_KEY`). The
+  checks, by a local model (Ollama, `gemma4:31b`) or Claude (`ANTHROPIC_API_KEY`); every pass
+  goes to the model you chose, and the waiting page names it at each step (a box can hand the
+  analysis alone to Claude, as the toolkit does by default). The
   translation becomes a second page: a switch in the bar shows the original or the translation,
   and you highlight on either one, the highlighting follows by time. The app looks for the
   toolkit in `TRADUCTION_DIR`, `~/code/traduction` or `~/code/traduction-toolkit`, and asks for
@@ -50,15 +52,27 @@ that download.
   on the pauses). At the output, « Subtitles » draws the original or a translation into the
   picture of the edit (the toolkit's style), and « Subtitle files beside the edit » writes an
   `.srt` per language on the edit's timeline, carried in the MP4 as tracks too.
+- **Subtitle editor**: the **Subtitles** button (Ctrl+U) replaces the page with the cues of the
+  text shown, made once by the toolkit and kept with the project as you leave them: the text of
+  each one edited in place (Enter splits at the cursor, Shift+Enter breaks the line, Tab goes
+  on), split, merge, delete, the edges moved by a tenth of a second or set to the instant being
+  played, undo. A translation's cues show the original words beside them. The pace of each cue
+  (characters a second) is green up to 17, amber up to 22, red beyond; the rows that break the
+  shape rules (42 characters a line, two lines, 7 s, overlaps) are tinted and say why. The picture shows the cue being played, in the burn-in proportions. **Shorten what reads
+  too fast…** hands the chosen cues to `traduire.py`'s proofreading pass, by the local model or
+  Claude. **Re-cut from the text** starts again from the toolkit's cutting. Edited cues are what
+  **Save the subtitles…** and the output use, trimmed to the kept pieces.
 - **Project files**: Project ▾ › **Save the project…** (Ctrl+Shift+S) writes a `.rve.json`
-  beside the video with the text, the translations, the highlighting and the output settings;
+  beside the video with the text, the translations, the subtitles, the highlighting and the
+  output settings;
   one file per clip from the same video, opened again by Ctrl+Shift+O, a drop, the home page
   field or the command line.
 - Projects are kept (sound, text, highlighting): the same file opens again with its text.
 - Ctrl+= and Ctrl+- change the text size. English, French, German, Spanish, Portuguese and
   Russian, following the system language.
 
-More detail: [docs/NOTES.md](docs/NOTES.md).
+More detail: [docs/NOTES.md](docs/NOTES.md). Prise en main pas à pas, en français, pour Linux,
+macOS et Windows : [docs/PRISE-EN-MAIN.md](docs/PRISE-EN-MAIN.md).
 
 ## Install
 

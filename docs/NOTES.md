@@ -7,7 +7,8 @@
 - Projects: `projects/<name>-<id>/` in the data folder (`~/.local/share/readers-video-editor` on
   Linux): `audio16k.wav` (the sound as the transcription hears it), `transcription.json`
   (the tokens, the language), `translation-<lang>.json` (traduire.py's segments with `text_tgt`,
-  the translated tokens, the analysis), `selection.json` (the highlighting, by token ranges of
+  the translated tokens, the analysis), `cues-<key>.json` (the subtitles of a text once made or
+  edited, 1.4.0), `selection.json` (the highlighting, by token ranges of
   the `view` shown; by times when the text changes), `project.json`, and the toolkit's job files
   while it runs. The id is a hash of the path, size and date of the source.
 - Models of faster-whisper: `models/` in the same data folder (tiny 75 MB … large-v3 3 GB).
@@ -111,8 +112,9 @@ The app finds the toolkit as its launcher does (`TRADUCTION_DIR`, `toolkit_dir` 
 `TOOLKIT_BRIDGE` as `toolkit_bridge.py` in the project folder and runs it on `toolkit_job.json`.
 The bridge moves the toolkit's prints to stderr and answers on stdout with `@@ {json}` lines
 (`step`, `result`, `error`); the app reads the merged stream, the `📦 Chunk i/n` lines move the
-gauge. The passes are those of `traduire.main()`: `analyze_content` (by Claude when a key is
-there, the toolkit's « auto »), `translate_chunks`, `review_translation` (the « proofreading »
+gauge. The passes are those of `traduire.main()`: `analyze_content` (by the model chosen, or by
+Claude when the box « Analysis of the content by Claude » is ticked: the toolkit's « auto » rule,
+made a visible choice in 1.4.0, off by default), `translate_chunks`, `review_translation` (the « proofreading »
 box), `check_consistency`, `verify_glossary`, `_clean_translation_artifacts`,
 `_clear_same_lang_translations`. Segments are the tokens grouped by sentence index
 (`segments_from_tokens`: faster-whisper's segments, or one per cue from subtitles), with the
@@ -135,10 +137,60 @@ join so no cue straddles it), then cut into cues; the files are `<edit>.<lang>.s
 narrower than 16:9 as `_scale_style_for_video` does, picture encoded once more, x264 crf 18); the
 srt files also go into the MP4 as `mov_text` tracks with their ISO 639-2 language.
 
+## The subtitle editor (1.4.0)
+
+Cues become data once the editor is opened: `cues-<key>.json` in the project folder (`src` or a
+language code: `language`, `cues` as `[start, end, text]` on the timeline of the whole file,
+`edited`), loaded by `show_tokens`, saved in the project file under `cues`, dropped when the
+text they came from is made again (`forget_cues`: a new transcription, new subtitles, a new
+translation of that language). `ensure_cues` makes them once with `make_cues` (the toolkit's
+`resegment()` through the bridge, `simple_cues` without it) in the background, the patience page
+with a Stop; « Re-cut from the text » makes them again, after a question when they were edited.
+
+`CueEditor` sits in the page stack beside the page and the patience page: two rows of buttons,
+the hint, a `QTableView` on `CueModel` (Start, End, c/s, Text, and Original for a translation:
+the original words whose middle falls inside the cue, `words_during`). Times are typed as
+`1:02.345` (`parse_clock`), the text in a `CueTextEditor` (a `QPlainTextEdit` in the cell:
+Enter → `split`, Shift+Enter a line break, Tab commits and edits the next row through the
+delegate's event filter). Splitting shares the time in proportion to the letters, with 0.05 s
+between the halves, and snaps a cut inside a word to the space before it; merging joins the
+texts and `two_lines` re-wraps. The history is whole snapshots of the list (200 at most); Ctrl+Z
+and the bar's Undo go to the editor while the mode is on (`Main.undo`), to the page otherwise.
+`cue_issues` colours a row (bad: a line over 42, three lines, an overlap; warn: over 7 s, under
+1 s) and fills its tooltip. The pace has its own colour on the c/s number (`pace_level`): green
+up to `CPS_TARGET` 17 (the toolkit's target), amber up to `MAX_CPS` 22 (the app's limit, 17
+being harsh as one), red beyond, in bold when not green; `pace_note` adds the reading to the
+tooltip. The highlighting tools are
+disabled in the mode, the passage list and the output stay live. Reading and Subtitles exclude
+each other.
+
+The picture: `QLabel#overlay` over the black screen, placed by `place_overlay` inside the
+picture rectangle (the video's aspect fitted in the screen), the letters 24/288 of the picture
+height as traduire's style (`FontSize=24` for `PlayResY` 288), smaller for pictures narrower
+than 16:9 as `scale_style` does, 16/288 above the bottom. It shows the editor's cues in the
+mode, else the cues chosen for the output when they exist (`refresh_overlay`), driven by
+`on_position` like the page's current word.
+
+Shortening: `ask_shorten` offers the rows that read too fast, the selected rows or all, and the
+model (Ollama here or Claude, the same fields as the translation dialog, `_llm_rows`).
+`start_shorten` sends the chosen rows with two neighbours each side for context as segments
+(`index` = row, `text` = the original words during the cue, `text_tgt` = the cue's text) to the
+bridge task `review`: `review_translation` alone, with the translation's `ContentAnalysis`
+(glossary) when there is one, then `_clean_translation_artifacts`; the job carries `max_cps`
+(the app's 22), set on the toolkit module for the call, so it marks the segments over that pace
+with ⚠️ and its prompt asks to shorten them. Only the chosen rows take the
+answer (`apply_texts`, one undo step). The `🔎 Fenêtre i/n` lines move the gauge.
+
+At the output and for « Save the subtitles… », stored cues win over a fresh cutting: whole-file
+cues are written as they are; for the edit, `cues_in_edit` trims each cue to the kept pieces and
+shifts it, drops what a cut leaves of a cue when it is less than half of it and under a second,
+and joins the two halves of a cue around a join when their text is the same.
+
 ## Project files (1.3.0)
 
 `<stem>.rve.json` beside the video (or wherever asked): `source`, `source_name`, the
-`transcription.json` content, the `translation-*.json` contents, the selection (view, ranges,
+`transcription.json` content, the `translation-*.json` contents, the `cues-*.json` contents
+(1.4.0), the selection (view, ranges,
 mode, fade, picture fade) and the output settings (format, burnt subtitles, srt files). Opening
 one (`open_project_file`, by drop, Ctrl+Shift+O, the home field, the command line) installs
 those files into the project folder of the source (`install_project`) and opens the source; a
