@@ -2,8 +2,9 @@
 #
 # Runs on a v* tag (the files are attached to the release of that tag) and on demand from the
 # Actions tab (kept as artifacts for a few days, or attached to the release named in `tag`).
-# Windows: onnxruntime's binaries and data are collected, not its whole package, since PyInstaller's
-# isolated import of onnxruntime.quantization crashes there (seen 2026-10-29). Windows and macOS bundles carry ffmpeg
+# Windows: onnxruntime is left out of the bundle, since PyInstaller's isolated import of it crashes
+# on the runner (access violation, seen 2026-10-29 with 1.31); faster-whisper imports it only for
+# its VAD, which the app never uses. Windows and macOS bundles carry ffmpeg
 # (imageio-ffmpeg) and faster-whisper, so they transcribe out of the box; the .deb depends on the
 # distribution's ffmpeg and asks for `pip install faster-whisper` for the transcription.
 #
@@ -70,8 +71,7 @@ jobs:
             --add-data "packaging/fonts;fonts" \
             --collect-all imageio_ffmpeg --collect-all faster_whisper --collect-all ctranslate2 \
             --collect-all tokenizers --collect-all huggingface_hub --collect-all soundfile \
-            --collect-binaries onnxruntime --collect-data onnxruntime \
-            --exclude-module onnxruntime.quantization --exclude-module onnxruntime.transformers --exclude-module onnxruntime.tools \
+            --exclude-module onnxruntime \
             --hidden-import PyQt5.QtMultimedia --hidden-import PyQt5.QtMultimediaWidgets \
             readers_video_editor.py
           mkdir -p out
