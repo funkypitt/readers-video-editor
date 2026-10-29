@@ -1,7 +1,9 @@
 # Windows and macOS builds of Reader's Video Editor, and the Debian package.
 #
 # Runs on a v* tag (the files are attached to the release of that tag) and on demand from the
-# Actions tab (kept as artifacts for a few days). Windows and macOS bundles carry ffmpeg
+# Actions tab (kept as artifacts for a few days, or attached to the release named in `tag`).
+# Windows: onnxruntime's binaries and data are collected, not its whole package, since PyInstaller's
+# isolated import of onnxruntime.quantization crashes there (seen 2026-10-29). Windows and macOS bundles carry ffmpeg
 # (imageio-ffmpeg) and faster-whisper, so they transcribe out of the box; the .deb depends on the
 # distribution's ffmpeg and asks for `pip install faster-whisper` for the transcription.
 #
@@ -14,6 +16,11 @@ on:
   push:
     tags: ['v*']
   workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to attach the files to (empty: artifacts only)"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -62,7 +69,9 @@ jobs:
             --add-data "packaging/readers-video-editor.png;." \
             --add-data "packaging/fonts;fonts" \
             --collect-all imageio_ffmpeg --collect-all faster_whisper --collect-all ctranslate2 \
-            --collect-all tokenizers --collect-all huggingface_hub --collect-all onnxruntime --collect-all soundfile \
+            --collect-all tokenizers --collect-all huggingface_hub --collect-all soundfile \
+            --collect-binaries onnxruntime --collect-data onnxruntime \
+            --exclude-module onnxruntime.quantization --exclude-module onnxruntime.transformers --exclude-module onnxruntime.tools \
             --hidden-import PyQt5.QtMultimedia --hidden-import PyQt5.QtMultimediaWidgets \
             readers_video_editor.py
           mkdir -p out
@@ -132,12 +141,12 @@ jobs:
           path: out/*
 
       - name: Attach to the release
-        if: startsWith(github.ref, 'refs/tags/')
+        if: startsWith(github.ref, 'refs/tags/') || (github.event_name == 'workflow_dispatch' && inputs.tag != '')
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          TAG="${GITHUB_REF_NAME}"
+          TAG="${{ inputs.tag || github.ref_name }}"
           if ! gh release view "$TAG" >/dev/null 2>&1; then
             gh release create "$TAG" --title "Reader's Video Editor $VERSION" --notes "Reader's Video Editor $VERSION" || sleep 5
           fi
@@ -174,11 +183,11 @@ jobs:
           path: out/*
 
       - name: Attach to the release
-        if: startsWith(github.ref, 'refs/tags/')
+        if: startsWith(github.ref, 'refs/tags/') || (github.event_name == 'workflow_dispatch' && inputs.tag != '')
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          TAG="${GITHUB_REF_NAME}"
+          TAG="${{ inputs.tag || github.ref_name }}"
           if ! gh release view "$TAG" >/dev/null 2>&1; then
             gh release create "$TAG" --title "Reader's Video Editor $VERSION" --notes "Reader's Video Editor $VERSION" || sleep 5
           fi
