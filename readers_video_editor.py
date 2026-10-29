@@ -28,7 +28,7 @@ from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 APP = "readers-video-editor"
-VERSION = "1.4.0"
+VERSION = "1.5.0"
 
 
 def _app_dirs():
@@ -953,6 +953,137 @@ _TR_SUBS = {
  },
 }
 for _code, _more in _TR_SUBS.items():
+    _TR.setdefault(_code, {}).update(_more)
+
+# The strings of 1.5.0: the square frame, the sound finished by finaliser.py
+_TR_SOUND = {
+ "fr": {
+  "Sound": "Son", "As it is": "Tel quel", "Square (1:1), centred": "Carré (1:1), centré",
+  "Improved: background noise, level": "Amélioré : bruit de fond, niveau",
+  "finaliser.py of the traduction toolkit: mains hum and a steady background noise removed when there are some, the level brought to the norm. The length does not change.":
+    "finaliser.py de la boîte à outils traduction : ronflette secteur et bruit de fond régulier retirés s'il y en a, niveau mis à la norme. La durée ne change pas.",
+  "Improve the sound": "Améliorer le son", "Continue": "Continuer",
+  "The traduction toolkit improves the sound (finaliser.py). It was not found: give its folder, or install it from %1.":
+    "La boîte à outils traduction améliore le son (finaliser.py). Elle n'a pas été trouvée : indiquez son dossier, ou installez-la depuis %1.",
+  "finaliser.py is not in this folder.": "finaliser.py n'est pas dans ce dossier.",
+  "finaliser.py is not in the toolkit folder %1.": "finaliser.py n'est pas dans le dossier de la boîte à outils %1.",
+  "the sound could not be improved (finaliser.py): %1": "le son n'a pas pu être amélioré (finaliser.py) : %1",
+  "Sound: %1": "Son : %1", "Channels": "Canaux", "Hum and rumble": "Ronflette et grondements", "Analysis": "Analyse",
+  "Background noise": "Bruit de fond", "Levelling": "Nivelage", "Level": "Niveau", "Fades": "Fondus", "Check": "Contrôle",
+  "Frame": "Cadre", "square (1:1), the centre of the picture": "carré (1:1), le centre de l'image", "finished by finaliser.py": "finition par finaliser.py",
+  "mains hum at %1 Hz removed": "ronflette secteur à %1 Hz retirée",
+  "background noise reduced, by %1 dB at most": "bruit de fond réduit, de %1 dB au plus",
+  "background noise reduced gently (the stronger cleaning harmed the voice)": "bruit de fond réduit doucement (le nettoyage plus fort abîmait la voix)",
+  "background left as it is: cleaning it harmed the voice": "fond laissé tel quel : le nettoyer abîmait la voix",
+  "background already clean (%1 dB under the voice)": "fond déjà propre (%1 dB sous la voix)",
+  "background left as it is: music, not noise": "fond laissé tel quel : de la musique, pas un bruit",
+  "background left as it is: it changes along the file": "fond laissé tel quel : il change au fil du fichier",
+  "uneven voice levels evened out, slowly": "niveaux de voix inégaux égalisés, lentement",
+  "level %1 dB": "niveau %1 dB", "%1 dB taken from the peaks alone": "%1 dB retirés aux seules crêtes",
+  "voice quality %1 → %2 (DNSMOS, out of 5)": "qualité de la voix %1 → %2 (DNSMOS, sur 5)",
+ },
+ "de": {
+  "Sound": "Ton", "As it is": "Wie er ist", "Square (1:1), centred": "Quadrat (1:1), zentriert",
+  "Improved: background noise, level": "Verbessert: Hintergrundrauschen, Pegel",
+  "finaliser.py of the traduction toolkit: mains hum and a steady background noise removed when there are some, the level brought to the norm. The length does not change.":
+    "finaliser.py des traduction-Toolkits: Netzbrummen und ein gleichmäßiges Hintergrundrauschen werden entfernt, falls vorhanden, der Pegel auf die Norm gebracht. Die Länge ändert sich nicht.",
+  "Improve the sound": "Ton verbessern", "Continue": "Weiter",
+  "The traduction toolkit improves the sound (finaliser.py). It was not found: give its folder, or install it from %1.":
+    "Das traduction-Toolkit verbessert den Ton (finaliser.py). Es wurde nicht gefunden: Geben Sie seinen Ordner an, oder installieren Sie es von %1.",
+  "finaliser.py is not in this folder.": "finaliser.py ist nicht in diesem Ordner.",
+  "finaliser.py is not in the toolkit folder %1.": "finaliser.py ist nicht im Toolkit-Ordner %1.",
+  "the sound could not be improved (finaliser.py): %1": "der Ton konnte nicht verbessert werden (finaliser.py): %1",
+  "Sound: %1": "Ton: %1", "Channels": "Kanäle", "Hum and rumble": "Brummen und Rumpeln", "Analysis": "Analyse",
+  "Background noise": "Hintergrundrauschen", "Levelling": "Angleichen", "Level": "Pegel", "Fades": "Blenden", "Check": "Prüfung",
+  "Frame": "Bildausschnitt", "square (1:1), the centre of the picture": "Quadrat (1:1), die Bildmitte", "finished by finaliser.py": "Nachbearbeitung durch finaliser.py",
+  "mains hum at %1 Hz removed": "Netzbrummen bei %1 Hz entfernt",
+  "background noise reduced, by %1 dB at most": "Hintergrundrauschen um höchstens %1 dB verringert",
+  "background noise reduced gently (the stronger cleaning harmed the voice)": "Hintergrundrauschen sanft verringert (die stärkere Reinigung schadete der Stimme)",
+  "background left as it is: cleaning it harmed the voice": "Hintergrund belassen: die Reinigung schadete der Stimme",
+  "background already clean (%1 dB under the voice)": "Hintergrund bereits sauber (%1 dB unter der Stimme)",
+  "background left as it is: music, not noise": "Hintergrund belassen: Musik, kein Rauschen",
+  "background left as it is: it changes along the file": "Hintergrund belassen: er ändert sich im Lauf der Datei",
+  "uneven voice levels evened out, slowly": "ungleiche Stimmpegel langsam angeglichen",
+  "level %1 dB": "Pegel %1 dB", "%1 dB taken from the peaks alone": "%1 dB nur von den Spitzen genommen",
+  "voice quality %1 → %2 (DNSMOS, out of 5)": "Stimmqualität %1 → %2 (DNSMOS, von 5)",
+ },
+ "es": {
+  "Sound": "Sonido", "As it is": "Tal cual", "Square (1:1), centred": "Cuadrado (1:1), centrado",
+  "Improved: background noise, level": "Mejorado: ruido de fondo, nivel",
+  "finaliser.py of the traduction toolkit: mains hum and a steady background noise removed when there are some, the level brought to the norm. The length does not change.":
+    "finaliser.py del toolkit traduction: zumbido de red y ruido de fondo constante eliminados si los hay, nivel llevado a la norma. La duración no cambia.",
+  "Improve the sound": "Mejorar el sonido", "Continue": "Continuar",
+  "The traduction toolkit improves the sound (finaliser.py). It was not found: give its folder, or install it from %1.":
+    "El toolkit traduction mejora el sonido (finaliser.py). No se encontró: indique su carpeta, o instálelo desde %1.",
+  "finaliser.py is not in this folder.": "finaliser.py no está en esta carpeta.",
+  "finaliser.py is not in the toolkit folder %1.": "finaliser.py no está en la carpeta del toolkit %1.",
+  "the sound could not be improved (finaliser.py): %1": "no se pudo mejorar el sonido (finaliser.py): %1",
+  "Sound: %1": "Sonido: %1", "Channels": "Canales", "Hum and rumble": "Zumbido y retumbo", "Analysis": "Análisis",
+  "Background noise": "Ruido de fondo", "Levelling": "Nivelación", "Level": "Nivel", "Fades": "Fundidos", "Check": "Control",
+  "Frame": "Encuadre", "square (1:1), the centre of the picture": "cuadrado (1:1), el centro de la imagen", "finished by finaliser.py": "acabado por finaliser.py",
+  "mains hum at %1 Hz removed": "zumbido de red a %1 Hz eliminado",
+  "background noise reduced, by %1 dB at most": "ruido de fondo reducido, %1 dB como máximo",
+  "background noise reduced gently (the stronger cleaning harmed the voice)": "ruido de fondo reducido suavemente (la limpieza más fuerte dañaba la voz)",
+  "background left as it is: cleaning it harmed the voice": "fondo dejado tal cual: limpiarlo dañaba la voz",
+  "background already clean (%1 dB under the voice)": "fondo ya limpio (%1 dB por debajo de la voz)",
+  "background left as it is: music, not noise": "fondo dejado tal cual: música, no ruido",
+  "background left as it is: it changes along the file": "fondo dejado tal cual: cambia a lo largo del archivo",
+  "uneven voice levels evened out, slowly": "niveles de voz desiguales igualados, lentamente",
+  "level %1 dB": "nivel %1 dB", "%1 dB taken from the peaks alone": "%1 dB quitados solo a los picos",
+  "voice quality %1 → %2 (DNSMOS, out of 5)": "calidad de la voz %1 → %2 (DNSMOS, sobre 5)",
+ },
+ "pt": {
+  "Sound": "Som", "As it is": "Tal como está", "Square (1:1), centred": "Quadrado (1:1), centrado",
+  "Improved: background noise, level": "Melhorado: ruído de fundo, nível",
+  "finaliser.py of the traduction toolkit: mains hum and a steady background noise removed when there are some, the level brought to the norm. The length does not change.":
+    "finaliser.py do toolkit traduction: zumbido da rede e ruído de fundo constante removidos quando existem, nível levado à norma. A duração não muda.",
+  "Improve the sound": "Melhorar o som", "Continue": "Continuar",
+  "The traduction toolkit improves the sound (finaliser.py). It was not found: give its folder, or install it from %1.":
+    "O toolkit traduction melhora o som (finaliser.py). Não foi encontrado: indique a sua pasta, ou instale-o a partir de %1.",
+  "finaliser.py is not in this folder.": "finaliser.py não está nesta pasta.",
+  "finaliser.py is not in the toolkit folder %1.": "finaliser.py não está na pasta do toolkit %1.",
+  "the sound could not be improved (finaliser.py): %1": "não foi possível melhorar o som (finaliser.py): %1",
+  "Sound: %1": "Som: %1", "Channels": "Canais", "Hum and rumble": "Zumbido e ronco", "Analysis": "Análise",
+  "Background noise": "Ruído de fundo", "Levelling": "Nivelamento", "Level": "Nível", "Fades": "Fundidos", "Check": "Controlo",
+  "Frame": "Enquadramento", "square (1:1), the centre of the picture": "quadrado (1:1), o centro da imagem", "finished by finaliser.py": "acabamento por finaliser.py",
+  "mains hum at %1 Hz removed": "zumbido da rede a %1 Hz removido",
+  "background noise reduced, by %1 dB at most": "ruído de fundo reduzido, %1 dB no máximo",
+  "background noise reduced gently (the stronger cleaning harmed the voice)": "ruído de fundo reduzido suavemente (a limpeza mais forte prejudicava a voz)",
+  "background left as it is: cleaning it harmed the voice": "fundo deixado tal como está: limpá-lo prejudicava a voz",
+  "background already clean (%1 dB under the voice)": "fundo já limpo (%1 dB abaixo da voz)",
+  "background left as it is: music, not noise": "fundo deixado tal como está: música, não ruído",
+  "background left as it is: it changes along the file": "fundo deixado tal como está: muda ao longo do ficheiro",
+  "uneven voice levels evened out, slowly": "níveis de voz desiguais igualados, lentamente",
+  "level %1 dB": "nível %1 dB", "%1 dB taken from the peaks alone": "%1 dB retirados apenas aos picos",
+  "voice quality %1 → %2 (DNSMOS, out of 5)": "qualidade da voz %1 → %2 (DNSMOS, em 5)",
+ },
+ "ru": {
+  "Sound": "Звук", "As it is": "Как есть", "Square (1:1), centred": "Квадрат (1:1), по центру",
+  "Improved: background noise, level": "Улучшенный: фоновый шум, уровень",
+  "finaliser.py of the traduction toolkit: mains hum and a steady background noise removed when there are some, the level brought to the norm. The length does not change.":
+    "finaliser.py из набора traduction: сетевой гул и равномерный фоновый шум убираются, если они есть, уровень приводится к норме. Длительность не меняется.",
+  "Improve the sound": "Улучшить звук", "Continue": "Продолжить",
+  "The traduction toolkit improves the sound (finaliser.py). It was not found: give its folder, or install it from %1.":
+    "Набор traduction улучшает звук (finaliser.py). Он не найден: укажите его папку или установите его с %1.",
+  "finaliser.py is not in this folder.": "finaliser.py нет в этой папке.",
+  "finaliser.py is not in the toolkit folder %1.": "finaliser.py нет в папке набора %1.",
+  "the sound could not be improved (finaliser.py): %1": "не удалось улучшить звук (finaliser.py): %1",
+  "Sound: %1": "Звук: %1", "Channels": "Каналы", "Hum and rumble": "Гул и рокот", "Analysis": "Анализ",
+  "Background noise": "Фоновый шум", "Levelling": "Выравнивание", "Level": "Уровень", "Fades": "Затухания", "Check": "Проверка",
+  "Frame": "Кадр", "square (1:1), the centre of the picture": "квадрат (1:1), центр изображения", "finished by finaliser.py": "обработка finaliser.py",
+  "mains hum at %1 Hz removed": "сетевой гул на %1 Гц убран",
+  "background noise reduced, by %1 dB at most": "фоновый шум уменьшен, не более чем на %1 дБ",
+  "background noise reduced gently (the stronger cleaning harmed the voice)": "фоновый шум уменьшен мягко (более сильная чистка портила голос)",
+  "background left as it is: cleaning it harmed the voice": "фон оставлен как есть: чистка портила голос",
+  "background already clean (%1 dB under the voice)": "фон уже чистый (%1 дБ ниже голоса)",
+  "background left as it is: music, not noise": "фон оставлен как есть: музыка, а не шум",
+  "background left as it is: it changes along the file": "фон оставлен как есть: он меняется по ходу файла",
+  "uneven voice levels evened out, slowly": "неровные уровни голоса выровнены, медленно",
+  "level %1 dB": "уровень %1 дБ", "%1 dB taken from the peaks alone": "%1 дБ снято только с пиков",
+  "voice quality %1 → %2 (DNSMOS, out of 5)": "качество голоса %1 → %2 (DNSMOS, из 5)",
+ },
+}
+for _code, _more in _TR_SOUND.items():
     _TR.setdefault(_code, {}).update(_more)
 
 
@@ -2178,22 +2309,117 @@ def _run_ffmpeg(cmd, task, log, on_time=None):
         raise RuntimeError(detail or "ffmpeg failed")
 
 
-def produce_video(task, source, cuts, fade, image_fade, out, burn=None, tracks=()):
+# The centre of the picture, as a square of its shorter side (even, for yuv420p). iw and ih are
+# the size as displayed: ffmpeg turns a phone's picture upright before the filters run.
+SQUARE_FILTER = "crop=2*floor(min(iw\\,ih)/2):2*floor(min(iw\\,ih)/2)"
+
+# finaliser.py's nine passes, as the gauge names them
+FINISH_STEPS = {1: "Channels", 2: "Hum and rumble", 3: "Analysis", 4: "Background noise", 5: "Levelling",
+                6: "Level", 7: "Fades", 8: "Encoding", 9: "Check"}
+
+
+def finish_sound(task, toolkit, src, fmt, channels, folder, share=(0.0, 1.0)):
+    """finaliser.py of the toolkit on `src`, written into `folder` as `<stem>_podcast.<fmt>`:
+    the sound finished as for a podcast (mains hum, the background when it is a steady noise,
+    the level to the norm, constant gain), its length kept to the sample so the log, the edit
+    list and the subtitles stay true (--sans-rognage). Returns (path, the JSON report)."""
+    script = os.path.join(toolkit, "finaliser.py")
+    if not os.path.isfile(script):
+        raise RuntimeError(_("finaliser.py is not in the toolkit folder %1.", toolkit))
+    src, folder = Path(src), Path(folder)
+    cmd = [toolkit_python(), script, str(src), "--format", fmt, "--sans-rognage", "--forcer",
+           "--canaux", "stereo" if channels >= 2 else "mono", "-o", str(folder)]
+    env = dict(os.environ, PYTHONIOENCODING="utf-8", PYTHONUNBUFFERED="1")
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, errors="replace",
+                            env=env, cwd=toolkit, **_RUN_FLAGS)
+    task["proc"] = proc
+    a, b = share
+    lines = []
+    try:
+        for line in proc.stdout:
+            if task.get("cancelled"):
+                proc.kill()
+                break
+            line = line.strip()
+            if not line:
+                continue
+            lines.append(line)
+            m = re.match(r"\[(\d)/9\]", line)
+            if m:
+                k = int(m.group(1))
+                task["progress"] = a + (b - a) * (k - 1) / 9.0
+                task["message"] = _("Sound: %1", _(FINISH_STEPS.get(k, "")))
+        proc.wait()
+    finally:
+        task["proc"] = None
+    if task.get("cancelled"):
+        raise Cancelled()
+    done = folder / f"{src.stem}_podcast.{fmt}"
+    if proc.returncode != 0 or not done.exists():
+        failed = [l.split(":", 1)[1].strip() for l in lines if l.startswith("✗") and ":" in l]
+        detail = failed[0] if failed else " · ".join(lines[-6:])
+        raise RuntimeError(_("the sound could not be improved (finaliser.py): %1", detail[-500:]))
+    report = read_json(folder / f"{src.stem}_podcast.json", {}) or {}
+    task["progress"] = b
+    return done, report
+
+
+def sound_summary(report):
+    """What finaliser.py did, in the words of the app, from its JSON report; [] without one."""
+    if not report:
+        return []
+    plan, a, m = report.get("plan") or {}, report.get("analyse") or {}, report.get("mesures") or {}
+    L = []
+    if a.get("ronflette"):
+        L.append(_("mains hum at %1 Hz removed", ", ".join(str(h) for h in a["ronflette"])))
+    what = str(m.get("debruitage") or "")
+    if plan.get("debruitage") and "DeepFilterNet" in what:
+        L.append(_("background noise reduced, by %1 dB at most", plan["debruitage"]))
+    elif plan.get("debruitage") and "spectrale" in what:
+        L.append(_("background noise reduced gently (the stronger cleaning harmed the voice)"))
+    elif plan.get("debruitage"):
+        L.append(_("background left as it is: cleaning it harmed the voice"))
+    elif a.get("ecart_db") is not None and a["ecart_db"] >= 40:
+        L.append(_("background already clean (%1 dB under the voice)", int(round(a["ecart_db"]))))
+    elif a.get("part_tonale") is not None and a["part_tonale"] > 0.25:
+        L.append(_("background left as it is: music, not noise"))
+    elif (a.get("regularite_db") or 0) > 5:
+        L.append(_("background left as it is: it changes along the file"))
+    if plan.get("nivelage"):
+        L.append(_("uneven voice levels evened out, slowly"))
+    if m.get("gain_db") is not None:
+        final = (m.get("final") or {}).get("lufs")
+        line = _("level %1 dB", f"{m['gain_db']:+.1f}") + (f" → {final:.1f} LUFS" if final is not None else "")
+        if m.get("limiteur"):
+            line += ", " + _("%1 dB taken from the peaks alone", f"{m.get('retire_aux_cretes_db') or 0:.1f}")
+        L.append(line)
+    d = report.get("dnsmos") or {}
+    if (d.get("avant") or {}).get("sig") and (d.get("apres") or {}).get("sig"):
+        L.append(_("voice quality %1 → %2 (DNSMOS, out of 5)", d["avant"]["sig"], d["apres"]["sig"]))
+    return L
+
+
+def produce_video(task, source, cuts, fade, image_fade, out, burn=None, tracks=(), square=False, finish=None):
     """One intermediate file per piece (x264 picture + raw sound), then one join: the picture is
     copied as it is, the sound encoded once. With `burn` = (srt, style) the subtitles are drawn
     into the picture at the join (encoded once more, as traduire.py burns them); `tracks` =
-    [(language, srt), …] go into the MP4 as subtitle tracks one can switch on."""
+    [(language, srt), …] go into the MP4 as subtitle tracks one can switch on. `square` takes
+    the centre of the picture as a 1:1 square (each piece, before its fades). `finish` =
+    {toolkit, channels} hands the joined sound to finaliser.py: the join is then a MOV with the
+    raw sound, finished into an MP4, and the tracks are added in a last copy."""
     ff = ffmpeg_exe()
     total = sum(c["f"] - c["d"] for c in cuts)
     tmp = Path(tempfile.mkdtemp(prefix="edit_", dir=str(out.parent)))
     share = 0.6 if burn else 0.96
+    if finish:
+        share *= 0.55
     sub = None
     try:
         done, pieces = 0.0, []
         for k, c in enumerate(cuts):
             dur = c["f"] - c["d"]
             task["message"] = _("Piece %1 of %2", k + 1, len(cuts))
-            vf = []
+            vf = [SQUARE_FILTER] if square else []
             if image_fade and fade > 0:
                 fv = min(fade, dur / 2.0)
                 if c.get("vi", True):
@@ -2222,12 +2448,15 @@ def produce_video(task, source, cuts, fade, image_fade, out, burn=None, tracks=(
             for p in pieces:
                 f.write("file '" + str(p).replace("'", "'\\''") + "'\n")
         partial = out.with_name(out.stem + ".partial" + out.suffix)
+        joined = tmp / "joined.mov" if finish else partial
         cmd = [ff, "-y", "-f", "concat", "-safe", "0", "-i", str(lst)]
-        for _lang, srt in tracks:
-            cmd += ["-i", str(srt)]
+        if not finish:
+            for _lang, srt in tracks:
+                cmd += ["-i", str(srt)]
         cmd += ["-map", "0:v:0", "-map", "0:a:0"]
-        for k in range(len(tracks)):
-            cmd += ["-map", f"{k + 1}:0"]
+        if not finish:
+            for k in range(len(tracks)):
+                cmd += ["-map", f"{k + 1}:0"]
         if burn:
             # ffmpeg's filter parser is picky about paths: a copy with a plain name (as traduire.py)
             sub = Path(tempfile.mkdtemp(prefix="subs_")) / "subs.srt"
@@ -2236,14 +2465,35 @@ def produce_video(task, source, cuts, fade, image_fade, out, burn=None, tracks=(
                     "-c:v", "libx264", "-crf", "18", "-preset", "medium", "-pix_fmt", "yuv420p"]
         else:
             cmd += ["-c:v", "copy"]
-        cmd += ["-c:a", "aac", "-b:a", "192k"]
-        if tracks:
-            cmd += ["-c:s", "mov_text"]
-            for k, (lang, _srt) in enumerate(tracks):
-                cmd += [f"-metadata:s:s:{k}", "language=" + ISO3.get(lang, "und")]
-        cmd += ["-movflags", "+faststart", str(partial)]
+        if finish:
+            cmd += ["-c:a", "copy", str(joined)]
+        else:
+            cmd += ["-c:a", "aac", "-b:a", "192k"]
+            if tracks:
+                cmd += ["-c:s", "mov_text"]
+                for k, (lang, _srt) in enumerate(tracks):
+                    cmd += [f"-metadata:s:s:{k}", "language=" + ISO3.get(lang, "und")]
+            cmd += ["-movflags", "+faststart", str(partial)]
+        join_end = share + (1.0 - share) * (0.3 if finish else 1.0)
         try:
-            _run_ffmpeg(cmd, task, str(tmp / "ffmpeg.log"), lambda t: task.update(progress=share + (1.0 - share) * min(t / total, 1.0)))
+            _run_ffmpeg(cmd, task, str(tmp / "ffmpeg.log"), lambda t: task.update(progress=share + (join_end - share) * min(t / total, 1.0)))
+            if finish:
+                finished, report = finish_sound(task, finish["toolkit"], joined, "mp4", finish["channels"], tmp, share=(join_end, 0.98))
+                task["sound"] = report
+                task["message"] = _("Joining")
+                cmd = [ff, "-y", "-i", str(finished)]
+                for _lang, srt in tracks:
+                    cmd += ["-i", str(srt)]
+                cmd += ["-map", "0:v:0", "-map", "0:a:0"]
+                for k in range(len(tracks)):
+                    cmd += ["-map", f"{k + 1}:0"]
+                cmd += ["-c:v", "copy", "-c:a", "copy"]
+                if tracks:
+                    cmd += ["-c:s", "mov_text"]
+                    for k, (lang, _srt) in enumerate(tracks):
+                        cmd += [f"-metadata:s:s:{k}", "language=" + ISO3.get(lang, "und")]
+                cmd += ["-movflags", "+faststart", str(partial)]
+                _run_ffmpeg(cmd, task, str(tmp / "ffmpeg.log"))
             os.replace(partial, out)
         finally:
             if partial.exists():
@@ -2254,18 +2504,25 @@ def produce_video(task, source, cuts, fade, image_fade, out, burn=None, tracks=(
             shutil.rmtree(sub.parent, ignore_errors=True)
 
 
-def produce_audio(task, source, cuts, audio, fmt, out):
-    """The sound is decoded once from start to end and the pieces taken on the fly, to the sample."""
+def produce_audio(task, source, cuts, audio, fmt, out, finish=None):
+    """The sound is decoded once from start to end and the pieces taken on the fly, to the sample.
+    With `finish` = {toolkit, channels} the pieces go to a raw WAV first, which finaliser.py
+    finishes and encodes in `fmt`."""
     ff = ffmpeg_exe()
     sr, ch = audio["rate"], audio["channels"]
     codec = {"mp3": ["-c:a", "libmp3lame", "-b:a", "192k"], "m4a": ["-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart"],
              "wav": ["-c:a", "pcm_s16le"]}[fmt]
     partial = out.with_name(out.stem + ".partial" + out.suffix)
+    tmp = Path(tempfile.mkdtemp(prefix="edit_", dir=str(out.parent))) if finish else None
+    target = tmp / "joined.wav" if finish else partial
+    if finish:
+        codec = ["-c:a", "pcm_f32le"]
+    taking = 0.55 if finish else 0.97
     log = tempfile.NamedTemporaryFile(prefix="edit_", suffix=".log", delete=False)
     raw = ["-f", "f32le", "-ar", str(sr), "-ac", str(ch)]
     dec = subprocess.Popen([ff, "-nostdin", "-v", "error", "-i", source, "-vn", "-map", "0:a:0", "-acodec", "pcm_f32le"] + raw + ["-"],
                            stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, **_RUN_FLAGS)
-    enc = subprocess.Popen([ff, "-nostdin", "-y", "-v", "error"] + raw + ["-i", "-"] + codec + [str(partial)],
+    enc = subprocess.Popen([ff, "-nostdin", "-y", "-v", "error"] + raw + ["-i", "-"] + codec + [str(target)],
                            stdin=subprocess.PIPE, stderr=log, **_RUN_FLAGS)
     bounds = [(int(round(c["d"] * sr)), int(round(c["f"] * sr)), max(1, int(c["fi"] * sr)), max(1, int(c["fo"] * sr))) for c in cuts]
     last = bounds[-1][1]
@@ -2298,13 +2555,17 @@ def produce_audio(task, source, cuts, audio, fmt, out):
                 else:
                     break
             pos += n
-            task["progress"] = 0.97 * min(pos / max(last, 1), 1.0)
+            task["progress"] = taking * min(pos / max(last, 1), 1.0)
         task["message"] = _("Encoding")
         enc.stdin.close()
         if enc.wait() != 0:
             log.flush()
             with open(log.name) as f:
                 raise RuntimeError(f.read()[-600:].strip() or "ffmpeg failed")
+        if finish:
+            finished, report = finish_sound(task, finish["toolkit"], target, fmt, finish["channels"], tmp, share=(taking, 0.99))
+            task["sound"] = report
+            os.replace(finished, partial)
         os.replace(partial, out)
     except BrokenPipeError:
         with open(log.name) as f:
@@ -2321,6 +2582,8 @@ def produce_audio(task, source, cuts, audio, fmt, out):
         os.unlink(log.name)
         if partial.exists():
             partial.unlink()
+        if tmp is not None:
+            shutil.rmtree(tmp, ignore_errors=True)
 
 
 # ------------------------------------------------------------------------------------------
@@ -2355,7 +2618,7 @@ def _para(text, indent):
     return textwrap.wrap(text, width=72, initial_indent=indent, subsequent_indent=indent) or [indent + _("(without words)")]
 
 
-def log_text(out, project, tokens, cuts, mode, fade, image_fade, fmt):
+def log_text(out, project, tokens, cuts, mode, fade, image_fade, fmt, square=False, sound=None):
     duration = project.get("duration") or 0.0
     kept = sum(c["f"] - c["d"] for c in cuts)
     video = fmt == "mp4"
@@ -2370,6 +2633,13 @@ def log_text(out, project, tokens, cuts, mode, fade, image_fade, fmt):
     if video:
         L.append(f"{_('Picture'):<18}: " + (_("straight cuts") if not (image_fade and fade > 0)
                                            else _("fade to black where %1 or more is removed, straight cut elsewhere", _secs(IMAGE_FADE_MIN, 0))))
+        if square:
+            L.append(f"{_('Frame'):<18}: " + _("square (1:1), the centre of the picture"))
+    if sound:
+        lines = sound_summary(sound) or [_("finished by finaliser.py")]
+        L.append(f"{_('Sound'):<18}: " + "; ".join(lines))
+        for alert in sound.get("alertes") or []:
+            L.append(f"{'':<18}  ⚠ {alert}")
     L += [f"{_('Pieces kept'):<18}: {len(cuts)}", f"{_('Removed in all'):<18}: {hmsm(max(0.0, duration - kept))}", "",
           _("Times are hours:minutes:seconds.thousandths."), ""]
 
@@ -2454,11 +2724,11 @@ def log_edl(out, project, cuts, fmt):
     return "\n".join(L + notes) + "\n"
 
 
-def write_logs(out, project, tokens, cuts, mode, fade, image_fade, fmt):
+def write_logs(out, project, tokens, cuts, mode, fade, image_fade, fmt, square=False, sound=None):
     image = image_fade and fade > 0
     cuts_edl = cuts if image else [dict(c, vi=False, vo=False) for c in cuts]
     written = []
-    for ext, content in (("txt", log_text(out, project, tokens, cuts, mode, fade, image_fade, fmt)),
+    for ext, content in (("txt", log_text(out, project, tokens, cuts, mode, fade, image_fade, fmt, square, sound)),
                          ("edl", log_edl(out, project, cuts_edl, fmt))):
         path = out.with_suffix("." + ext)
         with open(path, "w", encoding="utf-8") as f:
@@ -2524,6 +2794,8 @@ def load_config():
     cfg.setdefault("target_lang", "fr")
     cfg.setdefault("burn", "none")             # subtitles drawn into the picture of the edit: "none", "src" or a language
     cfg.setdefault("srt_files", False)
+    cfg.setdefault("frame", "as_is")           # the picture of the edit: as it is, or a centred square (1:1)
+    cfg.setdefault("sound", "as_is")           # the sound of the edit: as it is, or finished by the toolkit (finaliser.py)
     cfg.setdefault("toolkit_dir", "")
     return cfg
 
@@ -3962,18 +4234,38 @@ class Main(QtWidgets.QMainWindow):
         self.image_fade.setChecked(bool(self.cfg.get("image_fade", True)))
         self.image_fade.toggled.connect(lambda _c: self.on_selection())
         g.addWidget(self.image_fade, 2, 0, 1, 2)
+        self.l_frame = QtWidgets.QLabel(_("Picture"))
+        self.l_frame.setObjectName("label")
+        g.addWidget(self.l_frame, 3, 0)
+        self.frame = QtWidgets.QComboBox()
+        self.frame.addItem(_("As it is"), "as_is")
+        self.frame.addItem(_("Square (1:1), centred"), "square")
+        self.frame.setCurrentIndex(max(0, self.frame.findData(self.cfg.get("frame", "as_is"))))
+        self.frame.currentIndexChanged.connect(lambda _i: self.remember_output())
+        g.addWidget(self.frame, 4, 0)
+        lab = QtWidgets.QLabel(_("Sound"))
+        lab.setObjectName("label")
+        g.addWidget(lab, 3, 1)
+        self.sound = QtWidgets.QComboBox()
+        self.sound.addItem(_("As it is"), "as_is")
+        self.sound.addItem(_("Improved: background noise, level"), "finish")
+        self.sound.setCurrentIndex(max(0, self.sound.findData(self.cfg.get("sound", "as_is"))))
+        self.sound.currentIndexChanged.connect(lambda _i: self.remember_output())
+        self.sound.setToolTip(_("finaliser.py of the traduction toolkit: mains hum and a steady background noise removed when there are some, the level brought to the norm. The length does not change."))
+        g.addWidget(self.sound, 4, 1)
+        self.format.currentIndexChanged.connect(lambda _i: self.refresh_frame_option())
         self.l_subs = QtWidgets.QLabel(_("Subtitles"))
         self.l_subs.setObjectName("label")
-        g.addWidget(self.l_subs, 3, 0, 1, 2)
+        g.addWidget(self.l_subs, 5, 0, 1, 2)
         self.subs = QtWidgets.QComboBox()
         self.subs.currentIndexChanged.connect(lambda _i: self.remember_output())
-        g.addWidget(self.subs, 4, 0)
+        g.addWidget(self.subs, 6, 0)
         self.srt_files = QtWidgets.QCheckBox(_("Subtitle files beside the edit (.srt)"))
         self.srt_files.setChecked(bool(self.cfg.get("srt_files", False)))
         self.srt_files.toggled.connect(lambda _c: self.remember_output())
-        g.addWidget(self.srt_files, 4, 1)
+        g.addWidget(self.srt_files, 6, 1)
         self.b_produce = self._btn(_("Produce the edit"), self.produce_or_stop, kind="strong", tip="Ctrl+E")
-        g.addWidget(self.b_produce, 5, 0, 1, 2)
+        g.addWidget(self.b_produce, 7, 0, 1, 2)
         pv.addWidget(self.settings)
         self.following = QtWidgets.QWidget()
         self.following.setObjectName("following")
@@ -4007,8 +4299,13 @@ class Main(QtWidgets.QMainWindow):
         self.fin_logs = QtWidgets.QLabel(_("Beside it: the log of the cuts (.txt) and the edit list (.edl)."))
         self.fin_logs.setObjectName("muted")
         self.fin_logs.setWordWrap(True)
+        self.fin_sound = QtWidgets.QLabel("")
+        self.fin_sound.setObjectName("muted")
+        self.fin_sound.setWordWrap(True)
+        self.fin_sound.hide()
         dv.addWidget(self.fin_detail)
         dv.addWidget(self.fin_path)
+        dv.addWidget(self.fin_sound)
         dv.addWidget(self.fin_logs)
         dr = QtWidgets.QHBoxLayout()
         dr.setContentsMargins(0, 6, 0, 0)
@@ -4318,8 +4615,9 @@ class Main(QtWidgets.QMainWindow):
 
     def enable(self, loaded):
         for w in (self.fade, self.image_fade, self.format, self.b_preview, self.b_clear, self.b_silences, self.b_read, self.b_subs, self.b_text, self.b_undo, self.b_redo,
-                  self.b_project, self.subs, self.srt_files, self.lang_box):
+                  self.b_project, self.subs, self.srt_files, self.lang_box, self.sound):
             w.setEnabled(loaded)
+        self.refresh_frame_option()
         for w in (self.b_highlight, self.b_erase, self.b_keep, self.b_cut):
             w.setEnabled(loaded and not self.subs_mode)
         self.b_produce.setEnabled(loaded and bool(self.cuts) and self.thread is None)
@@ -4745,20 +5043,63 @@ class Main(QtWidgets.QMainWindow):
         if self.subs.currentData():
             self.cfg["burn"] = self.subs.currentData()
         self.cfg["srt_files"] = self.srt_files.isChecked()
+        self.cfg["frame"], self.cfg["sound"] = self.frame.currentData() or "as_is", self.sound.currentData() or "as_is"
         save_config(self.cfg)
         self.refresh_overlay()
+
+    def refresh_frame_option(self):
+        """The square frame concerns the picture: greyed when the sound alone is produced."""
+        video = self.format.currentData() == "mp4" and bool(self.project) and bool(self.tokens)
+        self.frame.setEnabled(video)
+        self.l_frame.setEnabled(video)
+
+    def toolkit_for_sound(self):
+        """The toolkit folder for finaliser.py: the one found, or asked for in a small dialog;
+        None when the user gives up."""
+        where = toolkit_dir(self.cfg)
+        if where and os.path.isfile(os.path.join(where, "finaliser.py")):
+            return where
+        dlg = QtWidgets.QDialog(self)
+        dlg.setWindowTitle(_("Improve the sound"))
+        dlg.setMinimumWidth(620)
+        v = QtWidgets.QVBoxLayout(dlg)
+        v.setContentsMargins(18, 16, 18, 14)
+        v.setSpacing(10)
+        folder = self._toolkit_row(dlg, v, _("The traduction toolkit improves the sound (finaliser.py). It was not found: give its folder, or install it from %1.", TOOLKIT_URL), force=True)
+        error = QtWidgets.QLabel("")
+        error.setObjectName("danger")
+        error.setWordWrap(True)
+        v.addWidget(error)
+        buttons = QtWidgets.QHBoxLayout()
+        buttons.addStretch(1)
+        buttons.addWidget(self._btn(_("Cancel"), dlg.reject))
+        go = self._btn(_("Continue"), None, kind="strong")
+        buttons.addWidget(go)
+        v.addLayout(buttons)
+        chosen = []
+
+        def accept():
+            where = self._toolkit_from(folder, error, "finaliser.py")
+            if not where:
+                return
+            save_config(self.cfg)
+            chosen.append(where)
+            dlg.accept()
+        go.clicked.connect(accept)
+        dlg.exec_()
+        return chosen[0] if chosen else None
 
     def show_project_name(self):
         name = Path(self.project_file).name if self.project_file else ""
         self.a_detail.setText(self.detail + (" · " + name if name else ""))
 
     # ---- the translation (traduire.py, through the toolkit's Python) ----
-    def _toolkit_row(self, dlg, v):
+    def _toolkit_row(self, dlg, v, message=None, force=False):
         """When the toolkit is not found: the message and a field for its folder, in a dialog.
-        Returns the field, or None when the toolkit is there."""
-        if toolkit_dir(self.cfg):
+        Returns the field, or None when the toolkit is there (unless `force`)."""
+        if toolkit_dir(self.cfg) and not force:
             return None
-        lab = QtWidgets.QLabel(_("The traduction toolkit does the translation (traduire.py). It was not found: give its folder, or install it from %1.", TOOLKIT_URL))
+        lab = QtWidgets.QLabel(message or _("The traduction toolkit does the translation (traduire.py). It was not found: give its folder, or install it from %1.", TOOLKIT_URL))
         lab.setObjectName("danger")
         lab.setWordWrap(True)
         v.addWidget(lab)
@@ -4775,13 +5116,13 @@ class Main(QtWidgets.QMainWindow):
         v.addLayout(row)
         return folder
 
-    def _toolkit_from(self, folder, error):
+    def _toolkit_from(self, folder, error, needs="traduire.py"):
         """The toolkit folder a dialog settled on, or None after the error is shown."""
         where = toolkit_dir(self.cfg)
         if folder is not None:
             where = folder.text().strip()
-            if not os.path.isfile(os.path.join(where, "traduire.py")):
-                error.setText(_("traduire.py is not in this folder."))
+            if not os.path.isfile(os.path.join(where, needs)):
+                error.setText(_("traduire.py is not in this folder.") if needs == "traduire.py" else _("finaliser.py is not in this folder."))
                 return None
             self.cfg["toolkit_dir"] = where
         return where
@@ -4999,6 +5340,9 @@ class Main(QtWidgets.QMainWindow):
             self.cfg["burn"] = out["burn"]
         if "srt_files" in out:
             self.srt_files.setChecked(bool(out["srt_files"]))
+        for key, combo in (("frame", self.frame), ("sound", self.sound)):
+            if out.get(key) and combo.findData(out[key]) >= 0:
+                combo.setCurrentIndex(combo.findData(out[key]))
 
     def save_project(self, ask=False):
         if not self.project or not self.tokens or self.thread:
@@ -5021,7 +5365,8 @@ class Main(QtWidgets.QMainWindow):
                 "cues": {k: c for k, c in self.cues.items() if k == "src" or k in self.texts},
                 "selection": {"view": self.view, "ranges": [list(p) for p in clean], "mode": self.mode_value,
                               "fade": float(self.fade.currentData()), "image_fade": self.image_fade.isChecked()},
-                "output": {"format": self.format.currentData(), "burn": self.subs.currentData() or "none", "srt_files": self.srt_files.isChecked()}}
+                "output": {"format": self.format.currentData(), "burn": self.subs.currentData() or "none", "srt_files": self.srt_files.isChecked(),
+                           "frame": self.frame.currentData() or "as_is", "sound": self.sound.currentData() or "as_is"}}
         write_json(path, data)
         self.project_file = path
         self.show_project_name()
@@ -5538,10 +5883,20 @@ class Main(QtWidgets.QMainWindow):
         codes = {k: (self.src_lang if k == "src" else k) for k in keys}
         tk = toolkit_dir(self.cfg)
         stored = {k: sorted(self.cues[k]["cues"]) for k in keys if k in self.cues}
+        square = fmt == "mp4" and project["type"] == "video" and self.frame.currentData() == "square"
+        finish = None
+        if self.sound.currentData() == "finish":
+            where = self.toolkit_for_sound()
+            if not where:
+                return
+            finish = {"toolkit": where, "channels": (project.get("audio") or {}).get("channels", 2)}
         style = SUBTITLE_STYLE
         if project.get("video"):
-            style = scale_style(SUBTITLE_STYLE, project["video"].get("width", 0), project["video"].get("height", 0))
-        self.task = {"cancelled": False, "progress": 0.0, "message": "", "proc": None}
+            w, h = project["video"].get("width", 0), project["video"].get("height", 0)
+            if square and w > 0 and h > 0:
+                w = h = min(w, h)
+            style = scale_style(SUBTITLE_STYLE, w, h)
+        self.task = {"cancelled": False, "progress": 0.0, "message": "", "proc": None, "sound": None}
         task = self.task
 
         def work(w):
@@ -5566,12 +5921,12 @@ class Main(QtWidgets.QMainWindow):
                 if fmt == "mp4":
                     produce_video(task, project["source"], cuts, fade, image_fade, out,
                                   burn=(paths[burn], style) if burn in paths else None,
-                                  tracks=[(codes[k], paths[k]) for k in keys if srt_files])
+                                  tracks=[(codes[k], paths[k]) for k in keys if srt_files], square=square, finish=finish)
                 else:
-                    produce_audio(task, project["source"], cuts, project["audio"], fmt, out)
+                    produce_audio(task, project["source"], cuts, project["audio"], fmt, out, finish=finish)
             finally:
                 stop.set()
-            write_logs(out, project, tokens, cuts, mode, fade, image_fade, fmt)
+            write_logs(out, project, tokens, cuts, mode, fade, image_fade, fmt, square=square, sound=task.get("sound"))
             return out
 
         def done(path):
@@ -5583,6 +5938,9 @@ class Main(QtWidgets.QMainWindow):
             self.fin_path.setText(str(path))
             self.fin_logs.setText(_("Beside it: the log of the cuts (.txt), the edit list (.edl) and the subtitles (.srt).") if srt_files
                                   else _("Beside it: the log of the cuts (.txt) and the edit list (.edl)."))
+            summary = sound_summary(task.get("sound"))
+            self.fin_sound.setText(_("Sound: %1", "; ".join(summary)) if summary else "")
+            self.fin_sound.setVisible(bool(summary))
             self.show_production("finished")
             self.enable(True)
 

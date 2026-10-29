@@ -43,6 +43,7 @@ sous-titres. Rien ne part sur Internet, sauf dans trois cas que vous choisissez 
 | Transcrire la parole | faster-whisper + un modèle | s'installe seul au premier usage (≈ 300 Mo) | inclus dans l'app | inclus dans l'app |
 | Ouvrir une vidéo par son adresse | yt-dlp | téléchargé seul au premier usage (40 Mo) | idem | idem |
 | Traduire, raccourcir des sous-titres (**facultatif**) | le **traduction toolkit** + Ollama ou une clé Anthropic | oui | oui | **non** (voir § 5) |
+| Améliorer le son du montage (**facultatif**) | le **traduction toolkit** avec `deepfilternet`, `pyloudnorm`, `speechmos` dans son Python | oui | oui | **non** (voir § 3.5) |
 | Incruster des sous-titres dans l'image | un ffmpeg avec libass | les ffmpeg habituels l'ont | inclus | inclus |
 
 ### Deux parcours : montage seul, ou montage et traduction
@@ -298,6 +299,20 @@ En bas à gauche :
   Le son entre et sort en fondu à chaque morceau.
 - **fondu au noir de l'image** : l'image passe au noir seulement là où une seconde ou plus est
   enlevée.
+- **Image** : *Tel quel*, ou *Carré (1:1), centré* pour les réseaux sociaux : le centre de
+  l'image, le petit côté comme côté du carré ; les sous-titres incrustés sont dimensionnés pour
+  ce carré. Grisé quand on produit le son seul.
+- **Son** : *Tel quel*, ou *Amélioré : bruit de fond, niveau*. Le son du montage passe alors par
+  `finaliser.py` du traduction toolkit (§ 5.1 pour l'installer) : ronflette secteur et bruit de
+  fond régulier retirés s'il en trouve (DeepFilterNet3 à faible dose, contrôlé par DNSMOS : si la
+  voix en souffre, un nettoyage plus doux, ou aucun), niveaux de voix très inégaux égalisés,
+  niveau mis à la norme des podcasts par un gain constant, fondus courts. La durée ne change pas,
+  le journal, la liste de montage et les sous-titres restent justes. À la fin, le panneau et le
+  journal disent ce qui a été fait (« ronflette secteur à 50 Hz retirée ; bruit de fond réduit,
+  de 8 dB au plus ; niveau +2,1 dB → −16,0 LUFS »). Il faut, dans le Python du toolkit :
+  `pip install deepfilternet pyloudnorm speechmos` ; une carte graphique sert si elle est là,
+  sinon le processeur suffit (plus lent). Si le toolkit n'est pas trouvé, une petite boîte
+  demande son dossier.
 - **Sous-titres** : voir § 6.
 
 Cliquez **Produire le montage** (Ctrl+E). La jauge avance ; *Stop* interrompt. Le fichier est

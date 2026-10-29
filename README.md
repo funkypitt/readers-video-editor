@@ -34,6 +34,15 @@ that download.
 - **Watch the edit** plays it, jumping over what is removed. **Produce the edit** writes MP4
   (picture re-encoded once, x264), or MP3 / M4A / WAV from the sound alone, beside the original,
   then offers to watch it or open its folder.
+- **Picture**: as it is, or **square (1:1)**: the centre of the picture, the shorter side as the
+  square, for the social networks; the burnt-in subtitles are sized for it.
+- **Sound**: as it is, or **improved**: the edit's sound goes through the
+  [traduction toolkit](https://github.com/funkypitt/traduction-toolkit)'s `finaliser.py`, which
+  removes a mains hum and a steady background noise when it finds some (DeepFilterNet3 at a low
+  dose, checked by DNSMOS: if the voice suffers, a gentler cleaning, or none), evens out very
+  uneven voice levels, brings the level to the podcast norm by a constant gain and adds short
+  fades; the length does not change, so the log, the edit list and the subtitles stay true. The
+  finished panel and the log say what was done.
 - **Read**: the page alone across the window, about seventy characters a line, the word being
   spoken underlined, −5 s / +10 s, speed 0.8 to 2×. **Save the text…** writes the transcript as
   paragraphs; Ctrl+Shift+C copies it.
@@ -81,6 +90,7 @@ macOS et Windows : [docs/PRISE-EN-MAIN.md](docs/PRISE-EN-MAIN.md).
 - Windows (`.exe`) and macOS (`.dmg`, `apple-silicon` or `intel`): from the latest release; they carry ffmpeg and the transcription. They are unsigned: on Windows *More info* › *Run anyway*, on macOS right click on the app › *Open* the first time.
 - Anywhere else: `python3 readers_video_editor.py [video | project.rve.json] [subtitles.srt]` with PyQt5 (with QtMultimedia), numpy, soundfile and ffmpeg installed; faster-whisper is installed by the app on first use (python3 -m venv must work).
 - The translation needs the [traduction toolkit](https://github.com/funkypitt/traduction-toolkit) (its `traduire.py` is run by the app, in its own Python) and Ollama with a model, or an Anthropic key. Burning subtitles needs an ffmpeg with libass (the usual builds).
+- The improved sound needs the same toolkit with the requirements of its `finaliser.py` in the toolkit's Python (`pip install deepfilternet pyloudnorm speechmos`, a GPU is used when there is one) and ffmpeg on the PATH.
 - The address feature needs nothing installed: the app keeps its own copy of yt-dlp in its data folder (`~/.local/share/readers-video-editor/bin`, `%APPDATA%\Readers Video Editor\bin`, `~/Library/Application Support/readers-video-editor/bin`).
 
 ## Build
@@ -94,5 +104,7 @@ Actions at every `v*` tag. Single file, PyQt5 + numpy + soundfile + ffmpeg; fast
 Licence MIT, voir `LICENSE`. The cutting method comes from the author's `monter.py`
 (traduction toolkit); transcription by [faster-whisper](https://github.com/SYSTRAN/faster-whisper);
 videos from addresses by [yt-dlp](https://github.com/yt-dlp/yt-dlp); translation and subtitle
-re-segmentation by the author's `traduire.py` (traduction toolkit). Fonts: Roboto (Apache 2.0)
+re-segmentation by the author's `traduire.py`, sound finishing by the author's `finaliser.py` and
+`nettoyer.py` (traduction toolkit; [DeepFilterNet](https://github.com/Rikorose/DeepFilterNet),
+pyloudnorm, DNSMOS). Fonts: Roboto (Apache 2.0)
 and Literata (SIL OFL 1.1), bundled in `packaging/fonts`.

@@ -186,6 +186,50 @@ cues are written as they are; for the edit, `cues_in_edit` trims each cue to the
 shifts it, drops what a cut leaves of a cue when it is less than half of it and under a second,
 and joins the two halves of a cue around a join when their text is the same.
 
+## The square frame and the improved sound (1.5.0)
+
+Two combos in the production block, « Picture » and « Sound », kept in the config (`frame`,
+`sound`) and in the project file's `output`.
+
+**Square (1:1), centred**: each piece gets `crop=2*floor(min(iw,ih)/2):…` before its fades
+(`SQUARE_FILTER`): the centre of the picture, the shorter side as the square, even for yuv420p;
+`iw`/`ih` are the displayed size, since ffmpeg turns a phone's picture upright before the
+filters. The pieces are re-encoded anyway, so the crop costs nothing more. The burn-in style is
+scaled for a square picture (`scale_style(…, side, side)`, traduire.py's rule for pictures
+narrower than 16:9). The frame combo is greyed when the sound alone is produced.
+
+**Improved: background noise, level**: the edit's sound is handed to the toolkit's `finaliser.py`
+(`finish_sound`), run as a subprocess in the toolkit's Python (the rule of the translation:
+`TRADUCTION_PYTHON`, the conda env `interview` or `traduction`, else the app's own) with
+`--format <fmt> --sans-rognage --forcer --canaux stereo|mono -o <tmp>`: `--sans-rognage` keeps
+the length to the sample, so the log, the edit list and the subtitles stay true; the channels
+follow the source. To avoid a second lossy generation, the join writes a MOV with the raw
+sound (`joined.mov`, no subtitle tracks) when the sound is to be finished, finaliser.py writes
+`joined_podcast.mp4` beside it (picture copied: nothing trimmed, no picture fade asked), and a
+last copy adds the subtitle tracks and `+faststart`. For MP3/M4A/WAV the pieces go to a raw
+`joined.wav` and finaliser.py encodes the format itself (MP3 at a constant bit rate, 128 kbit/s
+mono / 192 stereo, 44.1 kHz; AAC 96/160; WAV 16 bits 48 kHz). Its `[k/9]` lines move the gauge
+(« Sound: Channels », « Analysis », « Background noise »…), its `✗ échec : …` line is the
+error shown. The JSON report (`joined_podcast.json`) becomes `sound_summary()`: translated lines
+built from the structured fields (hum at … Hz removed; background noise reduced by … dB at most
+/ reduced gently / left as it is: already clean, music, or changing; voice levels evened out;
+level … dB → … LUFS, … dB taken from the peaks alone; voice quality before → after by DNSMOS),
+shown in the finished panel and written in the log's « Sound » line with finaliser.py's alerts
+(in French, verbatim) under it. The decisions are finaliser.py's: nothing is denoised when the
+background is already 40 dB under the voice, is music, or changes along the file; otherwise
+DeepFilterNet3 at 8 dB (12 when the background is strong) judged by DNSMOS, with a gentle
+spectral subtraction or nothing when the voice suffers; levelling only when the loudness range
+passes 14 LU.
+
+When the toolkit is not found, or has no `finaliser.py`, « Produce the edit » first opens a
+small dialog asking for the toolkit folder (`toolkit_for_sound`, the translation's row with
+another message); Cancel leaves the settings as they were. Checked headless 2026-10-29 on
+synthetic media (espeak-ng + testsrc2, white noise −42 dB and a 50 Hz hum added): the square
+MP4 is 720×720 with the subtitles burnt at the right size and the `mov_text` track kept, the MP3
+path works, the hum at 50.2 Hz and the noise are found and the voice level stays flat (gain
+difference between the plain edit and the finished one, 0.25 s frames on the voice: p10 −4.7 dB,
+p90 −3.0 dB: a constant gain, the rest is the removed hum and noise; the floor drops 9.6 dB).
+
 ## Project files (1.3.0)
 
 `<stem>.rve.json` beside the video (or wherever asked): `source`, `source_name`, the
