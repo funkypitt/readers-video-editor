@@ -273,6 +273,41 @@ a minute or more is shown as `34:28` rather than `2067.6 s`. Checked on a 66-min
 See above: the cards sit 10 % above the bottom on a square or landscape picture, 24 % on a
 vertical one. Checked on the square test media and on a 720×1280 vertical one.
 
+## The toolkit installs itself (1.7.0)
+
+Four pieces, so that a macOS (or Linux) user never opens a terminal for the toolkit:
+
+- `install_toolkit()`: the GitHub zip of the toolkit's main branch into `<data>/toolkit` (the
+  `.new` folder, then moved into place; members with `..` refused); `toolkit_dir()` looks there
+  last. The dialog row (`_toolkit_row`) has « Install it here (download, a few MB) », run in a
+  thread while the modal dialog pumps events, then the folder field is filled and remembered.
+- `prepare_toolkit_python(packages, progress, task)`: `toolkit_python()` (TRADUCTION_PYTHON,
+  conda envs, then `<data>/toolkit-venv`, then `system_python()`: the app's interpreter when not
+  frozen, else `python3` on macOS, `py`/`python` on Windows) is kept when `python_has()` imports
+  the packages; otherwise the app's venv is made (`python -m venv`, no system site packages)
+  and pip installs them (`anthropic` for Claude; `deepfilternet pyloudnorm speechmos` for the
+  sound), pip's Collecting/Downloading/Installing lines on the waiting page, cancel kills pip.
+  The person's own environments are never written to. Called in `start_translation`,
+  `start_shorten` and in the production's `work()` before `finish_sound`; `run_bridge` and
+  `finish_sound` take the `python` chosen.
+- The Anthropic key: a password field in `_llm_rows` (shown when Claude is chosen), kept in
+  `cfg["anthropic_key"]`, passed as `ANTHROPIC_API_KEY` in the subprocess environment
+  (`claude_env`); the environment's own variable still works.
+- `FINISH_ERRORS`: finaliser.py's known French messages said in the app's words (ffmpeg
+  missing, libraries missing, silent file, no picture).
+- macOS: the toolkit calls `ffmpeg`/`ffprobe` by name and the bundle has neither on the PATH
+  (imageio's binary has another name, no ffprobe). `ensure_ffmpeg_tools()` fetches the Apple
+  silicon static zips from https://ffmpeg.martin-riedl.de/ (the page is read for the newest
+  `/download/macos/arm64/…/ffmpeg.zip` and `ffprobe.zip`, about 28 MB each) into `<data>/bin`,
+  put first on the PATH for finaliser.py; `ffmpeg_exe()`/`ffprobe_exe()` use them too.
+  evermeet.cx, the usual source, answers 410 since 2026. The Intel build is gone from the CI:
+  the app is built for Apple silicon only.
+
+Checked 2026-10-30 headless on Linux: the toolkit download into a temporary data folder, the
+venv + pip path with a small package (`pyloudnorm`) and a Python that lacks it, the
+translation dialog with the install row and the key field. Not checked: the whole chain on a
+real Mac (venv from the Xcode python3, torch wheels, the ffmpeg zips) — the user has the Mac.
+
 ## Project files (1.3.0)
 
 `<stem>.rve.json` beside the video (or wherever asked): `source`, `source_name`, the

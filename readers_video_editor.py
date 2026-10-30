@@ -28,7 +28,7 @@ from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 APP = "readers-video-editor"
-VERSION = "1.6.2"
+VERSION = "1.7.0"
 
 
 def _app_dirs():
@@ -1107,6 +1107,92 @@ _TR_CAPTIONS = {
 for _code, _more in _TR_CAPTIONS.items():
     _TR.setdefault(_code, {}).update(_more)
 
+# The strings of 1.7.0: the toolkit installs itself
+_TR_SETUP = {
+ "fr": {
+  "Install it here (download, a few MB)": "L'installer ici (téléchargement, quelques Mo)",
+  "Downloading the traduction toolkit…": "Téléchargement de la boîte à outils traduction…",
+  "Installed in %1. Its libraries will be installed by the app when a feature needs them.": "Installée dans %1. Ses bibliothèques seront installées par l'application quand une fonction en aura besoin.",
+  "The download failed: %1": "Le téléchargement a échoué : %1", "The archive does not hold traduire.py.": "L'archive ne contient pas traduire.py.",
+  "No Python was found to set the toolkit up with.": "Aucun Python trouvé pour préparer la boîte à outils.",
+  "Preparing the toolkit's environment (once)…": "Préparation de l'environnement de la boîte à outils (une fois)…",
+  "The toolkit's environment could not be made: %1": "L'environnement de la boîte à outils n'a pas pu être créé : %1",
+  "Installing %1 (once)…": "Installation de %1 (une fois)…", "%1 could not be installed: %2": "%1 n'a pas pu être installé : %2",
+  "Anthropic API key": "Clé API Anthropic", "Give an Anthropic API key.": "Indiquez une clé API Anthropic.",
+  "Fetching %1 (once)…": "Récupération de %1 (une fois)…", "%1 could not be fetched.": "%1 n'a pas pu être récupéré.",
+  "ffmpeg and ffprobe were not found on this computer: install ffmpeg.": "ffmpeg et ffprobe sont introuvables sur cet ordinateur : installez ffmpeg.",
+  "some of the toolkit's libraries are missing.": "des bibliothèques de la boîte à outils manquent.",
+  "this file is silent, or too short to be analysed.": "ce fichier est muet, ou trop court pour être analysé.",
+  "this file has no picture.": "ce fichier n'a pas d'image.",
+ },
+ "de": {
+  "Install it here (download, a few MB)": "Hier installieren (Download, wenige MB)",
+  "Downloading the traduction toolkit…": "Das traduction-Toolkit wird heruntergeladen…",
+  "Installed in %1. Its libraries will be installed by the app when a feature needs them.": "Installiert in %1. Seine Bibliotheken installiert die App, sobald eine Funktion sie braucht.",
+  "The download failed: %1": "Der Download ist fehlgeschlagen: %1", "The archive does not hold traduire.py.": "Das Archiv enthält kein traduire.py.",
+  "No Python was found to set the toolkit up with.": "Kein Python gefunden, um das Toolkit einzurichten.",
+  "Preparing the toolkit's environment (once)…": "Die Umgebung des Toolkits wird vorbereitet (einmalig)…",
+  "The toolkit's environment could not be made: %1": "Die Umgebung des Toolkits konnte nicht erstellt werden: %1",
+  "Installing %1 (once)…": "%1 wird installiert (einmalig)…", "%1 could not be installed: %2": "%1 konnte nicht installiert werden: %2",
+  "Anthropic API key": "Anthropic-API-Schlüssel", "Give an Anthropic API key.": "Geben Sie einen Anthropic-API-Schlüssel an.",
+  "Fetching %1 (once)…": "%1 wird geholt (einmalig)…", "%1 could not be fetched.": "%1 konnte nicht geholt werden.",
+  "ffmpeg and ffprobe were not found on this computer: install ffmpeg.": "ffmpeg und ffprobe wurden auf diesem Rechner nicht gefunden: Installieren Sie ffmpeg.",
+  "some of the toolkit's libraries are missing.": "einige Bibliotheken des Toolkits fehlen.",
+  "this file is silent, or too short to be analysed.": "diese Datei ist stumm oder zu kurz für eine Analyse.",
+  "this file has no picture.": "diese Datei hat kein Bild.",
+ },
+ "es": {
+  "Install it here (download, a few MB)": "Instalarlo aquí (descarga, unos MB)",
+  "Downloading the traduction toolkit…": "Descargando el toolkit traduction…",
+  "Installed in %1. Its libraries will be installed by the app when a feature needs them.": "Instalado en %1. La aplicación instalará sus bibliotecas cuando una función las necesite.",
+  "The download failed: %1": "La descarga ha fallado: %1", "The archive does not hold traduire.py.": "El archivo no contiene traduire.py.",
+  "No Python was found to set the toolkit up with.": "No se encontró ningún Python para preparar el toolkit.",
+  "Preparing the toolkit's environment (once)…": "Preparando el entorno del toolkit (una vez)…",
+  "The toolkit's environment could not be made: %1": "No se pudo crear el entorno del toolkit: %1",
+  "Installing %1 (once)…": "Instalando %1 (una vez)…", "%1 could not be installed: %2": "No se pudo instalar %1: %2",
+  "Anthropic API key": "Clave API de Anthropic", "Give an Anthropic API key.": "Indique una clave API de Anthropic.",
+  "Fetching %1 (once)…": "Obteniendo %1 (una vez)…", "%1 could not be fetched.": "No se pudo obtener %1.",
+  "ffmpeg and ffprobe were not found on this computer: install ffmpeg.": "ffmpeg y ffprobe no se encontraron en este equipo: instale ffmpeg.",
+  "some of the toolkit's libraries are missing.": "faltan bibliotecas del toolkit.",
+  "this file is silent, or too short to be analysed.": "este archivo es mudo, o demasiado corto para analizarlo.",
+  "this file has no picture.": "este archivo no tiene imagen.",
+ },
+ "pt": {
+  "Install it here (download, a few MB)": "Instalá-lo aqui (transferência, alguns MB)",
+  "Downloading the traduction toolkit…": "A transferir o toolkit traduction…",
+  "Installed in %1. Its libraries will be installed by the app when a feature needs them.": "Instalado em %1. As suas bibliotecas serão instaladas pela aplicação quando uma função precisar delas.",
+  "The download failed: %1": "A transferência falhou: %1", "The archive does not hold traduire.py.": "O arquivo não contém traduire.py.",
+  "No Python was found to set the toolkit up with.": "Nenhum Python encontrado para preparar o toolkit.",
+  "Preparing the toolkit's environment (once)…": "A preparar o ambiente do toolkit (uma vez)…",
+  "The toolkit's environment could not be made: %1": "Não foi possível criar o ambiente do toolkit: %1",
+  "Installing %1 (once)…": "A instalar %1 (uma vez)…", "%1 could not be installed: %2": "Não foi possível instalar %1: %2",
+  "Anthropic API key": "Chave API Anthropic", "Give an Anthropic API key.": "Indique uma chave API Anthropic.",
+  "Fetching %1 (once)…": "A obter %1 (uma vez)…", "%1 could not be fetched.": "Não foi possível obter %1.",
+  "ffmpeg and ffprobe were not found on this computer: install ffmpeg.": "ffmpeg e ffprobe não foram encontrados neste computador: instale o ffmpeg.",
+  "some of the toolkit's libraries are missing.": "faltam bibliotecas do toolkit.",
+  "this file is silent, or too short to be analysed.": "este ficheiro é mudo, ou demasiado curto para ser analisado.",
+  "this file has no picture.": "este ficheiro não tem imagem.",
+ },
+ "ru": {
+  "Install it here (download, a few MB)": "Установить сюда (загрузка, несколько МБ)",
+  "Downloading the traduction toolkit…": "Загрузка набора traduction…",
+  "Installed in %1. Its libraries will be installed by the app when a feature needs them.": "Установлен в %1. Его библиотеки приложение установит, когда они понадобятся какой-либо функции.",
+  "The download failed: %1": "Загрузка не удалась: %1", "The archive does not hold traduire.py.": "В архиве нет traduire.py.",
+  "No Python was found to set the toolkit up with.": "Не найден Python для подготовки набора.",
+  "Preparing the toolkit's environment (once)…": "Подготовка окружения набора (один раз)…",
+  "The toolkit's environment could not be made: %1": "Не удалось создать окружение набора: %1",
+  "Installing %1 (once)…": "Установка %1 (один раз)…", "%1 could not be installed: %2": "Не удалось установить %1: %2",
+  "Anthropic API key": "Ключ API Anthropic", "Give an Anthropic API key.": "Укажите ключ API Anthropic.",
+  "Fetching %1 (once)…": "Получение %1 (один раз)…", "%1 could not be fetched.": "Не удалось получить %1.",
+  "ffmpeg and ffprobe were not found on this computer: install ffmpeg.": "ffmpeg и ffprobe не найдены на этом компьютере: установите ffmpeg.",
+  "some of the toolkit's libraries are missing.": "не хватает библиотек набора.",
+  "this file is silent, or too short to be analysed.": "этот файл беззвучен или слишком короток для анализа.",
+  "this file has no picture.": "в этом файле нет изображения.",
+ },
+}
+for _code, _more in _TR_SETUP.items():
+    _TR.setdefault(_code, {}).update(_more)
+
 
 def _lang():
     for var in ("LC_ALL", "LC_MESSAGES", "LANG"):
@@ -1144,8 +1230,16 @@ def _bundled_tool(name):
     return None
 
 
+def _own_tool(name):
+    """A copy the app fetched for itself into its data folder (macOS: ffmpeg and ffprobe)."""
+    for cand in (os.path.join(DATA_DIR, "bin", name), os.path.join(DATA_DIR, "bin", name + ".exe")):
+        if os.path.isfile(cand):
+            return cand
+    return None
+
+
 def ffmpeg_exe():
-    found = shutil.which("ffmpeg") or _bundled_tool("ffmpeg")
+    found = shutil.which("ffmpeg") or _bundled_tool("ffmpeg") or _own_tool("ffmpeg")
     if found:
         return found
     try:
@@ -1156,7 +1250,58 @@ def ffmpeg_exe():
 
 
 def ffprobe_exe():
-    return shutil.which("ffprobe") or _bundled_tool("ffprobe")
+    return shutil.which("ffprobe") or _bundled_tool("ffprobe") or _own_tool("ffprobe")
+
+
+# Static builds for macOS on Apple silicon (the only Mac the app is built for), fetched once when
+# the toolkit needs `ffmpeg` and `ffprobe` by name on the PATH (the bundle carries imageio's
+# ffmpeg under another name, and no ffprobe). The page lists its builds; the newest zip is taken.
+FFMPEG_MAC_PAGE = "https://ffmpeg.martin-riedl.de/"
+FFMPEG_MAC_LINK = r'href="(/download/macos/arm64/[^"]+/%s\.zip)"'
+
+
+def ensure_ffmpeg_tools(progress, task):
+    """ffmpeg and ffprobe reachable by name for the toolkit: the system's, or copies fetched into
+    the app's bin folder (macOS). Returns the folder to put first on the PATH, or None."""
+    if shutil.which("ffmpeg") and shutil.which("ffprobe"):
+        return None
+    own = os.path.join(DATA_DIR, "bin")
+    if _own_tool("ffmpeg") and _own_tool("ffprobe"):
+        return own
+    if sys.platform != "darwin":
+        raise RuntimeError(_("ffmpeg and ffprobe were not found on this computer: install ffmpeg."))
+    import urllib.request
+    import zipfile
+    os.makedirs(own, exist_ok=True)
+    req = urllib.request.Request(FFMPEG_MAC_PAGE, headers={"User-Agent": APP + "/" + VERSION})
+    with urllib.request.urlopen(req, timeout=60) as r:
+        page = r.read().decode("utf-8", "replace")
+    for name in ("ffmpeg", "ffprobe"):
+        if _own_tool(name):
+            continue
+        m = re.search(FFMPEG_MAC_LINK % name, page)
+        if not m:
+            raise RuntimeError(_("%1 could not be fetched.", name))
+        progress(_("Fetching %1 (once)…", name))
+        zpath = os.path.join(own, name + ".zip")
+        req = urllib.request.Request(FFMPEG_MAC_PAGE.rstrip("/") + m.group(1), headers={"User-Agent": APP + "/" + VERSION})
+        with urllib.request.urlopen(req, timeout=300) as r, open(zpath, "wb") as f:
+            while True:
+                if task.get("cancelled"):
+                    raise Cancelled()
+                chunk = r.read(1 << 16)
+                if not chunk:
+                    break
+                f.write(chunk)
+        with zipfile.ZipFile(zpath) as z:
+            member = next((m for m in z.namelist() if m.rstrip("/").split("/")[-1] == name), None)
+            if member is None:
+                raise RuntimeError(_("%1 could not be fetched.", name))
+            with z.open(member) as src, open(os.path.join(own, name), "wb") as dst:
+                shutil.copyfileobj(src, dst)
+        os.chmod(os.path.join(own, name), 0o755)
+        os.unlink(zpath)
+    return own
 
 
 _RUN_FLAGS = {"creationflags": 0x08000000} if sys.platform == "win32" else {}   # no console window on Windows
@@ -1747,24 +1892,147 @@ def lang_label(code):
     return next((name for c, name in LANGUAGES if c == code), code.upper())
 
 
+TOOLKIT_DIR_APP = os.path.join(DATA_DIR, "toolkit")        # the copy the app downloads for itself (1.7.0)
+TOOLKIT_ZIP = "https://github.com/funkypitt/traduction-toolkit/archive/refs/heads/main.zip"
+TOOLKIT_VENV = os.path.join(DATA_DIR, "toolkit-venv")      # the app's own environment for the toolkit's libraries
+TOOLKIT_PACKAGES = {"claude": ["anthropic"], "sound": ["deepfilternet", "pyloudnorm", "speechmos"]}
+TOOLKIT_IMPORTS = {"deepfilternet": "df"}                  # pip name → module name, when they differ
+
+
 def toolkit_dir(cfg=None):
     for d in (os.environ.get("TRADUCTION_DIR"), (cfg or {}).get("toolkit_dir"),
-              os.path.expanduser("~/code/traduction"), os.path.expanduser("~/code/traduction-toolkit")):
+              os.path.expanduser("~/code/traduction"), os.path.expanduser("~/code/traduction-toolkit"), TOOLKIT_DIR_APP):
         if d and os.path.isfile(os.path.join(d, "traduire.py")):
             return d
     return None
 
 
+def _toolkit_venv_python():
+    return os.path.join(TOOLKIT_VENV, "Scripts", "python.exe") if sys.platform == "win32" else os.path.join(TOOLKIT_VENV, "bin", "python")
+
+
 def toolkit_python():
-    """The toolkit's interpreter (the rule of gui.py and monter.py); traduire.py itself needs only
-    the standard library, anthropic when Claude is asked for."""
+    """The toolkit's interpreter (the rule of gui.py and monter.py): TRADUCTION_PYTHON, the conda
+    envs, then the environment the app made for itself, then a system Python. traduire.py itself
+    needs only the standard library, anthropic when Claude is asked for."""
     cands = [os.environ.get("TRADUCTION_PYTHON")] + [os.path.expanduser(f"~/miniconda3/envs/{e}/bin/python") for e in ("interview", "traduction")]
+    cands.append(_toolkit_venv_python())
     for c in cands:
         if c and os.path.exists(c):
             return c
-    if getattr(sys, "frozen", False):
-        return shutil.which("python3") or shutil.which("python")
-    return sys.executable
+    return system_python()
+
+
+def system_python():
+    """A Python outside the bundle, to make environments with: the one running the app, or the
+    system's (python3 of the Xcode tools on macOS, py or python on Windows)."""
+    if not getattr(sys, "frozen", False):
+        return sys.executable
+    for name in (("py", "python", "python3") if sys.platform == "win32" else ("python3", "python")):
+        found = shutil.which(name)
+        if found:
+            return found
+    return None
+
+
+def python_has(py, packages):
+    """Whether `py` imports the modules of these pip packages."""
+    mods = [TOOLKIT_IMPORTS.get(p, p) for p in packages]
+    if not mods:
+        return True
+    try:
+        r = subprocess.run([py, "-c", "import " + ", ".join(mods)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                           timeout=180, **_RUN_FLAGS)
+        return r.returncode == 0
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+
+
+def install_toolkit(progress, task):
+    """Downloads the toolkit (the GitHub zip of its main branch, a few MB) into the app's data
+    folder, without git; a copy already there is replaced. Returns its folder."""
+    import urllib.request
+    import zipfile
+    os.makedirs(DATA_DIR, exist_ok=True)
+    zpath = os.path.join(DATA_DIR, "toolkit.zip")
+    progress(_("Downloading the traduction toolkit…"))
+    req = urllib.request.Request(TOOLKIT_ZIP, headers={"User-Agent": APP + "/" + VERSION})
+    with urllib.request.urlopen(req, timeout=120) as r, open(zpath, "wb") as f:
+        while True:
+            if task.get("cancelled"):
+                raise Cancelled()
+            chunk = r.read(1 << 16)
+            if not chunk:
+                break
+            f.write(chunk)
+    fresh = TOOLKIT_DIR_APP + ".new"
+    shutil.rmtree(fresh, ignore_errors=True)
+    with zipfile.ZipFile(zpath) as z:
+        names = z.namelist()
+        if any(n.startswith("/") or ".." in n.split("/") for n in names):
+            raise RuntimeError("archive")
+        z.extractall(fresh)
+        top = names[0].split("/")[0] if names else ""
+    src = os.path.join(fresh, top) if top and os.path.isdir(os.path.join(fresh, top)) else fresh
+    if not os.path.isfile(os.path.join(src, "traduire.py")):
+        shutil.rmtree(fresh, ignore_errors=True)
+        raise RuntimeError(_("The archive does not hold traduire.py."))
+    shutil.rmtree(TOOLKIT_DIR_APP, ignore_errors=True)
+    shutil.move(src, TOOLKIT_DIR_APP)
+    shutil.rmtree(fresh, ignore_errors=True)
+    os.unlink(zpath)
+    return TOOLKIT_DIR_APP
+
+
+def prepare_toolkit_python(packages, progress, task):
+    """The Python that will run the toolkit, with `packages` importable: the one toolkit_python()
+    names when it has them; otherwise the app's own environment, made once with the system
+    Python and completed by pip (anthropic for Claude; deepfilternet, pyloudnorm and speechmos
+    for the sound, which bring torch: about half a gigabyte, once). The person's own
+    environments are never touched. pip's lines go to `progress`."""
+    py = toolkit_python()
+    if py and python_has(py, packages):
+        return py
+    vpy = _toolkit_venv_python()
+    if not os.path.exists(vpy):
+        base = system_python()
+        if not base:
+            raise RuntimeError(_("No Python was found to set the toolkit up with."))
+        progress(_("Preparing the toolkit's environment (once)…"))
+        r = subprocess.run([base, "-m", "venv", TOOLKIT_VENV], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, **_RUN_FLAGS)
+        if r.returncode != 0 or not os.path.exists(vpy):
+            raise RuntimeError(_("The toolkit's environment could not be made: %1", (r.stdout or "")[-300:].strip() or "venv"))
+    if python_has(vpy, packages):
+        return vpy
+    what = ", ".join(packages)
+    progress(_("Installing %1 (once)…", what))
+    cmd = [vpy, "-m", "pip", "install", "--upgrade", "--disable-pip-version-check", "--progress-bar", "off"] + packages
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, errors="replace", **_RUN_FLAGS)
+    task["proc"] = proc
+    tail = []
+    try:
+        for line in proc.stdout:
+            if task.get("cancelled"):
+                proc.kill()
+                raise Cancelled()
+            line = line.strip()
+            if line:
+                tail = (tail + [line])[-8:]
+                if line.startswith(("Collecting", "Downloading", "Installing")):
+                    progress(_("Installing %1 (once)…", what) + "  " + line[:60])
+        proc.wait()
+    finally:
+        task["proc"] = None
+    if proc.returncode != 0 or not python_has(vpy, packages):
+        raise RuntimeError(_("%1 could not be installed: %2", what, " ".join(tail)[-300:] or "import"))
+    return vpy
+
+
+def claude_env(cfg):
+    """The Anthropic key the app keeps in its settings (1.7.0), for the toolkit's subprocess;
+    the environment's own key otherwise."""
+    key = (cfg or {}).get("anthropic_key") or ""
+    return {"ANTHROPIC_API_KEY": key} if key else {}
 
 
 # What runs in the toolkit's Python: traduire.py's passes, in the order of its main(). Its own
@@ -1842,7 +2110,7 @@ except Exception as ex:
 """
 
 
-def run_bridge(task, job, folder, on_message=None):
+def run_bridge(task, job, folder, on_message=None, python=None, env_extra=None):
     """Runs the toolkit on `job` (a dict) in a subprocess and returns its result dict.
     on_message(dict) receives each "@@" message and each printed line ({"line": …})."""
     folder = Path(folder)
@@ -1850,8 +2118,8 @@ def run_bridge(task, job, folder, on_message=None):
     script.write_text(TOOLKIT_BRIDGE, encoding="utf-8")
     job_file = folder / "toolkit_job.json"
     write_json(job_file, job)
-    env = dict(os.environ, PYTHONIOENCODING="utf-8", PYTHONUNBUFFERED="1")
-    proc = subprocess.Popen([toolkit_python(), str(script), str(job_file)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+    env = dict(os.environ, PYTHONIOENCODING="utf-8", PYTHONUNBUFFERED="1", **(env_extra or {}))
+    proc = subprocess.Popen([python or toolkit_python(), str(script), str(job_file)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                             text=True, errors="replace", env=env, **_RUN_FLAGS)
     task["proc"] = proc
     result, error, tail = None, "", []
@@ -2417,7 +2685,15 @@ FINISH_STEPS = {1: "Channels", 2: "Hum and rumble", 3: "Analysis", 4: "Backgroun
                 6: "Level", 7: "Fades", 8: "Encoding", 9: "Check"}
 
 
-def finish_sound(task, toolkit, src, fmt, channels, folder, share=(0.0, 1.0)):
+# finaliser.py's messages the app knows, said in its own words
+FINISH_ERRORS = (("ffmpeg introuvable", "ffmpeg and ffprobe were not found on this computer: install ffmpeg."),
+                 ("Dépendances manquantes", "some of the toolkit's libraries are missing."),
+                 ("pyloudnorm manquant", "some of the toolkit's libraries are missing."),
+                 ("muet, ou trop court", "this file is silent, or too short to be analysed."),
+                 ("n'a pas d'image", "this file has no picture."))
+
+
+def finish_sound(task, toolkit, src, fmt, channels, folder, share=(0.0, 1.0), python=None, path_first=None):
     """finaliser.py of the toolkit on `src`, written into `folder` as `<stem>_podcast.<fmt>`:
     the sound finished as for a podcast (mains hum, the background when it is a steady noise,
     the level to the norm, constant gain), its length kept to the sample so the log, the edit
@@ -2426,9 +2702,11 @@ def finish_sound(task, toolkit, src, fmt, channels, folder, share=(0.0, 1.0)):
     if not os.path.isfile(script):
         raise RuntimeError(_("finaliser.py is not in the toolkit folder %1.", toolkit))
     src, folder = Path(src), Path(folder)
-    cmd = [toolkit_python(), script, str(src), "--format", fmt, "--sans-rognage", "--forcer",
+    cmd = [python or toolkit_python(), script, str(src), "--format", fmt, "--sans-rognage", "--forcer",
            "--canaux", "stereo" if channels >= 2 else "mono", "-o", str(folder)]
     env = dict(os.environ, PYTHONIOENCODING="utf-8", PYTHONUNBUFFERED="1")
+    if path_first:
+        env["PATH"] = path_first + os.pathsep + env.get("PATH", "")
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, errors="replace",
                             env=env, cwd=toolkit, **_RUN_FLAGS)
     task["proc"] = proc
@@ -2457,6 +2735,11 @@ def finish_sound(task, toolkit, src, fmt, channels, folder, share=(0.0, 1.0)):
     if proc.returncode != 0 or not done.exists():
         failed = [l.split(":", 1)[1].strip() for l in lines if l.startswith("✗") and ":" in l]
         detail = failed[0] if failed else " · ".join(lines[-6:])
+        whole = "\n".join(lines)
+        for french, known in FINISH_ERRORS:
+            if french in whole:
+                detail = _(known)
+                break
         raise RuntimeError(_("the sound could not be improved (finaliser.py): %1", detail[-500:]))
     report = read_json(folder / f"{src.stem}_podcast.json", {}) or {}
     task["progress"] = b
@@ -2582,7 +2865,8 @@ def produce_video(task, source, cuts, fade, image_fade, out, burn=None, tracks=(
         try:
             _run_ffmpeg(cmd, task, str(tmp / "ffmpeg.log"), lambda t: task.update(progress=share + (join_end - share) * min(t / total, 1.0)))
             if finish:
-                finished, report = finish_sound(task, finish["toolkit"], joined, "mp4", finish["channels"], tmp, share=(join_end, 0.98))
+                finished, report = finish_sound(task, finish["toolkit"], joined, "mp4", finish["channels"], tmp, share=(join_end, 0.98),
+                                                python=finish.get("python"), path_first=finish.get("path_first"))
                 task["sound"] = report
                 task["message"] = _("Joining")
                 cmd = [ff, "-y", "-i", str(finished)]
@@ -2667,7 +2951,8 @@ def produce_audio(task, source, cuts, audio, fmt, out, finish=None):
             with open(log.name) as f:
                 raise RuntimeError(f.read()[-600:].strip() or "ffmpeg failed")
         if finish:
-            finished, report = finish_sound(task, finish["toolkit"], target, fmt, finish["channels"], tmp, share=(taking, 0.99))
+            finished, report = finish_sound(task, finish["toolkit"], target, fmt, finish["channels"], tmp, share=(taking, 0.99),
+                                            python=finish.get("python"), path_first=finish.get("path_first"))
             task["sound"] = report
             os.replace(finished, partial)
         os.replace(partial, out)
@@ -5241,6 +5526,39 @@ class Main(QtWidgets.QMainWindow):
                 folder.setText(d)
         row.addWidget(self._btn(_("Browse…"), browse))
         v.addLayout(row)
+        status = QtWidgets.QLabel("")
+        status.setObjectName("muted")
+        status.setWordWrap(True)
+        here = self._btn(_("Install it here (download, a few MB)"), None, kind="strong")
+
+        def install():
+            here.setEnabled(False)
+            status.setText(_("Downloading the traduction toolkit…"))
+            box, task = {}, {"cancelled": False}
+
+            def run():
+                try:
+                    box["where"] = install_toolkit(lambda t: None, task)
+                except Exception as ex:        # noqa: BLE001
+                    box["error"] = str(ex)[:300]
+            th = threading.Thread(target=run, daemon=True)
+            th.start()
+            while th.is_alive():
+                QtWidgets.QApplication.processEvents()
+                time.sleep(0.05)
+            if "where" in box:
+                folder.setText(box["where"])
+                self.cfg["toolkit_dir"] = box["where"]
+                save_config(self.cfg)
+                status.setText(_("Installed in %1. Its libraries will be installed by the app when a feature needs them.", box["where"]))
+            else:
+                status.setText(_("The download failed: %1", box.get("error", "")))
+                here.setEnabled(True)
+        here.clicked.connect(install)
+        row2 = QtWidgets.QHBoxLayout()
+        row2.addWidget(here)
+        row2.addWidget(status, 1)
+        v.addLayout(row2)
         return folder
 
     def _toolkit_from(self, folder, error, needs="traduire.py"):
@@ -5270,7 +5588,24 @@ class Main(QtWidgets.QMainWindow):
             lab.setObjectName("label")
             g.addWidget(lab, row, col)
             g.addWidget(w, row + 1, col)
-        return llm, model
+        # the Anthropic key, kept in the app's settings (1.7.0): no environment variable to set
+        key_lab = QtWidgets.QLabel(_("Anthropic API key"))
+        key_lab.setObjectName("label")
+        key = QtWidgets.QLineEdit(self.cfg.get("anthropic_key") or os.environ.get("ANTHROPIC_API_KEY") or "")
+        key.setEchoMode(QtWidgets.QLineEdit.Password)
+        key.setPlaceholderText("sk-ant-…")
+        g.addWidget(key_lab, row + 2, 0, 1, 2)
+        g.addWidget(key, row + 3, 0, 1, 2)
+
+        def show_key(i):
+            key_lab.setVisible(i == 1)
+            key.setVisible(i == 1)
+        llm.currentIndexChanged.connect(show_key)
+        show_key(llm.currentIndex())
+        return llm, model, key
+
+    def anthropic_key(self):
+        return self.cfg.get("anthropic_key") or os.environ.get("ANTHROPIC_API_KEY") or ""
 
     def ask_translate(self):
         if not self.project or self.thread or not self.texts.get("src"):
@@ -5302,7 +5637,7 @@ class Main(QtWidgets.QMainWindow):
             lab.setObjectName("label")
             g.addWidget(lab, 0, col)
             g.addWidget(w, 1, col)
-        llm, model = self._llm_rows(g, 2, _("Translation by"))
+        llm, model, key = self._llm_rows(g, 2, _("Translation by"))
         v.addLayout(g)
         context = QtWidgets.QPlainTextEdit()
         context.setPlaceholderText(_("Context for the translator: names, subject, register (optional)"))
@@ -5314,8 +5649,8 @@ class Main(QtWidgets.QMainWindow):
         # with the local model, the analysis pass can still go to Claude (traduire.py's "auto"): said and chosen here
         analysis = QtWidgets.QCheckBox(_("Analysis of the content (names, glossary) by Claude rather than the local model"))
         analysis.setChecked(bool(self.cfg.get("analysis_by_claude", False)))
-        analysis.setVisible(llm.currentData() == "local" and bool(os.environ.get("ANTHROPIC_API_KEY")))
-        llm.currentIndexChanged.connect(lambda i: analysis.setVisible(i == 0 and bool(os.environ.get("ANTHROPIC_API_KEY"))))
+        analysis.setVisible(llm.currentData() == "local" and bool(self.anthropic_key()))
+        llm.currentIndexChanged.connect(lambda i: analysis.setVisible(i == 0 and bool(self.anthropic_key() or key.text().strip())))
         v.addWidget(analysis)
         error = QtWidgets.QLabel("")
         error.setObjectName("danger")
@@ -5334,6 +5669,10 @@ class Main(QtWidgets.QMainWindow):
                 return
             if src.currentData() == tgt.currentData():
                 error.setText(_("Same as the source language."))
+                return
+            self.cfg["anthropic_key"] = key.text().strip()
+            if llm.currentData() == "claude" and not self.anthropic_key():
+                error.setText(_("Give an Anthropic API key."))
                 return
             self.cfg["llm"], self.cfg["ollama_model"] = llm.currentData(), model.text().strip() or LLM_LOCAL_MODEL
             self.cfg["review"], self.cfg["target_lang"] = review.isChecked(), tgt.currentData()
@@ -5379,7 +5718,9 @@ class Main(QtWidgets.QMainWindow):
                         i, n = int(m.group(1)), int(m.group(2))
                         w.progress.emit(state["base"] + (state["next"] - state["base"]) * (i - 1) / max(n, 1),
                                         state["text"] + "  " + _("Translating… %1 of %2", i, n).split("…")[-1].strip())
-            result = run_bridge(task, job, d, on_message)
+            needs = TOOLKIT_PACKAGES["claude"] if (llm == "claude" or analysis_by_claude) else []
+            py = prepare_toolkit_python(needs, lambda t: w.progress.emit(0.0, t), task)
+            result = run_bridge(task, job, d, on_message, python=py, env_extra=claude_env(self.cfg))
             tokens = tokens_from_translation(result["segments"], duration)
             if not any(t[0] for t in tokens):
                 raise RuntimeError(_("The translation came back empty."))
@@ -5709,7 +6050,7 @@ class Main(QtWidgets.QMainWindow):
         g = QtWidgets.QGridLayout()
         g.setHorizontalSpacing(10)
         g.setVerticalSpacing(6)
-        llm, model = self._llm_rows(g, 0, _("Proofreading by"))
+        llm, model, key = self._llm_rows(g, 0, _("Proofreading by"))
         v.addLayout(g)
         error = QtWidgets.QLabel("")
         error.setObjectName("danger")
@@ -5729,6 +6070,10 @@ class Main(QtWidgets.QMainWindow):
             rows = {"fast": fast, "selected": chosen, "all": list(range(len(cues)))}[scope.currentData()]
             if not rows:
                 error.setText(_("Nothing to shorten."))
+                return
+            self.cfg["anthropic_key"] = key.text().strip()
+            if llm.currentData() == "claude" and not self.anthropic_key():
+                error.setText(_("Give an Anthropic API key."))
                 return
             self.cfg["llm"], self.cfg["ollama_model"] = llm.currentData(), model.text().strip() or LLM_LOCAL_MODEL
             save_config(self.cfg)
@@ -5766,7 +6111,8 @@ class Main(QtWidgets.QMainWindow):
                 if m:
                     i, n = int(m.group(1)), int(m.group(2))
                     w.progress.emit((i - 1) / max(n, 1), _("Proofreading… %1 of %2", i, n) + " · " + model_label(llm, model))
-            result = run_bridge(task, job, d, on_message)
+            py = prepare_toolkit_python(TOOLKIT_PACKAGES["claude"] if llm == "claude" else [], lambda t: w.progress.emit(0.0, t), task)
+            result = run_bridge(task, job, d, on_message, python=py, env_extra=claude_env(self.cfg))
             changes = {}
             for s in result["segments"]:
                 r, new = int(s["index"]), " ".join((s.get("text_tgt") or "").split())
@@ -6053,6 +6399,10 @@ class Main(QtWidgets.QMainWindow):
                         f.write(srt_text(cues))
                     paths[key] = path
                 task["message"] = ""
+                if finish:
+                    finish["path_first"] = ensure_ffmpeg_tools(lambda t: task.update(message=t), task)
+                    finish["python"] = prepare_toolkit_python(TOOLKIT_PACKAGES["sound"], lambda t: task.update(message=t), task)
+                    task["message"] = ""
                 burn_style = style
                 if captions:
                     ass = d / "captions.ass"

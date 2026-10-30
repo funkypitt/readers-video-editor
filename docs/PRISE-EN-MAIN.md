@@ -42,8 +42,8 @@ sous-titres. Rien ne part sur Internet, sauf dans trois cas que vous choisissez 
 | Ouvrir, surligner, monter, lire | l'application et ffmpeg | ffmpeg installé par le paquet | inclus dans l'app | inclus dans l'app |
 | Transcrire la parole | faster-whisper + un modèle | s'installe seul au premier usage (≈ 300 Mo) | inclus dans l'app | inclus dans l'app |
 | Ouvrir une vidéo par son adresse | yt-dlp | téléchargé seul au premier usage (40 Mo) | idem | idem |
-| Traduire, raccourcir des sous-titres (**facultatif**) | le **traduction toolkit** + Ollama ou une clé Anthropic | oui | oui | **non** (voir § 5) |
-| Améliorer le son du montage (**facultatif**) | le **traduction toolkit** avec `deepfilternet`, `pyloudnorm`, `speechmos` dans son Python | oui | oui | **non** (voir § 3.5) |
+| Traduire, raccourcir des sous-titres (**facultatif**) | le **traduction toolkit** (l'app l'installe) + Ollama ou une clé Anthropic | oui | oui | **non** (voir § 5) |
+| Améliorer le son du montage (**facultatif**) | le **traduction toolkit** et ses bibliothèques (l'app installe les deux) | oui | oui | **non** (voir § 3.5) |
 | Incruster des sous-titres dans l'image | un ffmpeg avec libass | les ffmpeg habituels l'ont | inclus | inclus |
 
 ### Deux parcours : montage seul, ou montage et traduction
@@ -159,9 +159,8 @@ et `gst-libav` sur Arch). Le texte et le montage marchent même sans lecteur.
 
 ### 2.2 macOS
 
-1. **Téléchargez** le `.dmg` sur la page des versions du dépôt. Il y en a deux : prenez
-   `apple-silicon` si votre Mac a une puce Apple (M1, M2, M3, M4…), `intel` sinon. Pour le
-   savoir : menu  › *À propos de ce Mac* › la ligne *Puce* ou *Processeur*.
+1. **Téléchargez** le `.dmg` sur la page des versions du dépôt. Il est fait pour les Mac à puce
+   Apple (M1, M2, M3, M4…) ; les Mac Intel ne sont pas pris en charge.
 2. **Ouvrez** le `.dmg` et glissez *Readers Video Editor* dans le dossier *Applications*.
 3. **Premier lancement** : l'application n'est pas signée par Apple, macOS refuse donc de
    l'ouvrir d'un double clic. Faites un **clic droit** (ou Ctrl + clic) sur l'application › **Ouvrir**
@@ -309,10 +308,12 @@ En bas à gauche :
   niveau mis à la norme des podcasts par un gain constant, fondus courts. La durée ne change pas,
   le journal, la liste de montage et les sous-titres restent justes. À la fin, le panneau et le
   journal disent ce qui a été fait (« ronflette secteur à 50 Hz retirée ; bruit de fond réduit,
-  de 8 dB au plus ; niveau +2,1 dB → −16,0 LUFS »). Il faut, dans le Python du toolkit :
-  `pip install deepfilternet pyloudnorm speechmos` ; une carte graphique sert si elle est là,
-  sinon le processeur suffit (plus lent). Si le toolkit n'est pas trouvé, une petite boîte
-  demande son dossier.
+  de 8 dB au plus ; niveau +2,1 dB → −16,0 LUFS »). Rien à installer à la main : si le toolkit
+  n'est pas trouvé, une petite boîte propose de **l'installer ici** ; la première fois, l'app
+  installe elle-même ses bibliothèques (`deepfilternet`, `pyloudnorm`, `speechmos`, avec torch :
+  environ un demi-giga, une fois, les lignes de pip dans la jauge), et sur Mac elle récupère
+  aussi `ffmpeg` et `ffprobe` pour puce Apple. Une carte graphique sert si elle est là, sinon le
+  processeur suffit (plus lent).
 - **Sous-titres** : voir § 6.
 
 Cliquez **Produire le montage** (Ctrl+E). La jauge avance ; *Stop* interrompt. Le fichier est
@@ -369,29 +370,27 @@ La traduction n'est pas faite par l'application mais par **`traduire.py`**, le s
 lance dans son propre Python. Elle en reprend toutes les passes : analyse du contenu (noms,
 glossaire), traduction par morceaux, relecture, cohérence, glossaire.
 
-**1. Le toolkit.** Clonez-le dans l'un des dossiers où l'application le cherche :
+**1. Le toolkit.** Rien à taper : la première fois, la boîte *Traduire…* dit que le toolkit
+n'est pas trouvé et propose **L'installer ici** : l'application télécharge l'archive du dépôt
+(quelques Mo) dans son dossier de données, sans git. Si vous l'avez déjà quelque part, donnez son
+dossier avec *Parcourir…*. L'application regarde, dans l'ordre : la variable d'environnement
+`TRADUCTION_DIR`, le dossier donné une fois (retenu dans les réglages), `~/code/traduction`,
+`~/code/traduction-toolkit`, puis sa propre copie.
 
-```bash
-git clone https://github.com/funkypitt/traduction-toolkit ~/code/traduction-toolkit
-```
+**2. Un Python pour le toolkit.** Rien à taper non plus : `traduire.py` n'a besoin que de la
+bibliothèque standard de Python 3.10 ou plus, et du paquet `anthropic` seulement si vous
+choisissez Claude. L'application prend, dans l'ordre : `TRADUCTION_PYTHON`,
+`~/miniconda3/envs/interview/bin/python`, `~/miniconda3/envs/traduction/bin/python`, son propre
+environnement, sinon le `python3` de votre système. Quand il manque une bibliothèque, elle crée
+son propre environnement avec le Python du système et y installe ce qu'il faut, une fois, les
+lignes de pip dans la page d'attente ; vos environnements à vous ne sont jamais modifiés.
 
-L'application regarde, dans l'ordre : la variable d'environnement `TRADUCTION_DIR`, le dossier
-donné une fois dans la boîte de traduction (retenu dans les réglages), `~/code/traduction`,
-`~/code/traduction-toolkit`. Si elle ne le trouve pas, la boîte *Traduire…* le dit et vous
-demande son dossier.
-
-**2. Un Python pour le toolkit.** `traduire.py` n'a besoin que de la bibliothèque standard de
-Python 3.10 ou plus, et du paquet `anthropic` seulement si vous choisissez Claude.
-L'application prend, dans l'ordre : `TRADUCTION_PYTHON`, `~/miniconda3/envs/interview/bin/python`,
-`~/miniconda3/envs/traduction/bin/python`, sinon le `python3` de votre système (sur Linux
-depuis les sources, le Python qui lance l'application).
-
-- Linux : le Python du système convient. Pour Claude : `python3 -m pip install anthropic`.
+- Linux : le Python du système suffit (le paquet `.deb` demande `python3-venv`).
 - macOS : `python3` vient avec les outils en ligne de commande de Xcode. La première fois que
-  vous tapez `python3` dans le Terminal, macOS propose de les installer : acceptez. Pour
-  Claude : `python3 -m pip install anthropic`.
+  vous tapez `python3` dans le Terminal, macOS propose de les installer : acceptez. C'est la
+  seule chose à faire une fois.
 - Windows : pas disponible (voir § 2.3). Avec WSL : installez l'application Linux dans WSL
-  (§ 2.1), le toolkit dans `~/code/traduction-toolkit` de WSL, et lancez tout depuis WSL.
+  (§ 2.1) et lancez tout depuis WSL.
 
 **3. Un modèle de langue**, l'un ou l'autre :
 
@@ -412,17 +411,11 @@ depuis les sources, le Python qui lance l'application).
   répond pas* sinon.
 
 - **Claude, par l'API d'Anthropic** (payant, meilleur, le texte part chez Anthropic). Créez une
-  clé sur https://console.anthropic.com (*API Keys* › *Create Key*) et mettez-la dans la
-  variable d'environnement `ANTHROPIC_API_KEY` **de façon que l'application la voie** :
-
-  - Linux, lancée depuis le menu : écrivez `ANTHROPIC_API_KEY=sk-ant-…` dans le fichier
-    `~/.config/environment.d/anthropic.conf` (créez-le), puis fermez et rouvrez la session. Ou
-    lancez l'application depuis un terminal où la clé est exportée.
-  - macOS, lancée depuis le Finder : dans le Terminal, `launchctl setenv ANTHROPIC_API_KEY sk-ant-…`
-    (à refaire après un redémarrage), puis relancez l'application. Ou lancez-la depuis le
-    Terminal : `ANTHROPIC_API_KEY=sk-ant-… open -a "Readers Video Editor"`.
-
-  L'application dit *ANTHROPIC_API_KEY n'est pas définie* quand elle ne la voit pas.
+  clé sur https://console.anthropic.com (*API Keys* › *Create Key*) et collez-la dans le champ
+  **Clé API Anthropic** de la boîte *Traduire…* (il apparaît quand Claude est choisi). Elle est
+  gardée dans les réglages de l'application, en clair dans son fichier de configuration (§ 4) ;
+  une variable d'environnement `ANTHROPIC_API_KEY` est lue aussi. Le paquet `anthropic` est
+  installé par l'application au premier usage.
 
 ### 5.2 La boîte Traduire…
 

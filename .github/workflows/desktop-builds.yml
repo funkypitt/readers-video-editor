@@ -30,7 +30,6 @@ jobs:
   build:
     name: ${{ matrix.target }}
     runs-on: ${{ matrix.os }}
-    continue-on-error: ${{ matrix.target == 'macos-intel' }}
     strategy:
       fail-fast: false
       matrix:
@@ -39,8 +38,6 @@ jobs:
             target: windows
           - os: macos-15
             target: macos-apple-silicon
-          - os: macos-15-intel
-            target: macos-intel
 
     steps:
       - uses: actions/checkout@v4
@@ -106,7 +103,7 @@ jobs:
           mkdir -p dmg out
           cp -R "dist/Readers Video Editor.app" dmg/
           ln -s /Applications dmg/Applications
-          ARCH=$([ "${{ matrix.target }}" = "macos-intel" ] && echo intel || echo apple-silicon)
+          ARCH=apple-silicon
           made=
           for try in 1 2 3; do
             if hdiutil create -volname "Readers Video Editor" -srcfolder dmg -ov -format UDZO \
