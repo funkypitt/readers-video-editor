@@ -242,8 +242,11 @@ Dialogue event per spoken word shows its card with that word in the accent colou
 next card starts sooner. Style: Montserrat ExtraBold (bundled, OFL, `fontsdir=` on the
 subtitles filter so the bundles find it without any installation), size 6.5 % of the shorter
 side (47 px on 720, 70 px on 1080×1920), outline 8 % and shadow 6 % of the size, alignment 2
-(bottom centre) with MarginV 26 % of the height and 8 % side margins, PlayRes = the picture
-(the square side when the frame is square). No animation, no uppercase, one accent colour.
+(bottom centre) with MarginV 10 % of the height, 24 % on a vertical picture (H > 1.2 W: the
+band Reels lay at the bottom), and 8 % side margins, PlayRes = the picture (the square side
+when the frame is square). 1.6.2: the 26 % of 1.6.0 on every frame put the cards over a face
+framed in the middle of a square video (the user's own test); the classic subtitles sit at
+the bottom (MarginV 16 of 288) and were never concerned. No animation, no uppercase, one accent colour.
 The classic path is unchanged (`force_style`, now also with `fontsdir`); the `.srt` files
 beside the edit stay the cues. The overlay preview in the window still shows the cues, not
 the cards. Checked 2026-10-29 on the synthetic media: 16:9 and square frames.
@@ -264,6 +267,11 @@ The margin of the page and the list of passages took `hmsm(t)[3:8]`, which cut t
 at 1:05:05 the margin said 05:05. `stamp()` now gives `MM:SS` under the hour and `H:MM:SS`
 past it (the passage list's time column widened from 52 to 64 px). A passage without words of
 a minute or more is shown as `34:28` rather than `2067.6 s`. Checked on a 66-minute recording.
+
+## Captions lowered (1.6.2)
+
+See above: the cards sit 10 % above the bottom on a square or landscape picture, 24 % on a
+vertical one. Checked on the square test media and on a 720×1280 vertical one.
 
 ## Project files (1.3.0)
 

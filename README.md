@@ -63,8 +63,8 @@ that download.
   `.srt` per language on the edit's timeline, carried in the MP4 as tracks too.
 - **Instagram-like captions**: instead of the two lines at the bottom, the style the short
   videos share: a few big words at a time (four at most, Montserrat ExtraBold, white with a
-  black outline), centred in the lower middle of the picture above the band the apps cover,
-  the spoken word in yellow, one card per group of words cut at sentence ends and pauses.
+  black outline), centred near the bottom of the picture, higher on a vertical one above the
+  band the apps lay over a Reel, the spoken word in yellow, one card per group of words cut at sentence ends and pauses.
   Built from the words' timings (exact from the transcription, estimated from subtitles or a
   translation); sized as a share of the picture, so a vertical, a square and a landscape
   picture get the same look.

@@ -484,8 +484,8 @@ En bas à gauche, sous *Sous-titres* :
   contour noir), réduits pour les vidéos plus étroites que 16:9. *Aucun* n'incruste rien.
 - Le style, à côté : **Deux lignes en bas** (les sous-titres habituels), ou **Légendes façon
   Instagram** : quelques grands mots à la fois (quatre au plus, Montserrat ExtraBold, blanc à
-  contour noir), centrés dans le bas-milieu de l'image, au-dessus de la bande que les
-  applications recouvrent, le mot prononcé en jaune ; une carte par groupe de mots, coupée aux
+  contour noir), centrés près du bas de l'image, et plus haut sur une vidéo verticale,
+  au-dessus de la bande que les applications posent sur un Reel, le mot prononcé en jaune ; une carte par groupe de mots, coupée aux
   fins de phrase et aux pauses. Les cartes suivent le minutage des mots : exact quand le texte
   vient de la transcription, estimé quand il vient d'un fichier de sous-titres ou d'une
   traduction. Les tailles sont des parts de l'image : une vidéo verticale, carrée ou 16:9 reçoit

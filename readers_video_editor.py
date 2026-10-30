@@ -28,7 +28,7 @@ from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 APP = "readers-video-editor"
-VERSION = "1.6.1"
+VERSION = "1.6.2"
 
 
 def _app_dirs():
@@ -1089,20 +1089,20 @@ for _code, _more in _TR_SOUND.items():
 # The strings of 1.6.0: Instagram-like captions
 _TR_CAPTIONS = {
  "fr": {"Two lines at the bottom": "Deux lignes en bas", "Instagram-like captions": "Légendes façon Instagram",
-        "A few big words at a time, centred in the lower middle of the picture, the spoken word in yellow: the style of the short videos.":
-        "Quelques grands mots à la fois, centrés dans le bas-milieu de l'image, le mot prononcé en jaune : le style des vidéos courtes."},
+        "A few big words at a time, centred near the bottom of the picture (higher on a vertical one), the spoken word in yellow: the style of the short videos.":
+        "Quelques grands mots à la fois, centrés près du bas de l'image (plus haut sur une vidéo verticale), le mot prononcé en jaune : le style des vidéos courtes."},
  "de": {"Two lines at the bottom": "Zwei Zeilen unten", "Instagram-like captions": "Untertitel im Instagram-Stil",
-        "A few big words at a time, centred in the lower middle of the picture, the spoken word in yellow: the style of the short videos.":
-        "Wenige große Wörter auf einmal, mittig im unteren Bildteil, das gesprochene Wort in Gelb: der Stil der Kurzvideos."},
+        "A few big words at a time, centred near the bottom of the picture (higher on a vertical one), the spoken word in yellow: the style of the short videos.":
+        "Wenige große Wörter auf einmal, mittig nahe dem unteren Bildrand (bei Hochformat höher), das gesprochene Wort in Gelb: der Stil der Kurzvideos."},
  "es": {"Two lines at the bottom": "Dos líneas abajo", "Instagram-like captions": "Rótulos estilo Instagram",
-        "A few big words at a time, centred in the lower middle of the picture, the spoken word in yellow: the style of the short videos.":
-        "Pocas palabras grandes a la vez, centradas en la parte media-baja de la imagen, la palabra pronunciada en amarillo: el estilo de los vídeos cortos."},
+        "A few big words at a time, centred near the bottom of the picture (higher on a vertical one), the spoken word in yellow: the style of the short videos.":
+        "Pocas palabras grandes a la vez, centradas cerca de la parte inferior de la imagen (más arriba en vertical), la palabra pronunciada en amarillo: el estilo de los vídeos cortos."},
  "pt": {"Two lines at the bottom": "Duas linhas em baixo", "Instagram-like captions": "Legendas ao estilo Instagram",
-        "A few big words at a time, centred in the lower middle of the picture, the spoken word in yellow: the style of the short videos.":
-        "Poucas palavras grandes de cada vez, centradas na parte média-baixa da imagem, a palavra dita a amarelo: o estilo dos vídeos curtos."},
+        "A few big words at a time, centred near the bottom of the picture (higher on a vertical one), the spoken word in yellow: the style of the short videos.":
+        "Poucas palavras grandes de cada vez, centradas perto da parte inferior da imagem (mais acima na vertical), a palavra dita a amarelo: o estilo dos vídeos curtos."},
  "ru": {"Two lines at the bottom": "Две строки внизу", "Instagram-like captions": "Подписи в стиле Instagram",
-        "A few big words at a time, centred in the lower middle of the picture, the spoken word in yellow: the style of the short videos.":
-        "Несколько крупных слов за раз, по центру нижней половины кадра, произносимое слово жёлтым: стиль коротких видео."},
+        "A few big words at a time, centred near the bottom of the picture (higher on a vertical one), the spoken word in yellow: the style of the short videos.":
+        "Несколько крупных слов за раз, по центру у нижнего края кадра (выше на вертикальном видео), произносимое слово жёлтым: стиль коротких видео."},
 }
 for _code, _more in _TR_CAPTIONS.items():
     _TR.setdefault(_code, {}).update(_more)
@@ -2056,9 +2056,9 @@ def filter_path(path):
 
 
 # Instagram-like captions (1.6.0): the style the short videos of 2025-2026 share — a few big words
-# at a time in a heavy sans, white with a black outline, centred in the lower-middle of the
-# picture (above the band the apps cover), the spoken word in one accent colour (the app's
-# stabilo yellow). Sizes are shares of the picture, so a vertical, a square and a landscape
+# at a time in a heavy sans, white with a black outline, centred near the bottom of the picture
+# (higher on a vertical one, above the band the apps cover), the spoken word in one accent
+# colour (the app's stabilo yellow). Sizes are shares of the picture, so a vertical, a square and a landscape
 # picture get the same look.
 CAPTION_FONT = "Montserrat ExtraBold"   # bundled in packaging/fonts (OFL)
 CAPTION_WORDS = 4                       # words per card at most
@@ -2106,7 +2106,9 @@ def captions_ass(tokens, width, height):
     W, H = (width, height) if width > 0 and height > 0 else (1280, 720)
     size = max(18, round(0.065 * min(W, H)))
     outline, shadow = max(2, round(size * 0.08)), max(1, round(size * 0.06))
-    ml, mv = round(0.08 * W), round(0.26 * H)
+    # near the bottom, like subtitles, so the cards never cover a face framed in the middle; higher
+    # only on a vertical picture, above the band the apps lay over a Reel (about a quarter)
+    ml, mv = round(0.08 * W), round((0.24 if H > W * 1.2 else 0.10) * H)
     L = ["[Script Info]", "ScriptType: v4.00+", f"PlayResX: {W}", f"PlayResY: {H}", "WrapStyle: 0", "ScaledBorderAndShadow: yes", "",
          "[V4+ Styles]",
          "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, "
@@ -4378,7 +4380,7 @@ class Main(QtWidgets.QMainWindow):
         self.caption_style.addItem(_("Two lines at the bottom"), "subtitles")
         self.caption_style.addItem(_("Instagram-like captions"), "captions")
         self.caption_style.setCurrentIndex(max(0, self.caption_style.findData(self.cfg.get("caption_style", "subtitles"))))
-        self.caption_style.setToolTip(_("A few big words at a time, centred in the lower middle of the picture, the spoken word in yellow: the style of the short videos."))
+        self.caption_style.setToolTip(_("A few big words at a time, centred near the bottom of the picture (higher on a vertical one), the spoken word in yellow: the style of the short videos."))
         self.caption_style.currentIndexChanged.connect(lambda _i: self.remember_output())
         g.addWidget(self.caption_style, 6, 1)
         self.srt_files = QtWidgets.QCheckBox(_("Subtitle files beside the edit (.srt)"))
