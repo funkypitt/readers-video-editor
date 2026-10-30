@@ -46,6 +46,25 @@ sous-titres. Rien ne part sur Internet, sauf dans trois cas que vous choisissez 
 | Améliorer le son du montage (**facultatif**) | le **traduction toolkit** et ses bibliothèques (l'app installe les deux) | oui | oui | **non** (voir § 3.5) |
 | Incruster des sous-titres dans l'image | un ffmpeg avec libass | les ffmpeg habituels l'ont | inclus | inclus |
 
+### La page « Prise en main »
+
+Au premier lancement, l'application ouvre une page **Prise en main** (on la retrouve ensuite
+par le bouton *Prise en main…* de la page d'accueil, ou par *Projet ▾ › Prise en main…* pendant
+le montage). Trois niveaux, chacun en étapes, chaque étape vérifiée par un vrai essai et munie
+du bouton qui fait le travail :
+
+1. **Le montage** : ffmpeg, la transcription et son modèle. Rien à installer ; le bouton *Cela
+   me suffit : commencer à monter* mène tout de suite au montage. Si vous ne traduisez jamais,
+   arrêtez-vous là : rien des niveaux 2 et 3 ne sert au montage.
+2. **Traduction et sous-titres, facultatif** : la boîte à outils (téléchargée par l'app) et le
+   modèle de langue, au choix : *Ollama, sur cet ordinateur* (l'app détecte Ollama, le démarre,
+   propose le modèle que la machine peut porter, le télécharge et l'essaie), *Claude Code, votre
+   abonnement* (la commande `claude`, sans clé ni facture à l'appel : l'app lance son
+   installateur, un bouton ouvre le terminal pour la connexion, un bouton essaie), ou *Claude,
+   une clé API* (collée dans la page, essayée contre l'API).
+3. **Son amélioré, facultatif** : les bibliothèques (et sur Mac ffmpeg et ffprobe) installées
+   tout de suite plutôt qu'au premier usage.
+
 ### Deux parcours : montage seul, ou montage et traduction
 
 Choisissez dès maintenant ; vous pourrez toujours ajouter la traduction plus tard.
@@ -297,7 +316,8 @@ En bas à gauche :
 - **Fondu à chaque coupe** : *Aucun*, *Bref (0,2 s)*, *Normal (0,5 s)*, *Lent (1 s)*, *Très lent (1,5 s)*.
   Le son entre et sort en fondu à chaque morceau.
 - **fondu au noir de l'image** : l'image passe au noir seulement là où une seconde ou plus est
-  enlevée.
+  enlevée, et jamais au tout début du montage : sa première image est la vignette que X et les
+  autres réseaux affichent.
 - **Image** : *Tel quel*, ou *Carré (1:1), centré* pour les réseaux sociaux : le centre de
   l'image, le petit côté comme côté du carré ; les sous-titres incrustés sont dimensionnés pour
   ce carré. Grisé quand on produit le son seul.
@@ -370,6 +390,9 @@ La traduction n'est pas faite par l'application mais par **`traduire.py`**, le s
 lance dans son propre Python. Elle en reprend toutes les passes : analyse du contenu (noms,
 glossaire), traduction par morceaux, relecture, cohérence, glossaire.
 
+La page **Prise en main** (§ 1) fait tout ce qui suit en quelques boutons ; le détail, pour
+comprendre ce qu'elle fait :
+
 **1. Le toolkit.** Rien à taper : la première fois, la boîte *Traduire…* dit que le toolkit
 n'est pas trouvé et propose **L'installer ici** : l'application télécharge l'archive du dépôt
 (quelques Mo) dans son dossier de données, sans git. Si vous l'avez déjà quelque part, donnez son
@@ -392,7 +415,15 @@ lignes de pip dans la page d'attente ; vos environnements à vous ne sont jamais
 - Windows : pas disponible (voir § 2.3). Avec WSL : installez l'application Linux dans WSL
   (§ 2.1) et lancez tout depuis WSL.
 
-**3. Un modèle de langue**, l'un ou l'autre :
+**3. Un modèle de langue**, l'un des trois :
+
+- **Claude Code, votre abonnement** (le choix le plus simple si vous avez un abonnement Claude).
+  C'est la commande `claude` d'Anthropic, qui travaille sur votre forfait : pas de clé, pas de
+  facture à l'appel. La page *Prise en main* l'installe (l'installateur de claude.ai), ouvre un
+  terminal pour la connexion (tapez `/login`, le navigateur s'ouvre, une fois) et l'essaie.
+  L'application lui passe le travail de `traduire.py` tel quel ; la demande de réponse
+  structurée que le toolkit fait à l'API devient une réponse en JSON que l'application relit.
+
 
 - **Local, avec Ollama** (gratuit, hors ligne). Installez Ollama depuis https://ollama.com
   (Linux : `curl -fsSL https://ollama.com/install.sh | sh` ; macOS : l'application Ollama ;

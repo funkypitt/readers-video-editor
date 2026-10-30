@@ -28,7 +28,7 @@ from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 APP = "readers-video-editor"
-VERSION = "1.7.0"
+VERSION = "1.8.0"
 
 
 def _app_dirs():
@@ -1193,6 +1193,342 @@ _TR_SETUP = {
 for _code, _more in _TR_SETUP.items():
     _TR.setdefault(_code, {}).update(_more)
 
+# The strings of 1.8.0: the getting-started page, Claude Code
+_TR_START = {
+ "fr": {
+  "Getting started": "Prise en main", "Getting started…": "Prise en main…", "Optional —": "Facultatif —", "Model": "Modèle", "« %1 »: %2.": "« %1 » : %2.",
+  "the fastest, rough words and timings: good to try the app, not to publish": "le plus rapide, mots et minutages approximatifs : bon pour essayer l'application, pas pour publier",
+  "fast, still rough; acceptable for English only": "rapide, encore approximatif ; acceptable pour l'anglais seulement",
+  "the default: good words in most languages, about as long as the recording lasts": "le choix par défaut : de bons mots dans la plupart des langues, à peu près la durée de l'enregistrement",
+  "better words and names, about three times slower, 1.5 GB": "meilleurs mots et noms propres, environ trois fois plus lent, 1,5 Go",
+  "the best words, about ten times slower on a processor, 3 GB on disk and 4 GB of memory": "les meilleurs mots, environ dix fois plus lent sur un processeur, 3 Go sur le disque et 4 Go de mémoire",
+  "small and fast; translations to be reread": "petit et rapide ; traductions à relire", "decent translations, a few minutes for a talk": "traductions correctes, quelques minutes pour une causerie",
+  "good translations, fast on a Mac with 32 GB": "bonnes traductions, rapide sur un Mac de 32 Go", "the toolkit's best local model; slow without a big graphics card": "le meilleur modèle local du toolkit ; lent sans grosse carte graphique",
+  "Quality and cost: Claude gives the best translations; Claude Code costs nothing beyond your plan, the API key pays by the call, both send the text to Anthropic. A local model keeps everything on this computer, slower, and the smaller the model, the rougher the translation.":
+    "Qualité et coût : Claude donne les meilleures traductions ; Claude Code ne coûte rien au-delà de votre abonnement, la clé API paie à l'appel, les deux envoient le texte chez Anthropic. Un modèle local garde tout sur cet ordinateur, plus lentement, et plus le modèle est petit, plus la traduction est approximative.",
+  "Speed: about the length of the edit on a processor, much less with a graphics card; the length and the picture do not change.": "Vitesse : à peu près la durée du montage sur un processeur, bien moins avec une carte graphique ; la durée et l'image ne changent pas.",
+  "Three levels. Level 1 is all you need to cut a video: it works as soon as the app is installed. Levels 2 and 3 are optional extras; if you never translate, skip them, nothing there is needed for the editing. One step at a time, each checked by a real test, each with the button that does the work. You can come back here any time: « Getting started… » on the home page, or Project ▾ › Getting started… while editing.":
+    "Trois niveaux. Le niveau 1 suffit pour monter une vidéo : il marche dès que l'application est installée. Les niveaux 2 et 3 sont des suppléments facultatifs ; si vous ne traduisez jamais, sautez-les, rien de ce qui s'y trouve ne sert au montage. Une étape à la fois, chacune vérifiée par un vrai essai, chacune avec le bouton qui fait le travail. Vous pouvez revenir ici à tout moment : « Prise en main… » sur la page d'accueil, ou Projet ▾ › Prise en main… pendant le montage.",
+  "Level 1 · Editing": "Niveau 1 · Le montage", "The whole point of the app: open, highlight, produce. Nothing to install.": "Le cœur de l'application : ouvrir, surligner, produire. Rien à installer.",
+  "That is enough for me: start editing": "Cela me suffit : commencer à monter",
+  "Level 2 · Translation and subtitles — optional": "Niveau 2 · Traduction et sous-titres — facultatif",
+  "Only if you want to translate the text, or to cut subtitles with the toolkit's rules. Otherwise skip this level entirely.": "Seulement si vous voulez traduire le texte, ou découper des sous-titres avec les règles de la boîte à outils. Sinon, sautez ce niveau entièrement.",
+  "Level 3 · Improved sound — optional": "Niveau 3 · Son amélioré — facultatif",
+  "Only if you want the edit's sound cleaned and levelled on the way out. Needs the toolkit of level 2 (not the model).": "Seulement si vous voulez le son du montage nettoyé et mis à niveau à la sortie. Demande la boîte à outils du niveau 2 (pas le modèle).",
+  "What this computer has, and the buttons that put the rest in place.": "Ce que cet ordinateur a, et les boutons qui mettent le reste en place.",
+  "Three levels. The first works as soon as the app is installed. The next two are optional: one step at a time, each checked by a real test, each with the button that does the work. You can come back here any time: « Getting started… » on the home page, or Project ▾ › Getting started… while editing.":
+    "Trois niveaux. Le premier marche dès que l'application est installée. Les deux suivants sont facultatifs : une étape à la fois, chacune vérifiée par un vrai essai, chacune avec le bouton qui fait le travail. Vous pouvez revenir ici à tout moment : « Prise en main… » sur la page d'accueil, ou Projet ▾ › Prise en main… pendant le montage.",
+  "Cut a video by its text": "Monter une vidéo par son texte", "Transcribe the speech": "Transcrire la parole",
+  "Translate and subtitle: the toolkit": "Traduire et sous-titrer : la boîte à outils", "Translate and subtitle: the language model": "Traduire et sous-titrer : le modèle de langue",
+  "Improve the sound": "Améliorer le son", "Check again": "Vérifier à nouveau", "Start editing": "Commencer à monter", "Checking…": "Vérification…", "Working…": "En cours…",
+  "Ready: ffmpeg is here. Open a video or a recording, highlight, produce.": "Prêt : ffmpeg est là. Ouvrez une vidéo ou un enregistrement, surlignez, produisez.",
+  "ffmpeg is missing. On Linux: sudo apt install ffmpeg, then « Check again ».": "ffmpeg manque. Sur Linux : sudo apt install ffmpeg, puis « Vérifier à nouveau ».",
+  "The transcription is missing from this build.": "La transcription manque dans cette version.",
+  "faster-whisper is not installed yet: the app installs it in a folder of its own (about 300 MB, once).": "faster-whisper n'est pas encore installé : l'application l'installe dans un dossier à elle (environ 300 Mo, une fois).",
+  "Install the transcription": "Installer la transcription",
+  "faster-whisper is here. The model « %1 » (%2) is downloaded at the first transcription; or now:": "faster-whisper est là. Le modèle « %1 » (%2) est téléchargé à la première transcription ; ou maintenant :",
+  "Download the model now": "Télécharger le modèle maintenant", "Downloading the model « %1 » (%2)…": "Téléchargement du modèle « %1 » (%2)…",
+  "Ready: faster-whisper and the model « %1 ». A subtitle file beside the video is used instead when there is one.": "Prêt : faster-whisper et le modèle « %1 ». Un fichier de sous-titres à côté de la vidéo est utilisé à la place quand il y en a un.",
+  "Found: %1": "Trouvée : %1",
+  "The traduction toolkit does the translation, the subtitles and the sound. It is not on this computer: the app can download it (a few MB, no git).": "La boîte à outils traduction fait la traduction, les sous-titres et le son. Elle n'est pas sur cet ordinateur : l'application peut la télécharger (quelques Mo, sans git).",
+  "Install it here": "L'installer ici", "Needs the toolkit (step 2).": "Demande la boîte à outils (étape 2).",
+  "Ready: the libraries of finaliser.py are here. « Sound: improved » in the production block uses them.": "Prêt : les bibliothèques de finaliser.py sont là. « Son : amélioré » dans le bloc de production s'en sert.",
+  "The libraries (deepfilternet, pyloudnorm, speechmos, with torch: about 500 MB) are installed at the first use, in an environment of the app's own. Or now:": "Les bibliothèques (deepfilternet, pyloudnorm, speechmos, avec torch : environ 500 Mo) s'installent au premier usage, dans un environnement propre à l'application. Ou maintenant :",
+  "On this Mac, ffmpeg and ffprobe for Apple silicon are fetched too (2 × 28 MB).": "Sur ce Mac, ffmpeg et ffprobe pour puce Apple sont récupérés aussi (2 × 28 Mo).",
+  "Install now": "Installer maintenant",
+  "Ollama, on this computer": "Ollama, sur cet ordinateur", "Claude Code, your own plan": "Claude Code, votre abonnement", "Claude, an API key": "Claude, une clé API",
+  "Ollama runs the model on this computer. It is not installed: get it from ollama.com (the app on a Mac, one command on Linux), open it, then « Check again ».": "Ollama fait tourner le modèle sur cet ordinateur. Il n'est pas installé : prenez-le sur ollama.com (l'application sur Mac, une commande sur Linux), ouvrez-le, puis « Vérifier à nouveau ».",
+  "Get Ollama": "Obtenir Ollama", "Ollama is installed but not running.": "Ollama est installé mais ne tourne pas.", "Start Ollama": "Démarrer Ollama",
+  "Ollama answers, but this computer (%1 GB of memory) is too small for a model of the toolkit's family: choose Claude.": "Ollama répond, mais cet ordinateur (%1 Go de mémoire) est trop petit pour un modèle de la famille du toolkit : choisissez Claude.",
+  "Ollama answers. This computer (%1 GB of memory) can carry « %2 »%3; the download happens once.": "Ollama répond. Cet ordinateur (%1 Go de mémoire) peut porter « %2 »%3 ; le téléchargement se fait une fois.",
+  "Download %1": "Télécharger %1", "Downloading %1… %2 %": "Téléchargement de %1… %2 %", "Downloading %1…": "Téléchargement de %1…",
+  "the model is not there after the download": "le modèle n'est pas là après le téléchargement",
+  "Ready: Ollama answers and « %1 » replied to a test.": "Prêt : Ollama répond et « %1 » a répondu à un essai.",
+  "Ollama answers and « %1 » is here. One test to be sure:": "Ollama répond et « %1 » est là. Un essai pour être sûr :", "Test": "Essayer", "Asking « %1 »…": "Question à « %1 »…",
+  "Claude Code is the claude command, on your own Claude plan: no key, no bill by the call. It is not installed; the app can run its installer (from claude.ai).": "Claude Code est la commande claude, sur votre abonnement Claude : pas de clé, pas de facture à l'appel. Il n'est pas installé ; l'application peut lancer son installateur (depuis claude.ai).",
+  "Install Claude Code": "Installer Claude Code", "Installing Claude Code…": "Installation de Claude Code…",
+  "Ready: Claude Code answers (%1).": "Prêt : Claude Code répond (%1).",
+  "Claude Code found: %1. Sign in once with your Claude account (a terminal opens: type /login and follow the browser), then test.": "Claude Code trouvé : %1. Connectez-vous une fois avec votre compte Claude (un terminal s'ouvre : tapez /login et suivez le navigateur), puis essayez.",
+  "Asking Claude Code…": "Question à Claude Code…", "Sign in": "Se connecter",
+  "No terminal was found: open one yourself, type claude, then /login.": "Aucun terminal trouvé : ouvrez-en un vous-même, tapez claude, puis /login.",
+  "Claude Code did not answer in time.": "Claude Code n'a pas répondu à temps.",
+  "Claude Code is installed but not signed in: click « Sign in ».": "Claude Code est installé mais pas connecté : cliquez « Se connecter ».",
+  "Ready: the key is accepted by Anthropic.": "Prêt : la clé est acceptée par Anthropic.",
+  "A key from console.anthropic.com (API Keys › Create Key), paid by the call; the text goes to Anthropic. Paste it, then test.": "Une clé de console.anthropic.com (API Keys › Create Key), payée à l'appel ; le texte part chez Anthropic. Collez-la, puis essayez.",
+  "Asking Anthropic…": "Question à Anthropic…", "Test the key": "Essayer la clé", "The key is refused by Anthropic.": "La clé est refusée par Anthropic.",
+  "Claude Code (your own plan)": "Claude Code (votre abonnement)", "Claude (API key)": "Claude (clé API)",
+  "Claude Code found: %1": "Claude Code trouvé : %1",
+  "Claude Code is not installed: « Getting started » on the home page installs it.": "Claude Code n'est pas installé : « Prise en main », sur la page d'accueil, l'installe.",
+  "Ollama answers.": "Ollama répond.", "Ollama does not answer: « Getting started » on the home page sets it up.": "Ollama ne répond pas : « Prise en main », sur la page d'accueil, le met en place.",
+ },
+ "de": {
+  "Getting started": "Erste Schritte", "Getting started…": "Erste Schritte…", "Optional —": "Freiwillig —", "Model": "Modell", "« %1 »: %2.": "„%1“: %2.",
+  "the fastest, rough words and timings: good to try the app, not to publish": "das schnellste, grobe Wörter und Zeiten: gut zum Ausprobieren, nicht zum Veröffentlichen",
+  "fast, still rough; acceptable for English only": "schnell, noch grob; nur für Englisch annehmbar",
+  "the default: good words in most languages, about as long as the recording lasts": "die Voreinstellung: gute Wörter in den meisten Sprachen, etwa so lang wie die Aufnahme dauert",
+  "better words and names, about three times slower, 1.5 GB": "bessere Wörter und Namen, etwa dreimal langsamer, 1,5 GB",
+  "the best words, about ten times slower on a processor, 3 GB on disk and 4 GB of memory": "die besten Wörter, etwa zehnmal langsamer auf einem Prozessor, 3 GB auf der Platte und 4 GB Speicher",
+  "small and fast; translations to be reread": "klein und schnell; Übersetzungen zum Nachlesen", "decent translations, a few minutes for a talk": "ordentliche Übersetzungen, einige Minuten für einen Vortrag",
+  "good translations, fast on a Mac with 32 GB": "gute Übersetzungen, schnell auf einem Mac mit 32 GB", "the toolkit's best local model; slow without a big graphics card": "das beste lokale Modell des Toolkits; langsam ohne große Grafikkarte",
+  "Quality and cost: Claude gives the best translations; Claude Code costs nothing beyond your plan, the API key pays by the call, both send the text to Anthropic. A local model keeps everything on this computer, slower, and the smaller the model, the rougher the translation.":
+    "Qualität und Kosten: Claude liefert die besten Übersetzungen; Claude Code kostet nichts über Ihr Abo hinaus, der API-Schlüssel zahlt pro Aufruf, beide senden den Text an Anthropic. Ein lokales Modell behält alles auf diesem Rechner, langsamer, und je kleiner das Modell, desto gröber die Übersetzung.",
+  "Speed: about the length of the edit on a processor, much less with a graphics card; the length and the picture do not change.": "Geschwindigkeit: etwa die Länge des Schnitts auf einem Prozessor, viel weniger mit Grafikkarte; Länge und Bild ändern sich nicht.",
+  "Three levels. Level 1 is all you need to cut a video: it works as soon as the app is installed. Levels 2 and 3 are optional extras; if you never translate, skip them, nothing there is needed for the editing. One step at a time, each checked by a real test, each with the button that does the work. You can come back here any time: « Getting started… » on the home page, or Project ▾ › Getting started… while editing.":
+    "Drei Stufen. Stufe 1 genügt, um ein Video zu schneiden: sie funktioniert, sobald die App installiert ist. Die Stufen 2 und 3 sind freiwillige Zugaben; wer nie übersetzt, überspringt sie, nichts davon braucht der Schnitt. Ein Schritt nach dem anderen, jeder durch einen echten Test geprüft, jeder mit dem Knopf, der die Arbeit macht. Sie kommen jederzeit hierher zurück: „Erste Schritte…“ auf der Startseite oder Projekt ▾ › Erste Schritte… während des Schneidens.",
+  "Level 1 · Editing": "Stufe 1 · Der Schnitt", "The whole point of the app: open, highlight, produce. Nothing to install.": "Der Kern der App: öffnen, markieren, erzeugen. Nichts zu installieren.",
+  "That is enough for me: start editing": "Das genügt mir: mit dem Schneiden beginnen",
+  "Level 2 · Translation and subtitles — optional": "Stufe 2 · Übersetzung und Untertitel — freiwillig",
+  "Only if you want to translate the text, or to cut subtitles with the toolkit's rules. Otherwise skip this level entirely.": "Nur wenn Sie den Text übersetzen oder Untertitel nach den Regeln des Toolkits schneiden wollen. Sonst diese Stufe ganz überspringen.",
+  "Level 3 · Improved sound — optional": "Stufe 3 · Verbesserter Ton — freiwillig",
+  "Only if you want the edit's sound cleaned and levelled on the way out. Needs the toolkit of level 2 (not the model).": "Nur wenn der Ton des Schnitts beim Export gereinigt und ausgepegelt werden soll. Braucht das Toolkit der Stufe 2 (nicht das Modell).",
+  "What this computer has, and the buttons that put the rest in place.": "Was dieser Rechner hat, und die Knöpfe, die den Rest einrichten.",
+  "Three levels. The first works as soon as the app is installed. The next two are optional: one step at a time, each checked by a real test, each with the button that does the work. You can come back here any time: « Getting started… » on the home page, or Project ▾ › Getting started… while editing.":
+    "Drei Stufen. Die erste funktioniert, sobald die App installiert ist. Die beiden nächsten sind freiwillig: ein Schritt nach dem anderen, jeder durch einen echten Test geprüft, jeder mit dem Knopf, der die Arbeit macht. Sie kommen jederzeit hierher zurück: „Erste Schritte…“ auf der Startseite oder Projekt ▾ › Erste Schritte… während des Schneidens.",
+  "Cut a video by its text": "Ein Video über seinen Text schneiden", "Transcribe the speech": "Die Sprache transkribieren",
+  "Translate and subtitle: the toolkit": "Übersetzen und untertiteln: das Toolkit", "Translate and subtitle: the language model": "Übersetzen und untertiteln: das Sprachmodell",
+  "Improve the sound": "Ton verbessern", "Check again": "Erneut prüfen", "Start editing": "Mit dem Schneiden beginnen", "Checking…": "Prüfung…", "Working…": "Läuft…",
+  "Ready: ffmpeg is here. Open a video or a recording, highlight, produce.": "Bereit: ffmpeg ist da. Video oder Aufnahme öffnen, markieren, erzeugen.",
+  "ffmpeg is missing. On Linux: sudo apt install ffmpeg, then « Check again ».": "ffmpeg fehlt. Unter Linux: sudo apt install ffmpeg, dann „Erneut prüfen“.",
+  "The transcription is missing from this build.": "Die Transkription fehlt in dieser Version.",
+  "faster-whisper is not installed yet: the app installs it in a folder of its own (about 300 MB, once).": "faster-whisper ist noch nicht installiert: die App installiert es in einem eigenen Ordner (etwa 300 MB, einmalig).",
+  "Install the transcription": "Transkription installieren",
+  "faster-whisper is here. The model « %1 » (%2) is downloaded at the first transcription; or now:": "faster-whisper ist da. Das Modell „%1“ (%2) wird bei der ersten Transkription geladen; oder jetzt:",
+  "Download the model now": "Modell jetzt laden", "Downloading the model « %1 » (%2)…": "Modell „%1“ (%2) wird geladen…",
+  "Ready: faster-whisper and the model « %1 ». A subtitle file beside the video is used instead when there is one.": "Bereit: faster-whisper und das Modell „%1“. Eine Untertiteldatei neben dem Video wird stattdessen verwendet, wenn es eine gibt.",
+  "Found: %1": "Gefunden: %1",
+  "The traduction toolkit does the translation, the subtitles and the sound. It is not on this computer: the app can download it (a few MB, no git).": "Das traduction-Toolkit macht die Übersetzung, die Untertitel und den Ton. Es ist nicht auf diesem Rechner: die App kann es herunterladen (wenige MB, ohne git).",
+  "Install it here": "Hier installieren", "Needs the toolkit (step 2).": "Braucht das Toolkit (Schritt 2).",
+  "Ready: the libraries of finaliser.py are here. « Sound: improved » in the production block uses them.": "Bereit: die Bibliotheken von finaliser.py sind da. „Ton: verbessert“ im Produktionsblock nutzt sie.",
+  "The libraries (deepfilternet, pyloudnorm, speechmos, with torch: about 500 MB) are installed at the first use, in an environment of the app's own. Or now:": "Die Bibliotheken (deepfilternet, pyloudnorm, speechmos, mit torch: etwa 500 MB) werden beim ersten Gebrauch in einer eigenen Umgebung der App installiert. Oder jetzt:",
+  "On this Mac, ffmpeg and ffprobe for Apple silicon are fetched too (2 × 28 MB).": "Auf diesem Mac werden auch ffmpeg und ffprobe für Apple Silicon geholt (2 × 28 MB).",
+  "Install now": "Jetzt installieren",
+  "Ollama, on this computer": "Ollama, auf diesem Rechner", "Claude Code, your own plan": "Claude Code, Ihr eigenes Abo", "Claude, an API key": "Claude, ein API-Schlüssel",
+  "Ollama runs the model on this computer. It is not installed: get it from ollama.com (the app on a Mac, one command on Linux), open it, then « Check again ».": "Ollama lässt das Modell auf diesem Rechner laufen. Es ist nicht installiert: holen Sie es von ollama.com (die App auf dem Mac, ein Befehl unter Linux), öffnen Sie es, dann „Erneut prüfen“.",
+  "Get Ollama": "Ollama holen", "Ollama is installed but not running.": "Ollama ist installiert, läuft aber nicht.", "Start Ollama": "Ollama starten",
+  "Ollama answers, but this computer (%1 GB of memory) is too small for a model of the toolkit's family: choose Claude.": "Ollama antwortet, aber dieser Rechner (%1 GB Speicher) ist zu klein für ein Modell aus der Familie des Toolkits: wählen Sie Claude.",
+  "Ollama answers. This computer (%1 GB of memory) can carry « %2 »%3; the download happens once.": "Ollama antwortet. Dieser Rechner (%1 GB Speicher) trägt „%2“%3; der Download geschieht einmalig.",
+  "Download %1": "%1 laden", "Downloading %1… %2 %": "%1 wird geladen… %2 %", "Downloading %1…": "%1 wird geladen…",
+  "the model is not there after the download": "das Modell ist nach dem Download nicht da",
+  "Ready: Ollama answers and « %1 » replied to a test.": "Bereit: Ollama antwortet und „%1“ hat auf einen Test geantwortet.",
+  "Ollama answers and « %1 » is here. One test to be sure:": "Ollama antwortet und „%1“ ist da. Ein Test zur Sicherheit:", "Test": "Testen", "Asking « %1 »…": "Frage an „%1“…",
+  "Claude Code is the claude command, on your own Claude plan: no key, no bill by the call. It is not installed; the app can run its installer (from claude.ai).": "Claude Code ist der Befehl claude, auf Ihrem eigenen Claude-Abo: kein Schlüssel, keine Abrechnung pro Aufruf. Er ist nicht installiert; die App kann seinen Installer ausführen (von claude.ai).",
+  "Install Claude Code": "Claude Code installieren", "Installing Claude Code…": "Claude Code wird installiert…",
+  "Ready: Claude Code answers (%1).": "Bereit: Claude Code antwortet (%1).",
+  "Claude Code found: %1. Sign in once with your Claude account (a terminal opens: type /login and follow the browser), then test.": "Claude Code gefunden: %1. Melden Sie sich einmal mit Ihrem Claude-Konto an (ein Terminal öffnet sich: /login eingeben und dem Browser folgen), dann testen.",
+  "Asking Claude Code…": "Frage an Claude Code…", "Sign in": "Anmelden",
+  "No terminal was found: open one yourself, type claude, then /login.": "Kein Terminal gefunden: öffnen Sie selbst eines, tippen Sie claude, dann /login.",
+  "Claude Code did not answer in time.": "Claude Code hat nicht rechtzeitig geantwortet.",
+  "Claude Code is installed but not signed in: click « Sign in ».": "Claude Code ist installiert, aber nicht angemeldet: klicken Sie „Anmelden“.",
+  "Ready: the key is accepted by Anthropic.": "Bereit: der Schlüssel wird von Anthropic angenommen.",
+  "A key from console.anthropic.com (API Keys › Create Key), paid by the call; the text goes to Anthropic. Paste it, then test.": "Ein Schlüssel von console.anthropic.com (API Keys › Create Key), pro Aufruf bezahlt; der Text geht an Anthropic. Einfügen, dann testen.",
+  "Asking Anthropic…": "Frage an Anthropic…", "Test the key": "Schlüssel testen", "The key is refused by Anthropic.": "Der Schlüssel wird von Anthropic abgelehnt.",
+  "Claude Code (your own plan)": "Claude Code (Ihr eigenes Abo)", "Claude (API key)": "Claude (API-Schlüssel)",
+  "Claude Code found: %1": "Claude Code gefunden: %1",
+  "Claude Code is not installed: « Getting started » on the home page installs it.": "Claude Code ist nicht installiert: „Erste Schritte“ auf der Startseite installiert es.",
+  "Ollama answers.": "Ollama antwortet.", "Ollama does not answer: « Getting started » on the home page sets it up.": "Ollama antwortet nicht: „Erste Schritte“ auf der Startseite richtet es ein.",
+ },
+ "es": {
+  "Getting started": "Primeros pasos", "Getting started…": "Primeros pasos…", "Optional —": "Opcional —", "Model": "Modelo", "« %1 »: %2.": "« %1 »: %2.",
+  "the fastest, rough words and timings: good to try the app, not to publish": "el más rápido, palabras y tiempos aproximados: bueno para probar la aplicación, no para publicar",
+  "fast, still rough; acceptable for English only": "rápido, aún aproximado; aceptable solo para inglés",
+  "the default: good words in most languages, about as long as the recording lasts": "el predeterminado: buenas palabras en la mayoría de idiomas, más o menos lo que dura la grabación",
+  "better words and names, about three times slower, 1.5 GB": "mejores palabras y nombres, unas tres veces más lento, 1,5 GB",
+  "the best words, about ten times slower on a processor, 3 GB on disk and 4 GB of memory": "las mejores palabras, unas diez veces más lento en un procesador, 3 GB en disco y 4 GB de memoria",
+  "small and fast; translations to be reread": "pequeño y rápido; traducciones para releer", "decent translations, a few minutes for a talk": "traducciones decentes, unos minutos para una charla",
+  "good translations, fast on a Mac with 32 GB": "buenas traducciones, rápido en un Mac de 32 GB", "the toolkit's best local model; slow without a big graphics card": "el mejor modelo local del toolkit; lento sin una gran tarjeta gráfica",
+  "Quality and cost: Claude gives the best translations; Claude Code costs nothing beyond your plan, the API key pays by the call, both send the text to Anthropic. A local model keeps everything on this computer, slower, and the smaller the model, the rougher the translation.":
+    "Calidad y coste: Claude da las mejores traducciones; Claude Code no cuesta nada más allá de su suscripción, la clave API paga por llamada, ambos envían el texto a Anthropic. Un modelo local lo guarda todo en este equipo, más despacio, y cuanto más pequeño el modelo, más tosca la traducción.",
+  "Speed: about the length of the edit on a processor, much less with a graphics card; the length and the picture do not change.": "Velocidad: más o menos la duración del montaje en un procesador, mucho menos con tarjeta gráfica; la duración y la imagen no cambian.",
+  "Three levels. Level 1 is all you need to cut a video: it works as soon as the app is installed. Levels 2 and 3 are optional extras; if you never translate, skip them, nothing there is needed for the editing. One step at a time, each checked by a real test, each with the button that does the work. You can come back here any time: « Getting started… » on the home page, or Project ▾ › Getting started… while editing.":
+    "Tres niveles. El nivel 1 basta para montar un vídeo: funciona en cuanto la aplicación está instalada. Los niveles 2 y 3 son extras opcionales; si nunca traduce, sáltelos, nada de eso hace falta para el montaje. Un paso a la vez, cada uno comprobado con una prueba real, cada uno con el botón que hace el trabajo. Puede volver aquí cuando quiera: « Primeros pasos… » en la página de inicio, o Proyecto ▾ › Primeros pasos… durante el montaje.",
+  "Level 1 · Editing": "Nivel 1 · El montaje", "The whole point of the app: open, highlight, produce. Nothing to install.": "El corazón de la aplicación: abrir, resaltar, producir. Nada que instalar.",
+  "That is enough for me: start editing": "Con esto me basta: empezar a montar",
+  "Level 2 · Translation and subtitles — optional": "Nivel 2 · Traducción y subtítulos — opcional",
+  "Only if you want to translate the text, or to cut subtitles with the toolkit's rules. Otherwise skip this level entirely.": "Solo si quiere traducir el texto, o cortar subtítulos con las reglas del toolkit. Si no, sáltese este nivel por completo.",
+  "Level 3 · Improved sound — optional": "Nivel 3 · Sonido mejorado — opcional",
+  "Only if you want the edit's sound cleaned and levelled on the way out. Needs the toolkit of level 2 (not the model).": "Solo si quiere el sonido del montaje limpiado y nivelado a la salida. Necesita el toolkit del nivel 2 (no el modelo).",
+  "What this computer has, and the buttons that put the rest in place.": "Lo que tiene este equipo, y los botones que ponen el resto en su sitio.",
+  "Three levels. The first works as soon as the app is installed. The next two are optional: one step at a time, each checked by a real test, each with the button that does the work. You can come back here any time: « Getting started… » on the home page, or Project ▾ › Getting started… while editing.":
+    "Tres niveles. El primero funciona en cuanto la aplicación está instalada. Los dos siguientes son opcionales: un paso a la vez, cada uno comprobado con una prueba real, cada uno con el botón que hace el trabajo. Puede volver aquí cuando quiera: « Primeros pasos… » en la página de inicio, o Proyecto ▾ › Primeros pasos… durante el montaje.",
+  "Cut a video by its text": "Montar un vídeo por su texto", "Transcribe the speech": "Transcribir el habla",
+  "Translate and subtitle: the toolkit": "Traducir y subtitular: el toolkit", "Translate and subtitle: the language model": "Traducir y subtitular: el modelo de lenguaje",
+  "Improve the sound": "Mejorar el sonido", "Check again": "Comprobar de nuevo", "Start editing": "Empezar a montar", "Checking…": "Comprobando…", "Working…": "En curso…",
+  "Ready: ffmpeg is here. Open a video or a recording, highlight, produce.": "Listo: ffmpeg está aquí. Abra un vídeo o una grabación, resalte, produzca.",
+  "ffmpeg is missing. On Linux: sudo apt install ffmpeg, then « Check again ».": "Falta ffmpeg. En Linux: sudo apt install ffmpeg, luego « Comprobar de nuevo ».",
+  "The transcription is missing from this build.": "La transcripción falta en esta versión.",
+  "faster-whisper is not installed yet: the app installs it in a folder of its own (about 300 MB, once).": "faster-whisper aún no está instalado: la aplicación lo instala en una carpeta propia (unos 300 MB, una vez).",
+  "Install the transcription": "Instalar la transcripción",
+  "faster-whisper is here. The model « %1 » (%2) is downloaded at the first transcription; or now:": "faster-whisper está aquí. El modelo « %1 » (%2) se descarga en la primera transcripción; o ahora:",
+  "Download the model now": "Descargar el modelo ahora", "Downloading the model « %1 » (%2)…": "Descargando el modelo « %1 » (%2)…",
+  "Ready: faster-whisper and the model « %1 ». A subtitle file beside the video is used instead when there is one.": "Listo: faster-whisper y el modelo « %1 ». Si hay un archivo de subtítulos junto al vídeo, se usa en su lugar.",
+  "Found: %1": "Encontrado: %1",
+  "The traduction toolkit does the translation, the subtitles and the sound. It is not on this computer: the app can download it (a few MB, no git).": "El toolkit traduction hace la traducción, los subtítulos y el sonido. No está en este equipo: la aplicación puede descargarlo (unos MB, sin git).",
+  "Install it here": "Instalarlo aquí", "Needs the toolkit (step 2).": "Necesita el toolkit (paso 2).",
+  "Ready: the libraries of finaliser.py are here. « Sound: improved » in the production block uses them.": "Listo: las bibliotecas de finaliser.py están aquí. « Sonido: mejorado » en el bloque de producción las usa.",
+  "The libraries (deepfilternet, pyloudnorm, speechmos, with torch: about 500 MB) are installed at the first use, in an environment of the app's own. Or now:": "Las bibliotecas (deepfilternet, pyloudnorm, speechmos, con torch: unos 500 MB) se instalan en el primer uso, en un entorno propio de la aplicación. O ahora:",
+  "On this Mac, ffmpeg and ffprobe for Apple silicon are fetched too (2 × 28 MB).": "En este Mac también se obtienen ffmpeg y ffprobe para Apple silicon (2 × 28 MB).",
+  "Install now": "Instalar ahora",
+  "Ollama, on this computer": "Ollama, en este equipo", "Claude Code, your own plan": "Claude Code, su propia suscripción", "Claude, an API key": "Claude, una clave API",
+  "Ollama runs the model on this computer. It is not installed: get it from ollama.com (the app on a Mac, one command on Linux), open it, then « Check again ».": "Ollama ejecuta el modelo en este equipo. No está instalado: obténgalo en ollama.com (la aplicación en Mac, un comando en Linux), ábralo y luego « Comprobar de nuevo ».",
+  "Get Ollama": "Obtener Ollama", "Ollama is installed but not running.": "Ollama está instalado pero no se está ejecutando.", "Start Ollama": "Iniciar Ollama",
+  "Ollama answers, but this computer (%1 GB of memory) is too small for a model of the toolkit's family: choose Claude.": "Ollama responde, pero este equipo (%1 GB de memoria) es demasiado pequeño para un modelo de la familia del toolkit: elija Claude.",
+  "Ollama answers. This computer (%1 GB of memory) can carry « %2 »%3; the download happens once.": "Ollama responde. Este equipo (%1 GB de memoria) puede con « %2 »%3; la descarga se hace una vez.",
+  "Download %1": "Descargar %1", "Downloading %1… %2 %": "Descargando %1… %2 %", "Downloading %1…": "Descargando %1…",
+  "the model is not there after the download": "el modelo no está tras la descarga",
+  "Ready: Ollama answers and « %1 » replied to a test.": "Listo: Ollama responde y « %1 » contestó a una prueba.",
+  "Ollama answers and « %1 » is here. One test to be sure:": "Ollama responde y « %1 » está aquí. Una prueba para estar seguros:", "Test": "Probar", "Asking « %1 »…": "Preguntando a « %1 »…",
+  "Claude Code is the claude command, on your own Claude plan: no key, no bill by the call. It is not installed; the app can run its installer (from claude.ai).": "Claude Code es el comando claude, con su propia suscripción a Claude: sin clave, sin factura por llamada. No está instalado; la aplicación puede ejecutar su instalador (desde claude.ai).",
+  "Install Claude Code": "Instalar Claude Code", "Installing Claude Code…": "Instalando Claude Code…",
+  "Ready: Claude Code answers (%1).": "Listo: Claude Code responde (%1).",
+  "Claude Code found: %1. Sign in once with your Claude account (a terminal opens: type /login and follow the browser), then test.": "Claude Code encontrado: %1. Inicie sesión una vez con su cuenta de Claude (se abre un terminal: escriba /login y siga el navegador), luego pruebe.",
+  "Asking Claude Code…": "Preguntando a Claude Code…", "Sign in": "Iniciar sesión",
+  "No terminal was found: open one yourself, type claude, then /login.": "No se encontró ningún terminal: abra uno usted mismo, escriba claude y luego /login.",
+  "Claude Code did not answer in time.": "Claude Code no respondió a tiempo.",
+  "Claude Code is installed but not signed in: click « Sign in ».": "Claude Code está instalado pero sin sesión: pulse « Iniciar sesión ».",
+  "Ready: the key is accepted by Anthropic.": "Listo: Anthropic acepta la clave.",
+  "A key from console.anthropic.com (API Keys › Create Key), paid by the call; the text goes to Anthropic. Paste it, then test.": "Una clave de console.anthropic.com (API Keys › Create Key), pagada por llamada; el texto va a Anthropic. Péguela y luego pruebe.",
+  "Asking Anthropic…": "Preguntando a Anthropic…", "Test the key": "Probar la clave", "The key is refused by Anthropic.": "Anthropic rechaza la clave.",
+  "Claude Code (your own plan)": "Claude Code (su propia suscripción)", "Claude (API key)": "Claude (clave API)",
+  "Claude Code found: %1": "Claude Code encontrado: %1",
+  "Claude Code is not installed: « Getting started » on the home page installs it.": "Claude Code no está instalado: « Primeros pasos », en la página de inicio, lo instala.",
+  "Ollama answers.": "Ollama responde.", "Ollama does not answer: « Getting started » on the home page sets it up.": "Ollama no responde: « Primeros pasos », en la página de inicio, lo configura.",
+ },
+ "pt": {
+  "Getting started": "Primeiros passos", "Getting started…": "Primeiros passos…", "Optional —": "Opcional —", "Model": "Modelo", "« %1 »: %2.": "« %1 »: %2.",
+  "the fastest, rough words and timings: good to try the app, not to publish": "o mais rápido, palavras e tempos aproximados: bom para experimentar a aplicação, não para publicar",
+  "fast, still rough; acceptable for English only": "rápido, ainda aproximado; aceitável só para inglês",
+  "the default: good words in most languages, about as long as the recording lasts": "a predefinição: boas palavras na maioria das línguas, mais ou menos a duração da gravação",
+  "better words and names, about three times slower, 1.5 GB": "melhores palavras e nomes, cerca de três vezes mais lento, 1,5 GB",
+  "the best words, about ten times slower on a processor, 3 GB on disk and 4 GB of memory": "as melhores palavras, cerca de dez vezes mais lento num processador, 3 GB em disco e 4 GB de memória",
+  "small and fast; translations to be reread": "pequeno e rápido; traduções a reler", "decent translations, a few minutes for a talk": "traduções razoáveis, alguns minutos para uma palestra",
+  "good translations, fast on a Mac with 32 GB": "boas traduções, rápido num Mac de 32 GB", "the toolkit's best local model; slow without a big graphics card": "o melhor modelo local do toolkit; lento sem uma grande placa gráfica",
+  "Quality and cost: Claude gives the best translations; Claude Code costs nothing beyond your plan, the API key pays by the call, both send the text to Anthropic. A local model keeps everything on this computer, slower, and the smaller the model, the rougher the translation.":
+    "Qualidade e custo: o Claude dá as melhores traduções; o Claude Code não custa nada além da sua subscrição, a chave API paga por chamada, ambos enviam o texto à Anthropic. Um modelo local guarda tudo neste computador, mais devagar, e quanto mais pequeno o modelo, mais grosseira a tradução.",
+  "Speed: about the length of the edit on a processor, much less with a graphics card; the length and the picture do not change.": "Velocidade: cerca da duração da montagem num processador, muito menos com placa gráfica; a duração e a imagem não mudam.",
+  "Three levels. Level 1 is all you need to cut a video: it works as soon as the app is installed. Levels 2 and 3 are optional extras; if you never translate, skip them, nothing there is needed for the editing. One step at a time, each checked by a real test, each with the button that does the work. You can come back here any time: « Getting started… » on the home page, or Project ▾ › Getting started… while editing.":
+    "Três níveis. O nível 1 chega para montar um vídeo: funciona assim que a aplicação está instalada. Os níveis 2 e 3 são extras opcionais; se nunca traduzir, salte-os, nada daí é preciso para a montagem. Um passo de cada vez, cada um verificado por um teste real, cada um com o botão que faz o trabalho. Pode voltar aqui a qualquer momento: « Primeiros passos… » na página inicial, ou Projeto ▾ › Primeiros passos… durante a montagem.",
+  "Level 1 · Editing": "Nível 1 · A montagem", "The whole point of the app: open, highlight, produce. Nothing to install.": "O essencial da aplicação: abrir, sublinhar, produzir. Nada a instalar.",
+  "That is enough for me: start editing": "Isto chega-me: começar a montar",
+  "Level 2 · Translation and subtitles — optional": "Nível 2 · Tradução e legendas — opcional",
+  "Only if you want to translate the text, or to cut subtitles with the toolkit's rules. Otherwise skip this level entirely.": "Só se quiser traduzir o texto, ou cortar legendas com as regras do toolkit. Caso contrário, salte este nível por completo.",
+  "Level 3 · Improved sound — optional": "Nível 3 · Som melhorado — opcional",
+  "Only if you want the edit's sound cleaned and levelled on the way out. Needs the toolkit of level 2 (not the model).": "Só se quiser o som da montagem limpo e nivelado à saída. Precisa do toolkit do nível 2 (não do modelo).",
+  "What this computer has, and the buttons that put the rest in place.": "O que este computador tem, e os botões que põem o resto no lugar.",
+  "Three levels. The first works as soon as the app is installed. The next two are optional: one step at a time, each checked by a real test, each with the button that does the work. You can come back here any time: « Getting started… » on the home page, or Project ▾ › Getting started… while editing.":
+    "Três níveis. O primeiro funciona assim que a aplicação está instalada. Os dois seguintes são opcionais: um passo de cada vez, cada um verificado por um teste real, cada um com o botão que faz o trabalho. Pode voltar aqui a qualquer momento: « Primeiros passos… » na página inicial, ou Projeto ▾ › Primeiros passos… durante a montagem.",
+  "Cut a video by its text": "Montar um vídeo pelo seu texto", "Transcribe the speech": "Transcrever a fala",
+  "Translate and subtitle: the toolkit": "Traduzir e legendar: o toolkit", "Translate and subtitle: the language model": "Traduzir e legendar: o modelo de linguagem",
+  "Improve the sound": "Melhorar o som", "Check again": "Verificar de novo", "Start editing": "Começar a montar", "Checking…": "A verificar…", "Working…": "Em curso…",
+  "Ready: ffmpeg is here. Open a video or a recording, highlight, produce.": "Pronto: o ffmpeg está aqui. Abra um vídeo ou uma gravação, sublinhe, produza.",
+  "ffmpeg is missing. On Linux: sudo apt install ffmpeg, then « Check again ».": "Falta o ffmpeg. No Linux: sudo apt install ffmpeg, depois « Verificar de novo ».",
+  "The transcription is missing from this build.": "A transcrição falta nesta versão.",
+  "faster-whisper is not installed yet: the app installs it in a folder of its own (about 300 MB, once).": "O faster-whisper ainda não está instalado: a aplicação instala-o numa pasta própria (cerca de 300 MB, uma vez).",
+  "Install the transcription": "Instalar a transcrição",
+  "faster-whisper is here. The model « %1 » (%2) is downloaded at the first transcription; or now:": "O faster-whisper está aqui. O modelo « %1 » (%2) é transferido na primeira transcrição; ou agora:",
+  "Download the model now": "Transferir o modelo agora", "Downloading the model « %1 » (%2)…": "A transferir o modelo « %1 » (%2)…",
+  "Ready: faster-whisper and the model « %1 ». A subtitle file beside the video is used instead when there is one.": "Pronto: faster-whisper e o modelo « %1 ». Um ficheiro de legendas ao lado do vídeo é usado em vez disso quando existe.",
+  "Found: %1": "Encontrado: %1",
+  "The traduction toolkit does the translation, the subtitles and the sound. It is not on this computer: the app can download it (a few MB, no git).": "O toolkit traduction faz a tradução, as legendas e o som. Não está neste computador: a aplicação pode transferi-lo (alguns MB, sem git).",
+  "Install it here": "Instalá-lo aqui", "Needs the toolkit (step 2).": "Precisa do toolkit (passo 2).",
+  "Ready: the libraries of finaliser.py are here. « Sound: improved » in the production block uses them.": "Pronto: as bibliotecas do finaliser.py estão aqui. « Som: melhorado » no bloco de produção usa-as.",
+  "The libraries (deepfilternet, pyloudnorm, speechmos, with torch: about 500 MB) are installed at the first use, in an environment of the app's own. Or now:": "As bibliotecas (deepfilternet, pyloudnorm, speechmos, com torch: cerca de 500 MB) instalam-se no primeiro uso, num ambiente próprio da aplicação. Ou agora:",
+  "On this Mac, ffmpeg and ffprobe for Apple silicon are fetched too (2 × 28 MB).": "Neste Mac, ffmpeg e ffprobe para Apple silicon são obtidos também (2 × 28 MB).",
+  "Install now": "Instalar agora",
+  "Ollama, on this computer": "Ollama, neste computador", "Claude Code, your own plan": "Claude Code, a sua subscrição", "Claude, an API key": "Claude, uma chave API",
+  "Ollama runs the model on this computer. It is not installed: get it from ollama.com (the app on a Mac, one command on Linux), open it, then « Check again ».": "O Ollama corre o modelo neste computador. Não está instalado: obtenha-o em ollama.com (a aplicação no Mac, um comando no Linux), abra-o, depois « Verificar de novo ».",
+  "Get Ollama": "Obter o Ollama", "Ollama is installed but not running.": "O Ollama está instalado mas não está a correr.", "Start Ollama": "Iniciar o Ollama",
+  "Ollama answers, but this computer (%1 GB of memory) is too small for a model of the toolkit's family: choose Claude.": "O Ollama responde, mas este computador (%1 GB de memória) é demasiado pequeno para um modelo da família do toolkit: escolha o Claude.",
+  "Ollama answers. This computer (%1 GB of memory) can carry « %2 »%3; the download happens once.": "O Ollama responde. Este computador (%1 GB de memória) aguenta « %2 »%3; a transferência faz-se uma vez.",
+  "Download %1": "Transferir %1", "Downloading %1… %2 %": "A transferir %1… %2 %", "Downloading %1…": "A transferir %1…",
+  "the model is not there after the download": "o modelo não está lá depois da transferência",
+  "Ready: Ollama answers and « %1 » replied to a test.": "Pronto: o Ollama responde e « %1 » respondeu a um teste.",
+  "Ollama answers and « %1 » is here. One test to be sure:": "O Ollama responde e « %1 » está aqui. Um teste para ter a certeza:", "Test": "Testar", "Asking « %1 »…": "A perguntar a « %1 »…",
+  "Claude Code is the claude command, on your own Claude plan: no key, no bill by the call. It is not installed; the app can run its installer (from claude.ai).": "O Claude Code é o comando claude, na sua própria subscrição Claude: sem chave, sem fatura por chamada. Não está instalado; a aplicação pode correr o seu instalador (de claude.ai).",
+  "Install Claude Code": "Instalar o Claude Code", "Installing Claude Code…": "A instalar o Claude Code…",
+  "Ready: Claude Code answers (%1).": "Pronto: o Claude Code responde (%1).",
+  "Claude Code found: %1. Sign in once with your Claude account (a terminal opens: type /login and follow the browser), then test.": "Claude Code encontrado: %1. Inicie sessão uma vez com a sua conta Claude (abre-se um terminal: escreva /login e siga o navegador), depois teste.",
+  "Asking Claude Code…": "A perguntar ao Claude Code…", "Sign in": "Iniciar sessão",
+  "No terminal was found: open one yourself, type claude, then /login.": "Nenhum terminal encontrado: abra um você mesmo, escreva claude, depois /login.",
+  "Claude Code did not answer in time.": "O Claude Code não respondeu a tempo.",
+  "Claude Code is installed but not signed in: click « Sign in ».": "O Claude Code está instalado mas sem sessão: clique « Iniciar sessão ».",
+  "Ready: the key is accepted by Anthropic.": "Pronto: a chave é aceite pela Anthropic.",
+  "A key from console.anthropic.com (API Keys › Create Key), paid by the call; the text goes to Anthropic. Paste it, then test.": "Uma chave de console.anthropic.com (API Keys › Create Key), paga por chamada; o texto vai para a Anthropic. Cole-a, depois teste.",
+  "Asking Anthropic…": "A perguntar à Anthropic…", "Test the key": "Testar a chave", "The key is refused by Anthropic.": "A chave é recusada pela Anthropic.",
+  "Claude Code (your own plan)": "Claude Code (a sua subscrição)", "Claude (API key)": "Claude (chave API)",
+  "Claude Code found: %1": "Claude Code encontrado: %1",
+  "Claude Code is not installed: « Getting started » on the home page installs it.": "O Claude Code não está instalado: « Primeiros passos », na página inicial, instala-o.",
+  "Ollama answers.": "O Ollama responde.", "Ollama does not answer: « Getting started » on the home page sets it up.": "O Ollama não responde: « Primeiros passos », na página inicial, configura-o.",
+ },
+ "ru": {
+  "Getting started": "Первые шаги", "Getting started…": "Первые шаги…", "Optional —": "Необязательно —", "Model": "Модель", "« %1 »: %2.": "«%1»: %2.",
+  "the fastest, rough words and timings: good to try the app, not to publish": "самая быстрая, слова и тайминги грубые: годится попробовать приложение, не публиковать",
+  "fast, still rough; acceptable for English only": "быстрая, всё ещё грубая; приемлема только для английского",
+  "the default: good words in most languages, about as long as the recording lasts": "по умолчанию: хорошие слова на большинстве языков, примерно столько же, сколько длится запись",
+  "better words and names, about three times slower, 1.5 GB": "лучше слова и имена, примерно втрое медленнее, 1,5 ГБ",
+  "the best words, about ten times slower on a processor, 3 GB on disk and 4 GB of memory": "лучшие слова, примерно в десять раз медленнее на процессоре, 3 ГБ на диске и 4 ГБ памяти",
+  "small and fast; translations to be reread": "маленькая и быстрая; переводы нужно перечитывать", "decent translations, a few minutes for a talk": "приличные переводы, несколько минут на беседу",
+  "good translations, fast on a Mac with 32 GB": "хорошие переводы, быстро на Mac с 32 ГБ", "the toolkit's best local model; slow without a big graphics card": "лучшая локальная модель набора; медленно без мощной видеокарты",
+  "Quality and cost: Claude gives the best translations; Claude Code costs nothing beyond your plan, the API key pays by the call, both send the text to Anthropic. A local model keeps everything on this computer, slower, and the smaller the model, the rougher the translation.":
+    "Качество и цена: Claude даёт лучшие переводы; Claude Code не стоит ничего сверх подписки, ключ API платит за вызов, оба отправляют текст в Anthropic. Локальная модель держит всё на этом компьютере, медленнее, и чем меньше модель, тем грубее перевод.",
+  "Speed: about the length of the edit on a processor, much less with a graphics card; the length and the picture do not change.": "Скорость: примерно длительность монтажа на процессоре, намного меньше с видеокартой; длительность и изображение не меняются.",
+  "Three levels. Level 1 is all you need to cut a video: it works as soon as the app is installed. Levels 2 and 3 are optional extras; if you never translate, skip them, nothing there is needed for the editing. One step at a time, each checked by a real test, each with the button that does the work. You can come back here any time: « Getting started… » on the home page, or Project ▾ › Getting started… while editing.":
+    "Три уровня. Уровня 1 достаточно для монтажа видео: он работает сразу после установки. Уровни 2 и 3 — необязательные дополнения; если вы никогда не переводите, пропустите их, для монтажа ничего из этого не нужно. По одному шагу, каждый проверяется реальной пробой, у каждого есть кнопка, которая делает работу. Сюда можно вернуться в любой момент: «Первые шаги…» на главной странице или Проект ▾ › Первые шаги… во время монтажа.",
+  "Level 1 · Editing": "Уровень 1 · Монтаж", "The whole point of the app: open, highlight, produce. Nothing to install.": "Суть приложения: открыть, выделить, создать. Ничего устанавливать не нужно.",
+  "That is enough for me: start editing": "Мне этого достаточно: начать монтаж",
+  "Level 2 · Translation and subtitles — optional": "Уровень 2 · Перевод и субтитры — необязательно",
+  "Only if you want to translate the text, or to cut subtitles with the toolkit's rules. Otherwise skip this level entirely.": "Только если вы хотите переводить текст или резать субтитры по правилам набора. Иначе пропустите этот уровень целиком.",
+  "Level 3 · Improved sound — optional": "Уровень 3 · Улучшенный звук — необязательно",
+  "Only if you want the edit's sound cleaned and levelled on the way out. Needs the toolkit of level 2 (not the model).": "Только если вы хотите, чтобы звук монтажа чистился и выравнивался на выходе. Нужен набор уровня 2 (не модель).",
+  "What this computer has, and the buttons that put the rest in place.": "Что есть на этом компьютере, и кнопки, которые добавят остальное.",
+  "Three levels. The first works as soon as the app is installed. The next two are optional: one step at a time, each checked by a real test, each with the button that does the work. You can come back here any time: « Getting started… » on the home page, or Project ▾ › Getting started… while editing.":
+    "Три уровня. Первый работает сразу после установки. Два следующих необязательны: по одному шагу, каждый проверяется реальной пробой, у каждого есть кнопка, которая делает работу. Сюда можно вернуться в любой момент: «Первые шаги…» на главной странице или Проект ▾ › Первые шаги… во время монтажа.",
+  "Cut a video by its text": "Монтаж видео по его тексту", "Transcribe the speech": "Расшифровка речи",
+  "Translate and subtitle: the toolkit": "Перевод и субтитры: набор инструментов", "Translate and subtitle: the language model": "Перевод и субтитры: языковая модель",
+  "Improve the sound": "Улучшить звук", "Check again": "Проверить снова", "Start editing": "Начать монтаж", "Checking…": "Проверка…", "Working…": "Выполняется…",
+  "Ready: ffmpeg is here. Open a video or a recording, highlight, produce.": "Готово: ffmpeg на месте. Откройте видео или запись, выделите, создайте.",
+  "ffmpeg is missing. On Linux: sudo apt install ffmpeg, then « Check again ».": "Нет ffmpeg. В Linux: sudo apt install ffmpeg, затем «Проверить снова».",
+  "The transcription is missing from this build.": "В этой сборке нет расшифровки.",
+  "faster-whisper is not installed yet: the app installs it in a folder of its own (about 300 MB, once).": "faster-whisper ещё не установлен: приложение установит его в собственную папку (около 300 МБ, один раз).",
+  "Install the transcription": "Установить расшифровку",
+  "faster-whisper is here. The model « %1 » (%2) is downloaded at the first transcription; or now:": "faster-whisper на месте. Модель «%1» (%2) загружается при первой расшифровке; или сейчас:",
+  "Download the model now": "Загрузить модель сейчас", "Downloading the model « %1 » (%2)…": "Загрузка модели «%1» (%2)…",
+  "Ready: faster-whisper and the model « %1 ». A subtitle file beside the video is used instead when there is one.": "Готово: faster-whisper и модель «%1». Файл субтитров рядом с видео используется вместо неё, если он есть.",
+  "Found: %1": "Найден: %1",
+  "The traduction toolkit does the translation, the subtitles and the sound. It is not on this computer: the app can download it (a few MB, no git).": "Набор traduction делает перевод, субтитры и звук. Его нет на этом компьютере: приложение может загрузить его (несколько МБ, без git).",
+  "Install it here": "Установить сюда", "Needs the toolkit (step 2).": "Нужен набор инструментов (шаг 2).",
+  "Ready: the libraries of finaliser.py are here. « Sound: improved » in the production block uses them.": "Готово: библиотеки finaliser.py на месте. «Звук: улучшенный» в блоке создания использует их.",
+  "The libraries (deepfilternet, pyloudnorm, speechmos, with torch: about 500 MB) are installed at the first use, in an environment of the app's own. Or now:": "Библиотеки (deepfilternet, pyloudnorm, speechmos, с torch: около 500 МБ) устанавливаются при первом использовании в собственное окружение приложения. Или сейчас:",
+  "On this Mac, ffmpeg and ffprobe for Apple silicon are fetched too (2 × 28 MB).": "На этом Mac также загружаются ffmpeg и ffprobe для Apple silicon (2 × 28 МБ).",
+  "Install now": "Установить сейчас",
+  "Ollama, on this computer": "Ollama, на этом компьютере", "Claude Code, your own plan": "Claude Code, ваша подписка", "Claude, an API key": "Claude, ключ API",
+  "Ollama runs the model on this computer. It is not installed: get it from ollama.com (the app on a Mac, one command on Linux), open it, then « Check again ».": "Ollama запускает модель на этом компьютере. Он не установлен: возьмите его на ollama.com (приложение на Mac, одна команда в Linux), откройте, затем «Проверить снова».",
+  "Get Ollama": "Получить Ollama", "Ollama is installed but not running.": "Ollama установлен, но не запущен.", "Start Ollama": "Запустить Ollama",
+  "Ollama answers, but this computer (%1 GB of memory) is too small for a model of the toolkit's family: choose Claude.": "Ollama отвечает, но этот компьютер (%1 ГБ памяти) слишком мал для модели из семейства набора: выберите Claude.",
+  "Ollama answers. This computer (%1 GB of memory) can carry « %2 »%3; the download happens once.": "Ollama отвечает. Этот компьютер (%1 ГБ памяти) потянет «%2»%3; загрузка выполняется один раз.",
+  "Download %1": "Загрузить %1", "Downloading %1… %2 %": "Загрузка %1… %2 %", "Downloading %1…": "Загрузка %1…",
+  "the model is not there after the download": "после загрузки модели нет",
+  "Ready: Ollama answers and « %1 » replied to a test.": "Готово: Ollama отвечает, и «%1» ответила на пробу.",
+  "Ollama answers and « %1 » is here. One test to be sure:": "Ollama отвечает, и «%1» на месте. Одна проба для уверенности:", "Test": "Проверить", "Asking « %1 »…": "Вопрос к «%1»…",
+  "Claude Code is the claude command, on your own Claude plan: no key, no bill by the call. It is not installed; the app can run its installer (from claude.ai).": "Claude Code — это команда claude на вашей подписке Claude: без ключа и без оплаты за вызов. Он не установлен; приложение может запустить его установщик (с claude.ai).",
+  "Install Claude Code": "Установить Claude Code", "Installing Claude Code…": "Установка Claude Code…",
+  "Ready: Claude Code answers (%1).": "Готово: Claude Code отвечает (%1).",
+  "Claude Code found: %1. Sign in once with your Claude account (a terminal opens: type /login and follow the browser), then test.": "Claude Code найден: %1. Войдите один раз со своей учётной записью Claude (откроется терминал: введите /login и следуйте браузеру), затем проверьте.",
+  "Asking Claude Code…": "Вопрос к Claude Code…", "Sign in": "Войти",
+  "No terminal was found: open one yourself, type claude, then /login.": "Терминал не найден: откройте его сами, введите claude, затем /login.",
+  "Claude Code did not answer in time.": "Claude Code не ответил вовремя.",
+  "Claude Code is installed but not signed in: click « Sign in ».": "Claude Code установлен, но вход не выполнен: нажмите «Войти».",
+  "Ready: the key is accepted by Anthropic.": "Готово: Anthropic принимает ключ.",
+  "A key from console.anthropic.com (API Keys › Create Key), paid by the call; the text goes to Anthropic. Paste it, then test.": "Ключ с console.anthropic.com (API Keys › Create Key), оплата за вызов; текст уходит в Anthropic. Вставьте его, затем проверьте.",
+  "Asking Anthropic…": "Вопрос к Anthropic…", "Test the key": "Проверить ключ", "The key is refused by Anthropic.": "Anthropic отклоняет ключ.",
+  "Claude Code (your own plan)": "Claude Code (ваша подписка)", "Claude (API key)": "Claude (ключ API)",
+  "Claude Code found: %1": "Claude Code найден: %1",
+  "Claude Code is not installed: « Getting started » on the home page installs it.": "Claude Code не установлен: «Первые шаги» на главной странице установят его.",
+  "Ollama answers.": "Ollama отвечает.", "Ollama does not answer: « Getting started » on the home page sets it up.": "Ollama не отвечает: «Первые шаги» на главной странице настроят его.",
+ },
+}
+for _code, _more in _TR_START.items():
+    _TR.setdefault(_code, {}).update(_more)
+
 
 def _lang():
     for var in ("LC_ALL", "LC_MESSAGES", "LANG"):
@@ -1882,7 +2218,17 @@ PROJECT_EXT = ".rve.json"
 
 def model_label(llm, model=""):
     """Who does the work, named on the patience page: Claude and its model, or Ollama and its."""
+    if llm == "claude_code":
+        return "Claude Code · " + LLM_CLAUDE_MODEL
     return "Claude " + LLM_CLAUDE_MODEL if llm == "claude" else "Ollama " + (model or LLM_LOCAL_MODEL)
+
+
+def claude_job(cfg, llm):
+    """What a toolkit job needs to reach Claude: the command of Claude Code and its work folder,
+    or the key (in the environment); `claude_kind` = which of the two the analysis pass takes."""
+    exe = find_claude(quick=True)
+    kind = "claude_code" if (llm == "claude_code" or (llm != "claude" and exe and not (cfg.get("anthropic_key") or os.environ.get("ANTHROPIC_API_KEY")))) else "claude"
+    return {"claude_exe": exe or "", "work": WORK_DIR, "claude_kind": kind}
 
 
 def lang_label(code):
@@ -2035,6 +2381,292 @@ def claude_env(cfg):
     return {"ANTHROPIC_API_KEY": key} if key else {}
 
 
+# ------------------------------------------------------------------------------------------
+# Getting started (1.8.0): what this computer has, and the buttons that put the rest in place.
+# Claude Code = the `claude` command on the person's own plan (no key), the way Reader's Writer
+# uses it; Ollama = a model on this computer; or an Anthropic key.
+# ------------------------------------------------------------------------------------------
+
+STRIP_ENV = ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "CLAUDE_CODE_OAUTH_TOKEN", "ANTHROPIC_BASE_URL")
+CLAUDE_INSTALL = "curl -fsSL https://claude.ai/install.sh | bash"
+WORK_DIR = os.path.join(DATA_DIR, "work")
+OLLAMA_DOWNLOAD = "https://ollama.com/download"
+OLLAMA_INSTALL_LINUX = "curl -fsSL https://ollama.com/install.sh | sh"
+# The local models of the toolkit's family, by what the computer can carry: (model, memory needed in GB, download in GB)
+MODEL_LADDER = [("gemma4:31b", 40, 20), ("gemma4:26b-a4b", 28, 18), ("gemma4:12b", 14, 8), ("gemma4:e4b", 9, 7)]
+WHISPER_SIZES = {"tiny": "75 MB", "base": "145 MB", "small": "460 MB", "medium": "1.5 GB", "large-v3": "3 GB"}
+# What each choice costs and gives, said on the getting-started page (measured on a laptop's processor)
+WHISPER_NOTES = {"tiny": "the fastest, rough words and timings: good to try the app, not to publish",
+                 "base": "fast, still rough; acceptable for English only",
+                 "small": "the default: good words in most languages, about as long as the recording lasts",
+                 "medium": "better words and names, about three times slower, 1.5 GB",
+                 "large-v3": "the best words, about ten times slower on a processor, 3 GB on disk and 4 GB of memory"}
+LOCAL_NOTES = {"gemma4:e4b": "small and fast; translations to be reread", "gemma4:12b": "decent translations, a few minutes for a talk",
+               "gemma4:26b-a4b": "good translations, fast on a Mac with 32 GB", "gemma4:31b": "the toolkit's best local model; slow without a big graphics card"}
+
+
+def claude_places():
+    """Where Claude Code's installers put the command: the native installer, npm (global,
+    Homebrew, nvm, volta), the distribution."""
+    home = os.path.expanduser("~")
+    places = [os.path.join(home, ".local", "bin", "claude"), os.path.join(home, ".claude", "local", "claude"),
+              os.path.join(home, ".npm-global", "bin", "claude"), os.path.join(home, ".volta", "bin", "claude"),
+              "/opt/homebrew/bin/claude", "/usr/local/bin/claude", "/usr/bin/claude"]
+    places += sorted(glob.glob(os.path.join(home, ".nvm", "versions", "node", "*", "bin", "claude")), reverse=True)
+    return places
+
+
+def login_shell_which(name):
+    """The command as the login shell sees it: an app opened from the Finder or a launcher
+    inherits none of the PATH set in .zshrc or .profile."""
+    try:
+        shell = os.environ.get("SHELL") or "/bin/sh"
+        out = subprocess.run([shell, "-l", "-c", "command -v " + name], capture_output=True, text=True, timeout=10).stdout.strip().splitlines()
+        if out and os.path.isfile(out[-1]) and os.access(out[-1], os.X_OK):
+            return out[-1]
+    except Exception:
+        pass
+    return None
+
+
+def find_claude(quick=False):
+    """The claude command; quick = without the login shell (10 s at worst)."""
+    for c in claude_places():
+        if os.path.isfile(c) and os.access(c, os.X_OK):
+            return c
+    return shutil.which("claude") or (None if quick or sys.platform == "win32" else login_shell_which("claude"))
+
+
+def claude_child_env():
+    """The environment for `claude`: no API key or token (the plan is what pays), the usual
+    places on the PATH, a HOME."""
+    env = dict(os.environ)
+    for k in STRIP_ENV:
+        env.pop(k, None)
+    extra = [os.path.dirname(c) for c in claude_places()] + ["/usr/local/bin", "/usr/bin", "/bin"]
+    env["PATH"] = os.pathsep.join(extra + [d for d in env.get("PATH", "").split(os.pathsep) if d and d not in extra])
+    env.setdefault("HOME", os.path.expanduser("~"))
+    return env
+
+
+def claude_test(exe):
+    """One short answer through `claude -p`. Returns (ok, message)."""
+    os.makedirs(WORK_DIR, exist_ok=True)
+    cmd = [exe, "-p", "--output-format", "json", "--setting-sources", "", "--strict-mcp-config", "--tools", "",
+           "--model", "sonnet", "Answer with the single word OK."]
+    try:
+        r = subprocess.run(cmd, capture_output=True, text=True, timeout=180, env=claude_child_env(), cwd=WORK_DIR, **_RUN_FLAGS)
+    except subprocess.TimeoutExpired:
+        return False, _("Claude Code did not answer in time.")
+    except OSError as ex:
+        return False, str(ex)
+    out = (r.stdout or "").strip()
+    low = (out + " " + (r.stderr or "")).lower()
+    if "not logged in" in low or "/login" in low or "authentication" in low or "oauth" in low:
+        return False, _("Claude Code is installed but not signed in: click « Sign in ».")
+    try:
+        data = json.loads(out)
+        if data.get("is_error"):
+            return False, str(data.get("result", ""))[:200]
+        return "ok" in str(data.get("result", "")).lower(), str(data.get("result", ""))[:80]
+    except ValueError:
+        return False, (r.stderr or out or "claude")[-200:]
+
+
+def install_claude(progress, task):
+    """The native installer of Claude Code, as its site says. Returns the command found after."""
+    proc = subprocess.Popen(["bash", "-lc", CLAUDE_INSTALL], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, errors="replace",
+                            env=claude_child_env(), **_RUN_FLAGS)
+    task["proc"] = proc
+    tail = []
+    try:
+        for line in proc.stdout:
+            if task.get("cancelled"):
+                proc.kill()
+                raise Cancelled()
+            line = line.strip()
+            if line:
+                tail = (tail + [line])[-6:]
+                progress(_("Installing Claude Code…") + "  " + line[:70])
+        proc.wait()
+    finally:
+        task["proc"] = None
+    found = find_claude()
+    if proc.returncode != 0 or not found:
+        raise RuntimeError(" ".join(tail)[-300:] or "install.sh")
+    return found
+
+
+def open_terminal(command):
+    """Opens the person's terminal on `command` (the sign-in of Claude Code is interactive).
+    Returns False when no terminal was found."""
+    if sys.platform == "darwin":
+        script = 'tell application "Terminal" to do script "%s"' % command.replace('"', '\\"')
+        return subprocess.run(["osascript", "-e", script, "-e", 'tell application "Terminal" to activate'], capture_output=True).returncode == 0
+    for term, args in (("x-terminal-emulator", ["-e"]), ("cosmic-term", ["--"]), ("gnome-terminal", ["--"]), ("konsole", ["-e"]),
+                       ("xfce4-terminal", ["-x"]), ("kitty", []), ("alacritty", ["-e"]), ("xterm", ["-e"])):
+        exe = shutil.which(term)
+        if exe:
+            try:
+                subprocess.Popen([exe] + args + ["bash", "-lc", command + "; exec bash"], start_new_session=True)
+                return True
+            except OSError:
+                continue
+    return False
+
+
+def find_ollama():
+    places = ["/usr/local/bin/ollama", "/opt/homebrew/bin/ollama", "/usr/bin/ollama",
+              "/Applications/Ollama.app/Contents/Resources/ollama", os.path.expanduser("~/Applications/Ollama.app/Contents/Resources/ollama")]
+    for c in places:
+        if os.path.isfile(c) and os.access(c, os.X_OK):
+            return c
+    return shutil.which("ollama") or (None if sys.platform == "win32" else login_shell_which("ollama"))
+
+
+def ollama_json(url, path, timeout=5, data=None):
+    import urllib.request
+    req = urllib.request.Request(url.rstrip("/") + path, data=json.dumps(data).encode() if data is not None else None,
+                                 headers={"Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        return json.loads(r.read().decode("utf-8", "replace") or "{}")
+
+
+def ollama_models(url):
+    try:
+        return [m["name"] for m in ollama_json(url, "/api/tags").get("models", [])]
+    except Exception:
+        return []
+
+
+def ollama_start(exe):
+    """Starts Ollama: the Mac app when it is there, else `ollama serve` detached. Waits up to 10 s."""
+    try:
+        if sys.platform == "darwin" and os.path.isdir("/Applications/Ollama.app"):
+            subprocess.Popen(["open", "-a", "Ollama"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        else:
+            subprocess.Popen([exe, "serve"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+    except OSError:
+        return False
+    for _k in range(20):
+        time.sleep(0.5)
+        if ollama_answers(OLLAMA_URL):
+            return True
+    return False
+
+
+def ram_mb():
+    try:
+        if sys.platform == "darwin":
+            return int(subprocess.run(["sysctl", "-n", "hw.memsize"], capture_output=True, text=True, timeout=5).stdout.strip() or 0) // 2 ** 20
+        if sys.platform != "win32":
+            for line in open("/proc/meminfo"):
+                if line.startswith("MemTotal:"):
+                    return int(line.split()[1]) // 1024
+    except Exception:
+        pass
+    return 0
+
+
+def vram_mb():
+    try:
+        out = subprocess.run(["nvidia-smi", "--query-gpu=memory.total", "--format=csv,noheader,nounits"], capture_output=True, text=True, timeout=10)
+        return int(out.stdout.strip().splitlines()[0]) if out.returncode == 0 and out.stdout.strip() else 0
+    except Exception:
+        return 0
+
+
+def recommended_model(ram, vram=0):
+    """(model, download GB) this computer can carry, or None: a graphics card's memory, or the
+    unified memory of a Mac, or the RAM (slower)."""
+    room = max(vram, ram if sys.platform == "darwin" else ram * 0.7) / 1024
+    for model, need, size in MODEL_LADDER:
+        if room >= need:
+            return model, size
+    return None
+
+
+def ollama_pull(url, model, progress, task):
+    """Downloads a model through Ollama's API, the percentage on the way."""
+    import urllib.request
+    req = urllib.request.Request(url.rstrip("/") + "/api/pull", data=json.dumps({"name": model, "stream": True}).encode(),
+                                 headers={"Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=60) as r:
+        for raw in r:
+            if task.get("cancelled"):
+                raise Cancelled()
+            try:
+                msg = json.loads(raw.decode("utf-8", "replace"))
+            except ValueError:
+                continue
+            if msg.get("error"):
+                raise RuntimeError(msg["error"])
+            total, done = msg.get("total") or 0, msg.get("completed") or 0
+            if total:
+                progress(_("Downloading %1… %2 %", model, int(100 * done / total)))
+            else:
+                progress(_("Downloading %1…", model) + "  " + str(msg.get("status", ""))[:50])
+    if model not in ollama_models(url) and model + ":latest" not in ollama_models(url):
+        raise RuntimeError(_("the model is not there after the download"))
+
+
+def ollama_test(url, model):
+    """One word from the model. Returns (ok, message)."""
+    try:
+        data = ollama_json(url, "/api/generate", timeout=300, data={"model": model, "prompt": "Answer with the single word OK.", "stream": False, "think": False})
+        text = str(data.get("response", "")).strip()
+        return bool(text), text[:80]
+    except Exception as ex:
+        return False, str(ex)[:200]
+
+
+def anthropic_key_test(key):
+    """One tiny request to the API. Returns (ok, message)."""
+    import urllib.request
+    import urllib.error
+    body = {"model": LLM_CLAUDE_MODEL, "max_tokens": 8, "messages": [{"role": "user", "content": "Answer with the single word OK."}]}
+    req = urllib.request.Request("https://api.anthropic.com/v1/messages", data=json.dumps(body).encode(),
+                                 headers={"Content-Type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01"})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            data = json.loads(r.read().decode("utf-8", "replace"))
+        return True, "".join(b.get("text", "") for b in data.get("content", []))[:80]
+    except urllib.error.HTTPError as ex:
+        if ex.code in (401, 403):
+            return False, _("The key is refused by Anthropic.")
+        return False, f"HTTP {ex.code}"
+    except Exception as ex:
+        return False, str(ex)[:200]
+
+
+def whisper_model_present(size):
+    """faster-whisper's model files, as it stores them under the data folder."""
+    for d in glob.glob(os.path.join(MODELS_DIR, f"models--Systran--faster-whisper-{size}", "snapshots", "*")):
+        if os.path.isfile(os.path.join(d, "model.bin")):
+            return True
+    return False
+
+
+def download_whisper_model(size):
+    from faster_whisper import WhisperModel
+    os.makedirs(MODELS_DIR, exist_ok=True)
+    WhisperModel(size, device="cpu", compute_type="int8", download_root=MODELS_DIR)
+    return whisper_model_present(size)
+
+
+def probe_setup(cfg):
+    """What the getting-started page shows: one dict, measured in the background."""
+    tk = toolkit_dir(cfg)
+    up = ollama_answers(OLLAMA_URL)
+    ram, vram = ram_mb(), vram_mb()
+    size = cfg.get("model", MODEL_DEFAULT)
+    return {"ffmpeg": ffmpeg_exe(), "whisper": whisper_available(), "size": size, "whisper_model": whisper_model_present(size),
+            "toolkit": tk, "claude": find_claude(quick=True), "ollama_bin": find_ollama(), "ollama_up": up,
+            "ollama_models": ollama_models(OLLAMA_URL) if up else [], "ram": ram, "vram": vram, "recommended": recommended_model(ram, vram),
+            "sound_ready": bool(tk) and python_has(toolkit_python(), TOOLKIT_PACKAGES["sound"]),
+            "ffmpeg_named": bool(shutil.which("ffmpeg") and shutil.which("ffprobe")) or bool(_own_tool("ffmpeg") and _own_tool("ffprobe"))}
+
+
 # What runs in the toolkit's Python: traduire.py's passes, in the order of its main(). Its own
 # messages go to stderr, the app reads them for its gauge; the answers come as "@@ {json}".
 TOOLKIT_BRIDGE = r"""
@@ -2056,7 +2688,68 @@ try:
     segments = [t.Segment(d["index"], d["start"], d["end"], d["text"], d.get("text_tgt", ""),
                           words=d.get("words", []), lang=d.get("lang", "")) for d in job["segments"]]
 
+    class _ClaudeCodeClient:
+        # client.messages.create through `claude -p` on the person's own plan (no key). A forced
+        # tool_use becomes an answer in JSON, parsed here into a tool_use block; thinking never shows.
+        def __init__(self, exe, model, work):
+            self.exe, self.model, self.work = exe, model, work
+            self.messages = self
+
+        @staticmethod
+        def _flat(content):
+            if isinstance(content, list):
+                return "\n".join(str(b.get("text", "")) for b in content if isinstance(b, dict))
+            return str(content or "")
+
+        def create(self, **kw):
+            import re as _re
+            import subprocess as _sp
+            from types import SimpleNamespace as NS
+            system = self._flat(kw.get("system"))
+            prompt = "\n\n".join(self._flat(m.get("content")) for m in kw.get("messages", []))
+            tool = None
+            choice = kw.get("tool_choice") or {}
+            if kw.get("tools") and choice.get("type") == "tool":
+                tool = next((x for x in kw["tools"] if x.get("name") == choice.get("name")), None)
+            if tool:
+                prompt += ("\n\n=== FORMAT DE RÉPONSE OBLIGATOIRE ===\nRéponds UNIQUEMENT par un objet JSON, sans texte autour et sans "
+                           "balises ```, conforme à ce schéma JSON :\n" + json.dumps(tool.get("input_schema", {}), ensure_ascii=False)
+                           + "\nRôle de cet objet : " + str(tool.get("description", "")))
+            cmd = [self.exe, "-p", "--output-format", "json", "--setting-sources", "", "--strict-mcp-config", "--tools", ""]
+            if self.model:
+                cmd += ["--model", self.model]
+            if system:
+                cmd += ["--system-prompt", system]
+            env = dict(os.environ)
+            for k in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "CLAUDE_CODE_OAUTH_TOKEN", "ANTHROPIC_BASE_URL"):
+                env.pop(k, None)
+            os.makedirs(self.work, exist_ok=True)
+            r = _sp.run(cmd, input=prompt, capture_output=True, text=True, env=env, cwd=self.work, timeout=1800)
+            if r.returncode != 0:
+                raise RuntimeError("claude: " + (r.stderr or r.stdout or "")[-300:].strip())
+            data = json.loads(r.stdout)
+            text = str(data.get("result", ""))
+            if data.get("is_error"):
+                raise RuntimeError("claude: " + text[:300])
+            if tool:
+                body = _re.sub(r"^```[a-zA-Z]*\s*|\s*```$", "", text.strip())
+                a, b = body.find("{"), body.rfind("}")
+                obj = json.loads(body[a:b + 1]) if a >= 0 and b > a else {}
+                return NS(content=[NS(type="tool_use", name=tool["name"], input=obj)], stop_reason="tool_use")
+            return NS(content=[NS(type="text", text=text)], stop_reason="end_turn")
+
     def make_client(job):
+        if job.get("llm") == "claude_code":
+            import types
+            if "anthropic" not in sys.modules:
+                # traduire.py's retry wrapper imports anthropic on an error: a stand-in with its two classes
+                fake = types.ModuleType("anthropic")
+                fake.APIStatusError = type("APIStatusError", (Exception,), {})
+                fake.APIConnectionError = type("APIConnectionError", (Exception,), {})
+                sys.modules["anthropic"] = fake
+            if job.get("claude_model"):
+                t.CLAUDE_MODEL = job["claude_model"]
+            return _ClaudeCodeClient(job["claude_exe"], job.get("claude_model", ""), job.get("work") or os.getcwd())
         if job.get("llm") == "claude":
             if not os.environ.get("ANTHROPIC_API_KEY"):
                 say(error="ANTHROPIC_API_KEY")
@@ -2072,8 +2765,8 @@ try:
         client = make_client(job)
         # the analysis (names, glossary, domain) by Claude when the user asked for it (traduire.py's "auto")
         analysis_client = client
-        if job.get("llm") != "claude" and job.get("analysis_by_claude"):
-            analysis_client = make_client(dict(job, llm="claude"))
+        if job.get("llm") == "local" and job.get("analysis_by_claude"):
+            analysis_client = make_client(dict(job, llm=job.get("claude_kind") or "claude"))
         say(step="analysis")
         analysis = t.analyze_content(segments, analysis_client, src, tgt, context)
         say(step="translate")
@@ -2629,7 +3322,8 @@ def compute_cuts(wav, tokens, ranges, fade, duration, inverse=False, estimated=F
         if sound is not None:
             sound.close()
     for k, c in enumerate(cuts):
-        c["vi"] = k == 0 or c["d"] - cuts[k - 1]["f"] >= IMAGE_FADE_MIN
+        # no fade from black at the very start: the first frame is the thumbnail the social networks show
+        c["vi"] = k > 0 and c["d"] - cuts[k - 1]["f"] >= IMAGE_FADE_MIN
         c["vo"] = k == len(cuts) - 1 or cuts[k + 1]["d"] - c["f"] >= IMAGE_FADE_MIN
     for c in cuts:
         half = (c["f"] - c["d"]) / 2.0
@@ -4249,6 +4943,9 @@ class Main(QtWidgets.QMainWindow):
         self.media_ok = True
         self.reading = False
         self.mode_value = "keep"
+        self.setup_active = None       # the getting-started row whose job runs, while one does
+        self.setup_probe = {}
+        self.setup_ok = {}             # the real tests that passed on this page: "ollama", "claude_code", "claude"
         self.setWindowTitle("Reader's Video Editor")
         self.setAcceptDrops(True)
         self.resize(1200, 780)
@@ -4259,6 +4956,8 @@ class Main(QtWidgets.QMainWindow):
             QtCore.QTimer.singleShot(0, lambda: self.open_project_file(source))
         elif source:
             QtCore.QTimer.singleShot(0, lambda: self.open_source(source, srt))
+        elif not self.cfg.get("welcomed"):
+            QtCore.QTimer.singleShot(0, self.show_setup)
 
     # ---- building ----
     def _btn(self, text, fn=None, kind=None, tip=None):
@@ -4301,6 +5000,7 @@ class Main(QtWidgets.QMainWindow):
         self.views = QtWidgets.QStackedWidget()
         self.setCentralWidget(self.views)
         self._build_home()
+        self._build_setup()
         self._build_workshop()
         # the player
         self.player = QMediaPlayer(self, QMediaPlayer.VideoSurface)
@@ -4428,6 +5128,10 @@ class Main(QtWidgets.QMainWindow):
         keys.setWordWrap(True)
         v.addSpacing(16)
         v.addWidget(keys)
+        gs = QtWidgets.QHBoxLayout()
+        gs.addWidget(self._btn(_("Getting started…"), self.show_setup, tip=_("What this computer has, and the buttons that put the rest in place.")))
+        gs.addStretch(1)
+        v.addLayout(gs)
         hc = QtWidgets.QHBoxLayout()
         hc.addStretch(1)
         hc.addWidget(card, 20)
@@ -4437,6 +5141,390 @@ class Main(QtWidgets.QMainWindow):
         home.setWidget(inner)
         self.home = home
         self.views.addWidget(home)
+
+    # ---- getting started: five steps, each checked by a real test, each with the button that does it ----
+    def _build_setup(self):
+        page = QtWidgets.QScrollArea()
+        page.setWidgetResizable(True)
+        page.setFrameShape(QtWidgets.QFrame.NoFrame)
+        inner = QtWidgets.QWidget()
+        outer = QtWidgets.QVBoxLayout(inner)
+        outer.setContentsMargins(24, 28, 24, 40)
+        card = QtWidgets.QWidget()
+        card.setObjectName("card")
+        card.setMaximumWidth(760)
+        v = QtWidgets.QVBoxLayout(card)
+        v.setContentsMargins(0, 0, 0, 0)
+        v.setSpacing(12)
+        title = QtWidgets.QLabel(_("Getting started"))
+        title.setObjectName("h1")
+        v.addWidget(title)
+        lead = QtWidgets.QLabel(_("Three levels. Level 1 is all you need to cut a video: it works as soon as the app is installed. Levels 2 and 3 are optional extras; if you never translate, skip them, nothing there is needed for the editing. One step at a time, each checked by a real test, each with the button that does the work. You can come back here any time: « Getting started… » on the home page, or Project ▾ › Getting started… while editing."))
+        lead.setObjectName("lead")
+        lead.setWordWrap(True)
+        v.addWidget(lead)
+        self.setup_rows = {}
+
+        def heading(text, sub):
+            h = QtWidgets.QLabel(f"<b>{text}</b><br><span style='color:{C_MUTED}'>{sub}</span>")
+            h.setTextFormat(QtCore.Qt.RichText)
+            h.setWordWrap(True)
+            h.setContentsMargins(0, 10, 0, 0)
+            v.addWidget(h)
+        heading(_("Level 1 · Editing"), _("The whole point of the app: open, highlight, produce. Nothing to install."))
+        self.setup_rows["edit"] = self._setup_row(v, 1, _("Cut a video by its text"))
+        self.setup_rows["transcribe"] = self._setup_row(v, 1, _("Transcribe the speech"))
+        go1 = QtWidgets.QHBoxLayout()
+        go1.addWidget(self._btn(_("That is enough for me: start editing"), self.leave_setup, kind="strong"))
+        go1.addStretch(1)
+        v.addLayout(go1)
+        heading(_("Level 2 · Translation and subtitles — optional"), _("Only if you want to translate the text, or to cut subtitles with the toolkit's rules. Otherwise skip this level entirely."))
+        self.setup_rows["toolkit"] = self._setup_row(v, 2, _("Translate and subtitle: the toolkit"))
+        self.setup_rows["model"] = self._setup_row(v, 2, _("Translate and subtitle: the language model"))
+        heading(_("Level 3 · Improved sound — optional"), _("Only if you want the edit's sound cleaned and levelled on the way out. Needs the toolkit of level 2 (not the model)."))
+        self.setup_rows["sound"] = self._setup_row(v, 3, _("Improve the sound"))
+        bottom = QtWidgets.QHBoxLayout()
+        self.b_setup_refresh = self._btn(_("Check again"), self.refresh_setup)
+        bottom.addWidget(self.b_setup_refresh)
+        bottom.addStretch(1)
+        bottom.addWidget(self._btn(_("Start editing"), self.leave_setup, kind="strong"))
+        v.addLayout(bottom)
+        hc = QtWidgets.QHBoxLayout()
+        hc.addStretch(1)
+        hc.addWidget(card, 20)
+        hc.addStretch(1)
+        outer.addLayout(hc)
+        outer.addStretch(1)
+        page.setWidget(inner)
+        self.setup = page
+        self.views.addWidget(page)
+
+    def _setup_row(self, v, level, name):
+        """A step: a coloured dot and its name on one line, a sentence of detail, a row for a
+        choice, a field when the step needs one, a row of buttons. Returns the row as a namespace."""
+        from types import SimpleNamespace
+        box = QtWidgets.QFrame()
+        box.setObjectName("setuprow")
+        bv = QtWidgets.QVBoxLayout(box)
+        bv.setContentsMargins(14, 10, 14, 10)
+        bv.setSpacing(6)
+        head_row = QtWidgets.QHBoxLayout()
+        head_row.setSpacing(8)
+        dot = QtWidgets.QLabel("●")
+        dot.setObjectName("dot")
+        head_row.addWidget(dot)
+        head = QtWidgets.QLabel(f"<span style='color:{C_MUTED}'>{level} ·</span> <b>{name}</b>")
+        head.setTextFormat(QtCore.Qt.RichText)
+        head_row.addWidget(head, 1)
+        bv.addLayout(head_row)
+        detail = QtWidgets.QLabel("")
+        detail.setObjectName("muted")
+        detail.setWordWrap(True)
+        detail.setTextInteractionFlags(QtCore.Qt.TextSelectableByMouse)
+        bv.addWidget(detail)
+        choice = QtWidgets.QWidget()
+        ch = QtWidgets.QHBoxLayout(choice)
+        ch.setContentsMargins(0, 0, 0, 0)
+        choice.hide()
+        bv.addWidget(choice)
+        field = QtWidgets.QLineEdit()
+        field.hide()
+        bv.addWidget(field)
+        buttons = QtWidgets.QWidget()
+        bh = QtWidgets.QHBoxLayout(buttons)
+        bh.setContentsMargins(0, 0, 0, 0)
+        bh.setSpacing(8)
+        bh.addStretch(1)
+        buttons.hide()
+        bv.addWidget(buttons)
+        v.addWidget(box)
+        row = SimpleNamespace(box=box, dot=dot, detail=detail, choice=choice, choice_layout=ch, field=field, buttons=buttons, buttons_layout=bh, widgets=[])
+
+        def set_state(state, text):
+            colour = {"ok": C_OK, "todo": C_ACCENT, "busy": C_ACCENT, "off": C_MUTED, "opt": C_MUTED, "bad": C_DANGER}[state]
+            dot.setStyleSheet(f"color: {colour}; font-size: 14pt;")
+            detail.setText(text)
+
+        def set_buttons(items):
+            for w in row.widgets:
+                bh.removeWidget(w)
+                w.deleteLater()
+            row.widgets = []
+            for k, (text, fn, strong) in enumerate(items):
+                b = self._btn(text, fn, kind="strong" if strong else None)
+                bh.insertWidget(k, b)
+                row.widgets.append(b)
+            buttons.setVisible(bool(items))
+        row.set = set_state
+        row.set_buttons = set_buttons
+        return row
+
+    def show_setup(self):
+        if self.thread:
+            return
+        self.views.setCurrentWidget(self.setup)
+        self.refresh_setup()
+
+    def leave_setup(self):
+        if self.setup_active is not None:
+            return
+        self.cfg["welcomed"] = VERSION
+        save_config(self.cfg)
+        self.views.setCurrentWidget(self.home)
+
+    def refresh_setup(self):
+        if self.thread or self.setup_active is not None:
+            return
+        for r in self.setup_rows.values():
+            r.set("busy", _("Checking…"))
+            r.set_buttons([])
+        self.b_setup_refresh.setEnabled(False)
+
+        def done(p):
+            self.setup_probe = p
+            self.b_setup_refresh.setEnabled(True)
+            self.fill_setup()
+
+        def failed(msg):
+            self.b_setup_refresh.setEnabled(True)
+            self.setup_rows["edit"].set("bad", msg)
+        self.run_in_background(lambda w: probe_setup(self.cfg), done, failed)
+
+    def setup_job(self, key, fn, after=None):
+        """Runs `fn(task)` in the background for the step `key`, its progress in the step's detail,
+        a Stop button meanwhile; then checks everything again."""
+        if self.thread or self.setup_active is not None:
+            return
+        row = self.setup_rows[key]
+        self.setup_active = row
+        task = {"cancelled": False, "proc": None}
+        for r in self.setup_rows.values():
+            for b in r.widgets:
+                b.setEnabled(False)
+        self.b_setup_refresh.setEnabled(False)
+
+        def stop():
+            task["cancelled"] = True
+            proc = task.get("proc")
+            if proc:
+                try:
+                    proc.kill()
+                except OSError:
+                    pass
+        row.set_buttons([(_("Stop"), stop, False)])
+        row.set("busy", _("Working…"))
+
+        def work(w):
+            return fn(task, lambda text: w.progress.emit(0.0, text))
+
+        def done(result):
+            self.setup_active = None
+            if after:
+                after(result)
+            self.refresh_setup()
+
+        def failed(msg):
+            self.setup_active = None
+            self.fill_setup()
+            row.set("bad", msg or _("Cancelled."))
+        self.run_in_background(work, done, failed)
+
+    def fill_setup(self):
+        p = self.setup_probe
+        if not p:
+            return
+        R = self.setup_rows
+        self._fill_setup_rows(p, R)
+
+    def _fill_setup_rows(self, p, R):
+        # 1 · the edit
+        if p["ffmpeg"]:
+            R["edit"].set("ok", _("Ready: ffmpeg is here. Open a video or a recording, highlight, produce."))
+            R["edit"].set_buttons([])
+        else:
+            R["edit"].set("todo", _("ffmpeg is missing. On Linux: sudo apt install ffmpeg, then « Check again »."))
+            R["edit"].set_buttons([(_("Check again"), self.refresh_setup, False)])
+        # 1 · the transcription: the model chosen here is the one of the home page
+        size = p["size"]
+        tr = R["transcribe"]
+        for i in reversed(range(tr.choice_layout.count())):
+            w = tr.choice_layout.itemAt(i).widget()
+            if w:
+                tr.choice_layout.removeWidget(w)
+                w.deleteLater()
+        lab = QtWidgets.QLabel(_("Model"))
+        lab.setObjectName("muted")
+        combo = QtWidgets.QComboBox()
+        for m in MODELS:
+            combo.addItem(f"{m} · {WHISPER_SIZES.get(m, '')}", m)
+        combo.setCurrentIndex(max(0, combo.findData(size)))
+        combo.currentIndexChanged.connect(lambda i: self.setup_pick_whisper(combo.itemData(i)))
+        tr.choice_layout.addWidget(lab)
+        tr.choice_layout.addWidget(combo)
+        tr.choice_layout.addStretch(1)
+        tr.choice.show()
+        note = " " + _("« %1 »: %2.", size, _(WHISPER_NOTES.get(size, "")))
+        if not p["whisper"]:
+            if getattr(sys, "frozen", False):
+                R["transcribe"].set("bad", _("The transcription is missing from this build."))
+                R["transcribe"].set_buttons([])
+            else:
+                R["transcribe"].set("todo", _("faster-whisper is not installed yet: the app installs it in a folder of its own (about 300 MB, once)."))
+                R["transcribe"].set_buttons([(_("Install the transcription"), lambda: self.setup_job("transcribe", lambda t, say: install_whisper(say, lambda: t.get("cancelled"))), True)])
+        elif not p["whisper_model"]:
+            R["transcribe"].set("todo", _("faster-whisper is here. The model « %1 » (%2) is downloaded at the first transcription; or now:", size, WHISPER_SIZES.get(size, "")) + note)
+            R["transcribe"].set_buttons([(_("Download the model now"), lambda: self.setup_job("transcribe", lambda t, say: (say(_("Downloading the model « %1 » (%2)…", size, WHISPER_SIZES.get(size, ""))), download_whisper_model(size))), True)])
+        else:
+            R["transcribe"].set("ok", _("Ready: faster-whisper and the model « %1 ». A subtitle file beside the video is used instead when there is one.", size) + note)
+            R["transcribe"].set_buttons([])
+        # 2 · the toolkit
+        if p["toolkit"]:
+            R["toolkit"].set("ok", _("Found: %1", p["toolkit"]))
+            R["toolkit"].set_buttons([])
+        else:
+            R["toolkit"].set("opt", _("Optional —") + " " + _("The traduction toolkit does the translation, the subtitles and the sound. It is not on this computer: the app can download it (a few MB, no git)."))
+            R["toolkit"].set_buttons([(_("Install it here"), lambda: self.setup_job("toolkit", lambda t, say: install_toolkit(say, t)), True)])
+        self.fill_model_row()
+        # 3 · the sound
+        if not p["toolkit"]:
+            R["sound"].set("off", _("Needs the toolkit (step 2)."))
+            R["sound"].set_buttons([])
+        elif p["sound_ready"] and p["ffmpeg_named"]:
+            R["sound"].set("ok", _("Ready: the libraries of finaliser.py are here. « Sound: improved » in the production block uses them."))
+            R["sound"].set_buttons([])
+        else:
+            R["sound"].set("opt", _("Optional —") + " " + _("The libraries (deepfilternet, pyloudnorm, speechmos, with torch: about 500 MB) are installed at the first use, in an environment of the app's own. Or now:")
+                           + " " + _("Speed: about the length of the edit on a processor, much less with a graphics card; the length and the picture do not change.")
+                           + ("" if p["ffmpeg_named"] else " " + _("On this Mac, ffmpeg and ffprobe for Apple silicon are fetched too (2 × 28 MB).")))
+
+            def install_sound(t, say):
+                ensure_ffmpeg_tools(say, t)
+                return prepare_toolkit_python(TOOLKIT_PACKAGES["sound"], say, t)
+            R["sound"].set_buttons([(_("Install now"), lambda: self.setup_job("sound", install_sound), True)])
+
+    def fill_model_row(self):
+        """Step 2, the model: three ways, the one chosen in the settings; the buttons of that way."""
+        p, row = self.setup_probe, self.setup_rows["model"]
+        llm = self.cfg.get("llm") or "local"
+        # the three ways, as a segmented control
+        for i in reversed(range(row.choice_layout.count())):
+            w = row.choice_layout.itemAt(i).widget()
+            if w:
+                row.choice_layout.removeWidget(w)
+                w.deleteLater()
+        buttons, kinds = [], ("local", "claude_code", "claude")
+        for kind, text in zip(kinds, (_("Ollama, on this computer"), _("Claude Code, your own plan"), _("Claude, an API key"))):
+            b = QtWidgets.QPushButton(text)
+            b.clicked.connect(lambda _c, k=kind: self.setup_choose(k))
+            buttons.append(b)
+        row.choice_layout.addWidget(self._segment(buttons))
+        for kind, b in zip(kinds, buttons):
+            b.setChecked(kind == llm)
+        row.choice_layout.addStretch(1)
+        row.choice.show()
+        row.field.hide()
+        url = OLLAMA_URL
+        ways = " " + _("Quality and cost: Claude gives the best translations; Claude Code costs nothing beyond your plan, the API key pays by the call, both send the text to Anthropic. A local model keeps everything on this computer, slower, and the smaller the model, the rougher the translation.")
+        if llm == "local":
+            wanted = self.cfg.get("ollama_model") or (p["recommended"][0] if p["recommended"] else LLM_LOCAL_MODEL)
+            have = wanted in p["ollama_models"] or wanted + ":latest" in p["ollama_models"]
+            gb = f"{p['ram'] / 1024:.0f}"
+            if not p["ollama_bin"] and not p["ollama_up"]:
+                row.set("opt", _("Optional —") + " " + _("Ollama runs the model on this computer. It is not installed: get it from ollama.com (the app on a Mac, one command on Linux), open it, then « Check again »."))
+                row.set_buttons([(_("Get Ollama"), lambda: QtGui.QDesktopServices.openUrl(QtCore.QUrl(OLLAMA_DOWNLOAD)), True), (_("Check again"), self.refresh_setup, False)])
+            elif not p["ollama_up"]:
+                row.set("opt", _("Optional —") + " " + _("Ollama is installed but not running."))
+                row.set_buttons([(_("Start Ollama"), lambda: self.setup_job("model", lambda t, say: ollama_start(p["ollama_bin"])), True), (_("Check again"), self.refresh_setup, False)])
+            elif not have:
+                if p["recommended"] is None and not self.cfg.get("ollama_model"):
+                    row.set("opt", _("Optional —") + " " + _("Ollama answers, but this computer (%1 GB of memory) is too small for a model of the toolkit's family: choose Claude.", gb))
+                    row.set_buttons([])
+                else:
+                    size = next((s for m, _n, s in MODEL_LADDER if m == wanted), None)
+                    row.set("opt", _("Optional —") + " " + _("Ollama answers. This computer (%1 GB of memory) can carry « %2 »%3; the download happens once.", gb, wanted, f" ({size} GB)" if size else "")
+                            + (" " + _("« %1 »: %2.", wanted, _(LOCAL_NOTES[wanted])) if wanted in LOCAL_NOTES else "") + ways)
+
+                    def pull(t, say, m=wanted):
+                        ollama_pull(url, m, say, t)
+                        return m
+                    row.set_buttons([(_("Download %1", wanted), lambda: self.setup_job("model", pull, lambda m: self.cfg.update(ollama_model=m)), True), (_("Check again"), self.refresh_setup, False)])
+            elif self.setup_ok.get("ollama") == wanted:
+                row.set("ok", _("Ready: Ollama answers and « %1 » replied to a test.", wanted))
+                row.set_buttons([])
+            else:
+                row.set("opt", _("Optional —") + " " + _("Ollama answers and « %1 » is here. One test to be sure:", wanted)
+                        + (" " + _("« %1 »: %2.", wanted, _(LOCAL_NOTES[wanted])) if wanted in LOCAL_NOTES else "") + ways)
+
+                def test(t, say, m=wanted):
+                    say(_("Asking « %1 »…", m))
+                    ok, msg = ollama_test(url, m)
+                    if not ok:
+                        raise RuntimeError(msg)
+                    return m
+                row.set_buttons([(_("Test"), lambda: self.setup_job("model", test, lambda m: self.setup_ok.update(ollama=m) or self.cfg.update(ollama_model=m)), True)])
+        elif llm == "claude_code":
+            exe = p["claude"]
+            if not exe:
+                row.set("opt", _("Optional —") + " " + _("Claude Code is the claude command, on your own Claude plan: no key, no bill by the call. It is not installed; the app can run its installer (from claude.ai).") + ways)
+                row.set_buttons([(_("Install Claude Code"), lambda: self.setup_job("model", lambda t, say: install_claude(say, t)), True), (_("Check again"), self.refresh_setup, False)])
+            elif self.setup_ok.get("claude_code") == exe:
+                row.set("ok", _("Ready: Claude Code answers (%1).", exe))
+                row.set_buttons([])
+            else:
+                row.set("opt", _("Optional —") + " " + _("Claude Code found: %1. Sign in once with your Claude account (a terminal opens: type /login and follow the browser), then test.", exe))
+
+                def test(t, say, e=exe):
+                    say(_("Asking Claude Code…"))
+                    ok, msg = claude_test(e)
+                    if not ok:
+                        raise RuntimeError(msg)
+                    return e
+
+                def sign_in():
+                    if not open_terminal(exe):
+                        row.set("bad", _("No terminal was found: open one yourself, type claude, then /login."))
+                row.set_buttons([(_("Sign in"), sign_in, False), (_("Test"), lambda: self.setup_job("model", test, lambda e: self.setup_ok.update(claude_code=e)), True)])
+        else:
+            row.field.setEchoMode(QtWidgets.QLineEdit.Password)
+            row.field.setPlaceholderText("sk-ant-…")
+            row.field.setText(self.cfg.get("anthropic_key") or os.environ.get("ANTHROPIC_API_KEY") or "")
+            row.field.show()
+            key = row.field.text().strip()
+            if key and self.setup_ok.get("claude") == key:
+                row.set("ok", _("Ready: the key is accepted by Anthropic."))
+            else:
+                row.set("opt", _("Optional —") + " " + _("A key from console.anthropic.com (API Keys › Create Key), paid by the call; the text goes to Anthropic. Paste it, then test.") + ways)
+
+            def test(t, say):
+                k = row.field.text().strip()
+                if not k:
+                    raise RuntimeError(_("Give an Anthropic API key."))
+                say(_("Asking Anthropic…"))
+                ok, msg = anthropic_key_test(k)
+                if not ok:
+                    raise RuntimeError(msg)
+                return k
+
+            def keep(k):
+                self.cfg["anthropic_key"] = k
+                self.setup_ok["claude"] = k
+                save_config(self.cfg)
+            row.set_buttons([(_("Test the key"), lambda: self.setup_job("model", test, keep), True)])
+
+    def setup_pick_whisper(self, size):
+        """The transcription model chosen on the getting-started page: the setting of the home page."""
+        if not size or size == self.cfg.get("model"):
+            return
+        self.cfg["model"] = size
+        save_config(self.cfg)
+        self.h_model.setCurrentText(size)
+        self.setup_probe["size"], self.setup_probe["whisper_model"] = size, whisper_model_present(size)
+        self.fill_setup()
+
+    def setup_choose(self, kind):
+        self.cfg["llm"] = kind
+        save_config(self.cfg)
+        self.fill_model_row()
 
     def _build_workshop(self):
         shop = QtWidgets.QWidget()
@@ -4513,6 +5601,8 @@ class Main(QtWidgets.QMainWindow):
         self._menu_action(pm, _("Save the project…"), lambda: self.save_project(ask=False), "Ctrl+Shift+S")
         self._menu_action(pm, _("Save the project as…"), lambda: self.save_project(ask=True))
         self._menu_action(pm, _("Open a project…"), self.ask_project, "Ctrl+Shift+O")
+        pm.addSeparator()
+        self._menu_action(pm, _("Getting started…"), self.show_setup)
         self.b_project.setMenu(pm)
         h.addWidget(self.b_project)
         h.addWidget(self._btn(_("Another file"), self.show_home))
@@ -4843,6 +5933,7 @@ class Main(QtWidgets.QMainWindow):
             QWidget#controls {{ background: {C_PANEL2}; }}
             QWidget#bilan {{ background: {C_PANEL2}; border-bottom: 1px solid {C_BORDER}; }}
             QWidget#production {{ background: {C_PANEL2}; border-top: 1px solid {C_BORDER}; }}
+            QFrame#setuprow {{ background: {C_PANEL}; border: 1px solid {C_BORDER}; border-radius: 10px; }}
             QWidget#settings, QWidget#following, QWidget#finished {{ background: {C_PANEL2}; }}
             QWidget#paper, QWidget#paper QWidget {{ background: {PAPER}; }}
             QTextEdit {{ background: {PAPER}; color: {INK}; border: none; font-family: "{self.serif}"; font-size: {pt}pt; padding: 26px 20px; selection-background-color: {STABILO}; }}
@@ -5274,6 +6365,9 @@ class Main(QtWidgets.QMainWindow):
         self.thread.start()
 
     def on_progress(self, fraction, text):
+        if self.setup_active is not None:
+            self.setup_active.detail.setText(text)
+            return
         if self.task and self.task.get("download"):
             self.h_gauge.setValue(int(fraction * 1000))
             self.h_msg.setText(text)
@@ -5577,8 +6671,9 @@ class Main(QtWidgets.QMainWindow):
         Claude, and which Ollama model. Returns the two widgets."""
         llm = QtWidgets.QComboBox()
         llm.addItem(_("On this computer (Ollama)"), "local")
-        llm.addItem(_("Claude (API)") + " · " + LLM_CLAUDE_MODEL, "claude")
-        llm.setCurrentIndex(1 if self.cfg.get("llm") == "claude" else 0)
+        llm.addItem(_("Claude Code (your own plan)"), "claude_code")
+        llm.addItem(_("Claude (API key)") + " · " + LLM_CLAUDE_MODEL, "claude")
+        llm.setCurrentIndex(max(0, llm.findData(self.cfg.get("llm") or "local")))
         model = QtWidgets.QLineEdit(self.cfg.get("ollama_model") or LLM_LOCAL_MODEL)
         model.setPlaceholderText(LLM_LOCAL_MODEL)
         llm.currentIndexChanged.connect(lambda i: model.setEnabled(i == 0))
@@ -5597,9 +6692,23 @@ class Main(QtWidgets.QMainWindow):
         g.addWidget(key_lab, row + 2, 0, 1, 2)
         g.addWidget(key, row + 3, 0, 1, 2)
 
+        hint = QtWidgets.QLabel("")
+        hint.setObjectName("muted")
+        hint.setWordWrap(True)
+        g.addWidget(hint, row + 4, 0, 1, 2)
+
         def show_key(i):
-            key_lab.setVisible(i == 1)
-            key.setVisible(i == 1)
+            kind = llm.itemData(i)
+            key_lab.setVisible(kind == "claude")
+            key.setVisible(kind == "claude")
+            if kind == "claude_code":
+                exe = find_claude(quick=True)
+                hint.setText(_("Claude Code found: %1", exe) if exe else _("Claude Code is not installed: « Getting started » on the home page installs it."))
+            elif kind == "local":
+                hint.setText(_("Ollama answers.") if ollama_answers(OLLAMA_URL) else _("Ollama does not answer: « Getting started » on the home page sets it up."))
+            else:
+                hint.setText("")
+            hint.setVisible(bool(hint.text()))
         llm.currentIndexChanged.connect(show_key)
         show_key(llm.currentIndex())
         return llm, model, key
@@ -5649,8 +6758,8 @@ class Main(QtWidgets.QMainWindow):
         # with the local model, the analysis pass can still go to Claude (traduire.py's "auto"): said and chosen here
         analysis = QtWidgets.QCheckBox(_("Analysis of the content (names, glossary) by Claude rather than the local model"))
         analysis.setChecked(bool(self.cfg.get("analysis_by_claude", False)))
-        analysis.setVisible(llm.currentData() == "local" and bool(self.anthropic_key()))
-        llm.currentIndexChanged.connect(lambda i: analysis.setVisible(i == 0 and bool(self.anthropic_key() or key.text().strip())))
+        analysis.setVisible(llm.currentData() == "local" and bool(self.anthropic_key() or find_claude(quick=True)))
+        llm.currentIndexChanged.connect(lambda i: analysis.setVisible(i == 0 and bool(self.anthropic_key() or key.text().strip() or find_claude(quick=True))))
         v.addWidget(analysis)
         error = QtWidgets.QLabel("")
         error.setObjectName("danger")
@@ -5674,6 +6783,9 @@ class Main(QtWidgets.QMainWindow):
             if llm.currentData() == "claude" and not self.anthropic_key():
                 error.setText(_("Give an Anthropic API key."))
                 return
+            if llm.currentData() == "claude_code" and not find_claude(quick=True):
+                error.setText(_("Claude Code is not installed: « Getting started » on the home page installs it."))
+                return
             self.cfg["llm"], self.cfg["ollama_model"] = llm.currentData(), model.text().strip() or LLM_LOCAL_MODEL
             self.cfg["review"], self.cfg["target_lang"] = review.isChecked(), tgt.currentData()
             self.cfg["analysis_by_claude"] = analysis.isChecked()
@@ -5692,7 +6804,7 @@ class Main(QtWidgets.QMainWindow):
         duration = self.project["duration"]
         job = {"task": "translate", "toolkit": tk, "segments": segments, "source_lang": src, "target_lang": tgt,
                "llm": llm, "ollama_model": model, "ollama_url": OLLAMA_URL, "claude_model": LLM_CLAUDE_MODEL,
-               "context": context, "review": review, "analysis_by_claude": analysis_by_claude}
+               "context": context, "review": review, "analysis_by_claude": analysis_by_claude, **claude_job(self.cfg, llm)}
         # the passes of traduire.py, where each one starts on the gauge, and who does it
         who = model_label(llm, model)
         steps = [("analysis", 0.02, _("Analysing the text…") + " · " + (model_label("claude") if analysis_by_claude else who)),
@@ -5718,7 +6830,7 @@ class Main(QtWidgets.QMainWindow):
                         i, n = int(m.group(1)), int(m.group(2))
                         w.progress.emit(state["base"] + (state["next"] - state["base"]) * (i - 1) / max(n, 1),
                                         state["text"] + "  " + _("Translating… %1 of %2", i, n).split("…")[-1].strip())
-            needs = TOOLKIT_PACKAGES["claude"] if (llm == "claude" or analysis_by_claude) else []
+            needs = TOOLKIT_PACKAGES["claude"] if (llm == "claude" or (analysis_by_claude and job["claude_kind"] == "claude")) else []
             py = prepare_toolkit_python(needs, lambda t: w.progress.emit(0.0, t), task)
             result = run_bridge(task, job, d, on_message, python=py, env_extra=claude_env(self.cfg))
             tokens = tokens_from_translation(result["segments"], duration)
@@ -6075,6 +7187,9 @@ class Main(QtWidgets.QMainWindow):
             if llm.currentData() == "claude" and not self.anthropic_key():
                 error.setText(_("Give an Anthropic API key."))
                 return
+            if llm.currentData() == "claude_code" and not find_claude(quick=True):
+                error.setText(_("Claude Code is not installed: « Getting started » on the home page installs it."))
+                return
             self.cfg["llm"], self.cfg["ollama_model"] = llm.currentData(), model.text().strip() or LLM_LOCAL_MODEL
             save_config(self.cfg)
             dlg.accept()
@@ -6098,7 +7213,7 @@ class Main(QtWidgets.QMainWindow):
         analysis = (read_json(d / f"translation-{key}.json", {}) or {}).get("analysis") if key != "src" else None
         job = {"task": "review", "toolkit": tk, "segments": segments, "source_lang": src, "target_lang": tgt,
                "llm": llm, "ollama_model": model, "ollama_url": OLLAMA_URL, "claude_model": LLM_CLAUDE_MODEL,
-               "analysis": analysis or {}, "context": "", "max_cps": MAX_CPS}
+               "analysis": analysis or {}, "context": "", "max_cps": MAX_CPS, **claude_job(self.cfg, llm)}
         self.task = {"cancelled": False, "proc": None, "page": True}
         task = self.task
 

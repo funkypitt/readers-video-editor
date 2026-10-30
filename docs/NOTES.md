@@ -273,6 +273,46 @@ a minute or more is shown as `34:28` rather than `2067.6 s`. Checked on a 66-min
 See above: the cards sit 10 % above the bottom on a square or landscape picture, 24 % on a
 vertical one. Checked on the square test media and on a 720×1280 vertical one.
 
+## Getting started (1.8.0)
+
+A page in the views stack (`_build_setup`, `show_setup`, `leave_setup`), shown at the first
+start (`cfg["welcomed"]` = VERSION afterwards) and from « Getting started… » on the home page
+or Project ▾. `probe_setup(cfg)` runs in the background (python_has imports torch: seconds)
+and `fill_setup()` draws five rows (`_setup_row`: dot, name, detail, a segmented choice, a
+field, buttons) under three headings: level 1 editing (ffmpeg; faster-whisper installed by
+`install_whisper`, the model fetched by `download_whisper_model`, present when
+`models--Systran--faster-whisper-<size>/snapshots/*/model.bin` exists), level 2 optional
+(the toolkit by `install_toolkit`; the model by `fill_model_row`: Ollama — `find_ollama`,
+`ollama_start` (the Mac app or `ollama serve` detached), `recommended_model` from
+`MODEL_LADDER` against the GPU memory, a Mac's unified memory or 70 % of the RAM, `ollama_pull`
+through `/api/pull` with the percentage, `ollama_test` through `/api/generate` —, Claude Code —
+`find_claude` as Reader's Writer, `install_claude` (the claude.ai script in `bash -lc`),
+`open_terminal` (osascript on macOS, the usual terminals on Linux) for the interactive
+sign-in, `claude_test` = `claude -p … --tools "" --output-format json` with the API variables
+stripped —, or a key — `anthropic_key_test`, one 8-token request), level 3 optional (the sound
+libraries and, on macOS, the ffmpeg zips). Optional rows stay grey (`opt`) until their test
+turns them green; level 1 rows are orange when something is missing. One background job at a
+time (`setup_job`: the row's buttons become a Stop, progress in the row's detail through
+`on_progress`, then the probe runs again). « That is enough for me: start editing » sits right
+after level 1.
+
+**Claude Code in the bridge**: `_ClaudeCodeClient` in `TOOLKIT_BRIDGE` mimics
+`client.messages.create` through `claude -p --output-format json --tools "" --system-prompt …`
+(the plan pays, so the API variables are removed from the environment; `job["work"]` =
+`<data>/work` as cwd). traduire.py forces a `submit_texts` tool call: the tool's JSON schema is
+appended to the prompt as the only allowed answer, the answer is parsed (fences stripped, the
+outer braces) into a `tool_use` block, so `_claude_submit_texts` reads it as from the API;
+thinking blocks never appear. traduire's retry wrapper imports `anthropic` on an error: a
+stand-in module with `APIStatusError` and `APIConnectionError` is put in `sys.modules` when
+the real one is absent. `job["llm"] = "claude_code"`, `claude_exe`, `claude_kind` (which Claude
+the analysis pass takes when the local model is chosen: Claude Code when the command is there
+and no key is set). Checked 2026-10-30: two sentences translated with analysis, consistency
+and glossary passes in 21 s on the Max plan.
+
+**No fade from black at the start** (1.8.0, user: the first frame is the thumbnail X shows):
+`compute_cuts` sets `vi` only for a piece after a removed second or more; the fade to black at
+the very end stays. Checked: first frame mean luma 128, the join at 11.87 s at 7.
+
 ## The toolkit installs itself (1.7.0)
 
 Four pieces, so that a macOS (or Linux) user never opens a terminal for the toolkit:

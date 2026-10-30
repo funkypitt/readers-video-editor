@@ -12,6 +12,18 @@ that download.
 
 ## Key points
 
+- **Getting started** (1.8.0): a page shown at the first start, and again from « Getting
+  started… » on the home page or Project ▾ while editing. Three levels, each step checked by a
+  real test and fitted with the button that does the work: level 1, the editing (ffmpeg, the
+  transcription and its model: nothing to install, « that is enough for me » leads straight to
+  the editing); level 2, optional, translation and subtitles (the toolkit downloaded by the app;
+  the language model, three ways: Ollama on this computer with the model this machine can carry
+  downloaded by the app and tested, **Claude Code** on your own Claude plan with no key —
+  installed by the app, signed in once in a terminal, tested —, or an Anthropic API key tested
+  against the API); level 3, optional, the improved sound (the libraries, and on a Mac ffmpeg and
+  ffprobe, fetched now rather than at the first use). Each choice says what it costs in
+  quality and speed (the Whisper model from tiny to large-v3, the local models, Claude).
+  Someone who never translates skips levels 2 and 3 entirely.
 - **Open** a video or a recording (MP4, MKV, MOV, WebM, MP3, M4A, WAV, FLAC…) from the home
   page, or drop it on the window; the home page lists the files to resume. A `.srt` beside it
   with the same name is read at once; otherwise the words are transcribed here (faster-whisper,
@@ -29,7 +41,8 @@ that download.
   « I highlight what I cut » removes them and keeps all the rest.
 - **The cuts** are placed in the quietest instant near each boundary, never on a word; the sound
   fades in and out at each piece (0 to 3 s), the picture fades to black only where a second or
-  more is removed. The log (.txt) says what was kept and removed, word for word; the edit list
+  more is removed, and never at the very start of the edit: its first frame is the thumbnail
+  the social networks show. The log (.txt) says what was kept and removed, word for word; the edit list
   (.edl, CMX 3600) reopens the cut in a video editor.
 - **Watch the edit** plays it, jumping over what is removed. **Produce the edit** writes MP4
   (picture re-encoded once, x264), or MP3 / M4A / WAV from the sound alone, beside the original,
@@ -49,7 +62,9 @@ that download.
 - **Translate…** (Ctrl+T) hands the text to the
   [traduction toolkit](https://github.com/funkypitt/traduction-toolkit)'s `traduire.py`: analysis
   of the content (names, glossary), translation by chunks, proofreading, consistency and glossary
-  checks, by a local model (Ollama, `gemma4:31b`) or Claude (`ANTHROPIC_API_KEY`); every pass
+  checks, by a local model (Ollama, `gemma4:31b`), by Claude Code on your own plan (the `claude`
+  command, no key: the toolkit's forced tool call becomes a JSON answer the app parses) or by
+  Claude through an API key; every pass
   goes to the model you chose, and the waiting page names it at each step (a box can hand the
   analysis alone to Claude, as the toolkit does by default). The
   translation becomes a second page: a switch in the bar shows the original or the translation,
