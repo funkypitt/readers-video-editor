@@ -258,6 +258,13 @@ for Reels 2026; caption size for Reels 2026; caption placement), vfxai (trending
 styles 2026), vsubtitle (Reels caption best practices), clipspeed (Reels captions, safe zones),
 krumzi (captions on Reels 2026).
 
+## Times past the hour (1.6.1)
+
+The margin of the page and the list of passages took `hmsm(t)[3:8]`, which cut the hours off:
+at 1:05:05 the margin said 05:05. `stamp()` now gives `MM:SS` under the hour and `H:MM:SS`
+past it (the passage list's time column widened from 52 to 64 px). A passage without words of
+a minute or more is shown as `34:28` rather than `2067.6 s`. Checked on a 66-minute recording.
+
 ## Project files (1.3.0)
 
 `<stem>.rve.json` beside the video (or wherever asked): `source`, `source_name`, the

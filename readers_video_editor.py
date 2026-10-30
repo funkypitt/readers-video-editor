@@ -28,7 +28,7 @@ from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 APP = "readers-video-editor"
-VERSION = "1.6.0"
+VERSION = "1.6.1"
 
 
 def _app_dirs():
@@ -2700,6 +2700,15 @@ def hmsm(t):
     return f"{h:02d}:{m:02d}:{s:02d}.{ms:03d}"
 
 
+def stamp(t):
+    """A time in the margin of the page and in the list of passages: 05:05, and 1:05:05 past
+    the hour (the hours were cut off until 1.6.1)."""
+    t = max(0, int(round(t)))
+    h, r = divmod(t, 3600)
+    m, s = divmod(r, 60)
+    return f"{h}:{m:02d}:{s:02d}" if h else f"{m:02d}:{s:02d}"
+
+
 def plain(t):
     """A duration for a human: 1:02:03 or 2:03."""
     t = max(0, int(round(t)))
@@ -3069,10 +3078,10 @@ class Page(QtWidgets.QTextEdit):
                 open_block = False
                 tf = QtGui.QTextCharFormat(time_fmt)
                 tf.setProperty(QtGui.QTextFormat.UserProperty, float(d))
-                cur.insertText(hmsm(d)[3:8] + "\t", tf)
+                cur.insertText(stamp(d) + "\t", tf)
                 where = _("Start") + " · " if i == 0 else (_("End") + " · " if i == len(self.tokens) - 1 else "")
                 start = cur.position()
-                cur.insertText(f" {where}{f - d:.1f} s {label_without} ", pause_fmt)
+                cur.insertText(f" {where}{plain(f - d) if f - d >= 60 else f'{f - d:.1f} s'} {label_without} ", pause_fmt)
                 self.spans[i] = (start, cur.position())
                 continue
             gap = d - prev_end
@@ -3083,7 +3092,7 @@ class Page(QtWidgets.QTextEdit):
                 first = False
                 tf = QtGui.QTextCharFormat(time_fmt)
                 tf.setProperty(QtGui.QTextFormat.UserProperty, float(d))
-                cur.insertText(hmsm(d)[3:8] + "\t", tf)
+                cur.insertText(stamp(d) + "\t", tf)
                 open_block, chars = True, 0
             start = cur.position()
             cur.insertText(t, word_fmt)
@@ -3455,7 +3464,7 @@ class PassageDelegate(QtWidgets.QStyledItemDelegate):
         mono = QtGui.QFont(self.view.window().mono, max(7, int(option.font.pointSize() * 0.9)))
         painter.setFont(mono)
         painter.setPen(QtGui.QColor(C_ACCENT))
-        painter.drawText(QtCore.QRect(r.left(), r.top(), 52, r.height()), QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop, hmsm(t)[3:8])
+        painter.drawText(QtCore.QRect(r.left(), r.top(), 64, r.height()), QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop, stamp(t))
         small = QtGui.QFont(option.font)
         small.setPointSizeF(max(7.0, option.font.pointSizeF() * 0.85))
         painter.setFont(small)
@@ -3465,7 +3474,7 @@ class PassageDelegate(QtWidgets.QStyledItemDelegate):
         painter.drawText(QtCore.QRect(r.right() - 20, r.top() - 2, 20, r.height()), QtCore.Qt.AlignRight | QtCore.Qt.AlignTop, "×")
         painter.setFont(option.font)
         painter.setPen(QtGui.QColor(C_TEXT))
-        box = QtCore.QRect(r.left() + 58, r.top(), r.width() - 58 - 96, r.height())
+        box = QtCore.QRect(r.left() + 66, r.top(), r.width() - 66 - 96, r.height())
         painter.setClipRect(box)
         painter.drawText(box, QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop | QtCore.Qt.TextWordWrap, text)
         painter.restore()
