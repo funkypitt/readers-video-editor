@@ -61,6 +61,13 @@ that download.
   on the pauses). At the output, « Subtitles » draws the original or a translation into the
   picture of the edit (the toolkit's style), and « Subtitle files beside the edit » writes an
   `.srt` per language on the edit's timeline, carried in the MP4 as tracks too.
+- **Instagram-like captions**: instead of the two lines at the bottom, the style the short
+  videos share: a few big words at a time (four at most, Montserrat ExtraBold, white with a
+  black outline), centred in the lower middle of the picture above the band the apps cover,
+  the spoken word in yellow, one card per group of words cut at sentence ends and pauses.
+  Built from the words' timings (exact from the transcription, estimated from subtitles or a
+  translation); sized as a share of the picture, so a vertical, a square and a landscape
+  picture get the same look.
 - **Subtitle editor**: the **Subtitles** button (Ctrl+U) replaces the page with the cues of the
   text shown, made once by the toolkit and kept with the project as you leave them: the text of
   each one edited in place (Enter splits at the cursor, Shift+Enter breaks the line, Tab goes
@@ -106,5 +113,5 @@ Licence MIT, voir `LICENSE`. The cutting method comes from the author's `monter.
 videos from addresses by [yt-dlp](https://github.com/yt-dlp/yt-dlp); translation and subtitle
 re-segmentation by the author's `traduire.py`, sound finishing by the author's `finaliser.py` and
 `nettoyer.py` (traduction toolkit; [DeepFilterNet](https://github.com/Rikorose/DeepFilterNet),
-pyloudnorm, DNSMOS). Fonts: Roboto (Apache 2.0)
+pyloudnorm, DNSMOS). Fonts: Roboto (Apache 2.0), Montserrat (SIL OFL 1.1, the captions)
 and Literata (SIL OFL 1.1), bundled in `packaging/fonts`.

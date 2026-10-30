@@ -482,6 +482,14 @@ En bas à gauche, sous *Sous-titres* :
 - **Dans l'image : Français** (ou *Original*, ou chaque traduction) : les sous-titres sont
   **incrustés** dans l'image du MP4, dans le style par défaut du toolkit (Arial, blanc à
   contour noir), réduits pour les vidéos plus étroites que 16:9. *Aucun* n'incruste rien.
+- Le style, à côté : **Deux lignes en bas** (les sous-titres habituels), ou **Légendes façon
+  Instagram** : quelques grands mots à la fois (quatre au plus, Montserrat ExtraBold, blanc à
+  contour noir), centrés dans le bas-milieu de l'image, au-dessus de la bande que les
+  applications recouvrent, le mot prononcé en jaune ; une carte par groupe de mots, coupée aux
+  fins de phrase et aux pauses. Les cartes suivent le minutage des mots : exact quand le texte
+  vient de la transcription, estimé quand il vient d'un fichier de sous-titres ou d'une
+  traduction. Les tailles sont des parts de l'image : une vidéo verticale, carrée ou 16:9 reçoit
+  le même rendu. Les `.srt` à côté du montage restent les sous-titres classiques.
 - **Fichiers de sous-titres à côté du montage (.srt)** : un `.srt` par langue, sur la durée du
   montage (`ma-video_edit.fr.srt`, `ma-video_edit.en.srt`), **et** ces mêmes sous-titres
   ajoutés au MP4 comme pistes que le lecteur peut afficher ou cacher.

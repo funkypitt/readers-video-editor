@@ -230,6 +230,34 @@ path works, the hum at 50.2 Hz and the noise are found and the voice level stays
 difference between the plain edit and the finished one, 0.25 s frames on the voice: p10 −4.7 dB,
 p90 −3.0 dB: a constant gain, the rest is the removed hum and noise; the floor drops 9.6 dB).
 
+## Instagram-like captions (1.6.0)
+
+A second combo beside « Subtitles » (`caption_style`: `subtitles` or `captions`, config and
+project file). With `captions`, the burnt-in text is not the cues but an ASS file written by
+`captions_ass()` from the words of the chosen text on the edit's timeline
+(`tokens_in_edit`): `caption_cards()` groups the words into cards of 4 words / 26 characters
+at most, cut at a join, a sentence change, a word ending in .!?, or a pause ≥ 0.8 s; one
+Dialogue event per spoken word shows its card with that word in the accent colour
+(`{\c&H4AE8FF&}` = the stabilo #ffe84a); a card stays 0.5 s after its last word unless the
+next card starts sooner. Style: Montserrat ExtraBold (bundled, OFL, `fontsdir=` on the
+subtitles filter so the bundles find it without any installation), size 6.5 % of the shorter
+side (47 px on 720, 70 px on 1080×1920), outline 8 % and shadow 6 % of the size, alignment 2
+(bottom centre) with MarginV 26 % of the height and 8 % side margins, PlayRes = the picture
+(the square side when the frame is square). No animation, no uppercase, one accent colour.
+The classic path is unchanged (`force_style`, now also with `fontsdir`); the `.srt` files
+beside the edit stay the cues. The overlay preview in the window still shows the cues, not
+the cards. Checked 2026-10-29 on the synthetic media: 16:9 and square frames.
+
+The choices follow the trend guides of 2025-2026 (vendor blogs, consistent with one another):
+word-by-word highlight in a heavy sans with one accent colour is the style that holds
+attention best on talk videos; white with a black outline; centred in the lower-middle third,
+never at the bottom, where Reels put the account name, the caption and the audio ticker
+(a dead zone of 310–480 px on 1920); 60–75 px on 1080×1920; two lines at most; rotating
+through several colours is the most common mistake. Sources: Blitzcut (best caption style
+for Reels 2026; caption size for Reels 2026; caption placement), vfxai (trending caption
+styles 2026), vsubtitle (Reels caption best practices), clipspeed (Reels captions, safe zones),
+krumzi (captions on Reels 2026).
+
 ## Project files (1.3.0)
 
 `<stem>.rve.json` beside the video (or wherever asked): `source`, `source_name`, the

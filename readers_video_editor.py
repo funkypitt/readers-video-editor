@@ -28,7 +28,7 @@ from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 APP = "readers-video-editor"
-VERSION = "1.5.0"
+VERSION = "1.6.0"
 
 
 def _app_dirs():
@@ -1086,6 +1086,27 @@ _TR_SOUND = {
 for _code, _more in _TR_SOUND.items():
     _TR.setdefault(_code, {}).update(_more)
 
+# The strings of 1.6.0: Instagram-like captions
+_TR_CAPTIONS = {
+ "fr": {"Two lines at the bottom": "Deux lignes en bas", "Instagram-like captions": "Légendes façon Instagram",
+        "A few big words at a time, centred in the lower middle of the picture, the spoken word in yellow: the style of the short videos.":
+        "Quelques grands mots à la fois, centrés dans le bas-milieu de l'image, le mot prononcé en jaune : le style des vidéos courtes."},
+ "de": {"Two lines at the bottom": "Zwei Zeilen unten", "Instagram-like captions": "Untertitel im Instagram-Stil",
+        "A few big words at a time, centred in the lower middle of the picture, the spoken word in yellow: the style of the short videos.":
+        "Wenige große Wörter auf einmal, mittig im unteren Bildteil, das gesprochene Wort in Gelb: der Stil der Kurzvideos."},
+ "es": {"Two lines at the bottom": "Dos líneas abajo", "Instagram-like captions": "Rótulos estilo Instagram",
+        "A few big words at a time, centred in the lower middle of the picture, the spoken word in yellow: the style of the short videos.":
+        "Pocas palabras grandes a la vez, centradas en la parte media-baja de la imagen, la palabra pronunciada en amarillo: el estilo de los vídeos cortos."},
+ "pt": {"Two lines at the bottom": "Duas linhas em baixo", "Instagram-like captions": "Legendas ao estilo Instagram",
+        "A few big words at a time, centred in the lower middle of the picture, the spoken word in yellow: the style of the short videos.":
+        "Poucas palavras grandes de cada vez, centradas na parte média-baixa da imagem, a palavra dita a amarelo: o estilo dos vídeos curtos."},
+ "ru": {"Two lines at the bottom": "Две строки внизу", "Instagram-like captions": "Подписи в стиле Instagram",
+        "A few big words at a time, centred in the lower middle of the picture, the spoken word in yellow: the style of the short videos.":
+        "Несколько крупных слов за раз, по центру нижней половины кадра, произносимое слово жёлтым: стиль коротких видео."},
+}
+for _code, _more in _TR_CAPTIONS.items():
+    _TR.setdefault(_code, {}).update(_more)
+
 
 def _lang():
     for var in ("LC_ALL", "LC_MESSAGES", "LANG"):
@@ -2034,6 +2055,82 @@ def filter_path(path):
     return str(path).replace("\\", "/").replace(":", "\\:").replace("'", "\\'")
 
 
+# Instagram-like captions (1.6.0): the style the short videos of 2025-2026 share — a few big words
+# at a time in a heavy sans, white with a black outline, centred in the lower-middle of the
+# picture (above the band the apps cover), the spoken word in one accent colour (the app's
+# stabilo yellow). Sizes are shares of the picture, so a vertical, a square and a landscape
+# picture get the same look.
+CAPTION_FONT = "Montserrat ExtraBold"   # bundled in packaging/fonts (OFL)
+CAPTION_WORDS = 4                       # words per card at most
+CAPTION_CHARS = 26                      # characters per card at most (long words make shorter cards)
+CAPTION_PAUSE = 0.8                     # a pause this long ends a card
+CAPTION_HOLD = 0.5                      # how long a card stays after its last word, when nothing follows
+CAPTION_ACCENT = "&H4AE8FF&"            # STABILO #ffe84a as ASS blue-green-red
+
+
+def caption_cards(tokens):
+    """The words of the edit grouped into cards: [[(text, start, end), …], …]. A card ends on a
+    join, at a sentence end, on a pause, at CAPTION_WORDS words or CAPTION_CHARS characters."""
+    cards, card, chars, last = [], [], 0, None
+    for t, d, f, sidx in tokens:
+        if t is None:
+            if card:
+                cards.append(card)
+            card, chars, last = [], 0, None
+            continue
+        word = re.sub(r"[{}\\]", "", t).strip()
+        if not word:
+            continue
+        if card and (sidx != last[3] or d - last[2] > CAPTION_PAUSE or len(card) >= CAPTION_WORDS
+                     or chars + 1 + len(word) > CAPTION_CHARS or last[0].rstrip()[-1:] in ".!?…"):
+            cards.append(card)
+            card, chars = [], 0
+        card.append((word, d, f))
+        chars += len(word) + (1 if chars else 0)
+        last = (word, d, f, sidx)
+    if card:
+        cards.append(card)
+    return cards
+
+
+def _ass_time(t):
+    t = max(0.0, t)
+    h, rest = divmod(t, 3600)
+    m, sec = divmod(rest, 60)
+    return f"{int(h)}:{int(m):02d}:{sec:05.2f}"
+
+
+def captions_ass(tokens, width, height):
+    """An ASS subtitle file of Instagram-like captions for the words given (on the edit's
+    timeline): one event per spoken word, showing its card with that word in the accent colour."""
+    W, H = (width, height) if width > 0 and height > 0 else (1280, 720)
+    size = max(18, round(0.065 * min(W, H)))
+    outline, shadow = max(2, round(size * 0.08)), max(1, round(size * 0.06))
+    ml, mv = round(0.08 * W), round(0.26 * H)
+    L = ["[Script Info]", "ScriptType: v4.00+", f"PlayResX: {W}", f"PlayResY: {H}", "WrapStyle: 0", "ScaledBorderAndShadow: yes", "",
+         "[V4+ Styles]",
+         "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, "
+         "ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
+         f"Style: Captions,{CAPTION_FONT},{size},&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,{outline},{shadow},2,{ml},{ml},{mv},1",
+         "", "[Events]", "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"]
+    cards = caption_cards(tokens)
+    for k, card in enumerate(cards):
+        start = card[0][1]
+        end = card[-1][2] + CAPTION_HOLD
+        if k + 1 < len(cards):
+            end = min(end, cards[k + 1][0][1])
+        end = max(end, card[-1][2])
+        at = start
+        for i, (word, d, f) in enumerate(card):
+            a = at
+            b = card[i + 1][1] if i + 1 < len(card) else end
+            b = max(b, a + 0.05)
+            at = b
+            text = " ".join(("{\\c" + CAPTION_ACCENT + "}" + w + "{\\c&HFFFFFF&}") if j == i else w for j, (w, _d, _f) in enumerate(card))
+            L.append(f"Dialogue: 0,{_ass_time(a)},{_ass_time(b)},Captions,,0,0,0,,{text}")
+    return "\n".join(L) + "\n"
+
+
 # ---- the subtitle editor: cues on the timeline of the whole file, kept in the project ----
 MAX_CPS = 22                  # characters a second a subtitle must not exceed (the toolkit's 17 is its target, harsh as a limit)
 CPS_TARGET = 17               # traduire.MAX_CPS: comfortable reading; above it the pace is shown amber, above MAX_CPS red
@@ -2459,10 +2556,15 @@ def produce_video(task, source, cuts, fade, image_fade, out, burn=None, tracks=(
                 cmd += ["-map", f"{k + 1}:0"]
         if burn:
             # ffmpeg's filter parser is picky about paths: a copy with a plain name (as traduire.py)
-            sub = Path(tempfile.mkdtemp(prefix="subs_")) / "subs.srt"
+            sub = Path(tempfile.mkdtemp(prefix="subs_")) / ("subs" + Path(burn[0]).suffix.lower())
             shutil.copy2(burn[0], sub)
-            cmd += ["-vf", f"subtitles='{filter_path(sub)}':force_style='{burn[1]}'",
-                    "-c:v", "libx264", "-crf", "18", "-preset", "medium", "-pix_fmt", "yuv420p"]
+            vf = f"subtitles='{filter_path(sub)}'"
+            if burn[1]:
+                vf += f":force_style='{burn[1]}'"
+            fonts = bundled_fonts_dir()
+            if fonts:
+                vf += f":fontsdir='{filter_path(fonts)}'"
+            cmd += ["-vf", vf, "-c:v", "libx264", "-crf", "18", "-preset", "medium", "-pix_fmt", "yuv420p"]
         else:
             cmd += ["-c:v", "copy"]
         if finish:
@@ -2618,7 +2720,7 @@ def _para(text, indent):
     return textwrap.wrap(text, width=72, initial_indent=indent, subsequent_indent=indent) or [indent + _("(without words)")]
 
 
-def log_text(out, project, tokens, cuts, mode, fade, image_fade, fmt, square=False, sound=None):
+def log_text(out, project, tokens, cuts, mode, fade, image_fade, fmt, square=False, sound=None, subtitles=None):
     duration = project.get("duration") or 0.0
     kept = sum(c["f"] - c["d"] for c in cuts)
     video = fmt == "mp4"
@@ -2635,6 +2737,8 @@ def log_text(out, project, tokens, cuts, mode, fade, image_fade, fmt, square=Fal
                                            else _("fade to black where %1 or more is removed, straight cut elsewhere", _secs(IMAGE_FADE_MIN, 0))))
         if square:
             L.append(f"{_('Frame'):<18}: " + _("square (1:1), the centre of the picture"))
+        if subtitles:
+            L.append(f"{_('Subtitles'):<18}: {subtitles}")
     if sound:
         lines = sound_summary(sound) or [_("finished by finaliser.py")]
         L.append(f"{_('Sound'):<18}: " + "; ".join(lines))
@@ -2724,11 +2828,11 @@ def log_edl(out, project, cuts, fmt):
     return "\n".join(L + notes) + "\n"
 
 
-def write_logs(out, project, tokens, cuts, mode, fade, image_fade, fmt, square=False, sound=None):
+def write_logs(out, project, tokens, cuts, mode, fade, image_fade, fmt, square=False, sound=None, subtitles=None):
     image = image_fade and fade > 0
     cuts_edl = cuts if image else [dict(c, vi=False, vo=False) for c in cuts]
     written = []
-    for ext, content in (("txt", log_text(out, project, tokens, cuts, mode, fade, image_fade, fmt, square, sound)),
+    for ext, content in (("txt", log_text(out, project, tokens, cuts, mode, fade, image_fade, fmt, square, sound, subtitles)),
                          ("edl", log_edl(out, project, cuts_edl, fmt))):
         path = out.with_suffix("." + ext)
         with open(path, "w", encoding="utf-8") as f:
@@ -2794,6 +2898,7 @@ def load_config():
     cfg.setdefault("target_lang", "fr")
     cfg.setdefault("burn", "none")             # subtitles drawn into the picture of the edit: "none", "src" or a language
     cfg.setdefault("srt_files", False)
+    cfg.setdefault("caption_style", "subtitles")  # what is drawn into the picture: "subtitles" (two lines at the bottom) or "captions" (Instagram-like)
     cfg.setdefault("frame", "as_is")           # the picture of the edit: as it is, or a centred square (1:1)
     cfg.setdefault("sound", "as_is")           # the sound of the edit: as it is, or finished by the toolkit (finaliser.py)
     cfg.setdefault("toolkit_dir", "")
@@ -4260,12 +4365,19 @@ class Main(QtWidgets.QMainWindow):
         self.subs = QtWidgets.QComboBox()
         self.subs.currentIndexChanged.connect(lambda _i: self.remember_output())
         g.addWidget(self.subs, 6, 0)
+        self.caption_style = QtWidgets.QComboBox()
+        self.caption_style.addItem(_("Two lines at the bottom"), "subtitles")
+        self.caption_style.addItem(_("Instagram-like captions"), "captions")
+        self.caption_style.setCurrentIndex(max(0, self.caption_style.findData(self.cfg.get("caption_style", "subtitles"))))
+        self.caption_style.setToolTip(_("A few big words at a time, centred in the lower middle of the picture, the spoken word in yellow: the style of the short videos."))
+        self.caption_style.currentIndexChanged.connect(lambda _i: self.remember_output())
+        g.addWidget(self.caption_style, 6, 1)
         self.srt_files = QtWidgets.QCheckBox(_("Subtitle files beside the edit (.srt)"))
         self.srt_files.setChecked(bool(self.cfg.get("srt_files", False)))
         self.srt_files.toggled.connect(lambda _c: self.remember_output())
-        g.addWidget(self.srt_files, 6, 1)
+        g.addWidget(self.srt_files, 7, 0, 1, 2)
         self.b_produce = self._btn(_("Produce the edit"), self.produce_or_stop, kind="strong", tip="Ctrl+E")
-        g.addWidget(self.b_produce, 7, 0, 1, 2)
+        g.addWidget(self.b_produce, 8, 0, 1, 2)
         pv.addWidget(self.settings)
         self.following = QtWidgets.QWidget()
         self.following.setObjectName("following")
@@ -4617,6 +4729,7 @@ class Main(QtWidgets.QMainWindow):
         for w in (self.fade, self.image_fade, self.format, self.b_preview, self.b_clear, self.b_silences, self.b_read, self.b_subs, self.b_text, self.b_undo, self.b_redo,
                   self.b_project, self.subs, self.srt_files, self.lang_box, self.sound):
             w.setEnabled(loaded)
+        self.caption_style.setEnabled(loaded and (self.subs.currentData() or "none") != "none")
         self.refresh_frame_option()
         for w in (self.b_highlight, self.b_erase, self.b_keep, self.b_cut):
             w.setEnabled(loaded and not self.subs_mode)
@@ -5037,6 +5150,7 @@ class Main(QtWidgets.QMainWindow):
         self.subs.blockSignals(False)
         self.subs.setVisible(video)
         self.l_subs.setVisible(video)
+        self.caption_style.setVisible(video)
         self.refresh_overlay()
 
     def remember_output(self):
@@ -5044,6 +5158,8 @@ class Main(QtWidgets.QMainWindow):
             self.cfg["burn"] = self.subs.currentData()
         self.cfg["srt_files"] = self.srt_files.isChecked()
         self.cfg["frame"], self.cfg["sound"] = self.frame.currentData() or "as_is", self.sound.currentData() or "as_is"
+        self.cfg["caption_style"] = self.caption_style.currentData() or "subtitles"
+        self.caption_style.setEnabled((self.subs.currentData() or "none") != "none")
         save_config(self.cfg)
         self.refresh_overlay()
 
@@ -5340,7 +5456,7 @@ class Main(QtWidgets.QMainWindow):
             self.cfg["burn"] = out["burn"]
         if "srt_files" in out:
             self.srt_files.setChecked(bool(out["srt_files"]))
-        for key, combo in (("frame", self.frame), ("sound", self.sound)):
+        for key, combo in (("frame", self.frame), ("sound", self.sound), ("caption_style", self.caption_style)):
             if out.get(key) and combo.findData(out[key]) >= 0:
                 combo.setCurrentIndex(combo.findData(out[key]))
 
@@ -5366,7 +5482,8 @@ class Main(QtWidgets.QMainWindow):
                 "selection": {"view": self.view, "ranges": [list(p) for p in clean], "mode": self.mode_value,
                               "fade": float(self.fade.currentData()), "image_fade": self.image_fade.isChecked()},
                 "output": {"format": self.format.currentData(), "burn": self.subs.currentData() or "none", "srt_files": self.srt_files.isChecked(),
-                           "frame": self.frame.currentData() or "as_is", "sound": self.sound.currentData() or "as_is"}}
+                           "frame": self.frame.currentData() or "as_is", "sound": self.sound.currentData() or "as_is",
+                           "caption_style": self.caption_style.currentData() or "subtitles"}}
         write_json(path, data)
         self.project_file = path
         self.show_project_name()
@@ -5877,8 +5994,14 @@ class Main(QtWidgets.QMainWindow):
         d = Path(project["dir"])
         # the subtitles of the edit: the ones drawn into the picture, the files beside it
         burn = self.subs.currentData() if fmt == "mp4" and project["type"] == "video" else "none"
+        captions = burn in self.texts and self.caption_style.currentData() == "captions"
         srt_files = self.srt_files.isChecked()
-        keys = sorted(self.texts) if srt_files else ([burn] if burn in self.texts else [])
+        keys = sorted(self.texts) if srt_files else ([burn] if burn in self.texts and not captions else [])
+        burn_tokens = list(self.texts[burn]["tokens"]) if captions else None
+        burn_code = (self.src_lang if burn == "src" else burn) if burn in self.texts else None
+        sub_line = None
+        if burn_code is not None:
+            sub_line = _("In the picture: %1", lang_label(burn_code)) + (", " + _("Instagram-like captions") if captions else "")
         texts = {k: list(self.texts[k]["tokens"]) for k in keys}
         codes = {k: (self.src_lang if k == "src" else k) for k in keys}
         tk = toolkit_dir(self.cfg)
@@ -5896,6 +6019,7 @@ class Main(QtWidgets.QMainWindow):
             if square and w > 0 and h > 0:
                 w = h = min(w, h)
             style = scale_style(SUBTITLE_STYLE, w, h)
+        size = (w, h) if project.get("video") else (0, 0)
         self.task = {"cancelled": False, "progress": 0.0, "message": "", "proc": None, "sound": None}
         task = self.task
 
@@ -5918,15 +6042,21 @@ class Main(QtWidgets.QMainWindow):
                         f.write(srt_text(cues))
                     paths[key] = path
                 task["message"] = ""
+                burn_style = style
+                if captions:
+                    ass = d / "captions.ass"
+                    with open(ass, "w", encoding="utf-8") as f:
+                        f.write(captions_ass(tokens_in_edit(burn_tokens, cuts), *size))
+                    paths[burn], burn_style = ass, None
                 if fmt == "mp4":
                     produce_video(task, project["source"], cuts, fade, image_fade, out,
-                                  burn=(paths[burn], style) if burn in paths else None,
+                                  burn=(paths[burn], burn_style) if burn in paths else None,
                                   tracks=[(codes[k], paths[k]) for k in keys if srt_files], square=square, finish=finish)
                 else:
                     produce_audio(task, project["source"], cuts, project["audio"], fmt, out, finish=finish)
             finally:
                 stop.set()
-            write_logs(out, project, tokens, cuts, mode, fade, image_fade, fmt, square=square, sound=task.get("sound"))
+            write_logs(out, project, tokens, cuts, mode, fade, image_fade, fmt, square=square, sound=task.get("sound"), subtitles=sub_line)
             return out
 
         def done(path):
