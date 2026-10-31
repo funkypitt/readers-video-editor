@@ -358,3 +358,46 @@ one (`open_project_file`, by drop, Ctrl+Shift+O, the home field, the command lin
 those files into the project folder of the source (`install_project`) and opens the source; a
 source not found at its path is looked for beside the project file by name. The folder keeps
 autosaving as before; the file changes only on Save. Several files for one video = several clips.
+
+## The toolkit's practices (1.9.0)
+
+Audit of 2026-10-31 against the traduction pipeline (traduire.py, monter.py, finaliser.py):
+the translation, the subtitles and the sound already went through the toolkit's own
+functions; six points were behind.
+
+- **Windows transcription**: `vad_filter=True` imports onnxruntime, which the Windows build
+  excludes (PyInstaller crash, 1.5.0). `transcribe()` now turns the voice detection off when
+  onnxruntime cannot be imported, instead of failing.
+- **Public toolkit late**: the app downloads `funkypitt/traduction-toolkit`, which had not
+  been synced since 2026-10-18 (the glossary fix of 2026-10-21 was missing). Run
+  `~/code/traduction/sync-toolkit.sh` after every toolkit fix: on this computer the app uses
+  `~/code/traduction`, so a late public copy never shows here.
+- **The graphics card before finaliser.py** (`take_gpu_lock`, `free_gpu` in
+  `finish_sound`): the toolkit's lock file `~/.cache/traduction_gpu.lock` is taken (fcntl,
+  Linux/macOS, cancellable wait), then the models Ollama keeps loaded are unloaded
+  (`/api/ps`, `keep_alive: 0`) and nvidia-smi is polled until 6000 MiB are free — the rule of
+  `traduire.free_gpu_for_task`. A translation by gemma4:31b followed by « Sound: improved »
+  within five minutes used to leave DeepFilterNet without memory.
+- **Transcription**: `condition_on_previous_text=False` (no repeated sentence over a long
+  stretch) and `repair_word_timings()` = `traduire._repair_aberrant_word_timings` (a word
+  longer than 3 s or 4× the segment's median is shortened on the side of its reliable
+  neighbour). `hallucination_silence_threshold` was tried and NOT kept: on a synthetic voice it
+  dropped every word (0 instead of 6); on real speech it changed nothing.
+  Measured on 5 min of a public-domain LibriVox chapter (French, with an English quotation),
+  CPU int8, 20 threads: small old settings 35 s, new 27 s — and the old settings *translated*
+  the English quotation into French (« Donne-moi les jours… »: conditioning on the previous
+  French text), the new ones write it as spoken. medium: 62 s and it skipped the whole
+  quotation. large-v3-turbo: 66 s and NO punctuation at all without the previous-text
+  conditioning (0 sentence end in 700 words), which breaks paragraphs and subtitle cuts — so
+  it is not offered, and small stays the default.
+- **Claude Code retries** (bridge, `_ClaudeCodeClient.create`): traduire.py's retry loop only
+  knows the anthropic library's errors, so one failed `claude -p` stopped the translation. Now
+  three tries (15 s, 45 s) on a failure or an answer without JSON; a login or credit message
+  is not retried; after three answers without JSON an empty `submit_texts` is returned and
+  traduire.py asks again for the missing lines. Checked with a fake `claude` (overloaded then
+  OK → 2 calls; prose → 3 calls, {}; not logged in → 1 call, error).
+- **MP3 playback**: seeking in a VBR MP3 lands by estimate. `listening_copy()` makes
+  `listening.m4a` (AAC 160k, `-aac_pns 0`) in the project folder in a thread at opening, and
+  `use_listening_copy` swaps it into the player at the same position (signal
+  `listening_ready`). Both come from ffmpeg's decoding: lag 0 samples at 30 s, 5 min and
+  10 min of a VBR MP3. The exports still read the source.

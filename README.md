@@ -12,6 +12,7 @@ that download.
 
 ## Key points
 
+- **Transcription and sound like the toolkit** (1.9.0): no repeated sentences, no word stretched over a pause, the graphics card freed before the sound is improved, exact playback of MP3 files, Claude Code retried when it fails.
 - **Getting started** (1.8.0): a page shown at the first start, and again from « Getting
   started… » on the home page or Project ▾ while editing. Three levels, each step checked by a
   real test and fitted with the button that does the work: level 1, the editing (ffmpeg, the

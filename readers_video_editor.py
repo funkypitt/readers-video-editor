@@ -28,7 +28,7 @@ from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 APP = "readers-video-editor"
-VERSION = "1.8.0"
+VERSION = "1.9.0"
 
 
 def _app_dirs():
@@ -74,6 +74,10 @@ LANGUAGES = [("", "auto"), ("fr", "Français"), ("en", "English"), ("de", "Deuts
              ("pt", "Português"), ("nl", "Nederlands"), ("ru", "Русский"), ("pl", "Polski"), ("ja", "日本語"), ("zh", "中文")]
 MODELS = ["tiny", "base", "small", "medium", "large-v3"]
 MODEL_DEFAULT = "small"
+HALLUCINATION_SILENCE = 2.0  # faster-whisper: a doubtful passage between silences this long is dropped
+WORD_MAX_DUR = 3.0          # traduire.ABERRANT_WORD_MAX_DUR_SEC: no word lasts longer
+WORD_RATIO = 4.0            # traduire.ABERRANT_WORD_RATIO: nor 4 times the median word of its segment
+WORD_CPS = 14.0             # traduire.CHARS_PER_SECOND_ESTIMATE: the length given back to such a word
 
 
 # ------------------------------------------------------------------------------------------
@@ -1529,6 +1533,22 @@ _TR_START = {
 for _code, _more in _TR_START.items():
     _TR.setdefault(_code, {}).update(_more)
 
+# The strings of 1.9.0: the graphics card made free before the sound is improved
+_TR_GPU = {
+ "fr": {"Waiting for the graphics card (another task of the toolkit is using it)…": "En attente de la carte graphique (une autre tâche de la boîte à outils l'utilise)…",
+        "Freeing the graphics card…": "Libération de la carte graphique…"},
+ "de": {"Waiting for the graphics card (another task of the toolkit is using it)…": "Warten auf die Grafikkarte (eine andere Aufgabe des Werkzeugkastens benutzt sie)…",
+        "Freeing the graphics card…": "Die Grafikkarte wird freigegeben…"},
+ "es": {"Waiting for the graphics card (another task of the toolkit is using it)…": "Esperando la tarjeta gráfica (otra tarea de la caja de herramientas la está usando)…",
+        "Freeing the graphics card…": "Liberando la tarjeta gráfica…"},
+ "pt": {"Waiting for the graphics card (another task of the toolkit is using it)…": "À espera da placa gráfica (outra tarefa da caixa de ferramentas está a usá-la)…",
+        "Freeing the graphics card…": "A libertar a placa gráfica…"},
+ "ru": {"Waiting for the graphics card (another task of the toolkit is using it)…": "Ожидание видеокарты (её использует другая задача набора инструментов)…",
+        "Freeing the graphics card…": "Освобождение видеокарты…"},
+}
+for _code, _more in _TR_GPU.items():
+    _TR.setdefault(_code, {}).update(_more)
+
 
 def _lang():
     for var in ("LC_ALL", "LC_MESSAGES", "LANG"):
@@ -1883,6 +1903,29 @@ def extract_audio(source, wav):
     os.replace(tmp, wav)
 
 
+def listening_copy(source, folder):
+    """The file the window plays. An MP3 is played from an AAC copy (made once, in the project
+    folder), as monter.py does: seeking in an MP3 of variable bitrate lands by estimate, seconds
+    away on a long file, so a click on a word or the preview of the edit would miss it. Both
+    copies come from ffmpeg's decoding, the one the cuts are measured on."""
+    if Path(source).suffix.lower() != ".mp3":
+        return source
+    copy = Path(folder) / "listening.m4a"
+    try:
+        if copy.exists() and copy.stat().st_mtime >= Path(source).stat().st_mtime:
+            return str(copy)
+    except OSError:
+        pass
+    tmp = copy.with_name("listening.tmp.m4a")
+    r = subprocess.run([ffmpeg_exe(), "-nostdin", "-y", "-v", "error", "-i", source, "-vn", "-map", "0:a:0", "-c:a", "aac",
+                        "-b:a", "160k", "-aac_pns", "0", "-movflags", "+faststart", str(tmp)],
+                       capture_output=True, text=True, **_RUN_FLAGS)
+    if r.returncode != 0 or not tmp.exists():
+        return source
+    os.replace(tmp, copy)
+    return str(copy)
+
+
 def read_wav(path):
     import soundfile as sf
     x, sr = sf.read(str(path), dtype="float32", always_2d=True)
@@ -2161,8 +2204,18 @@ def transcribe(wav, language, model_size, duration, progress, cancelled):
     model = WhisperModel(model_size, device="cpu", compute_type="int8", download_root=MODELS_DIR)
     # the sound is handed over as samples: no PyAV decoding, the same WAV the cuts are measured on
     audio, _sr = read_wav(wav)
+    # faster-whisper's voice detection needs onnxruntime, which the Windows build leaves out:
+    # without it the whole sound is listened to, rather than nothing transcribed at all
+    try:
+        import onnxruntime  # noqa: F401
+        vad = True
+    except Exception:
+        vad = False
+    # each window is heard on its own (no loop that repeats a sentence over a long stretch), and a
+    # stretch of silence of 2 s around a doubtful passage drops what Whisper invented in it
     segments, info = model.transcribe(audio.astype(np.float32), language=language or None, word_timestamps=True,
-                                      vad_filter=True, beam_size=5)
+                                      vad_filter=vad, beam_size=5, condition_on_previous_text=False,
+                                      hallucination_silence_threshold=HALLUCINATION_SILENCE)
     words = []
     for k, seg in enumerate(segments):
         if cancelled():
@@ -2187,7 +2240,35 @@ def transcribe(wav, language, model_size, duration, progress, cancelled):
                 words[-1][2] = float(w.end)
             else:
                 words.append([text, float(w.start), float(w.end), k])
-    return words, info.language
+    return repair_word_timings(words), info.language
+
+
+def repair_word_timings(words):
+    """A word that lasts too long (Whisper stretched it over a pause or some music) is brought back
+    to a plausible length on the side of its reliable neighbour: traduire.py's
+    _repair_aberrant_word_timings, on the words of each segment. A cut placed on such a word
+    would otherwise fall seconds away from where it is spoken."""
+    by_seg = {}
+    for w in words:
+        by_seg.setdefault(w[3], []).append(w)
+    for ws in by_seg.values():
+        if len(ws) < 2:
+            continue
+        durs = sorted(w[2] - w[1] for w in ws)
+        limit = max(WORD_MAX_DUR, WORD_RATIO * durs[len(durs) // 2])
+        for i, w in enumerate(ws):
+            if w[2] - w[1] <= limit:
+                continue
+            est = max(0.25, len(w[0]) / WORD_CPS)
+            prev_gap = w[1] - ws[i - 1][2] if i > 0 else 999.0
+            next_gap = ws[i + 1][1] - w[2] if i + 1 < len(ws) else 999.0
+            if next_gap < 2.0:
+                w[1] = max(w[2] - est, ws[i - 1][2] if i > 0 else 0.0)
+            elif prev_gap < 2.0:
+                w[2] = min(w[1] + est, ws[i + 1][1] if i + 1 < len(ws) else w[2])
+            else:
+                w[2] = w[1] + est
+    return words
 
 
 # ------------------------------------------------------------------------------------------
@@ -2641,7 +2722,7 @@ def anthropic_key_test(key):
 
 def whisper_model_present(size):
     """faster-whisper's model files, as it stores them under the data folder."""
-    for d in glob.glob(os.path.join(MODELS_DIR, f"models--Systran--faster-whisper-{size}", "snapshots", "*")):
+    for d in glob.glob(os.path.join(MODELS_DIR, f"models--*--faster-whisper-{size}", "snapshots", "*")):
         if os.path.isfile(os.path.join(d, "model.bin")):
             return True
     return False
@@ -2670,7 +2751,7 @@ def probe_setup(cfg):
 # What runs in the toolkit's Python: traduire.py's passes, in the order of its main(). Its own
 # messages go to stderr, the app reads them for its gauge; the answers come as "@@ {json}".
 TOOLKIT_BRIDGE = r"""
-import json, os, sys, traceback
+import json, os, sys, time, traceback
 from dataclasses import asdict
 job = json.load(open(sys.argv[1], encoding="utf-8"))
 sys.path.insert(0, job["toolkit"])
@@ -2724,6 +2805,25 @@ try:
             for k in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "CLAUDE_CODE_OAUTH_TOKEN", "ANTHROPIC_BASE_URL"):
                 env.pop(k, None)
             os.makedirs(self.work, exist_ok=True)
+            # traduire.py retries only the errors of the anthropic library: an overloaded plan, a
+            # timeout or an answer that is not JSON are retried here, three tries in all
+            delays = [15, 45]
+            while True:
+                try:
+                    return self._once(cmd, prompt, env, tool, _re, _sp, NS)
+                except Exception as ex:
+                    said = str(ex).lower()
+                    if any(k in said for k in ("login", "log in", "authenticat", "credit")):
+                        raise
+                    if not delays:
+                        if tool and isinstance(ex, ValueError):
+                            # still no JSON: an empty answer, and traduire.py asks again for the missing lines
+                            return NS(content=[NS(type="tool_use", name=tool["name"], input={})], stop_reason="tool_use")
+                        raise
+                    print(f"claude: {type(ex).__name__}: {str(ex)[:200]} — another try in {delays[0]} s", flush=True)
+                    time.sleep(delays.pop(0))
+
+        def _once(self, cmd, prompt, env, tool, _re, _sp, NS):
             r = _sp.run(cmd, input=prompt, capture_output=True, text=True, env=env, cwd=self.work, timeout=1800)
             if r.returncode != 0:
                 raise RuntimeError("claude: " + (r.stderr or r.stdout or "")[-300:].strip())
@@ -2734,7 +2834,9 @@ try:
             if tool:
                 body = _re.sub(r"^```[a-zA-Z]*\s*|\s*```$", "", text.strip())
                 a, b = body.find("{"), body.rfind("}")
-                obj = json.loads(body[a:b + 1]) if a >= 0 and b > a else {}
+                if a < 0 or b <= a:
+                    raise ValueError("no JSON object in the answer")
+                obj = json.loads(body[a:b + 1])
                 return NS(content=[NS(type="tool_use", name=tool["name"], input=obj)], stop_reason="tool_use")
             return NS(content=[NS(type="text", text=text)], stop_reason="end_turn")
 
@@ -3387,6 +3489,66 @@ FINISH_ERRORS = (("ffmpeg introuvable", "ffmpeg and ffprobe were not found on th
                  ("n'a pas d'image", "this file has no picture."))
 
 
+GPU_LOCK = os.path.expanduser("~/.cache/traduction_gpu.lock")   # traduire.acquire_gpu_lock's file
+GPU_FREE_MIB = 6000                                               # traduire.wait_for_vram_release's floor
+
+
+def take_gpu_lock(task):
+    """The toolkit's shared lock on the graphics card (Linux and macOS), so that finaliser.py never
+    runs beside a transcription or a dub of the toolkit. Returns the open file (closing it frees
+    the lock), or None where there is no such lock."""
+    try:
+        import fcntl
+    except ImportError:
+        return None
+    try:
+        os.makedirs(os.path.dirname(GPU_LOCK), exist_ok=True)
+        fh = open(GPU_LOCK, "w")
+    except OSError:
+        return None
+    while True:
+        try:
+            fcntl.flock(fh, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            return fh
+        except BlockingIOError:
+            task["message"] = _("Waiting for the graphics card (another task of the toolkit is using it)…")
+            if task.get("cancelled"):
+                fh.close()
+                raise Cancelled()
+            time.sleep(1.0)
+        except OSError:
+            fh.close()
+            return None
+
+
+def free_gpu(task, url=OLLAMA_URL, timeout=60.0):
+    """traduire.free_gpu_for_task: the models Ollama keeps loaded (a translation a few minutes ago
+    leaves gemma4:31b in the card for five minutes) are unloaded, then the card's memory is
+    awaited, so that DeepFilterNet does not run out of it."""
+    unloaded = False
+    try:
+        for m in (ollama_json(url, "/api/ps", timeout=3) or {}).get("models", []):
+            name = m.get("name") or m.get("model")
+            if name:
+                task["message"] = _("Freeing the graphics card…")
+                ollama_json(url, "/api/generate", timeout=30, data={"model": name, "keep_alive": 0})
+                unloaded = True
+    except Exception:
+        pass
+    if not unloaded or not shutil.which("nvidia-smi"):
+        return
+    end = time.time() + timeout
+    while time.time() < end and not task.get("cancelled"):
+        try:
+            out = subprocess.run(["nvidia-smi", "--query-gpu=memory.free", "--format=csv,noheader,nounits"],
+                                 capture_output=True, text=True, timeout=10, **_RUN_FLAGS).stdout
+            if min(int(v) for v in out.split()) >= GPU_FREE_MIB:
+                return
+        except Exception:
+            return
+        time.sleep(1.0)
+
+
 def finish_sound(task, toolkit, src, fmt, channels, folder, share=(0.0, 1.0), python=None, path_first=None):
     """finaliser.py of the toolkit on `src`, written into `folder` as `<stem>_podcast.<fmt>`:
     the sound finished as for a podcast (mains hum, the background when it is a steady noise,
@@ -3401,8 +3563,15 @@ def finish_sound(task, toolkit, src, fmt, channels, folder, share=(0.0, 1.0), py
     env = dict(os.environ, PYTHONIOENCODING="utf-8", PYTHONUNBUFFERED="1")
     if path_first:
         env["PATH"] = path_first + os.pathsep + env.get("PATH", "")
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, errors="replace",
-                            env=env, cwd=toolkit, **_RUN_FLAGS)
+    lock = take_gpu_lock(task)
+    try:
+        free_gpu(task)
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, errors="replace",
+                                env=env, cwd=toolkit, **_RUN_FLAGS)
+    except BaseException:
+        if lock:
+            lock.close()
+        raise
     task["proc"] = proc
     a, b = share
     lines = []
@@ -3423,6 +3592,8 @@ def finish_sound(task, toolkit, src, fmt, channels, folder, share=(0.0, 1.0), py
         proc.wait()
     finally:
         task["proc"] = None
+        if lock:
+            lock.close()
     if task.get("cancelled"):
         raise Cancelled()
     done = folder / f"{src.stem}_podcast.{fmt}"
@@ -4916,8 +5087,11 @@ class CueEditor(QtWidgets.QWidget):
 
 
 class Main(QtWidgets.QMainWindow):
+    listening_ready = QtCore.pyqtSignal(str, str)     # the source, the copy to play in its place
+
     def __init__(self, source=None, srt=None):
         super().__init__()
+        self.listening_ready.connect(self.use_listening_copy)
         self.cfg = load_config()
         self.page_pt = int(self.cfg.get("page_pt", 14))
         self.serif = pick_font(SERIF_CANDIDATES, "serif")
@@ -6304,6 +6478,9 @@ class Main(QtWidgets.QMainWindow):
         self.b_watch.setText(_("Watch") if info["type"] == "video" else _("Listen"))
         self.media_ok = True
         self.player.setMedia(QMediaContent(QtCore.QUrl.fromLocalFile(os.path.abspath(path))))
+        if Path(path).suffix.lower() == ".mp3":
+            src = os.path.abspath(path)
+            threading.Thread(target=lambda: self.listening_ready.emit(src, listening_copy(src, d)), daemon=True).start()
         self.slider.setMaximum(int(info["duration"] * 1000))
         self.views.setCurrentWidget(self.shop)
         self.show_production("settings")
@@ -6321,6 +6498,18 @@ class Main(QtWidgets.QMainWindow):
             self.load_srt(str(beside))
         else:
             self.start_transcription()
+
+    def use_listening_copy(self, source, copy):
+        """The AAC copy of an MP3 takes its place in the player, at the same moment."""
+        if not self.project or self.project.get("source") != source or copy == source:
+            return
+        pos = self.player.position()
+        playing = self.player.state() == QMediaPlayer.PlayingState
+        self.player.setMedia(QMediaContent(QtCore.QUrl.fromLocalFile(copy)))
+        if pos:
+            self.player.setPosition(pos)
+        if playing:
+            self.player.play()
 
     def say(self, text):
         if self.views.currentWidget() is self.home:
