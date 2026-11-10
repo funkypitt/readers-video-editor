@@ -417,3 +417,26 @@ short does not slow down, it freezes. Three places let that happen:
   48 → 31b. Linux and Windows are unchanged (graphics card, or 70 % of the RAM).
 
 Checked against a fake Ollama (the requests sent) and by the ladder's table; not on a Mac.
+
+## The memory looked at before a heavy step (1.10.0)
+
+The tester of 1.9.1's note was transcribing. Measured here: faster-whisper prepares all the
+sound it is given at once, 3.3 GB for one hour and 6.6 GB for two (feature extraction alone).
+
+- **Pieces** (`piece_bounds`, `TRANSCRIBE_PIECE` = 600 s): the sound is cut at the quietest half
+  second within 20 s of each ten-minute mark and each piece is transcribed on its own, its times
+  shifted; the language heard in the first piece that speaks holds for the rest. 16.5 min of
+  synthetic speech: 1780 words for 1779 spoken, cut at 582.15 s in digital silence, the
+  sentences on both sides intact, peak 1.3 GB with `small`. Against one single pass the words
+  differ only as two Whisper runs do when the 30 s windows fall elsewhere (a full stop, a capital).
+- **Before** (`Main.memory_ok(need_mb, hint)`): `available_mb()` (MemAvailable; vm_stat's free +
+  inactive + speculative + purgeable on macOS; GlobalMemoryStatusEx on Windows; 0 = unknown, no
+  question) against the need + 1 GB, or macOS's `kern.memorystatus_vm_pressure_level` ≥ 2. Asked
+  before the transcription (`transcription_need_mb`, after Ollama's models are unloaded), a
+  local translation or shortening and the test of a local model (`ollama_need_mb`: the file ×
+  1.3, 0 when already loaded), and the improved sound (3 GB). « Check again » measures again.
+- **During** (`stop_if_memory_short`, every 2 s in the transcription): macOS level 4, or under
+  400 MB elsewhere → `LowMemory`, shown on the waiting page with the retry row.
+
+The macOS and Windows readings are written from the systems' documentation and not run on those
+systems: a reading that fails returns 0 and the app behaves as before.

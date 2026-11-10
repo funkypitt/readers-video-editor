@@ -28,7 +28,7 @@ from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 APP = "readers-video-editor"
-VERSION = "1.9.1"
+VERSION = "1.10.0"
 
 
 def _app_dirs():
@@ -1550,6 +1550,43 @@ for _code, _more in _TR_GPU.items():
     _TR.setdefault(_code, {}).update(_more)
 
 
+# The strings of 1.10.0: the memory looked at before a heavy step
+_TR_MEMORY = {
+ "fr": {"Not enough free memory": 'Pas assez de mémoire libre',
+        "About %1 GB of memory are free on this computer, and this step needs about %2 GB. Close the apps that use the most memory (a browser with many tabs, another editor, a local model…), then « Check again ». Going on anyway may slow the computer down, or freeze it.": "Environ %1 Go de mémoire sont libres sur cet ordinateur, et cette étape en demande environ %2 Go. Fermez les applications qui en utilisent le plus (un navigateur avec beaucoup d'onglets, un autre logiciel de montage, un modèle local…), puis « Vérifier à nouveau ». Continuer quand même peut ralentir l'ordinateur, voire le figer.",
+        "The computer says its memory is under pressure. Close the apps that use the most memory (a browser with many tabs, another editor, a local model…), then « Check again ». Going on anyway may slow the computer down, or freeze it.": "L'ordinateur signale que sa mémoire est sous pression. Fermez les applications qui en utilisent le plus (un navigateur avec beaucoup d'onglets, un autre logiciel de montage, un modèle local…), puis « Vérifier à nouveau ». Continuer quand même peut ralentir l'ordinateur, voire le figer.",
+        "A smaller transcription model needs less memory.": 'Un modèle de transcription plus petit demande moins de mémoire.',
+        "Go on anyway": 'Continuer quand même',
+        "Stopped before the computer ran out of memory. Close the apps that use the most memory, or choose a smaller model, then start again.": "Arrêté avant que l'ordinateur ne manque de mémoire. Fermez les applications qui en utilisent le plus, ou choisissez un modèle plus petit, puis recommencez."},
+ "de": {"Not enough free memory": 'Zu wenig freier Speicher',
+        "About %1 GB of memory are free on this computer, and this step needs about %2 GB. Close the apps that use the most memory (a browser with many tabs, another editor, a local model…), then « Check again ». Going on anyway may slow the computer down, or freeze it.": 'Auf diesem Rechner sind etwa %1 GB Speicher frei, und dieser Schritt braucht etwa %2 GB. Schließen Sie die Programme, die am meisten Speicher belegen (ein Browser mit vielen Tabs, ein anderes Schnittprogramm, ein lokales Modell…), dann « Erneut prüfen ». Trotzdem fortzufahren kann den Rechner verlangsamen oder einfrieren.',
+        "The computer says its memory is under pressure. Close the apps that use the most memory (a browser with many tabs, another editor, a local model…), then « Check again ». Going on anyway may slow the computer down, or freeze it.": 'Der Rechner meldet, dass sein Speicher knapp wird. Schließen Sie die Programme, die am meisten Speicher belegen (ein Browser mit vielen Tabs, ein anderes Schnittprogramm, ein lokales Modell…), dann « Erneut prüfen ». Trotzdem fortzufahren kann den Rechner verlangsamen oder einfrieren.',
+        "A smaller transcription model needs less memory.": 'Ein kleineres Transkriptionsmodell braucht weniger Speicher.',
+        "Go on anyway": 'Trotzdem fortfahren',
+        "Stopped before the computer ran out of memory. Close the apps that use the most memory, or choose a smaller model, then start again.": 'Angehalten, bevor dem Rechner der Speicher ausging. Schließen Sie die Programme, die am meisten Speicher belegen, oder wählen Sie ein kleineres Modell, und beginnen Sie erneut.'},
+ "es": {"Not enough free memory": 'Poca memoria libre',
+        "About %1 GB of memory are free on this computer, and this step needs about %2 GB. Close the apps that use the most memory (a browser with many tabs, another editor, a local model…), then « Check again ». Going on anyway may slow the computer down, or freeze it.": 'En este equipo hay unos %1 GB de memoria libres, y este paso necesita unos %2 GB. Cierre las aplicaciones que más memoria usan (un navegador con muchas pestañas, otro editor, un modelo local…) y luego « Comprobar de nuevo ». Continuar de todos modos puede ralentizar el equipo o bloquearlo.',
+        "The computer says its memory is under pressure. Close the apps that use the most memory (a browser with many tabs, another editor, a local model…), then « Check again ». Going on anyway may slow the computer down, or freeze it.": 'El equipo indica que su memoria está bajo presión. Cierre las aplicaciones que más memoria usan (un navegador con muchas pestañas, otro editor, un modelo local…) y luego « Comprobar de nuevo ». Continuar de todos modos puede ralentizar el equipo o bloquearlo.',
+        "A smaller transcription model needs less memory.": 'Un modelo de transcripción más pequeño necesita menos memoria.',
+        "Go on anyway": 'Continuar de todos modos',
+        "Stopped before the computer ran out of memory. Close the apps that use the most memory, or choose a smaller model, then start again.": 'Detenido antes de que el equipo se quedara sin memoria. Cierre las aplicaciones que más memoria usan, o elija un modelo más pequeño, y vuelva a empezar.'},
+ "pt": {"Not enough free memory": 'Pouca memória livre',
+        "About %1 GB of memory are free on this computer, and this step needs about %2 GB. Close the apps that use the most memory (a browser with many tabs, another editor, a local model…), then « Check again ». Going on anyway may slow the computer down, or freeze it.": 'Neste computador há cerca de %1 GB de memória livres, e este passo precisa de cerca de %2 GB. Feche as aplicações que usam mais memória (um navegador com muitos separadores, outro editor, um modelo local…) e depois « Verificar de novo ». Continuar mesmo assim pode tornar o computador lento ou bloqueá-lo.',
+        "The computer says its memory is under pressure. Close the apps that use the most memory (a browser with many tabs, another editor, a local model…), then « Check again ». Going on anyway may slow the computer down, or freeze it.": 'O computador indica que a memória está sob pressão. Feche as aplicações que usam mais memória (um navegador com muitos separadores, outro editor, um modelo local…) e depois « Verificar de novo ». Continuar mesmo assim pode tornar o computador lento ou bloqueá-lo.',
+        "A smaller transcription model needs less memory.": 'Um modelo de transcrição mais pequeno precisa de menos memória.',
+        "Go on anyway": 'Continuar mesmo assim',
+        "Stopped before the computer ran out of memory. Close the apps that use the most memory, or choose a smaller model, then start again.": 'Parado antes de o computador ficar sem memória. Feche as aplicações que usam mais memória, ou escolha um modelo mais pequeno, e recomece.'},
+ "ru": {"Not enough free memory": 'Мало свободной памяти',
+        "About %1 GB of memory are free on this computer, and this step needs about %2 GB. Close the apps that use the most memory (a browser with many tabs, another editor, a local model…), then « Check again ». Going on anyway may slow the computer down, or freeze it.": 'На этом компьютере свободно около %1 ГБ памяти, а этому шагу нужно около %2 ГБ. Закройте приложения, которые занимают больше всего памяти (браузер с множеством вкладок, другой редактор, локальную модель…), затем « Проверить снова ». Если всё же продолжить, компьютер может замедлиться или зависнуть.',
+        "The computer says its memory is under pressure. Close the apps that use the most memory (a browser with many tabs, another editor, a local model…), then « Check again ». Going on anyway may slow the computer down, or freeze it.": 'Компьютер сообщает о нехватке памяти. Закройте приложения, которые занимают больше всего памяти (браузер с множеством вкладок, другой редактор, локальную модель…), затем « Проверить снова ». Если всё же продолжить, компьютер может замедлиться или зависнуть.',
+        "A smaller transcription model needs less memory.": 'Модель транскрипции поменьше требует меньше памяти.',
+        "Go on anyway": 'Всё же продолжить',
+        "Stopped before the computer ran out of memory. Close the apps that use the most memory, or choose a smaller model, then start again.": 'Остановлено, пока у компьютера не закончилась память. Закройте приложения, которые занимают больше всего памяти, или выберите модель поменьше и начните снова.'},
+}
+for _code, _more in _TR_MEMORY.items():
+    _TR.setdefault(_code, {}).update(_more)
+
+
 def _lang():
     for var in ("LC_ALL", "LC_MESSAGES", "LANG"):
         v = os.environ.get(var)
@@ -2197,6 +2234,119 @@ def install_whisper(progress, cancelled):
         raise RuntimeError(_("The transcription could not be installed: %1", "import"))
 
 
+# ------------------------------------------------------------------------------------------
+# The computer's memory, looked at before a heavy step and while it runs
+# ------------------------------------------------------------------------------------------
+
+WHISPER_RAM_GB = {"tiny": 0.5, "base": 0.6, "small": 1.2, "medium": 2.5, "large-v3": 4.0}   # the model once loaded (int8)
+TRANSCRIBE_PIECE = 600.0     # seconds heard at a time: Whisper prepares a whole piece at once (3.3 GB an hour, measured)
+PIECE_RAM_GB = 0.8           # what one such piece costs
+MEMORY_MARGIN_MB = 1024      # what must stay free beside a step's need
+MEMORY_FLOOR_MB = 400        # under this while a step runs, it stops (Linux, Windows)
+SOUND_RAM_GB = 3.0           # finaliser.py with DeepFilterNet and its measures
+
+
+class LowMemory(RuntimeError):
+    pass
+
+
+def available_mb():
+    """The memory a new task can take without pushing the others out, in MB (0: not known)."""
+    try:
+        if sys.platform == "darwin":
+            out = subprocess.run(["vm_stat"], capture_output=True, text=True, timeout=5).stdout
+            page = int((re.search(r"page size of (\d+) bytes", out) or [0, 4096])[1])
+            pages = 0
+            for name in ("Pages free", "Pages inactive", "Pages speculative", "Pages purgeable"):
+                m = re.search(re.escape(name) + r":\s+(\d+)", out)
+                pages += int(m.group(1)) if m else 0
+            return pages * page // 2 ** 20
+        if sys.platform == "win32":
+            import ctypes
+
+            class Status(ctypes.Structure):
+                _fields_ = [("length", ctypes.c_ulong), ("load", ctypes.c_ulong)] + [(n, ctypes.c_ulonglong) for n in
+                            ("total", "avail", "total_page", "avail_page", "total_virtual", "avail_virtual", "avail_extended")]
+            st = Status()
+            st.length = ctypes.sizeof(Status)
+            ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(st))
+            return int(st.avail) // 2 ** 20
+        for line in open("/proc/meminfo"):
+            if line.startswith("MemAvailable:"):
+                return int(line.split()[1]) // 1024
+    except Exception:
+        pass
+    return 0
+
+
+def memory_pressure():
+    """macOS's own word on its memory: 1 normal, 2 warning, 4 critical (0 elsewhere or unknown)."""
+    if sys.platform != "darwin":
+        return 0
+    try:
+        return int(subprocess.run(["sysctl", "-n", "kern.memorystatus_vm_pressure_level"], capture_output=True, text=True, timeout=5).stdout.strip() or 0)
+    except Exception:
+        return 0
+
+
+def memory_short():
+    """True when a running step should stop rather than let the computer freeze."""
+    if sys.platform == "darwin":
+        return memory_pressure() >= 4
+    free = available_mb()
+    return 0 < free < MEMORY_FLOOR_MB
+
+
+_memory_looked = [0.0]
+
+
+def stop_if_memory_short():
+    """Called along a long step; looks every two seconds at most."""
+    now = time.time()
+    if now - _memory_looked[0] < 2.0:
+        return
+    _memory_looked[0] = now
+    if memory_short():
+        raise LowMemory(_("Stopped before the computer ran out of memory. Close the apps that use the most memory, or choose a smaller model, then start again."))
+
+
+def transcription_need_mb(model_size, duration):
+    """The model, one piece being prepared, and the sound itself (16 kHz, 4 bytes a sample)."""
+    return int((WHISPER_RAM_GB.get(model_size, 2.0) + PIECE_RAM_GB) * 1024 + max(duration, 0) * 16000 * 4 / 2 ** 20)
+
+
+def ollama_need_mb(url, model):
+    """What loading this model asks for (its file and its context), 0 when it is loaded already
+    or when Ollama does not say."""
+    try:
+        loaded = [m.get("name") or m.get("model") for m in ollama_json(url, "/api/ps", timeout=3).get("models", [])]
+        if model in loaded or model + ":latest" in loaded:
+            return 0
+        for m in ollama_json(url, "/api/tags").get("models", []):
+            if m.get("name") in (model, model + ":latest"):
+                return int(m.get("size", 0) * 1.3) // 2 ** 20
+    except Exception:
+        pass
+    return 0
+
+
+def piece_bounds(audio, sr, piece=TRANSCRIBE_PIECE, search=20.0):
+    """Sample positions that cut a long sound into pieces of about `piece` seconds, each cut at
+    the quietest half second found within `search` seconds of the round mark, so that no word is
+    split. A sound shorter than a piece and a half stays whole."""
+    n, step, bounds = len(audio), int(piece * sr), [0]
+    hop = int(0.1 * sr)
+    while n - bounds[-1] > step * 1.5:
+        target = bounds[-1] + step
+        a = target - int(search * sr)
+        seg = audio[a:target + int(search * sr)]
+        rms = (seg[:len(seg) // hop * hop].reshape(-1, hop) ** 2).mean(axis=1)
+        quiet = np.convolve(rms, np.ones(5) / 5, mode="valid")
+        bounds.append(a + int(quiet.argmin()) * hop + hop * 5 // 2)
+    bounds.append(n)
+    return bounds
+
+
 def transcribe(wav, language, model_size, duration, progress, cancelled):
     """→ (words [[text, start, end, sentence]], language). progress(fraction) along the way."""
     from faster_whisper import WhisperModel
@@ -2213,34 +2363,47 @@ def transcribe(wav, language, model_size, duration, progress, cancelled):
         vad = False
     # each window is heard on its own (no loop that repeats a sentence over a long stretch), and a
     # stretch of silence of 2 s around a doubtful passage drops what Whisper invented in it
-    segments, info = model.transcribe(audio.astype(np.float32), language=language or None, word_timestamps=True,
-                                      vad_filter=vad, beam_size=5, condition_on_previous_text=False,
-                                      hallucination_silence_threshold=HALLUCINATION_SILENCE)
-    words = []
-    for k, seg in enumerate(segments):
+    # heard a piece at a time: Whisper prepares everything it is given at once, and a talk of three
+    # hours in one go took 10 GB
+    audio = audio.astype(np.float32, copy=False)
+    bounds = piece_bounds(audio, _sr)
+    words, k, found = [], -1, language or None
+    for a, b in zip(bounds, bounds[1:]):
         if cancelled():
             raise InterruptedError()
-        if duration > 0:
-            progress(min(seg.end / duration, 1.0))
-        ws = seg.words or []
-        if not ws:
-            # no timings for this segment: its words spread evenly over it
-            parts = words_of(seg.text)
-            if parts:
-                step = (seg.end - seg.start) / len(parts)
-                ws = [type("W", (), {"word": p, "start": seg.start + i * step, "end": seg.start + (i + 1) * step})()
-                      for i, p in enumerate(parts)]
-        for w in ws:
-            text = (w.word or "").strip()
-            if not text:
-                continue
-            glued = words and words[-1][3] == k and (text[0] in "'’-" or words[-1][0][-1] in "'’")
-            if glued:
-                words[-1][0] += text
-                words[-1][2] = float(w.end)
-            else:
-                words.append([text, float(w.start), float(w.end), k])
-    return repair_word_timings(words), info.language
+        stop_if_memory_short()
+        offset = a / _sr
+        segments, info = model.transcribe(audio[a:b], language=found, word_timestamps=True,
+                                          vad_filter=vad, beam_size=5, condition_on_previous_text=False,
+                                          hallucination_silence_threshold=HALLUCINATION_SILENCE)
+        for seg in segments:
+            k += 1
+            if cancelled():
+                raise InterruptedError()
+            stop_if_memory_short()
+            if duration > 0:
+                progress(min((offset + seg.end) / duration, 1.0))
+            ws = seg.words or []
+            if not ws:
+                # no timings for this segment: its words spread evenly over it
+                parts = words_of(seg.text)
+                if parts:
+                    step = (seg.end - seg.start) / len(parts)
+                    ws = [type("W", (), {"word": p, "start": seg.start + i * step, "end": seg.start + (i + 1) * step})()
+                          for i, p in enumerate(parts)]
+            for w in ws:
+                text = (w.word or "").strip()
+                if not text:
+                    continue
+                glued = words and words[-1][3] == k and (text[0] in "'’-" or words[-1][0][-1] in "'’")
+                if glued:
+                    words[-1][0] += text
+                    words[-1][2] = offset + float(w.end)
+                else:
+                    words.append([text, offset + float(w.start), offset + float(w.end), k])
+        if words:
+            found = found or info.language      # the language heard in the first piece that speaks holds for the rest
+    return repair_word_timings(words), found or info.language
 
 
 def repair_word_timings(words):
@@ -3541,17 +3704,18 @@ def free_gpu(task, url=OLLAMA_URL, timeout=60.0, wait=True):
     except Exception:
         pass
     if not wait or not unloaded or not shutil.which("nvidia-smi"):
-        return
+        return unloaded
     end = time.time() + timeout
     while time.time() < end and not task.get("cancelled"):
         try:
             out = subprocess.run(["nvidia-smi", "--query-gpu=memory.free", "--format=csv,noheader,nounits"],
                                  capture_output=True, text=True, timeout=10, **_RUN_FLAGS).stdout
             if min(int(v) for v in out.split()) >= GPU_FREE_MIB:
-                return
+                return unloaded
         except Exception:
-            return
+            return unloaded
         time.sleep(1.0)
+    return unloaded
 
 
 def finish_sound(task, toolkit, src, fmt, channels, folder, share=(0.0, 1.0), python=None, path_first=None):
@@ -5640,7 +5804,7 @@ class Main(QtWidgets.QMainWindow):
                     if not ok:
                         raise RuntimeError(msg)
                     return m
-                row.set_buttons([(_("Test"), lambda: self.setup_job("model", test, lambda m: self.setup_ok.update(ollama=m) or self.cfg.update(ollama_model=m)), True)])
+                row.set_buttons([(_("Test"), lambda: self.memory_ok(ollama_need_mb(url, wanted)) and self.setup_job("model", test, lambda m: self.setup_ok.update(ollama=m) or self.cfg.update(ollama_model=m)), True)])
         elif llm == "claude_code":
             exe = p["claude"]
             if not exe:
@@ -6524,6 +6688,34 @@ class Main(QtWidgets.QMainWindow):
             self.status.setVisible(bool(text))
 
     # ---- the waiting view ----
+    def memory_ok(self, need_mb, hint=""):
+        """Before a heavy step: True to go on. Asks when the free memory is under the step's need
+        (plus a margin) or when macOS says it is under pressure; the person closes apps and
+        checks again, goes on anyway, or cancels."""
+        while True:
+            free, pressure = available_mb(), memory_pressure()
+            short = 0 < free < need_mb + MEMORY_MARGIN_MB
+            if not short and pressure < 2:
+                return True
+            if short:
+                text = _("About %1 GB of memory are free on this computer, and this step needs about %2 GB. Close the apps that use the most memory (a browser with many tabs, another editor, a local model…), then « Check again ». Going on anyway may slow the computer down, or freeze it.",
+                         *(f"{v / 1024:.1f}".replace(".", "." if _LANG == "en" else ",") for v in (free, need_mb)))
+            else:
+                text = _("The computer says its memory is under pressure. Close the apps that use the most memory (a browser with many tabs, another editor, a local model…), then « Check again ». Going on anyway may slow the computer down, or freeze it.")
+            box = QtWidgets.QMessageBox(self)
+            box.setIcon(QtWidgets.QMessageBox.Warning)
+            box.setWindowTitle(_("Not enough free memory"))
+            box.setText(text + ("\n\n" + hint if hint else ""))
+            again = box.addButton(_("Check again"), QtWidgets.QMessageBox.AcceptRole)
+            go = box.addButton(_("Go on anyway"), QtWidgets.QMessageBox.DestructiveRole)
+            box.addButton(_("Cancel"), QtWidgets.QMessageBox.RejectRole)
+            box.setDefaultButton(again)
+            box.exec_()
+            if box.clickedButton() is go:
+                return True
+            if box.clickedButton() is not again:
+                return False
+
     def wait(self, message, detail="", failed=False):
         self.page_stack.setCurrentWidget(self.patience)
         self.p_msg.setText(message)
@@ -6609,6 +6801,13 @@ class Main(QtWidgets.QMainWindow):
         src = self.project["source"]
         language = self.h_lang.currentData() or ""
         model_size = self.h_model.currentText()
+        if free_gpu({}, wait=False):
+            time.sleep(1.0)                     # the model Ollama just dropped leaves the memory
+        if not self.memory_ok(transcription_need_mb(model_size, duration),
+                              _("A smaller transcription model needs less memory.") if model_size in ("medium", "large-v3") else ""):
+            if not self.tokens:
+                self.wait(_("The transcription failed."), _("Cancelled."), failed=True)
+            return
         self.cfg["language"], self.cfg["model"] = language, model_size
         save_config(self.cfg)
         # what was highlighted stays, by time, when the text is made again
@@ -6995,6 +7194,8 @@ class Main(QtWidgets.QMainWindow):
         d = Path(self.project["dir"])
         segments = segments_from_tokens(self.texts["src"]["tokens"])
         if not segments:
+            return
+        if llm == "local" and not self.memory_ok(ollama_need_mb(OLLAMA_URL, model)):
             return
         duration = self.project["duration"]
         job = {"task": "translate", "toolkit": tk, "segments": segments, "source_lang": src, "target_lang": tgt,
@@ -7393,6 +7594,8 @@ class Main(QtWidgets.QMainWindow):
         dlg.exec_()
 
     def start_shorten(self, tk, rows, llm, model):
+        if llm == "local" and not self.memory_ok(ollama_need_mb(OLLAMA_URL, model)):
+            return
         key, d, cues = self.view, Path(self.project["dir"]), self.editor.cues()
         src = self.src_lang or "en"
         tgt = (self.src_lang if key == "src" else key) or "en"
@@ -7678,6 +7881,10 @@ class Main(QtWidgets.QMainWindow):
         if self.sound.currentData() == "finish":
             where = self.toolkit_for_sound()
             if not where:
+                return
+            if free_gpu({}, wait=False):
+                time.sleep(1.0)
+            if not self.memory_ok(int(SOUND_RAM_GB * 1024)):
                 return
             finish = {"toolkit": where, "channels": (project.get("audio") or {}).get("channels", 2)}
         style = SUBTITLE_STYLE
