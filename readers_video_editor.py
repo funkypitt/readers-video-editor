@@ -28,7 +28,7 @@ from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 APP = "readers-video-editor"
-VERSION = "1.9.0"
+VERSION = "1.9.1"
 
 
 def _app_dirs():
@@ -2474,6 +2474,7 @@ WORK_DIR = os.path.join(DATA_DIR, "work")
 OLLAMA_DOWNLOAD = "https://ollama.com/download"
 OLLAMA_INSTALL_LINUX = "curl -fsSL https://ollama.com/install.sh | sh"
 # The local models of the toolkit's family, by what the computer can carry: (model, memory needed in GB, download in GB)
+MAC_RESERVE_GB = 8      # of a Mac's one memory, left to macOS and the open apps
 MODEL_LADDER = [("gemma4:31b", 40, 20), ("gemma4:26b-a4b", 28, 18), ("gemma4:12b", 14, 8), ("gemma4:e4b", 9, 7)]
 WHISPER_SIZES = {"tiny": "75 MB", "base": "145 MB", "small": "460 MB", "medium": "1.5 GB", "large-v3": "3 GB"}
 # What each choice costs and gives, said on the getting-started page (measured on a laptop's processor)
@@ -2659,8 +2660,9 @@ def vram_mb():
 
 def recommended_model(ram, vram=0):
     """(model, download GB) this computer can carry, or None: a graphics card's memory, or the
-    unified memory of a Mac, or the RAM (slower)."""
-    room = max(vram, ram if sys.platform == "darwin" else ram * 0.7) / 1024
+    unified memory of a Mac less what the system and the open apps need (a model loaded by
+    Metal cannot be swapped out: a Mac that runs short freezes whole), or the RAM (slower)."""
+    room = max(vram, ram - MAC_RESERVE_GB * 1024 if sys.platform == "darwin" else ram * 0.7) / 1024
     for model, need, size in MODEL_LADDER:
         if room >= need:
             return model, size
@@ -2692,9 +2694,10 @@ def ollama_pull(url, model, progress, task):
 
 
 def ollama_test(url, model):
-    """One word from the model. Returns (ok, message)."""
+    """One word from the model, which is unloaded right after (keep_alive 0): Ollama would keep
+    it in memory for five minutes, beside whatever is started next. Returns (ok, message)."""
     try:
-        data = ollama_json(url, "/api/generate", timeout=300, data={"model": model, "prompt": "Answer with the single word OK.", "stream": False, "think": False})
+        data = ollama_json(url, "/api/generate", timeout=300, data={"model": model, "prompt": "Answer with the single word OK.", "stream": False, "think": False, "keep_alive": 0})
         text = str(data.get("response", "")).strip()
         return bool(text), text[:80]
     except Exception as ex:
@@ -3521,10 +3524,12 @@ def take_gpu_lock(task):
             return None
 
 
-def free_gpu(task, url=OLLAMA_URL, timeout=60.0):
+def free_gpu(task, url=OLLAMA_URL, timeout=60.0, wait=True):
     """traduire.free_gpu_for_task: the models Ollama keeps loaded (a translation a few minutes ago
     leaves gemma4:31b in the card for five minutes) are unloaded, then the card's memory is
-    awaited, so that DeepFilterNet does not run out of it."""
+    awaited, so that DeepFilterNet does not run out of it. wait=False only unloads: before a
+    transcription or an export, which run on the processor but must not share the memory of a
+    Mac (one memory for everything) with a model nobody is using."""
     unloaded = False
     try:
         for m in (ollama_json(url, "/api/ps", timeout=3) or {}).get("models", []):
@@ -3535,7 +3540,7 @@ def free_gpu(task, url=OLLAMA_URL, timeout=60.0):
                 unloaded = True
     except Exception:
         pass
-    if not unloaded or not shutil.which("nvidia-smi"):
+    if not wait or not unloaded or not shutil.which("nvidia-smi"):
         return
     end = time.time() + timeout
     while time.time() < end and not task.get("cancelled"):
@@ -6619,6 +6624,7 @@ class Main(QtWidgets.QMainWindow):
                 install_whisper(lambda t: w.progress.emit(0.01, t), lambda: w.cancelled)
             w.progress.emit(0.02, _("Extracting the sound…"))
             extract_audio(src, wav)
+            free_gpu({}, wait=False)
             w.progress.emit(0.05, _("Loading the model %1 (downloaded once)…", model_size))
             words, lang = transcribe(wav, language, model_size, duration,
                                      lambda f: w.progress.emit(0.05 + 0.93 * f, _("Transcribing… %1 %", int(f * 100))),
@@ -7686,6 +7692,7 @@ class Main(QtWidgets.QMainWindow):
 
         def work(w):
             stop = threading.Event()
+            free_gpu(task, wait=False)
 
             def pump():
                 while not stop.is_set():

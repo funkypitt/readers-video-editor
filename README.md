@@ -12,6 +12,7 @@ that download.
 
 ## Key points
 
+- **A Mac's memory spared** (1.9.1): the local model is unloaded after its test and before a transcription or an export, and the model proposed on a Mac leaves 8 GB to the system.
 - **Transcription and sound like the toolkit** (1.9.0): no repeated sentences, no word stretched over a pause, the graphics card freed before the sound is improved, exact playback of MP3 files, Claude Code retried when it fails.
 - **Getting started** (1.8.0): a page shown at the first start, and again from « Getting
   started… » on the home page or Project ▾ while editing. Three levels, each step checked by a

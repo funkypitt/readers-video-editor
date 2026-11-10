@@ -401,3 +401,19 @@ functions; six points were behind.
   `use_listening_copy` swaps it into the player at the same position (signal
   `listening_ready`). Both come from ffmpeg's decoding: lag 0 samples at 30 s, 5 min and
   10 min of a VBR MP3. The exports still read the source.
+
+## A Mac's one memory (1.9.1)
+
+A tester's MacBook Pro (M4 Pro, 24 GB) froze whole and had to be forced off, the step unknown.
+A model Ollama loads through Metal sits in memory that cannot be swapped out, so a Mac that runs
+short does not slow down, it freezes. Three places let that happen:
+
+- `ollama_test` left the model loaded for Ollama's five minutes; it now asks with
+  `keep_alive: 0`.
+- `free_gpu` was only called before finaliser.py. `free_gpu(task, wait=False)` (unload, no
+  nvidia-smi wait) now also runs before the transcription and at the start of an export.
+- `recommended_model` took the whole unified memory as room. It now leaves `MAC_RESERVE_GB`
+  (8): 16 GB → no local model (Claude is proposed), 18 → e4b, 24–32 → 12b, 36 → 26b-a4b,
+  48 → 31b. Linux and Windows are unchanged (graphics card, or 70 % of the RAM).
+
+Checked against a fake Ollama (the requests sent) and by the ladder's table; not on a Mac.
