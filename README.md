@@ -12,6 +12,7 @@ that download.
 
 ## Key points
 
+- **The spoken language recognised** (1.11.0): the language of a new transcription is found by listening to several passages of the recording, not only its beginning, which may be music; it is named on the button that starts the transcription and shown with the text; when a language chosen by hand is plainly not the one spoken, the app asks before transcribing.
 - **The memory looked at first** (1.10.0): before a transcription, a local translation, the test of a local model or the improved sound, the app compares the free memory with what the step needs and, when it is short, asks to close apps (check again, go on anyway, cancel); a step that runs stops by itself before the computer runs out; a long recording is transcribed ten minutes at a time, so its length no longer counts.
 - **A Mac's memory spared** (1.9.1): the local model is unloaded after its test and before a transcription or an export, and the model proposed on a Mac leaves 8 GB to the system.
 - **Transcription and sound like the toolkit** (1.9.0): no repeated sentences, no word stretched over a pause, the graphics card freed before the sound is improved, exact playback of MP3 files, Claude Code retried when it fails.
