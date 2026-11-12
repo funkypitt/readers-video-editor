@@ -28,7 +28,7 @@ from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 APP = "readers-video-editor"
-VERSION = "1.11.0"
+VERSION = "1.11.1"
 
 
 def _app_dirs():
@@ -4535,6 +4535,7 @@ class Page(QtWidgets.QTextEdit):
         self.tokens = []
         self.sel = np.zeros(0, dtype=np.uint8)
         self.spans = []             # (start, end) char positions of each token, or None for a hidden one
+        self.painted = []           # the look each token has on the page now (see paint)
         self.anchor = -1
         self.tail = -1
         self.dragged = False
@@ -4570,6 +4571,7 @@ class Page(QtWidgets.QTextEdit):
         """The text from the tokens: a paragraph per sentence or long pause, its time in front."""
         self.clear()
         self.spans = [None] * len(self.tokens)
+        self.painted = [None] * len(self.tokens)
         if not self.tokens:
             return
         doc = self.document()
@@ -4598,6 +4600,9 @@ class Page(QtWidgets.QTextEdit):
         block_fmt.setBottomMargin(pt * 1.1)
         block_fmt.setLineHeight(150 if "Literata" in self.main.serif else 175, QtGui.QTextBlockFormat.ProportionalHeight)
         cur.setBlockFormat(block_fmt)
+        # one edit for the whole text: the page is laid out once, not at every word
+        cur.beginEditBlock()
+        space_fmt = QtGui.QTextCharFormat()
         open_block = False
         chars, prev_sentence, prev_end = 0, None, 0.0
         label_without = {"subtitles": _("without words"), "transcription": _("without words")}.get(self.origin, _("without words"))
@@ -4615,6 +4620,7 @@ class Page(QtWidgets.QTextEdit):
                 start = cur.position()
                 cur.insertText(f" {where}{plain(f - d) if f - d >= 60 else f'{f - d:.1f} s'} {label_without} ", pause_fmt)
                 self.spans[i] = (start, cur.position())
+                self.painted[i] = self.PLAIN
                 continue
             gap = d - prev_end
             new_sentence = s != prev_sentence
@@ -4629,10 +4635,12 @@ class Page(QtWidgets.QTextEdit):
             start = cur.position()
             cur.insertText(t, word_fmt)
             self.spans[i] = (start, cur.position())
-            cur.insertText(" ", word_fmt)
+            self.painted[i] = self.PLAIN
+            cur.insertText(" ", space_fmt)
             chars += len(t) + 1
             prev_sentence, prev_end = s, f
         self.paint(0, len(self.tokens) - 1)
+        cur.endEditBlock()
 
     def plain_text(self):
         """The transcript as paragraphs, without the passages without words."""
@@ -4656,18 +4664,39 @@ class Page(QtWidgets.QTextEdit):
         return "\n\n".join(p.replace("\u00a0", " ") for p in paras) + "\n"
 
     # ---- painting ----
+    PLAIN = (False, False, False, False, False, False)
+
     def paint(self, a, b):
-        a, b = max(0, a - 1), min(len(self.tokens) - 1, b + 1)
+        """The words of [a, b] shown as they are now. Only the words whose look changes are touched,
+        and all of them in one edit: a long recording stays quick under a long drag."""
+        n = len(self.tokens)
+        a, b = max(0, a - 1), min(n - 1, b + 1)
         if b < a:
             return
         cur = QtGui.QTextCursor(self.document())
         pa, pb = self.preview
         pt = self.main.page_pt + (2 if self.main.reading else 0)
         cut = self.mode == "cut"
+        erase = self.erase_gesture
+        sel, spans, painted = self.sel, self.spans, self.painted
+        editing = False
         for i in range(a, b + 1):
-            span = self.spans[i]
+            span = spans[i]
             if not span:
                 continue
+            selected = sel[i] == 1
+            in_preview = pa <= i <= pb
+            nxt = spans[i + 1] if i + 1 < n else None
+            joined = bool(nxt and nxt[0] == span[1] + 1
+                          and ((selected and sel[i + 1] == 1 and not in_preview) or (in_preview and i + 1 <= pb)))
+            marked = selected or in_preview
+            key = (bool(selected), in_preview, in_preview and erase, marked and cut, i == self.current, joined)
+            if painted[i] == key:
+                continue
+            painted[i] = key
+            if not editing:
+                cur.beginEditBlock()
+                editing = True
             fmt = QtGui.QTextCharFormat()
             pause = self.tokens[i][0] is None
             if pause:
@@ -4679,10 +4708,8 @@ class Page(QtWidgets.QTextEdit):
                 fmt.setForeground(QtGui.QColor(INK))
                 fmt.setFontFamily(self.main.serif)
                 fmt.setFontPointSize(pt)
-            selected = self.sel[i] == 1
-            in_preview = pa <= i <= pb
             if in_preview:
-                if self.erase_gesture:
+                if erase:
                     fmt.setBackground(QtGui.QColor(GOMME))
                     fmt.setForeground(QtGui.QColor(INK2))
                 else:
@@ -4704,9 +4731,7 @@ class Page(QtWidgets.QTextEdit):
             cur.setCharFormat(fmt)
             # the space after a word: highlighted with it when the next word is highlighted too,
             # so that a passage reads as one stroke of the pen
-            nxt = self.spans[i + 1] if i + 1 < len(self.spans) else None
             if nxt and nxt[0] == span[1] + 1:
-                joined = (selected and self.sel[i + 1] == 1 and not in_preview) or (in_preview and i + 1 <= pb)
                 sp = QtGui.QTextCharFormat()
                 if joined:
                     sp.setBackground(fmt.background())
@@ -4714,6 +4739,8 @@ class Page(QtWidgets.QTextEdit):
                 cur.setPosition(span[1])
                 cur.setPosition(span[1] + 1, QtGui.QTextCursor.KeepAnchor)
                 cur.setCharFormat(sp)
+        if editing:
+            cur.endEditBlock()
 
     def set_mode(self, mode):
         self.mode = mode
@@ -4734,7 +4761,7 @@ class Page(QtWidgets.QTextEdit):
     def change(self, a, b, value):
         if a > b:
             a, b = b, a
-        if not any(self.sel[i] != value for i in range(a, b + 1)):
+        if not (self.sel[a:b + 1] != value).any():
             return
         self.history.append(self.sel.copy())
         if len(self.history) > 200:
@@ -4873,9 +4900,14 @@ class Page(QtWidgets.QTextEdit):
     def show_preview(self, a, b):
         pa, pb = self.preview
         self.preview = (a, b)
-        lo = min(pa if pa >= 0 else a, a)
-        hi = max(pb, b)
-        self.paint(lo, hi)
+        if pa < 0:
+            self.paint(a, b)
+            return
+        # only the words that enter or leave the stroke
+        if a != pa:
+            self.paint(min(a, pa), max(a, pa))
+        if b != pb:
+            self.paint(min(b, pb), max(b, pb))
 
     def mouseReleaseEvent(self, e):
         if self.anchor < 0:
