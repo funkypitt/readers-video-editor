@@ -28,7 +28,7 @@ from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 APP = "readers-video-editor"
-VERSION = "1.11.1"
+VERSION = "1.11.2"
 
 
 def _app_dirs():
@@ -1707,6 +1707,29 @@ def ffprobe_exe():
 # Static builds for macOS on Apple silicon (the only Mac the app is built for), fetched once when
 # the toolkit needs `ffmpeg` and `ffprobe` by name on the PATH (the bundle carries imageio's
 # ffmpeg under another name, and no ffprobe). The page lists its builds; the newest zip is taken.
+_SSL_CONTEXT = None
+
+
+def https_open(req, timeout):
+    """urlopen for the HTTPS downloads. A bundled Python (the macOS app) looks for the system's
+    certificates in a folder of the machine it was built on, absent on the person's Mac, and
+    then refuses every site ("unable to get local issuer certificate"): when the default
+    context holds no certificate, those of certifi, carried in the bundle, are used instead."""
+    global _SSL_CONTEXT
+    import urllib.request
+    if _SSL_CONTEXT is None:
+        import ssl
+        ctx = ssl.create_default_context()
+        if not ctx.cert_store_stats().get("x509_ca"):
+            try:
+                import certifi
+                ctx.load_verify_locations(cafile=certifi.where())
+            except Exception:
+                pass
+        _SSL_CONTEXT = ctx
+    return urllib.request.urlopen(req, timeout=timeout, context=_SSL_CONTEXT)
+
+
 FFMPEG_MAC_PAGE = "https://ffmpeg.martin-riedl.de/"
 FFMPEG_MAC_LINK = r'href="(/download/macos/arm64/[^"]+/%s\.zip)"'
 
@@ -1725,7 +1748,7 @@ def ensure_ffmpeg_tools(progress, task):
     import zipfile
     os.makedirs(own, exist_ok=True)
     req = urllib.request.Request(FFMPEG_MAC_PAGE, headers={"User-Agent": APP + "/" + VERSION})
-    with urllib.request.urlopen(req, timeout=60) as r:
+    with https_open(req, timeout=60) as r:
         page = r.read().decode("utf-8", "replace")
     for name in ("ffmpeg", "ffprobe"):
         if _own_tool(name):
@@ -1736,7 +1759,7 @@ def ensure_ffmpeg_tools(progress, task):
         progress(_("Fetching %1 (once)…", name))
         zpath = os.path.join(own, name + ".zip")
         req = urllib.request.Request(FFMPEG_MAC_PAGE.rstrip("/") + m.group(1), headers={"User-Agent": APP + "/" + VERSION})
-        with urllib.request.urlopen(req, timeout=300) as r, open(zpath, "wb") as f:
+        with https_open(req, timeout=300) as r, open(zpath, "wb") as f:
             while True:
                 if task.get("cancelled"):
                     raise Cancelled()
@@ -1802,7 +1825,7 @@ def fetch_ytdlp(progress, cancelled):
     target = ytdlp_managed()
     part = target + ".part"
     req = urllib.request.Request(YTDLP_RELEASES + _ytdlp_asset(), headers={"User-Agent": APP + "/" + VERSION})
-    with urllib.request.urlopen(req, timeout=60) as r, open(part, "wb") as f:
+    with https_open(req, timeout=60) as r, open(part, "wb") as f:
         total = int(r.headers.get("Content-Length") or 0)
         got = 0
         while True:
@@ -2756,7 +2779,7 @@ def install_toolkit(progress, task):
     zpath = os.path.join(DATA_DIR, "toolkit.zip")
     progress(_("Downloading the traduction toolkit…"))
     req = urllib.request.Request(TOOLKIT_ZIP, headers={"User-Agent": APP + "/" + VERSION})
-    with urllib.request.urlopen(req, timeout=120) as r, open(zpath, "wb") as f:
+    with https_open(req, timeout=120) as r, open(zpath, "wb") as f:
         while True:
             if task.get("cancelled"):
                 raise Cancelled()
@@ -3084,7 +3107,7 @@ def anthropic_key_test(key):
     req = urllib.request.Request("https://api.anthropic.com/v1/messages", data=json.dumps(body).encode(),
                                  headers={"Content-Type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01"})
     try:
-        with urllib.request.urlopen(req, timeout=60) as r:
+        with https_open(req, timeout=60) as r:
             data = json.loads(r.read().decode("utf-8", "replace"))
         return True, "".join(b.get("text", "") for b in data.get("content", []))[:80]
     except urllib.error.HTTPError as ex:

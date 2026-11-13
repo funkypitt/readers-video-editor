@@ -440,3 +440,18 @@ sound it is given at once, 3.3 GB for one hour and 6.6 GB for two (feature extra
 
 The macOS and Windows readings are written from the systems' documentation and not run on those
 systems: a reading that fails returns 0 and the app behaves as before.
+
+## The downloads on a Mac (1.11.2)
+
+A tester's Mac refused the toolkit's download: `CERTIFICATE_VERIFY_FAILED … unable to get local
+issuer certificate`. The macOS app's Python, bundled by PyInstaller from `actions/setup-python`,
+looks for its certificates in a folder of the build machine, absent on the person's Mac, so
+every HTTPS site was refused: the toolkit, ffmpeg and ffprobe for the sound, yt-dlp and the test
+of an Anthropic key. Windows reads the system's store and Linux has `/etc/ssl/certs`.
+
+- `https_open(req, timeout)` makes one default SSL context; when it holds no certificate, those
+  of `certifi` are loaded into it. A system that has its own (a company's authority included)
+  keeps them. Ollama, on this computer over plain HTTP, is not concerned.
+- The macOS build installs `certifi` and carries its data (`--collect-data certifi`).
+- Reproduced here with `SSL_CERT_FILE` and `SSL_CERT_DIR` pointing to an empty folder: plain
+  `urlopen` gives the tester's error, `https_open` gets the toolkit's zip.

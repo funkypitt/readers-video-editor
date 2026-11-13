@@ -54,7 +54,7 @@ jobs:
         shell: bash
         run: |
           python -m pip install --upgrade pip
-          pip install "PyQt5==5.15.11" numpy soundfile imageio-ffmpeg faster-whisper pyinstaller
+          pip install "PyQt5==5.15.11" numpy soundfile imageio-ffmpeg faster-whisper certifi pyinstaller
 
       # ---------------------------------------------------------------- Windows: one .exe
       - name: Build the .exe
@@ -96,6 +96,7 @@ jobs:
             --add-data "packaging/fonts:fonts" \
             --collect-all imageio_ffmpeg --collect-all faster_whisper --collect-all ctranslate2 \
             --collect-all tokenizers --collect-all huggingface_hub --collect-all onnxruntime --collect-all soundfile \
+            --collect-data certifi \
             --hidden-import PyQt5.QtMultimedia --hidden-import PyQt5.QtMultimediaWidgets \
             readers_video_editor.py
           codesign --force --deep --sign - "dist/Readers Video Editor.app"
