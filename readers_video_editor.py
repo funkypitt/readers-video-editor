@@ -28,7 +28,7 @@ from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 APP = "readers-video-editor"
-VERSION = "1.11.2"
+VERSION = "1.12.0"
 
 
 def _app_dirs():
@@ -1642,6 +1642,87 @@ _TR_SPOKEN = {
         "Chinese": "китайский"},
 }
 for _code, _more in _TR_SPOKEN.items():
+    _TR.setdefault(_code, {}).update(_more)
+
+# the passages that look like ads
+_TR_ADS = {
+ "fr": {
+  "Ask SponsorBlock which passages of a YouTube video are ads": "Demander à SponsorBlock quels passages d'une vidéo YouTube sont de la publicité",
+  "SponsorBlock is asked with only part of a fingerprint of the video's address: it cannot tell which video you are watching. The passages it knows are proposed as cuts; nothing is cut until you say so.":
+      "SponsorBlock n'est interrogé qu'avec une partie d'une empreinte de l'adresse de la vidéo : il ne peut pas savoir laquelle vous regardez. Les passages qu'il connaît sont proposés comme coupes ; rien n'est coupé sans votre accord.",
+  "Proposed, not cut: tinted and underlined with dots on the page.": "Proposés, pas coupés : teintés et soulignés de pointillés sur la page.",
+  "Cut them all": "Tout couper", "Every proposed passage is cut. Undo puts them back.": "Chaque passage proposé est coupé. Annuler les remet.",
+  "Review": "Examiner", "One line per passage, to cut it or keep it": "Une ligne par passage, pour le couper ou le garder",
+  "Dismiss": "Ignorer", "These passages stay in the edit and are no longer proposed.": "Ces passages restent dans le montage et ne sont plus proposés.",
+  "Looks like an ad": "Ressemble à une publicité", "Self-promotion (SponsorBlock)": "Autopromotion (SponsorBlock)",
+  "Reminder to subscribe (SponsorBlock)": "Rappel de s'abonner (SponsorBlock)", "Sponsor (SponsorBlock)": "Sponsor (SponsorBlock)",
+  "%1 passages look like ads": "%1 passages ressemblent à de la publicité", "1 passage looks like an ad": "1 passage ressemble à de la publicité",
+  "Hide the list": "Masquer la liste", "Show it on the page and play it": "Le montrer sur la page et l'écouter",
+  "Cut": "Couper", "Cut this passage": "Couper ce passage", "Keep": "Garder",
+  "This passage stays in the edit and is no longer proposed.": "Ce passage reste dans le montage et n'est plus proposé.",
+ },
+ "de": {
+  "Ask SponsorBlock which passages of a YouTube video are ads": "SponsorBlock fragen, welche Stellen eines YouTube-Videos Werbung sind",
+  "SponsorBlock is asked with only part of a fingerprint of the video's address: it cannot tell which video you are watching. The passages it knows are proposed as cuts; nothing is cut until you say so.":
+      "SponsorBlock erhält nur einen Teil eines Fingerabdrucks der Videoadresse: Es kann nicht wissen, welches Video Sie ansehen. Die bekannten Stellen werden als Schnitte vorgeschlagen; geschnitten wird erst, wenn Sie es sagen.",
+  "Proposed, not cut: tinted and underlined with dots on the page.": "Vorgeschlagen, nicht geschnitten: auf der Seite getönt und gepunktet unterstrichen.",
+  "Cut them all": "Alle schneiden", "Every proposed passage is cut. Undo puts them back.": "Jede vorgeschlagene Stelle wird geschnitten. Rückgängig holt sie zurück.",
+  "Review": "Durchsehen", "One line per passage, to cut it or keep it": "Eine Zeile pro Stelle, um sie zu schneiden oder zu behalten",
+  "Dismiss": "Verwerfen", "These passages stay in the edit and are no longer proposed.": "Diese Stellen bleiben im Schnitt und werden nicht mehr vorgeschlagen.",
+  "Looks like an ad": "Sieht nach Werbung aus", "Self-promotion (SponsorBlock)": "Eigenwerbung (SponsorBlock)",
+  "Reminder to subscribe (SponsorBlock)": "Aufruf zum Abonnieren (SponsorBlock)", "Sponsor (SponsorBlock)": "Sponsor (SponsorBlock)",
+  "%1 passages look like ads": "%1 Stellen sehen nach Werbung aus", "1 passage looks like an ad": "1 Stelle sieht nach Werbung aus",
+  "Hide the list": "Liste ausblenden", "Show it on the page and play it": "Auf der Seite zeigen und abspielen",
+  "Cut": "Schneiden", "Cut this passage": "Diese Stelle schneiden", "Keep": "Behalten",
+  "This passage stays in the edit and is no longer proposed.": "Diese Stelle bleibt im Schnitt und wird nicht mehr vorgeschlagen.",
+ },
+ "es": {
+  "Ask SponsorBlock which passages of a YouTube video are ads": "Preguntar a SponsorBlock qué pasajes de un vídeo de YouTube son publicidad",
+  "SponsorBlock is asked with only part of a fingerprint of the video's address: it cannot tell which video you are watching. The passages it knows are proposed as cuts; nothing is cut until you say so.":
+      "A SponsorBlock solo se le envía una parte de una huella de la dirección del vídeo: no puede saber qué vídeo está viendo. Los pasajes que conoce se proponen como cortes; no se corta nada hasta que usted lo diga.",
+  "Proposed, not cut: tinted and underlined with dots on the page.": "Propuestos, no cortados: teñidos y subrayados con puntos en la página.",
+  "Cut them all": "Cortarlos todos", "Every proposed passage is cut. Undo puts them back.": "Se corta cada pasaje propuesto. Deshacer los devuelve.",
+  "Review": "Revisar", "One line per passage, to cut it or keep it": "Una línea por pasaje, para cortarlo o conservarlo",
+  "Dismiss": "Descartar", "These passages stay in the edit and are no longer proposed.": "Estos pasajes quedan en el montaje y ya no se proponen.",
+  "Looks like an ad": "Parece publicidad", "Self-promotion (SponsorBlock)": "Autopromoción (SponsorBlock)",
+  "Reminder to subscribe (SponsorBlock)": "Recordatorio para suscribirse (SponsorBlock)", "Sponsor (SponsorBlock)": "Patrocinador (SponsorBlock)",
+  "%1 passages look like ads": "%1 pasajes parecen publicidad", "1 passage looks like an ad": "1 pasaje parece publicidad",
+  "Hide the list": "Ocultar la lista", "Show it on the page and play it": "Mostrarlo en la página y reproducirlo",
+  "Cut": "Cortar", "Cut this passage": "Cortar este pasaje", "Keep": "Conservar",
+  "This passage stays in the edit and is no longer proposed.": "Este pasaje queda en el montaje y ya no se propone.",
+ },
+ "pt": {
+  "Ask SponsorBlock which passages of a YouTube video are ads": "Perguntar ao SponsorBlock quais trechos de um vídeo do YouTube são publicidade",
+  "SponsorBlock is asked with only part of a fingerprint of the video's address: it cannot tell which video you are watching. The passages it knows are proposed as cuts; nothing is cut until you say so.":
+      "O SponsorBlock recebe apenas parte de uma impressão digital do endereço do vídeo: não pode saber qual vídeo você está vendo. Os trechos que ele conhece são propostos como cortes; nada é cortado até você dizer.",
+  "Proposed, not cut: tinted and underlined with dots on the page.": "Propostos, não cortados: tingidos e sublinhados com pontos na página.",
+  "Cut them all": "Cortar todos", "Every proposed passage is cut. Undo puts them back.": "Cada trecho proposto é cortado. Desfazer os traz de volta.",
+  "Review": "Revisar", "One line per passage, to cut it or keep it": "Uma linha por trecho, para cortá-lo ou mantê-lo",
+  "Dismiss": "Descartar", "These passages stay in the edit and are no longer proposed.": "Estes trechos ficam na edição e não são mais propostos.",
+  "Looks like an ad": "Parece publicidade", "Self-promotion (SponsorBlock)": "Autopromoção (SponsorBlock)",
+  "Reminder to subscribe (SponsorBlock)": "Lembrete para se inscrever (SponsorBlock)", "Sponsor (SponsorBlock)": "Patrocinador (SponsorBlock)",
+  "%1 passages look like ads": "%1 trechos parecem publicidade", "1 passage looks like an ad": "1 trecho parece publicidade",
+  "Hide the list": "Ocultar a lista", "Show it on the page and play it": "Mostrá-lo na página e tocá-lo",
+  "Cut": "Cortar", "Cut this passage": "Cortar este trecho", "Keep": "Manter",
+  "This passage stays in the edit and is no longer proposed.": "Este trecho fica na edição e não é mais proposto.",
+ },
+ "ru": {
+  "Ask SponsorBlock which passages of a YouTube video are ads": "Спрашивать SponsorBlock, какие фрагменты видео с YouTube — реклама",
+  "SponsorBlock is asked with only part of a fingerprint of the video's address: it cannot tell which video you are watching. The passages it knows are proposed as cuts; nothing is cut until you say so.":
+      "SponsorBlock получает лишь часть отпечатка адреса видео: он не может узнать, какое видео вы смотрите. Известные ему фрагменты предлагаются к вырезанию; ничего не вырезается без вашего согласия.",
+  "Proposed, not cut: tinted and underlined with dots on the page.": "Предложено, но не вырезано: на странице выделено цветом и подчёркнуто точками.",
+  "Cut them all": "Вырезать все", "Every proposed passage is cut. Undo puts them back.": "Все предложенные фрагменты вырезаются. «Отменить» вернёт их.",
+  "Review": "Просмотреть", "One line per passage, to cut it or keep it": "По строке на фрагмент: вырезать или оставить",
+  "Dismiss": "Отклонить", "These passages stay in the edit and are no longer proposed.": "Эти фрагменты остаются в монтаже и больше не предлагаются.",
+  "Looks like an ad": "Похоже на рекламу", "Self-promotion (SponsorBlock)": "Самореклама (SponsorBlock)",
+  "Reminder to subscribe (SponsorBlock)": "Призыв подписаться (SponsorBlock)", "Sponsor (SponsorBlock)": "Спонсор (SponsorBlock)",
+  "%1 passages look like ads": "Похоже на рекламу — фрагментов: %1", "1 passage looks like an ad": "Один фрагмент похож на рекламу",
+  "Hide the list": "Скрыть список", "Show it on the page and play it": "Показать на странице и воспроизвести",
+  "Cut": "Вырезать", "Cut this passage": "Вырезать этот фрагмент", "Keep": "Оставить",
+  "This passage stays in the edit and is no longer proposed.": "Этот фрагмент остаётся в монтаже и больше не предлагается.",
+ },
+}
+for _code, _more in _TR_ADS.items():
     _TR.setdefault(_code, {}).update(_more)
 
 
@@ -4444,6 +4525,277 @@ def ranges_from_times(tokens, times):
 
 
 # ------------------------------------------------------------------------------------------
+# Passages that look like ads: proposed as cuts, never cut until the user says so
+# ------------------------------------------------------------------------------------------
+
+SPONSORBLOCK_API = "https://sponsor.ajay.app/api/skipSegments/"
+SPONSORBLOCK_CATEGORIES = ("sponsor", "selfpromo", "interaction")
+_YOUTUBE_ID = re.compile(r"^[A-Za-z0-9_-]{11}$")
+
+
+def youtube_id(url):
+    """The video id of a YouTube address (watch, youtu.be, shorts, live, embed), or ''."""
+    from urllib.parse import urlparse, parse_qs
+    try:
+        u = urlparse((url or "").strip())
+    except ValueError:
+        return ""
+    host = (u.hostname or "").lower()
+    if host.startswith("www.") or host.startswith("m."):
+        host = host.split(".", 1)[1]
+    vid = ""
+    if host == "youtu.be":
+        vid = u.path.strip("/").split("/")[0]
+    elif host in ("youtube.com", "music.youtube.com", "youtube-nocookie.com"):
+        if u.path == "/watch":
+            vid = (parse_qs(u.query).get("v") or [""])[0]
+        else:
+            parts = u.path.strip("/").split("/")
+            if len(parts) >= 2 and parts[0] in ("shorts", "live", "embed", "v"):
+                vid = parts[1]
+    return vid if _YOUTUBE_ID.match(vid or "") else ""
+
+
+def sponsorblock_url(video_id):
+    """The question asked: only the first 4 hex digits of the SHA-256 of the id leave the computer."""
+    from urllib.parse import quote
+    prefix = hashlib.sha256(video_id.encode("utf-8")).hexdigest()[:4]
+    cats = json.dumps(list(SPONSORBLOCK_CATEGORIES), separators=(",", ":"))
+    return SPONSORBLOCK_API + prefix + "?categories=" + quote(cats, safe="")
+
+
+def sponsorblock_segments(answer, video_id):
+    """The passages to skip for this video in SponsorBlock's answer (every video sharing the prefix)."""
+    out = []
+    for video in answer if isinstance(answer, list) else []:
+        if not isinstance(video, dict) or video.get("videoID") != video_id:
+            continue
+        for s in video.get("segments") or []:
+            try:
+                if s.get("actionType", "skip") != "skip" or s.get("category") not in SPONSORBLOCK_CATEGORIES:
+                    continue
+                a, b = float(s["segment"][0]), float(s["segment"][1])
+            except (AttributeError, KeyError, IndexError, TypeError, ValueError):
+                continue
+            if b - a >= 0.5:
+                out.append({"start": round(a, 3), "end": round(b, 3), "category": s["category"]})
+    return sorted(out, key=lambda s: s["start"])
+
+
+def fetch_sponsorblock(video_id, timeout=10):
+    """The skip passages SponsorBlock knows for this video: [] when none, None when it could not be asked."""
+    import urllib.request
+    import urllib.error
+    req = urllib.request.Request(sponsorblock_url(video_id), headers={"User-Agent": APP + "/" + VERSION})
+    try:
+        with https_open(req, timeout) as r:
+            return sponsorblock_segments(json.loads(r.read().decode("utf-8")), video_id)
+    except urllib.error.HTTPError as ex:
+        return [] if ex.code == 404 else None
+    except Exception:            # noqa: BLE001 — no network, a slow server: no proposal, no message
+        return None
+
+
+def starts_paragraph(gap, new_sentence, chars):
+    """The Reader's paragraph rule: a pause of 2 s, of 0.9 s after a sentence, or 0.25 s once 900 characters are written."""
+    return gap >= 2.0 or (new_sentence and gap >= 0.9) or (new_sentence and chars >= 900 and gap >= 0.25)
+
+
+def paragraph_spans(tokens):
+    """The paragraphs of the page as (first, last) token indices; a passage without words ends one."""
+    spans, a, chars, prev_sentence, prev_end = [], -1, 0, None, 0.0
+    for i, (t, d, f, s) in enumerate(tokens):
+        if t is None:
+            if a >= 0:
+                spans.append((a, i - 1))
+            a = -1
+            continue
+        if a < 0:
+            a, chars = i, 0
+        elif starts_paragraph(d - prev_end, s != prev_sentence, chars):
+            spans.append((a, i - 1))
+            a, chars = i, 0
+        chars += len(t) + 1
+        prev_sentence, prev_end = s, f
+    if a >= 0:
+        spans.append((a, len(tokens) - 1))
+    return spans
+
+
+# What marks an ad in what is said. One STRONG phrase is enough for its paragraph; WEAK phrases
+# only count two different ones together. EXCEPTIONS are blanked out first (a bill "sponsored by"
+# a senator is news, not an ad). The text is lowercased, ’ → ', ё → е, spaces collapsed.
+AD_STRONG = {
+    "en": [r"\bsponsored by\b",
+           r"\btoday'?s sponsor\b",
+           r"\bour sponsor (today|for (this|today'?s) (video|episode|show))\b",
+           r"\b(this|the) (video|episode|podcast|show)'?s sponsor\b",
+           r"\bsponsor of (this|today'?s) (video|episode|show|podcast)\b",
+           r"\bfor sponsoring (this|today'?s|the) (video|episode|show|podcast)\b",
+           r"\bbrought to you by\b",
+           r"\b(promo|discount|coupon) code\b",
+           r"\b(use|enter) (my |the )?code [\w-]+ (at checkout|for \d|to get \d)"],
+    "fr": [r"\bsponsoris[ée]e?s? par\b",
+           r"\bcode (promo|promotionnel|de r[ée]duction|r[ée]duc)\b",
+           r"\bpartenaire (de cette vid[ée]o|de cet [ée]pisode|du jour|de la vid[ée]o|de l'[ée]pisode)\b",
+           r"\bvous est offerte? par\b"],
+    "de": [r"\bgesponsert (von|durch)\b",
+           r"\b(video|folge|episode|podcast|stream) (wird|ist|wurde) (heute )?(von ([\w-]+ ){1,4})?gesponsert\b",
+           r"\b(rabatt|gutschein|promo|aktions)-?code\b",
+           r"\b(heutiger|heutigen|heutige) sponsor\b",
+           r"\bsponsor (dieses|des heutigen) (videos?|folge|episode)\b",
+           r"\b(enthält|beinhaltet) (bezahlte )?werbung\b"],
+    "es": [r"\bpatrocinad[oa]s? por\b",
+           r"\bc[óo]digo (de descuento|promocional|promo)\b",
+           r"\bnuestro patrocinador\b",
+           r"\bpatrocinador (de hoy|del d[íi]a|de este (v[íi]deo|episodio|programa))\b",
+           r"\bpor patrocinar (este|el) (v[íi]deo|episodio|programa)\b"],
+    "pt": [r"\bpatrocinad[oa]s? (por|pel[oa])\b",
+           r"\bc[óo]digo (de desconto|promocional|promo)\b",
+           r"\bcupom de desconto\b",
+           r"\bnosso patrocinador\b",
+           r"\bpatrocinador (de hoje|do dia|deste (v[íi]deo|epis[óo]dio|programa))\b"],
+    "ru": [r"\bпромокод\w*",
+           r"\bспонсор(ом)? (этого|сегодняшнего|нашего) (видео|выпуска|ролика|подкаста)\b",
+           r"\b(видео|выпуск|ролик|подкаст)\w* спонсиру\w*",
+           r"\bрекламн\w+ интеграци\w*",
+           r"\bпартнер\w* (этого|сегодняшнего) (видео|выпуска|ролика)\b"],
+}
+AD_WEAK = {
+    "en": [r"\blinks? (is |are )?(in the (description|show notes)|below)\b",
+           r"\b\d+ ?(%|percent|per cent) off\b(?!-)",
+           r"\bat checkout\b",
+           r"\bfree trial\b",
+           r"\buse (my |the )?code\b",
+           r"\b(go|head over|head) to [\w-]+ ?(\.|dot) ?(com|io|co|net|org)\b",
+           r"\bexclusive (offer|deal|discount)\b"],
+    "fr": [r"\bnotre partenaire\b",
+           r"\ben partenariat avec\b",
+           r"\blien (en|dans la|dans ma) (description|bio)\b",
+           r"\bparrain[ée]e?s? par\b",
+           r"\b\d+ ?(%|pour ?cent) de (r[ée]duction|remise)\b",
+           r"\boffre (exclusive|sp[ée]ciale)\b",
+           r"\bavec le code\b"],
+    "de": [r"\bunser(em|en)? sponsor\b",
+           r"\blinks? in der (video)?beschreibung\b",
+           r"\b\d+ ?(%|prozent) rabatt\b",
+           r"\bin kooperation mit\b",
+           r"\bmit dem code\b",
+           r"\bexklusives? angebot\b"],
+    "es": [r"\benlaces? (en|de) la descripci[óo]n\b",
+           r"\b\d+ ?(%|por ?ciento) de descuento\b",
+           r"\bcup[óo]n\b",
+           r"\ben colaboraci[óo]n con\b",
+           r"\bcon el c[óo]digo\b",
+           r"\boferta exclusiva\b"],
+    "pt": [r"\blinks? na descri[çc][ãa]o\b",
+           r"\b\d+ ?(%|por ?cento) de desconto\b",
+           r"\bcupom\b",
+           r"\bem parceria com\b",
+           r"\bcom o c[óo]digo\b"],
+    "ru": [r"\bспонсор\w*",
+           r"\b(по )?ссылк\w* (в|под) (описании|видео)\b|\bпо ссылке\b",
+           r"\bскидк\w* (в |до )?\d+ ?(%|процент\w*)|\b\d+ ?(%|процент\w*) скидк\w*"],
+}
+AD_EXCEPTIONS = [
+    r"\b(bill|legislation|resolution|amendment|act|measure|law|proposal|study|research|trial|survey|conference|summit|event"
+    r"|tournament|race|team|program|programme)s? (that |which )?(was |is |were |are |being |been |has been )?(co-?)?sponsored by\b",
+    r"\b(projet|proposition|loi|texte|tournoi|[ée]v[ée]nement|[ée]tude|[ée]quipe|course|colloque|conf[ée]rence|programme)s? "
+    r"(de loi )?(\w+ ){0,3}(sponsoris|parrain)[ée]e?s? par\b",
+    r"\b(gesetz|gesetzentwurf|turnier|studie|veranstaltung|konferenz|team|mannschaft|projekt|programm)\w* (wird |wurde |ist )?"
+    r"(\w+ ){0,3}gesponsert (von|durch)\b",
+    r"\b(ley|proyecto|torneo|evento|estudio|equipo|congreso|conferencia|programa|campeonato|lei|projeto|torneio|estudo|equipe"
+    r"|time|congresso|confer[êe]ncia)s? (de (ley|lei) )?(\w+ ){0,3}patrocinad[oa]s? (por|pel[oa])\b",
+]
+_AD_STRONG = [re.compile(p) for ps in AD_STRONG.values() for p in ps]
+_AD_WEAK = [re.compile(p) for ps in AD_WEAK.values() for p in ps]
+_AD_EXCEPTIONS = [re.compile(p) for p in AD_EXCEPTIONS]
+
+
+def ad_text(text):
+    t = (text or "").lower().replace("’", "'").replace("‘", "'").replace("ʼ", "'").replace("ё", "е")
+    t = re.sub(r"\s+", " ", t.replace(" ", " ").replace(" ", " "))
+    for ex in _AD_EXCEPTIONS:
+        t = ex.sub(lambda m: " " * len(m.group(0)), t)
+    return t
+
+
+def looks_like_ad(text):
+    """One strong phrase, or two different weak ones."""
+    t = ad_text(text)
+    if any(p.search(t) for p in _AD_STRONG):
+        return True
+    return sum(1 for p in _AD_WEAK if p.search(t)) >= 2
+
+
+def ad_passages(tokens):
+    """The paragraphs whose words look like an ad, as (first, last) tokens; neighbouring ones are one passage
+    (with the passage without words between them)."""
+    out = []
+    for a, b in paragraph_spans(tokens):
+        if not looks_like_ad(" ".join(tokens[i][0] for i in range(a, b + 1) if tokens[i][0] is not None)):
+            continue
+        if out and all(tokens[i][0] is None for i in range(out[-1][1] + 1, a)):
+            out[-1] = (out[-1][0], b)
+        else:
+            out.append((a, b))
+    return out
+
+
+def ad_key(source, start, end):
+    return f"{source}:{start:.1f}-{end:.1f}"
+
+
+def ad_proposals(sponsorblock, text_times, dismissed=()):
+    """The passages to propose, by time: SponsorBlock's, then the text's that overlap none of them.
+    Each: {key, start, end, source ('sponsorblock' or 'text'), category}. Dismissed keys are left out."""
+    items = [{"key": ad_key("sb", s["start"], s["end"]), "start": s["start"], "end": s["end"],
+              "source": "sponsorblock", "category": s.get("category", "sponsor")} for s in sponsorblock or []]
+    for a, b in text_times or []:
+        if not any(a < s["end"] and s["start"] < b for s in sponsorblock or []):
+            items.append({"key": ad_key("tx", a, b), "start": a, "end": b, "source": "text", "category": "sponsor"})
+    gone = set(dismissed or ())
+    return sorted((x for x in items if x["key"] not in gone), key=lambda x: x["start"])
+
+
+def ad_ranges(tokens, items):
+    """Each proposal on the tokens of the page: (item, first, last), the tokens whose middle falls inside it."""
+    import bisect
+    mids = [(t[1] + t[2]) / 2.0 for t in tokens]
+    out = []
+    for x in items:
+        a = bisect.bisect_left(mids, x["start"])
+        b = bisect.bisect_right(mids, x["end"]) - 1
+        if a <= b:
+            out.append((x, a, b))
+    return out
+
+
+def is_cut(sel, mode, a, b):
+    """True when [a, b] is already out of the edit: struck in the cut mode, not highlighted in the keep mode
+    (once something is highlighted)."""
+    part = sel[a:b + 1]
+    if mode == "cut":
+        return bool(part.all())
+    return bool(sel.any()) and not part.any()
+
+
+def with_cuts(sel, mode, ranges):
+    """The highlighting once the passages are cut, as an ordinary cut would leave it. In the keep mode with
+    nothing highlighted yet, everything else is kept."""
+    out = sel.copy()
+    if mode == "cut":
+        for a, b in ranges:
+            out[a:b + 1] = 1
+    else:
+        if not out.any():
+            out[:] = 1
+        for a, b in ranges:
+            out[a:b + 1] = 0
+    return out
+
+
+# ------------------------------------------------------------------------------------------
 # Settings, look
 # ------------------------------------------------------------------------------------------
 
@@ -4466,6 +4818,7 @@ def load_config():
     cfg.setdefault("frame", "as_is")           # the picture of the edit: as it is, or a centred square (1:1)
     cfg.setdefault("sound", "as_is")           # the sound of the edit: as it is, or finished by the toolkit (finaliser.py)
     cfg.setdefault("toolkit_dir", "")
+    cfg.setdefault("sponsorblock", True)       # YouTube downloads: SponsorBlock asked for the passages that are ads
     return cfg
 
 
@@ -4522,6 +4875,7 @@ PAPER, INK, INK2, RULE = "#f6f2e8", "#23211d", "#8b8578", "#e2dccd"
 STABILO, STABILO_PRE, GOMME = "#ffe84a", "#fff3a0", "#e9e4d8"
 RAYE, RAYE_PRE, RAYE_INK = "#ffc9c2", "#ffe1dc", "#8f3a31"
 CURRENT = "#e0621a"
+AD_TINT, AD_LINE, AD_BAR = "#dfe5f3", "#3f5fb8", "#e8ecf6"   # a passage proposed as a cut: tinted, a dotted line under it
 PAUSE_BG = "#eee8d8"
 SERIF_CANDIDATES = ["Literata", "Iowan Old Style", "Palatino Linotype", "Palatino", "Book Antiqua", "Georgia", "Noto Serif",
                     "DejaVu Serif", "Liberation Serif", "FreeSerif"]
@@ -4559,6 +4913,8 @@ class Page(QtWidgets.QTextEdit):
         self.sel = np.zeros(0, dtype=np.uint8)
         self.spans = []             # (start, end) char positions of each token, or None for a hidden one
         self.painted = []           # the look each token has on the page now (see paint)
+        self.proposed = np.zeros(0, dtype=np.uint8)   # 1 for the tokens of a passage proposed as a cut (an ad)
+        self.proposed_labels = []   # (first, last, label) of each proposed passage, for the tooltip
         self.anchor = -1
         self.tail = -1
         self.dragged = False
@@ -4583,6 +4939,8 @@ class Page(QtWidgets.QTextEdit):
         self.tokens = tokens
         self.origin = origin
         self.sel = np.zeros(len(tokens), dtype=np.uint8)
+        self.proposed = np.zeros(len(tokens), dtype=np.uint8)
+        self.proposed_labels = []
         for a, b in ranges:
             self.sel[max(0, a):min(len(tokens) - 1, b) + 1] = 1
         self.history, self.future = [], []
@@ -4647,7 +5005,7 @@ class Page(QtWidgets.QTextEdit):
                 continue
             gap = d - prev_end
             new_sentence = s != prev_sentence
-            if not open_block or gap >= 2.0 or (new_sentence and gap >= 0.9) or (new_sentence and chars >= 900 and gap >= 0.25):
+            if not open_block or starts_paragraph(gap, new_sentence, chars):
                 if not first:
                     cur.insertBlock(block_fmt)
                 first = False
@@ -4676,7 +5034,7 @@ class Page(QtWidgets.QTextEdit):
                 continue
             gap = d - prev_end
             new_sentence = sn != prev_sentence
-            if cur and (gap >= 2.0 or (new_sentence and gap >= 0.9) or (new_sentence and chars >= 900 and gap >= 0.25)):
+            if cur and starts_paragraph(gap, new_sentence, chars):
                 paras.append(" ".join(cur))
                 cur, chars = [], 0
             cur.append(t)
@@ -4702,6 +5060,7 @@ class Page(QtWidgets.QTextEdit):
         cut = self.mode == "cut"
         erase = self.erase_gesture
         sel, spans, painted = self.sel, self.spans, self.painted
+        proposed = self.proposed if len(self.proposed) == n else np.zeros(n, dtype=np.uint8)
         editing = False
         for i in range(a, b + 1):
             span = spans[i]
@@ -4713,7 +5072,9 @@ class Page(QtWidgets.QTextEdit):
             joined = bool(nxt and nxt[0] == span[1] + 1
                           and ((selected and sel[i + 1] == 1 and not in_preview) or (in_preview and i + 1 <= pb)))
             marked = selected or in_preview
-            key = (bool(selected), in_preview, in_preview and erase, marked and cut, i == self.current, joined)
+            ad = bool(proposed[i])
+            ad_joined = bool(ad and not joined and nxt and nxt[0] == span[1] + 1 and proposed[i + 1] and not marked and not sel[i + 1])
+            key = (bool(selected), in_preview, in_preview and erase, marked and cut, i == self.current, joined, ad, ad_joined)
             if painted[i] == key:
                 continue
             painted[i] = key
@@ -4745,6 +5106,12 @@ class Page(QtWidgets.QTextEdit):
                 else:
                     fmt.setBackground(QtGui.QColor(STABILO))
                     fmt.setForeground(QtGui.QColor(INK))
+            elif ad:
+                fmt.setBackground(QtGui.QColor(AD_TINT))
+            if ad:
+                fmt.setFontUnderline(True)
+                fmt.setUnderlineStyle(QtGui.QTextCharFormat.DotLine)
+                fmt.setUnderlineColor(QtGui.QColor(AD_LINE))
             if i == self.current:
                 fmt.setFontUnderline(True)
                 fmt.setUnderlineStyle(QtGui.QTextCharFormat.SingleUnderline)
@@ -4759,6 +5126,12 @@ class Page(QtWidgets.QTextEdit):
                 if joined:
                     sp.setBackground(fmt.background())
                     sp.setFontStrikeOut(fmt.fontStrikeOut())
+                elif ad_joined:
+                    sp.setBackground(QtGui.QColor(AD_TINT))
+                if ad and proposed[i + 1]:
+                    sp.setFontUnderline(True)
+                    sp.setUnderlineStyle(QtGui.QTextCharFormat.DotLine)
+                    sp.setUnderlineColor(QtGui.QColor(AD_LINE))
                 cur.setPosition(span[1])
                 cur.setPosition(span[1] + 1, QtGui.QTextCursor.KeepAnchor)
                 cur.setCharFormat(sp)
@@ -4768,6 +5141,44 @@ class Page(QtWidgets.QTextEdit):
     def set_mode(self, mode):
         self.mode = mode
         self.paint(0, len(self.tokens) - 1)
+
+    def set_proposed(self, items):
+        """The passages proposed as cuts: [(first, last, label)], painted tinted with a dotted line."""
+        n = len(self.tokens)
+        new = np.zeros(n, dtype=np.uint8)
+        for a, b, _label in items:
+            new[a:b + 1] = 1
+        old = self.proposed if len(self.proposed) == n else np.zeros(n, dtype=np.uint8)
+        self.proposed, self.proposed_labels = new, list(items)
+        diff = np.nonzero(old != new)[0]
+        if len(diff):
+            self.paint(int(diff[0]), int(diff[-1]))
+
+    def cut_passages(self, ranges):
+        """The passages cut as a stroke of the pen would cut them: one step for Undo."""
+        new = with_cuts(self.sel, self.mode, ranges)
+        if (new == self.sel).all():
+            return
+        self.history.append(self.sel.copy())
+        if len(self.history) > 200:
+            self.history.pop(0)
+        self.future = []
+        self.sel = new
+        self.paint(0, len(self.tokens) - 1)
+        self.changed.emit()
+
+    def viewportEvent(self, e):
+        # a word of a proposed passage says why it is proposed
+        if e.type() == QtCore.QEvent.ToolTip and self.proposed_labels:
+            i = self.token_at(e.pos())
+            label = next((lab for a, b, lab in self.proposed_labels if a <= i <= b), None) if i >= 0 else None
+            if label:
+                QtWidgets.QToolTip.showText(e.globalPos(), label, self.viewport())
+            else:
+                QtWidgets.QToolTip.hideText()
+                e.ignore()
+            return True
+        return super().viewportEvent(e)
 
     def ranges(self):
         r, a = [], -1
@@ -5523,10 +5934,12 @@ class CueEditor(QtWidgets.QWidget):
 
 class Main(QtWidgets.QMainWindow):
     listening_ready = QtCore.pyqtSignal(str, str)     # the source, the copy to play in its place
+    sponsorblock_ready = QtCore.pyqtSignal(str, object)   # the project folder, SponsorBlock's passages for its video
 
     def __init__(self, source=None, srt=None):
         super().__init__()
         self.listening_ready.connect(self.use_listening_copy)
+        self.sponsorblock_ready.connect(self.on_sponsorblock)
         self.cfg = load_config()
         self.page_pt = int(self.cfg.get("page_pt", 14))
         self.serif = pick_font(SERIF_CANDIDATES, "serif")
@@ -5552,6 +5965,10 @@ class Main(QtWidgets.QMainWindow):
         self.media_ok = True
         self.reading = False
         self.mode_value = "keep"
+        self.ads = {}               # ads.json of the project: {video, sponsorblock: [...], checked, dismissed: [...]}
+        self.ad_text_times = []     # the passages of the original text that look like an ad, in seconds
+        self.ad_items = []          # what the bar proposes now: (item, first, last) on the page's tokens
+        self.ads_open = False       # the list of the proposals unfolded
         self.setup_active = None       # the getting-started row whose job runs, while one does
         self.setup_probe = {}
         self.setup_ok = {}             # the real tests that passed on this page: "ollama", "claude_code", "claude"
@@ -5705,6 +6122,15 @@ class Main(QtWidgets.QMainWindow):
         self.h_lang.currentIndexChanged.connect(lambda _i: self.h_open.setText(_("Open · language: %1", spoken_name(self.h_lang.currentData()))))
         self.h_open.setText(_("Open · language: %1", spoken_name("")))
         v.addLayout(row)
+        self.h_sponsor = QtWidgets.QCheckBox(_("Ask SponsorBlock which passages of a YouTube video are ads"))
+        self.h_sponsor.setChecked(bool(self.cfg.get("sponsorblock", True)))
+        self.h_sponsor.toggled.connect(self.set_sponsorblock)
+        v.addWidget(self.h_sponsor)
+        hint = QtWidgets.QLabel(_("SponsorBlock is asked with only part of a fingerprint of the video's address: it cannot tell which video you are watching. The passages it knows are proposed as cuts; nothing is cut until you say so."))
+        hint.setObjectName("muted")
+        hint.setWordWrap(True)
+        hint.setContentsMargins(23, 0, 0, 0)
+        v.addWidget(hint)
         self.h_error = QtWidgets.QLabel("")
         self.h_error.setObjectName("danger")
         self.h_error.setWordWrap(True)
@@ -6452,7 +6878,13 @@ class Main(QtWidgets.QMainWindow):
         rv.setContentsMargins(0, 0, 0, 0)
         rv.setSpacing(0)
         self.page_stack = QtWidgets.QStackedWidget()
-        self.page_stack.addWidget(self.page)
+        self.page_box = QtWidgets.QWidget()
+        pbv = QtWidgets.QVBoxLayout(self.page_box)
+        pbv.setContentsMargins(0, 0, 0, 0)
+        pbv.setSpacing(0)
+        pbv.addWidget(self._build_ads_bar())
+        pbv.addWidget(self.page, 1)
+        self.page_stack.addWidget(self.page_box)
         self.editor = CueEditor(self)
         self.editor.changed.connect(self.on_cues_changed)
         self.editor.seek.connect(lambda t: self.go(t, None))
@@ -6550,6 +6982,15 @@ class Main(QtWidgets.QMainWindow):
             QFrame#setuprow {{ background: {C_PANEL}; border: 1px solid {C_BORDER}; border-radius: 10px; }}
             QWidget#settings, QWidget#following, QWidget#finished {{ background: {C_PANEL2}; }}
             QWidget#paper, QWidget#paper QWidget {{ background: {PAPER}; }}
+            QWidget#paper QWidget#adsbar, QWidget#paper QWidget#adsbar QWidget {{ background: {AD_BAR}; }}
+            QWidget#paper QWidget#adsbar {{ border-bottom: 1px solid #c9d2e8; }}
+            QWidget#adsbar QLabel {{ color: {INK}; background: transparent; }}
+            QWidget#adsbar QLabel#adsTitle {{ font-weight: 700; color: {AD_LINE}; }}
+            QWidget#adsbar QLabel#adsMuted {{ color: {INK2}; font-size: 9.5pt; }}
+            QWidget#adsbar QLabel#adsSource {{ color: {AD_LINE}; font-size: 9.5pt; font-weight: 600; }}
+            QWidget#paper QWidget#adsbar QPushButton {{ background: #ffffff; color: {INK}; border-color: #c9d2e8; padding: 5px 12px; }}
+            QWidget#paper QWidget#adsbar QPushButton[kind="adcut"] {{ background: {RAYE}; color: #4a1712; border-color: #e7aaa2; }}
+            QWidget#paper QWidget#adsbar QPushButton[kind="adtime"] {{ background: transparent; border: none; color: {AD_LINE}; font-family: "{self.mono}"; font-size: 9pt; padding: 2px 4px; text-decoration: underline; }}
             QTextEdit {{ background: {PAPER}; color: {INK}; border: none; font-family: "{self.serif}"; font-size: {pt}pt; padding: 26px 20px; selection-background-color: {STABILO}; }}
             QListWidget#passages {{ background: {C_PANEL2}; border: none; outline: none; padding: 4px; }}
             QScrollBar:vertical {{ background: transparent; width: 10px; margin: 0; }} QScrollBar::handle:vertical {{ background: {C_BORDER}; min-height: 24px; border-radius: 5px; }}
@@ -6622,11 +7063,13 @@ class Main(QtWidgets.QMainWindow):
         self.player.setMedia(QMediaContent())
         self.project, self.tokens, self.cuts = None, [], []
         self.texts, self.view, self.project_file, self.cues = {}, "src", None, {}
+        self.ads, self.ad_text_times = {}, []
         self.subs_mode = False
         self.b_subs.setChecked(False)
-        self.page_stack.setCurrentWidget(self.page)
+        self.page_stack.setCurrentWidget(self.page_box)
         self.refresh_overlay()
         self.page.set_tokens([], [])
+        self.refresh_ads()
         self.views.setCurrentWidget(self.home)
         self.h_error.setText("")
         self.refresh_recents()
@@ -6688,6 +7131,7 @@ class Main(QtWidgets.QMainWindow):
             self.rv.removeWidget(self.controls)
             self.sv.insertWidget(1, self.controls)
             self.side.show()
+        self.fill_ads_bar()
         self.apply_style()
 
     def resizeEvent(self, e):
@@ -6799,6 +7243,11 @@ class Main(QtWidgets.QMainWindow):
             self.h_open.setEnabled(True)
             media, srt = result
             self.open_source(media, srt)
+            vid = youtube_id(url)
+            if vid and self.project and self.project["source"] == os.path.abspath(media) and self.ads.get("video") != vid:
+                self.ads = {"video": vid, "dismissed": self.ads.get("dismissed") or []}
+                self.save_ads()
+                self.start_sponsorblock()
 
         def failed(msg):
             self.task = None
@@ -6896,13 +7345,17 @@ class Main(QtWidgets.QMainWindow):
         self.project_file = None
         if project:
             self.install_project(d, project)
+        self.ads = read_json(d / "ads.json", {}) or {}
+        self.ad_text_times, self.ad_items, self.ads_open = [], [], False
+        if self.ads.get("video") and not self.ads.get("checked"):
+            self.start_sponsorblock()
         self.a_name.setText(Path(path).name)
         self.detail = (_("Video") if info["type"] == "video" else _("Recording")) + " · " + plain(info["duration"])
         self.show_project_name()
         self.tokens, self.cuts, self.texts, self.view, self.cues = [], [], {}, "src", {}
         self.subs_mode = False
         self.b_subs.setChecked(False)
-        self.page_stack.setCurrentWidget(self.page)
+        self.page_stack.setCurrentWidget(self.page_box)
         self.refresh_overlay()
         self.page.set_tokens([], [])
         self.lang_box.hide()
@@ -7171,6 +7624,7 @@ class Main(QtWidgets.QMainWindow):
         views, and the page shows the one the project was on."""
         d = Path(self.project["dir"])
         self.src_lang = language or ""
+        self.ad_text_times = [(tokens[a][1], tokens[b][2]) for a, b in ad_passages(tokens)]
         self.texts = {"src": {"tokens": tokens, "origin": origin, "estimated": estimated, "language": self.src_lang}}
         for f in sorted(d.glob("translation-*.json")):
             tr = read_json(f)
@@ -7217,7 +7671,7 @@ class Main(QtWidgets.QMainWindow):
         if self.subs_mode:
             self.show_editor()
         else:
-            self.page_stack.setCurrentWidget(self.page)
+            self.page_stack.setCurrentWidget(self.page_box)
             self.refresh_overlay()
 
     def view_code(self):
@@ -7594,7 +8048,7 @@ class Main(QtWidgets.QMainWindow):
         def failed(msg):
             self.task = None
             self.p_cancel.hide()
-            self.page_stack.setCurrentWidget(self.page)
+            self.page_stack.setCurrentWidget(self.page_box)
             self.enable(True)
             self.on_selection()
             self.say(_("The translation failed: %1", msg) if msg else _("Cancelled."))
@@ -7641,6 +8095,8 @@ class Main(QtWidgets.QMainWindow):
         for k, c in (project.get("cues") or {}).items():
             if c and isinstance(c.get("cues"), list):
                 write_json(d / f"cues-{k}.json", c)
+        if isinstance(project.get("ads"), dict):
+            write_json(d / "ads.json", project["ads"])
         sel = dict(project.get("selection") or {})
         sel.pop("times", None)
         write_json(d / "selection.json", sel)
@@ -7678,6 +8134,7 @@ class Main(QtWidgets.QMainWindow):
                 "transcription": read_json(d / "transcription.json"),
                 "translations": {k: read_json(d / f"translation-{k}.json") for k in self.texts if k != "src"},
                 "cues": {k: c for k, c in self.cues.items() if k == "src" or k in self.texts},
+                "ads": self.ads,
                 "selection": {"view": self.view, "ranges": [list(p) for p in clean], "mode": self.mode_value,
                               "fade": float(self.fade.currentData()), "image_fade": self.image_fade.isChecked()},
                 "output": {"format": self.format.currentData(), "burn": self.subs.currentData() or "none", "srt_files": self.srt_files.isChecked(),
@@ -7716,6 +8173,162 @@ class Main(QtWidgets.QMainWindow):
             self.project_file = path
             self.show_project_name()
 
+    # ---- passages that look like ads: proposed, never cut until the user says so ----
+    def _build_ads_bar(self):
+        bar = QtWidgets.QWidget()
+        bar.setObjectName("adsbar")
+        v = QtWidgets.QVBoxLayout(bar)
+        v.setContentsMargins(20, 10, 20, 10)
+        v.setSpacing(6)
+        row = QtWidgets.QHBoxLayout()
+        row.setSpacing(8)
+        tb = QtWidgets.QVBoxLayout()
+        tb.setSpacing(1)
+        self.ads_title = QtWidgets.QLabel("")
+        self.ads_title.setObjectName("adsTitle")
+        tb.addWidget(self.ads_title)
+        sub = QtWidgets.QLabel(_("Proposed, not cut: tinted and underlined with dots on the page."))
+        sub.setObjectName("adsMuted")
+        sub.setWordWrap(True)
+        tb.addWidget(sub)
+        row.addLayout(tb, 1)
+        b = self._btn(_("Cut them all"), self.ads_cut_all, tip=_("Every proposed passage is cut. Undo puts them back."))
+        b.setProperty("kind", "adcut")
+        row.addWidget(b)
+        self.b_ads_review = self._btn(_("Review"), self.ads_toggle_review, tip=_("One line per passage, to cut it or keep it"))
+        row.addWidget(self.b_ads_review)
+        row.addWidget(self._btn(_("Dismiss"), self.ads_dismiss_all, tip=_("These passages stay in the edit and are no longer proposed.")))
+        v.addLayout(row)
+        self.ads_list = QtWidgets.QScrollArea()
+        self.ads_list.setWidgetResizable(True)
+        self.ads_list.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.ads_list.hide()
+        v.addWidget(self.ads_list)
+        bar.hide()
+        self.ads_bar = bar
+        return bar
+
+    def ad_label(self, item):
+        if item["source"] == "text":
+            return _("Looks like an ad")
+        return {"selfpromo": _("Self-promotion (SponsorBlock)"),
+                "interaction": _("Reminder to subscribe (SponsorBlock)")}.get(item["category"], _("Sponsor (SponsorBlock)"))
+
+    def set_sponsorblock(self, on):
+        self.cfg["sponsorblock"] = bool(on)
+        save_config(self.cfg)
+
+    def save_ads(self):
+        if self.project:
+            write_json(Path(self.project["dir"]) / "ads.json", self.ads)
+
+    def start_sponsorblock(self):
+        """SponsorBlock asked in the background for a YouTube video; nothing is said when it cannot answer."""
+        vid = self.ads.get("video")
+        if not self.project or not vid or not self.cfg.get("sponsorblock", True):
+            return
+        d = self.project["dir"]
+
+        def work():
+            segments = fetch_sponsorblock(vid)
+            if segments is not None:
+                self.sponsorblock_ready.emit(d, segments)
+        threading.Thread(target=work, daemon=True).start()
+
+    def on_sponsorblock(self, d, segments):
+        here = bool(self.project and self.project["dir"] == d)
+        ads = self.ads if here else (read_json(Path(d) / "ads.json", {}) or {})
+        ads["sponsorblock"] = segments
+        ads["checked"] = time.strftime("%Y-%m-%d %H:%M")
+        write_json(Path(d) / "ads.json", ads)
+        if here:
+            self.refresh_ads()
+
+    def refresh_ads(self):
+        """The proposals on the page and in the bar: SponsorBlock's and the text's, less those dismissed
+        and those already cut."""
+        items = []
+        if self.project and self.tokens and len(self.page.sel) == len(self.tokens):
+            props = ad_proposals(self.ads.get("sponsorblock") or [], self.ad_text_times, self.ads.get("dismissed") or [])
+            items = [(x, a, b) for x, a, b in ad_ranges(self.tokens, props) if not is_cut(self.page.sel, self.mode_value, a, b)]
+        self.ad_items = items
+        self.page.set_proposed([(a, b, self.ad_label(x)) for x, a, b in items])
+        self.fill_ads_bar()
+
+    def fill_ads_bar(self):
+        items = self.ad_items
+        self.ads_bar.setVisible(bool(items) and not self.reading)
+        if not items:
+            self.ads_open = False
+            return
+        n = len(items)
+        self.ads_title.setText(_("%1 passages look like ads", n) if n > 1 else _("1 passage looks like an ad"))
+        self.b_ads_review.setText(_("Hide the list") if self.ads_open else _("Review"))
+        self.ads_list.setVisible(self.ads_open)
+        if not self.ads_open:
+            return
+        inner = QtWidgets.QWidget()
+        lv = QtWidgets.QVBoxLayout(inner)
+        lv.setContentsMargins(0, 4, 0, 0)
+        lv.setSpacing(4)
+        for x, a, b in items:
+            row = QtWidgets.QHBoxLayout()
+            row.setSpacing(8)
+            t0, t1 = self.tokens[a][1], self.tokens[b][2]
+            when = self._btn(stamp(t0) + "–" + stamp(t1), lambda _c=False, a=a: self.ad_show(a), tip=_("Show it on the page and play it"))
+            when.setProperty("kind", "adtime")
+            row.addWidget(when, 0, QtCore.Qt.AlignTop)
+            tv = QtWidgets.QVBoxLayout()
+            tv.setSpacing(0)
+            src = QtWidgets.QLabel(self.ad_label(x))
+            src.setObjectName("adsSource")
+            tv.addWidget(src)
+            words = [self.tokens[i][0] for i in range(a, b + 1) if self.tokens[i][0] is not None]
+            text = " ".join(words[:18]) + (" …" if len(words) > 18 else "")
+            ex = QtWidgets.QLabel(text or _("Without words"))
+            ex.setWordWrap(True)
+            tv.addWidget(ex)
+            row.addLayout(tv, 1)
+            cut = self._btn(_("Cut"), lambda _c=False, k=x["key"]: self.ad_accept(k), tip=_("Cut this passage"))
+            cut.setProperty("kind", "adcut")
+            row.addWidget(cut, 0, QtCore.Qt.AlignTop)
+            row.addWidget(self._btn(_("Keep"), lambda _c=False, k=x["key"]: self.ad_reject(k), tip=_("This passage stays in the edit and is no longer proposed.")), 0, QtCore.Qt.AlignTop)
+            lv.addLayout(row)
+        self.ads_list.setWidget(inner)
+        self.ads_list.setFixedHeight(min(230, inner.sizeHint().height() + 2))
+
+    def ads_toggle_review(self):
+        self.ads_open = not self.ads_open
+        self.fill_ads_bar()
+
+    def ads_cut_all(self):
+        if self.ad_items:
+            self.page.cut_passages([(a, b) for _x, a, b in self.ad_items])
+
+    def ads_dismiss_all(self):
+        self.ads.setdefault("dismissed", []).extend(x["key"] for x, _a, _b in self.ad_items)
+        self.save_ads()
+        self.refresh_ads()
+
+    def ad_accept(self, key):
+        for x, a, b in self.ad_items:
+            if x["key"] == key:
+                self.page.cut_passages([(a, b)])
+                return
+
+    def ad_reject(self, key):
+        self.ads.setdefault("dismissed", []).append(key)
+        self.save_ads()
+        self.refresh_ads()
+
+    def ad_show(self, a):
+        if self.page.spans[a]:
+            cur = QtGui.QTextCursor(self.page.document())
+            cur.setPosition(self.page.spans[a][0])
+            self.page.setTextCursor(cur)
+            self.page.ensureCursorVisible()
+        self.go(self.tokens[a][1], True)
+
     # ---- the subtitle editor ----
     def undo(self):
         (self.editor if self.subs_mode else self.page).undo()
@@ -7740,7 +8353,7 @@ class Main(QtWidgets.QMainWindow):
         if on:
             self.show_editor()
         else:
-            self.page_stack.setCurrentWidget(self.page)
+            self.page_stack.setCurrentWidget(self.page_box)
             self.refresh_overlay()
             self.update_undo_buttons()
 
@@ -7976,7 +8589,7 @@ class Main(QtWidgets.QMainWindow):
             self.task = None
             self.p_cancel.hide()
             self.enable(True)
-            self.page_stack.setCurrentWidget(self.editor if self.subs_mode else self.page)
+            self.page_stack.setCurrentWidget(self.editor if self.subs_mode else self.page_box)
 
         def done(changes):
             back()
@@ -8028,6 +8641,7 @@ class Main(QtWidgets.QMainWindow):
                                      inverse=(mode == "cut"), estimated=self.estimated)
         self.stop_preview()
         self.update_summary()
+        self.refresh_ads()
 
     def update_summary(self):
         self.passages.clear()

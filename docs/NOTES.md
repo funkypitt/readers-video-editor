@@ -455,3 +455,22 @@ of an Anthropic key. Windows reads the system's store and Linux has `/etc/ssl/ce
 - The macOS build installs `certifi` and carries its data (`--collect-data certifi`).
 - Reproduced here with `SSL_CERT_FILE` and `SSL_CERT_DIR` pointing to an empty folder: plain
   `urlopen` gives the tester's error, `https_open` gets the toolkit's zip.
+
+## Ads proposed as cuts (1.12.0)
+
+Pure functions (tested in `tests/test_ads.py`): `youtube_id`, `sponsorblock_url` (only
+`sha256(id)[:4]` leaves the computer, categories sponsor/selfpromo/interaction), `sponsorblock_segments`
+(the answer's entry with our videoID, actionType "skip", ≥ 0.5 s), `fetch_sponsorblock` ([] on 404,
+None on any failure: no message), `paragraph_spans` (the page's paragraph rule, `starts_paragraph`,
+now shared by `Page.rebuild` and `plain_text`), `looks_like_ad` (normalise: lowercase, ’ → ', ё → е,
+spaces collapsed; blank `AD_EXCEPTIONS`; one `AD_STRONG` match, or two different `AD_WEAK` entries),
+`ad_passages` (hit paragraphs; neighbours with only wordless tokens between them merge), `ad_proposals`
+(SponsorBlock's first, the text's only where they overlap none; dismissed keys `sb:/tx:start-end` at
+0.1 s left out), `ad_ranges` (tokens whose middle falls inside), `is_cut`, `with_cuts` (cut mode: strike;
+keep mode: unhighlight, and with nothing highlighted yet, highlight all the rest).
+
+Storage: `ads.json` in the project folder `{video, sponsorblock, checked, dismissed}`, also in the
+`.rve.json` under "ads". The lookup runs after a YouTube download (thread, result through the
+`sponsorblock_ready` signal so only the UI thread writes ads.json) and again at opening while `checked`
+is missing. Setting `cfg["sponsorblock"]` (default on), checkbox on the home page. The text's passages
+are found on the original text and mapped by time onto a translation's tokens.
