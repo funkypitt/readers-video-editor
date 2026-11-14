@@ -1743,6 +1743,11 @@ def _lang():
         if v:
             return v[:2].lower()
     try:                    # Windows, and macOS opened from the Finder: no LANG at all
+        if sys.platform == "darwin":
+            # the language chosen in System Settings, not the region (an English Mac in Switzerland is fr_CH)
+            ui = QtCore.QLocale.system().uiLanguages()
+            if ui:
+                return ui[0][:2].lower()
         return QtCore.QLocale.system().name()[:2].lower()
     except Exception:
         return "en"
