@@ -7344,7 +7344,10 @@ class Main(QtWidgets.QMainWindow):
             e.acceptProposedAction()
 
     def dropEvent(self, e):
-        urls = e.mimeData().urls()
+        self.open_dropped(e.mimeData().urls())
+
+    def open_dropped(self, urls):
+        """Files or a link dropped on the window, or handed by the Finder (open with, the Dock)."""
         paths = [u.toLocalFile() for u in urls if u.isLocalFile()]
         srt = next((p for p in paths if p.lower().endswith(".srt")), None)
         media = next((p for p in paths if Path(p).suffix.lower() in EXT_VIDEO | EXT_AUDIO), None)
@@ -9094,6 +9097,32 @@ class Main(QtWidgets.QMainWindow):
         super().closeEvent(e)
 
 
+class FinderFiles(QtCore.QObject):
+    """QEvent.FileOpen → the window's drop, gathered a moment so a video and its .srt go together."""
+
+    def __init__(self, window):
+        super().__init__(window)
+        self.window, self.urls = window, []
+        self.timer = QtCore.QTimer(self)
+        self.timer.setSingleShot(True)
+        self.timer.setInterval(200)
+        self.timer.timeout.connect(self.flush)
+
+    def eventFilter(self, obj, e):
+        if e.type() == QtCore.QEvent.FileOpen:
+            url = e.url() if not e.file() else QtCore.QUrl.fromLocalFile(e.file())
+            if url.isValid():
+                self.urls.append(url)
+                self.timer.start()
+            return True
+        return False
+
+    def flush(self):
+        urls, self.urls = self.urls, []
+        if urls:
+            self.window.open_dropped(urls)
+
+
 def self_test_setup(steps):
     """`--self-test-setup[=step,step…]`: the getting-started steps run without a window, each one
     reported on a line, for the builds (CI) and for a Mac where the page fails. Steps: probe,
@@ -9261,6 +9290,11 @@ def main():
     srt = next((a for a in args if a.lower().endswith(".srt")), None)
     w = Main(source, srt)
     w.show()
+    # macOS hands the files opened from the Finder (double click, Open With, the Dock icon) as
+    # events, not as arguments: the first one may come before the window, then later ones
+    finder = FinderFiles(w)
+    app.installEventFilter(finder)
+    QtCore.QTimer.singleShot(0, finder.flush)
     sys.exit(app.exec_())
 
 
