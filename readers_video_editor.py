@@ -28,7 +28,7 @@ from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 APP = "readers-video-editor"
-VERSION = "1.12.1"
+VERSION = "1.12.2"
 
 
 def _app_dirs():
@@ -1547,6 +1547,18 @@ _TR_GPU = {
         "Freeing the graphics card…": "Освобождение видеокарты…"},
 }
 for _code, _more in _TR_GPU.items():
+    _TR.setdefault(_code, {}).update(_more)
+
+
+# The strings of 1.12.2: the model's download tells how far it is
+_TR_MODEL = {
+ "fr": {"Downloading the model « %1 »: %2 of about %3 (%4 %).": "Téléchargement du modèle « %1 » : %2 sur environ %3 (%4 %)."},
+ "de": {"Downloading the model « %1 »: %2 of about %3 (%4 %).": "Modell „%1“ wird geladen: %2 von etwa %3 (%4 %)."},
+ "es": {"Downloading the model « %1 »: %2 of about %3 (%4 %).": "Descargando el modelo « %1 »: %2 de unos %3 (%4 %)."},
+ "pt": {"Downloading the model « %1 »: %2 of about %3 (%4 %).": "A transferir o modelo « %1 »: %2 de cerca de %3 (%4 %)."},
+ "ru": {"Downloading the model « %1 »: %2 of about %3 (%4 %).": "Загрузка модели «%1»: %2 из примерно %3 (%4 %)."},
+}
+for _code, _more in _TR_MODEL.items():
     _TR.setdefault(_code, {}).update(_more)
 
 
@@ -3369,10 +3381,48 @@ def whisper_model_present(size):
     return False
 
 
-def download_whisper_model(size):
-    from faster_whisper import WhisperModel
+def _size_bytes(label):
+    """'3 GB' or '460 MB' (WHISPER_SIZES) in bytes, 0 if unknown."""
+    m = re.match(r"([\d.]+)\s*([MG])B", label or "")
+    return int(float(m.group(1)) * (1e9 if m.group(2) == "G" else 1e6)) if m else 0
+
+
+def download_whisper_model(size, task=None, say=None):
+    """The model's files only (not loaded: large-v3 would take 3 GB of memory for nothing), in a
+    thread of its own while this one tells how far it is and stops waiting when Stop is pressed
+    (the part already there is kept, the next try goes on from it)."""
+    from faster_whisper.utils import download_model
+    import threading
     os.makedirs(MODELS_DIR, exist_ok=True)
-    WhisperModel(size, device="cpu", compute_type="int8", download_root=MODELS_DIR)
+    outcome = {}
+
+    def fetch():
+        try:
+            download_model(size, cache_dir=MODELS_DIR)
+        except BaseException as ex:  # noqa: BLE001 - told by the waiting thread
+            outcome["error"] = ex
+        outcome["done"] = True
+    threading.Thread(target=fetch, daemon=True).start()
+    total = _size_bytes(WHISPER_SIZES.get(size, ""))
+    blobs = glob.glob(os.path.join(MODELS_DIR, f"models--*--faster-whisper-{size}", "blobs"))
+    while not outcome.get("done"):
+        time.sleep(0.5)
+        if task is not None and task.get("cancelled"):
+            raise RuntimeError(_("Cancelled."))
+        if say:
+            blobs = blobs or glob.glob(os.path.join(MODELS_DIR, f"models--*--faster-whisper-{size}", "blobs"))
+            got = 0
+            for d in blobs:
+                for f in os.listdir(d):
+                    try:
+                        got += os.path.getsize(os.path.join(d, f))
+                    except OSError:
+                        pass
+            if total:
+                say(_("Downloading the model « %1 »: %2 of about %3 (%4 %).", size, f"{got / 1e9:.2f} GB" if total >= 1e9 else f"{got / 1e6:.0f} MB",
+                      WHISPER_SIZES.get(size, ""), str(min(99, int(got * 100 / total)))))
+    if "error" in outcome:
+        raise outcome["error"]
     return whisper_model_present(size)
 
 
@@ -6573,7 +6623,7 @@ class Main(QtWidgets.QMainWindow):
                 R["transcribe"].set_buttons([(_("Install the transcription"), lambda: self.setup_job("transcribe", lambda t, say: install_whisper(say, lambda: t.get("cancelled"))), True)])
         elif not p["whisper_model"]:
             R["transcribe"].set("todo", _("faster-whisper is here. The model « %1 » (%2) is downloaded at the first transcription; or now:", size, WHISPER_SIZES.get(size, "")) + note)
-            R["transcribe"].set_buttons([(_("Download the model now"), lambda: self.setup_job("transcribe", lambda t, say: (say(_("Downloading the model « %1 » (%2)…", size, WHISPER_SIZES.get(size, ""))), download_whisper_model(size))), True)])
+            R["transcribe"].set_buttons([(_("Download the model now"), lambda: self.setup_job("transcribe", lambda t, say: (say(_("Downloading the model « %1 » (%2)…", size, WHISPER_SIZES.get(size, ""))), download_whisper_model(size, t, say))), True)])
         else:
             R["transcribe"].set("ok", _("Ready: faster-whisper and the model « %1 ». A subtitle file beside the video is used instead when there is one.", size) + note)
             R["transcribe"].set_buttons([])
