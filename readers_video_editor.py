@@ -7,6 +7,7 @@ soundfile; faster-whisper for the transcription. MIT licence."""
 
 import glob
 import hashlib
+import html
 import json
 import locale
 import math
@@ -27,8 +28,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
+# Hugging Face's « Xet » transfer keeps the model's data in a cache of its own and writes the file
+# only at the end: no progress can be told, and a download given up starts again. The plain one
+# writes as it goes (its size is the progress) and goes on from where it stopped.
+os.environ.setdefault("HF_HUB_DISABLE_XET", "1")
+
 APP = "readers-video-editor"
-VERSION = "1.12.3"
+VERSION = "1.12.4"
 
 
 def _app_dirs():
@@ -1565,6 +1571,7 @@ for _code, _more in _TR_MODEL.items():
 # The strings of 1.12.3: the getting started as a wizard, one step per screen
 _TR_WIZARD = {
  "fr": {
+  'The check failed: %1': 'La vérification a échoué : %1',
   '« %1 » is working: the other steps wait until it is done (one at a time).': "« %1 » est en cours : les autres étapes attendent qu'elle soit finie (une à la fois).",
   'Needs the toolkit: the step « Toolkit », before this one.': "Demande la boîte à outils : l'étape « Boîte à outils », avant celle-ci.",
   'Translation, subtitles, improved sound?': 'Traduction, sous-titres, son amélioré ?',
@@ -1584,6 +1591,7 @@ _TR_WIZARD = {
   'Step %1 of %2': 'Étape %1 sur %2',
  },
  "de": {
+  'The check failed: %1': 'Die Prüfung ist fehlgeschlagen: %1',
   '« %1 » is working: the other steps wait until it is done (one at a time).': '„%1“ läuft: die anderen Schritte warten, bis er fertig ist (einer nach dem anderen).',
   'Needs the toolkit: the step « Toolkit », before this one.': 'Braucht den Werkzeugkasten: den Schritt „Werkzeugkasten“ davor.',
   'Translation, subtitles, improved sound?': 'Übersetzung, Untertitel, verbesserter Ton?',
@@ -1603,6 +1611,7 @@ _TR_WIZARD = {
   'Step %1 of %2': 'Schritt %1 von %2',
  },
  "es": {
+  'The check failed: %1': 'La comprobación ha fallado: %1',
   '« %1 » is working: the other steps wait until it is done (one at a time).': '« %1 » está en curso: los otros pasos esperan a que termine (uno a la vez).',
   'Needs the toolkit: the step « Toolkit », before this one.': 'Necesita la caja de herramientas: el paso « Caja de herramientas », antes de este.',
   'Translation, subtitles, improved sound?': '¿Traducción, subtítulos, sonido mejorado?',
@@ -1622,6 +1631,7 @@ _TR_WIZARD = {
   'Step %1 of %2': 'Paso %1 de %2',
  },
  "pt": {
+  'The check failed: %1': 'A verificação falhou: %1',
   '« %1 » is working: the other steps wait until it is done (one at a time).': '« %1 » está em curso: os outros passos esperam que termine (um de cada vez).',
   'Needs the toolkit: the step « Toolkit », before this one.': 'Precisa da caixa de ferramentas: o passo « Caixa de ferramentas », antes deste.',
   'Translation, subtitles, improved sound?': 'Tradução, legendas, som melhorado?',
@@ -1641,6 +1651,7 @@ _TR_WIZARD = {
   'Step %1 of %2': 'Passo %1 de %2',
  },
  "ru": {
+  'The check failed: %1': 'Проверка не удалась: %1',
   '« %1 » is working: the other steps wait until it is done (one at a time).': '«%1» выполняется: остальные шаги ждут его завершения (по одному).',
   'Needs the toolkit: the step « Toolkit », before this one.': 'Нужен набор инструментов: шаг «Набор инструментов» перед этим.',
   'Translation, subtitles, improved sound?': 'Перевод, субтитры, улучшенный звук?',
@@ -1661,6 +1672,208 @@ _TR_WIZARD = {
  },
 }
 for _code, _more in _TR_WIZARD.items():
+    _TR.setdefault(_code, {}).update(_more)
+
+
+# The strings of 1.12.4: the getting started as an assistant (steps on the left, progress, details)
+_TR_ONBOARD = {
+ "fr": {
+  'about %1 left': 'environ %1 restant',
+  'Begin': 'Commencer',
+  'Checking: %1': 'Vérification : %1',
+  'Close the getting started': 'Quitter la prise en main',
+  'Download: a few MB, once. Stored in: %1.': 'Téléchargement : quelques Mo, une fois. Emplacement : %1.',
+  'Download: about 1 GB (PyTorch and the sound libraries), once, plus ffmpeg and ffprobe for Apple silicon on a Mac (2 × 28 MB). Time: 5 to 15 minutes.': 'Téléchargement : environ 1 Go (PyTorch et les bibliothèques du son), une fois, plus ffmpeg et ffprobe pour Apple silicon sur un Mac (2 × 28 Mo). Durée : 5 à 15 minutes.',
+  'Download: depends on the choice. Claude Code: about 200 MB; an API key: nothing; Ollama: its app, then the model (5 to 20 GB).': 'Téléchargement : selon le choix. Claude Code : environ 200 Mo ; une clé API : rien ; Ollama : son application, puis le modèle (5 à 20 Go).',
+  'Download: nothing, ffmpeg comes with the app.': "Téléchargement : rien, ffmpeg est fourni avec l'application.",
+  'Download: the model « %1 », %2, once. Stored in: %3. Time: a few minutes, depending on the connection.': 'Téléchargement : le modèle « %1 », %2, une fois. Emplacement : %3. Durée : quelques minutes, selon la connexion.',
+  'Elapsed: %1': 'Temps écoulé : %1',
+  'Here is where each step stands. What you skipped can be set up later: « Getting started… » on the home page, or Project ▾ › Getting started… while editing.': "Voici où en est chaque étape. Ce que vous avez passé peut être mis en place plus tard : « Prise en main… » sur la page d'accueil, ou Projet ▾ › Prise en main… pendant le montage.",
+  'Hide the details': 'Masquer les détails',
+  'Improved sound': 'Son amélioré',
+  'Not possible yet': 'Pas encore possible',
+  'Not set up': 'Pas en place',
+  'Optional': 'Facultatif',
+  'Optional. The traduction toolkit translates the text, cuts the subtitles by its rules and improves the sound. If you only edit, skip it, and the two steps after it.': 'Facultatif. La boîte à outils traduction traduit le texte, découpe les sous-titres selon ses règles et améliore le son. Si vous ne faites que monter, passez-la, ainsi que les deux étapes suivantes.',
+  'Optional. The translation is written by a language model. Choose where it runs: Claude Code on your own Claude plan, Claude with an API key paid by the call, or Ollama on this computer (free, private, slower).': "Facultatif. La traduction est rédigée par un modèle de langue. Choisissez où il tourne : Claude Code avec votre abonnement Claude, Claude avec une clé API payée à l'appel, ou Ollama sur cet ordinateur (gratuit, privé, plus lent).",
+  'Optional. When the edit is produced, removes the background noise and the hum and levels the voice. Needs the toolkit.': 'Facultatif. À la production du montage, enlève le bruit de fond et le ronflement, et met la voix à niveau. Demande la boîte à outils.',
+  'Ready': 'Prêt',
+  'Show the details': 'Afficher les détails',
+  'Skip the optional steps': 'Passer les étapes facultatives',
+  'Something went wrong': 'Un problème est survenu',
+  'Starting…': 'Démarrage…',
+  'Stopped: %1': 'Arrêté : %1',
+  'Summary': 'Récapitulatif',
+  'The heart of the app: open a video or a recording, highlight the text to keep, produce the edit. It needs ffmpeg, which comes with the app.': "Le cœur de l'application : ouvrir une vidéo ou un enregistrement, surligner le texte à garder, produire le montage. Il faut ffmpeg, fourni avec l'application.",
+  'This assistant prepares the app, one step at a time. Only the first two steps matter for editing a video; the three next ones are optional and only serve the translation, the subtitles and the improved sound. Each step says what it is for and what it downloads, then checks itself with a real test. You can skip any step and come back later: « Getting started… » on the home page.': "Cet assistant prépare l'application, une étape à la fois. Seules les deux premières étapes comptent pour monter une vidéo ; les trois suivantes sont facultatives et ne servent qu'à la traduction, aux sous-titres et au son amélioré. Chaque étape dit à quoi elle sert et ce qu'elle télécharge, puis se vérifie par un vrai essai. Vous pouvez passer n'importe quelle étape et revenir plus tard : « Prise en main… » sur la page d'accueil.",
+  'To do': 'À faire',
+  'Translation toolkit': 'Boîte à outils traduction',
+  'Turns the speech into text, word by word with its timing: this text is what you edit. The model runs on this computer, nothing is sent anywhere. A larger model writes better but is slower and heavier.': "Transforme la parole en texte, mot à mot avec son minutage : c'est ce texte que vous montez. Le modèle tourne sur cet ordinateur, rien n'est envoyé nulle part. Un modèle plus grand écrit mieux, mais il est plus lent et plus lourd.",
+  'Welcome': 'Bienvenue',
+  'What happened is in the details below. You can try again, or skip this step.': "Ce qui s'est passé est dans les détails ci-dessous. Vous pouvez réessayer, ou passer cette étape.",
+  'Working: the progress is below.': 'En cours : la progression est ci-dessous.',
+  'not ready': 'pas prêt',
+  'not set up (optional)': 'pas en place (facultatif)',
+  '« %1 » is working. The other steps wait until it is done: one at a time, so that two downloads do not slow each other down.': "« %1 » est en cours. Les autres étapes attendent qu'elle soit finie : une à la fois, pour que deux téléchargements ne se ralentissent pas l'un l'autre.",
+ },
+ "de": {
+  'about %1 left': 'noch etwa %1',
+  'Begin': 'Beginnen',
+  'Checking: %1': 'Prüfung: %1',
+  'Close the getting started': 'Erste Schritte schließen',
+  'Download: a few MB, once. Stored in: %1.': 'Download: einige MB, einmalig. Ablage: %1.',
+  'Download: about 1 GB (PyTorch and the sound libraries), once, plus ffmpeg and ffprobe for Apple silicon on a Mac (2 × 28 MB). Time: 5 to 15 minutes.': 'Download: etwa 1 GB (PyTorch und die Tonbibliotheken), einmalig, dazu ffmpeg und ffprobe für Apple Silicon auf einem Mac (2 × 28 MB). Dauer: 5 bis 15 Minuten.',
+  'Download: depends on the choice. Claude Code: about 200 MB; an API key: nothing; Ollama: its app, then the model (5 to 20 GB).': 'Download: je nach Wahl. Claude Code: etwa 200 MB; ein API-Schlüssel: nichts; Ollama: seine App, dann das Modell (5 bis 20 GB).',
+  'Download: nothing, ffmpeg comes with the app.': 'Download: nichts, ffmpeg kommt mit der App.',
+  'Download: the model « %1 », %2, once. Stored in: %3. Time: a few minutes, depending on the connection.': 'Download: das Modell „%1“, %2, einmalig. Ablage: %3. Dauer: einige Minuten, je nach Verbindung.',
+  'Elapsed: %1': 'Verstrichen: %1',
+  'Here is where each step stands. What you skipped can be set up later: « Getting started… » on the home page, or Project ▾ › Getting started… while editing.': 'So steht es um jeden Schritt. Was Sie übersprungen haben, lässt sich später einrichten: „Erste Schritte…“ auf der Startseite oder Projekt ▾ › Erste Schritte… beim Schneiden.',
+  'Hide the details': 'Details ausblenden',
+  'Improved sound': 'Verbesserter Ton',
+  'Not possible yet': 'Noch nicht möglich',
+  'Not set up': 'Nicht eingerichtet',
+  'Optional': 'Freiwillig',
+  'Optional. The traduction toolkit translates the text, cuts the subtitles by its rules and improves the sound. If you only edit, skip it, and the two steps after it.': 'Freiwillig. Der Übersetzungs-Werkzeugkasten übersetzt den Text, schneidet die Untertitel nach seinen Regeln und verbessert den Ton. Wenn Sie nur schneiden, überspringen Sie ihn und die beiden folgenden Schritte.',
+  'Optional. The translation is written by a language model. Choose where it runs: Claude Code on your own Claude plan, Claude with an API key paid by the call, or Ollama on this computer (free, private, slower).': 'Freiwillig. Die Übersetzung schreibt ein Sprachmodell. Wählen Sie, wo es läuft: Claude Code mit Ihrem Claude-Abo, Claude mit einem API-Schlüssel, pro Aufruf bezahlt, oder Ollama auf diesem Computer (kostenlos, privat, langsamer).',
+  'Optional. When the edit is produced, removes the background noise and the hum and levels the voice. Needs the toolkit.': 'Freiwillig. Beim Erzeugen des Schnitts entfernt es Hintergrundrauschen und Brummen und gleicht die Stimme an. Braucht den Werkzeugkasten.',
+  'Ready': 'Bereit',
+  'Show the details': 'Details anzeigen',
+  'Skip the optional steps': 'Freiwillige Schritte überspringen',
+  'Something went wrong': 'Etwas ist schiefgegangen',
+  'Starting…': 'Start…',
+  'Stopped: %1': 'Angehalten: %1',
+  'Summary': 'Übersicht',
+  'The heart of the app: open a video or a recording, highlight the text to keep, produce the edit. It needs ffmpeg, which comes with the app.': 'Der Kern der App: ein Video oder eine Aufnahme öffnen, den zu behaltenden Text markieren, den Schnitt erzeugen. Dafür braucht es ffmpeg, das mit der App kommt.',
+  'This assistant prepares the app, one step at a time. Only the first two steps matter for editing a video; the three next ones are optional and only serve the translation, the subtitles and the improved sound. Each step says what it is for and what it downloads, then checks itself with a real test. You can skip any step and come back later: « Getting started… » on the home page.': 'Dieser Assistent richtet die App ein, Schritt für Schritt. Nur die ersten beiden Schritte zählen für den Videoschnitt; die drei folgenden sind freiwillig und dienen nur der Übersetzung, den Untertiteln und dem verbesserten Ton. Jeder Schritt sagt, wozu er dient und was er lädt, und prüft sich dann mit einem echten Test. Sie können jeden Schritt überspringen und später zurückkommen: „Erste Schritte…“ auf der Startseite.',
+  'To do': 'Zu tun',
+  'Translation toolkit': 'Übersetzungs-Werkzeugkasten',
+  'Turns the speech into text, word by word with its timing: this text is what you edit. The model runs on this computer, nothing is sent anywhere. A larger model writes better but is slower and heavier.': 'Macht aus der Sprache Text, Wort für Wort mit seinem Timing: Diesen Text schneiden Sie. Das Modell läuft auf diesem Computer, nichts wird irgendwohin geschickt. Ein größeres Modell schreibt besser, ist aber langsamer und schwerer.',
+  'Welcome': 'Willkommen',
+  'What happened is in the details below. You can try again, or skip this step.': 'Was passiert ist, steht in den Details unten. Sie können es erneut versuchen oder diesen Schritt überspringen.',
+  'Working: the progress is below.': 'Läuft: der Fortschritt steht unten.',
+  'not ready': 'nicht bereit',
+  'not set up (optional)': 'nicht eingerichtet (freiwillig)',
+  '« %1 » is working. The other steps wait until it is done: one at a time, so that two downloads do not slow each other down.': '„%1“ läuft. Die anderen Schritte warten, bis er fertig ist: einer nach dem anderen, damit sich zwei Downloads nicht gegenseitig bremsen.',
+ },
+ "es": {
+  'about %1 left': 'quedan unos %1',
+  'Begin': 'Empezar',
+  'Checking: %1': 'Comprobando: %1',
+  'Close the getting started': 'Cerrar los primeros pasos',
+  'Download: a few MB, once. Stored in: %1.': 'Descarga: unos MB, una vez. Ubicación: %1.',
+  'Download: about 1 GB (PyTorch and the sound libraries), once, plus ffmpeg and ffprobe for Apple silicon on a Mac (2 × 28 MB). Time: 5 to 15 minutes.': 'Descarga: alrededor de 1 GB (PyTorch y las bibliotecas de sonido), una vez, más ffmpeg y ffprobe para Apple silicon en un Mac (2 × 28 MB). Duración: de 5 a 15 minutos.',
+  'Download: depends on the choice. Claude Code: about 200 MB; an API key: nothing; Ollama: its app, then the model (5 to 20 GB).': 'Descarga: según la elección. Claude Code: unos 200 MB; una clave API: nada; Ollama: su aplicación, luego el modelo (de 5 a 20 GB).',
+  'Download: nothing, ffmpeg comes with the app.': 'Descarga: nada, ffmpeg viene con la aplicación.',
+  'Download: the model « %1 », %2, once. Stored in: %3. Time: a few minutes, depending on the connection.': 'Descarga: el modelo « %1 », %2, una vez. Ubicación: %3. Duración: unos minutos, según la conexión.',
+  'Elapsed: %1': 'Tiempo transcurrido: %1',
+  'Here is where each step stands. What you skipped can be set up later: « Getting started… » on the home page, or Project ▾ › Getting started… while editing.': 'Así está cada paso. Lo que ha saltado puede configurarse más tarde: « Primeros pasos… » en la página de inicio, o Proyecto ▾ › Primeros pasos… durante el montaje.',
+  'Hide the details': 'Ocultar los detalles',
+  'Improved sound': 'Sonido mejorado',
+  'Not possible yet': 'Aún no es posible',
+  'Not set up': 'No configurado',
+  'Optional': 'Opcional',
+  'Optional. The traduction toolkit translates the text, cuts the subtitles by its rules and improves the sound. If you only edit, skip it, and the two steps after it.': 'Opcional. La caja de herramientas de traducción traduce el texto, corta los subtítulos según sus reglas y mejora el sonido. Si solo monta, sáltela, y también los dos pasos siguientes.',
+  'Optional. The translation is written by a language model. Choose where it runs: Claude Code on your own Claude plan, Claude with an API key paid by the call, or Ollama on this computer (free, private, slower).': 'Opcional. La traducción la redacta un modelo de lenguaje. Elija dónde se ejecuta: Claude Code con su suscripción a Claude, Claude con una clave API pagada por llamada, u Ollama en este ordenador (gratis, privado, más lento).',
+  'Optional. When the edit is produced, removes the background noise and the hum and levels the voice. Needs the toolkit.': 'Opcional. Al producir el montaje, quita el ruido de fondo y el zumbido y nivela la voz. Necesita la caja de herramientas.',
+  'Ready': 'Listo',
+  'Show the details': 'Mostrar los detalles',
+  'Skip the optional steps': 'Saltar los pasos opcionales',
+  'Something went wrong': 'Algo ha fallado',
+  'Starting…': 'Iniciando…',
+  'Stopped: %1': 'Detenido: %1',
+  'Summary': 'Resumen',
+  'The heart of the app: open a video or a recording, highlight the text to keep, produce the edit. It needs ffmpeg, which comes with the app.': 'El corazón de la aplicación: abrir un vídeo o una grabación, resaltar el texto que se conserva, producir el montaje. Necesita ffmpeg, que viene con la aplicación.',
+  'This assistant prepares the app, one step at a time. Only the first two steps matter for editing a video; the three next ones are optional and only serve the translation, the subtitles and the improved sound. Each step says what it is for and what it downloads, then checks itself with a real test. You can skip any step and come back later: « Getting started… » on the home page.': 'Este asistente prepara la aplicación, paso a paso. Solo los dos primeros pasos cuentan para montar un vídeo; los tres siguientes son opcionales y solo sirven para la traducción, los subtítulos y el sonido mejorado. Cada paso dice para qué sirve y qué descarga, y luego se comprueba con una prueba real. Puede saltar cualquier paso y volver más tarde: « Primeros pasos… » en la página de inicio.',
+  'To do': 'Por hacer',
+  'Translation toolkit': 'Caja de herramientas de traducción',
+  'Turns the speech into text, word by word with its timing: this text is what you edit. The model runs on this computer, nothing is sent anywhere. A larger model writes better but is slower and heavier.': 'Convierte el habla en texto, palabra por palabra con su tiempo: ese texto es el que usted monta. El modelo se ejecuta en este ordenador, no se envía nada a ninguna parte. Un modelo más grande escribe mejor, pero es más lento y más pesado.',
+  'Welcome': 'Bienvenido',
+  'What happened is in the details below. You can try again, or skip this step.': 'Lo que ha pasado está en los detalles de abajo. Puede intentarlo de nuevo o saltar este paso.',
+  'Working: the progress is below.': 'En curso: el progreso está abajo.',
+  'not ready': 'no listo',
+  'not set up (optional)': 'no configurado (opcional)',
+  '« %1 » is working. The other steps wait until it is done: one at a time, so that two downloads do not slow each other down.': '« %1 » está en curso. Los otros pasos esperan a que termine: uno a la vez, para que dos descargas no se frenen entre sí.',
+ },
+ "pt": {
+  'about %1 left': 'faltam cerca de %1',
+  'Begin': 'Começar',
+  'Checking: %1': 'A verificar: %1',
+  'Close the getting started': 'Fechar os primeiros passos',
+  'Download: a few MB, once. Stored in: %1.': 'Transferência: alguns MB, uma vez. Local: %1.',
+  'Download: about 1 GB (PyTorch and the sound libraries), once, plus ffmpeg and ffprobe for Apple silicon on a Mac (2 × 28 MB). Time: 5 to 15 minutes.': 'Transferência: cerca de 1 GB (PyTorch e as bibliotecas de som), uma vez, mais ffmpeg e ffprobe para Apple silicon num Mac (2 × 28 MB). Duração: 5 a 15 minutos.',
+  'Download: depends on the choice. Claude Code: about 200 MB; an API key: nothing; Ollama: its app, then the model (5 to 20 GB).': 'Transferência: depende da escolha. Claude Code: cerca de 200 MB; uma chave API: nada; Ollama: a sua aplicação, depois o modelo (5 a 20 GB).',
+  'Download: nothing, ffmpeg comes with the app.': 'Transferência: nada, o ffmpeg vem com a aplicação.',
+  'Download: the model « %1 », %2, once. Stored in: %3. Time: a few minutes, depending on the connection.': 'Transferência: o modelo « %1 », %2, uma vez. Local: %3. Duração: alguns minutos, conforme a ligação.',
+  'Elapsed: %1': 'Tempo decorrido: %1',
+  'Here is where each step stands. What you skipped can be set up later: « Getting started… » on the home page, or Project ▾ › Getting started… while editing.': 'Eis como está cada passo. O que saltou pode ser configurado mais tarde: « Primeiros passos… » na página inicial, ou Projeto ▾ › Primeiros passos… durante a montagem.',
+  'Hide the details': 'Ocultar os detalhes',
+  'Improved sound': 'Som melhorado',
+  'Not possible yet': 'Ainda não é possível',
+  'Not set up': 'Não configurado',
+  'Optional': 'Opcional',
+  'Optional. The traduction toolkit translates the text, cuts the subtitles by its rules and improves the sound. If you only edit, skip it, and the two steps after it.': 'Opcional. A caixa de ferramentas de tradução traduz o texto, corta as legendas segundo as suas regras e melhora o som. Se só monta, salte-a, e também os dois passos seguintes.',
+  'Optional. The translation is written by a language model. Choose where it runs: Claude Code on your own Claude plan, Claude with an API key paid by the call, or Ollama on this computer (free, private, slower).': 'Opcional. A tradução é escrita por um modelo de linguagem. Escolha onde corre: Claude Code com a sua assinatura Claude, Claude com uma chave API paga por chamada, ou Ollama neste computador (grátis, privado, mais lento).',
+  'Optional. When the edit is produced, removes the background noise and the hum and levels the voice. Needs the toolkit.': 'Opcional. Ao produzir a montagem, retira o ruído de fundo e o zumbido e nivela a voz. Precisa da caixa de ferramentas.',
+  'Ready': 'Pronto',
+  'Show the details': 'Mostrar os detalhes',
+  'Skip the optional steps': 'Saltar os passos opcionais',
+  'Something went wrong': 'Algo correu mal',
+  'Starting…': 'A iniciar…',
+  'Stopped: %1': 'Parado: %1',
+  'Summary': 'Resumo',
+  'The heart of the app: open a video or a recording, highlight the text to keep, produce the edit. It needs ffmpeg, which comes with the app.': 'O essencial da aplicação: abrir um vídeo ou uma gravação, sublinhar o texto a manter, produzir a montagem. Precisa do ffmpeg, que vem com a aplicação.',
+  'This assistant prepares the app, one step at a time. Only the first two steps matter for editing a video; the three next ones are optional and only serve the translation, the subtitles and the improved sound. Each step says what it is for and what it downloads, then checks itself with a real test. You can skip any step and come back later: « Getting started… » on the home page.': 'Este assistente prepara a aplicação, um passo de cada vez. Só os dois primeiros passos contam para montar um vídeo; os três seguintes são opcionais e só servem para a tradução, as legendas e o som melhorado. Cada passo diz para que serve e o que transfere, e depois verifica-se com um teste real. Pode saltar qualquer passo e voltar mais tarde: « Primeiros passos… » na página inicial.',
+  'To do': 'Por fazer',
+  'Translation toolkit': 'Caixa de ferramentas de tradução',
+  'Turns the speech into text, word by word with its timing: this text is what you edit. The model runs on this computer, nothing is sent anywhere. A larger model writes better but is slower and heavier.': 'Transforma a fala em texto, palavra a palavra com o seu tempo: é este texto que monta. O modelo corre neste computador, nada é enviado para lado nenhum. Um modelo maior escreve melhor, mas é mais lento e mais pesado.',
+  'Welcome': 'Bem-vindo',
+  'What happened is in the details below. You can try again, or skip this step.': 'O que aconteceu está nos detalhes abaixo. Pode tentar de novo ou saltar este passo.',
+  'Working: the progress is below.': 'Em curso: o progresso está abaixo.',
+  'not ready': 'não pronto',
+  'not set up (optional)': 'não configurado (opcional)',
+  '« %1 » is working. The other steps wait until it is done: one at a time, so that two downloads do not slow each other down.': '« %1 » está em curso. Os outros passos esperam que termine: um de cada vez, para que duas transferências não se atrasem uma à outra.',
+ },
+ "ru": {
+  'about %1 left': 'осталось около %1',
+  'Begin': 'Начать',
+  'Checking: %1': 'Проверка: %1',
+  'Close the getting started': 'Закрыть первые шаги',
+  'Download: a few MB, once. Stored in: %1.': 'Загрузка: несколько МБ, один раз. Место: %1.',
+  'Download: about 1 GB (PyTorch and the sound libraries), once, plus ffmpeg and ffprobe for Apple silicon on a Mac (2 × 28 MB). Time: 5 to 15 minutes.': 'Загрузка: около 1 ГБ (PyTorch и звуковые библиотеки), один раз, плюс ffmpeg и ffprobe для Apple silicon на Mac (2 × 28 МБ). Время: от 5 до 15 минут.',
+  'Download: depends on the choice. Claude Code: about 200 MB; an API key: nothing; Ollama: its app, then the model (5 to 20 GB).': 'Загрузка: зависит от выбора. Claude Code: около 200 МБ; ключ API: ничего; Ollama: его приложение, затем модель (от 5 до 20 ГБ).',
+  'Download: nothing, ffmpeg comes with the app.': 'Загрузка: ничего, ffmpeg входит в приложение.',
+  'Download: the model « %1 », %2, once. Stored in: %3. Time: a few minutes, depending on the connection.': 'Загрузка: модель «%1», %2, один раз. Место: %3. Время: несколько минут, в зависимости от соединения.',
+  'Elapsed: %1': 'Прошло: %1',
+  'Here is where each step stands. What you skipped can be set up later: « Getting started… » on the home page, or Project ▾ › Getting started… while editing.': 'Вот состояние каждого шага. Пропущенное можно настроить позже: «Первые шаги…» на главной странице или Проект ▾ › Первые шаги… во время монтажа.',
+  'Hide the details': 'Скрыть подробности',
+  'Improved sound': 'Улучшенный звук',
+  'Not possible yet': 'Пока невозможно',
+  'Not set up': 'Не настроено',
+  'Optional': 'Необязательно',
+  'Optional. The traduction toolkit translates the text, cuts the subtitles by its rules and improves the sound. If you only edit, skip it, and the two steps after it.': 'Необязательно. Набор инструментов перевода переводит текст, нарезает субтитры по своим правилам и улучшает звук. Если вы только монтируете, пропустите его и два следующих шага.',
+  'Optional. The translation is written by a language model. Choose where it runs: Claude Code on your own Claude plan, Claude with an API key paid by the call, or Ollama on this computer (free, private, slower).': 'Необязательно. Перевод пишет языковая модель. Выберите, где она работает: Claude Code по вашей подписке Claude, Claude с ключом API с оплатой за вызов или Ollama на этом компьютере (бесплатно, приватно, медленнее).',
+  'Optional. When the edit is produced, removes the background noise and the hum and levels the voice. Needs the toolkit.': 'Необязательно. При создании монтажа убирает фоновый шум и гул и выравнивает голос. Нужен набор инструментов.',
+  'Ready': 'Готово',
+  'Show the details': 'Показать подробности',
+  'Skip the optional steps': 'Пропустить необязательные шаги',
+  'Something went wrong': 'Что-то пошло не так',
+  'Starting…': 'Запуск…',
+  'Stopped: %1': 'Остановлено: %1',
+  'Summary': 'Итог',
+  'The heart of the app: open a video or a recording, highlight the text to keep, produce the edit. It needs ffmpeg, which comes with the app.': 'Суть приложения: открыть видео или запись, выделить текст, который нужно оставить, создать монтаж. Нужен ffmpeg, он входит в приложение.',
+  'This assistant prepares the app, one step at a time. Only the first two steps matter for editing a video; the three next ones are optional and only serve the translation, the subtitles and the improved sound. Each step says what it is for and what it downloads, then checks itself with a real test. You can skip any step and come back later: « Getting started… » on the home page.': 'Этот помощник готовит приложение шаг за шагом. Для монтажа видео важны только первые два шага; три следующих необязательны и нужны только для перевода, субтитров и улучшенного звука. Каждый шаг говорит, для чего он и что загружает, а затем проверяет себя настоящим тестом. Любой шаг можно пропустить и вернуться позже: «Первые шаги…» на главной странице.',
+  'To do': 'Сделать',
+  'Translation toolkit': 'Набор инструментов перевода',
+  'Turns the speech into text, word by word with its timing: this text is what you edit. The model runs on this computer, nothing is sent anywhere. A larger model writes better but is slower and heavier.': 'Превращает речь в текст, слово за словом с таймингом: именно этот текст вы монтируете. Модель работает на этом компьютере, ничего никуда не отправляется. Большая модель пишет лучше, но медленнее и тяжелее.',
+  'Welcome': 'Добро пожаловать',
+  'What happened is in the details below. You can try again, or skip this step.': 'Что произошло — в подробностях ниже. Можно попробовать снова или пропустить этот шаг.',
+  'Working: the progress is below.': 'Выполняется: ход работы ниже.',
+  'not ready': 'не готово',
+  'not set up (optional)': 'не настроено (необязательно)',
+  '« %1 » is working. The other steps wait until it is done: one at a time, so that two downloads do not slow each other down.': '«%1» выполняется. Остальные шаги ждут его завершения: по одному, чтобы две загрузки не замедляли друг друга.',
+ },
+}
+for _code, _more in _TR_ONBOARD.items():
     _TR.setdefault(_code, {}).update(_more)
 
 
@@ -3102,6 +3315,8 @@ def python_has(py, packages):
     mods = [TOOLKIT_IMPORTS.get(p, p) for p in packages]
     if not mods:
         return True
+    if not py:  # no Python for the toolkit yet (the macOS app fetches its own at the first need)
+        return False
     try:
         r = subprocess.run([py, "-c", "import " + ", ".join(mods)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
                            timeout=180, **_RUN_FLAGS)
@@ -3512,7 +3727,7 @@ def download_whisper_model(size, task=None, say=None):
                     os.remove(f)
             except OSError:
                 pass
-    started = time.time()
+    started, speed = time.time(), []
     threading.Thread(target=fetch, daemon=True).start()
     total = _size_bytes(WHISPER_SIZES.get(size, ""))
     while not outcome.get("done"):
@@ -3531,22 +3746,43 @@ def download_whisper_model(size, task=None, say=None):
                     except OSError:
                         pass
             if total:
+                now = time.time()
+                speed.append((now, got))
+                while len(speed) > 2 and now - speed[0][0] > 10:   # the speed of the last ten seconds
+                    speed.pop(0)
+                (t0, g0), rate = speed[0], 0.0
+                if now - t0 > 1:
+                    rate = (got - g0) / (now - t0)
+                pace = ""
+                if rate > 0:
+                    left = max(0, total - got) / rate
+                    pace = f" · {rate / 1e6:.1f} MB/s · " + _("about %1 left", f"{int(left // 60)} min" if left >= 90 else f"{int(left)} s")
                 say(_("Downloading the model « %1 »: %2 of about %3 (%4 %).", size, f"{got / 1e9:.2f} GB" if total >= 1e9 else f"{got / 1e6:.0f} MB",
-                      WHISPER_SIZES.get(size, ""), str(min(99, int(got * 100 / total)))))
+                      WHISPER_SIZES.get(size, ""), str(min(99, int(got * 100 / total)))).rstrip(".") + pace)
     if "error" in outcome:
         raise outcome["error"]
     return whisper_model_present(size)
 
 
-def probe_setup(cfg):
-    """What the getting-started page shows: one dict, measured in the background."""
-    tk = toolkit_dir(cfg)
-    up = ollama_answers(OLLAMA_URL)
-    ram, vram = ram_mb(), vram_mb()
+def probe_setup(cfg, say=None):
+    """What the getting-started page shows: one dict, measured in the background. `say(key)` is
+    told which step is being checked (edit, transcribe, toolkit, model, sound)."""
+    say = say or (lambda key: None)
+    say("edit")
+    ff = ffmpeg_exe()
+    say("transcribe")
     size = cfg.get("model", MODEL_DEFAULT)
-    return {"ffmpeg": ffmpeg_exe(), "whisper": whisper_available(), "size": size, "whisper_model": whisper_model_present(size),
-            "toolkit": tk, "claude": find_claude(quick=True), "ollama_bin": find_ollama(), "ollama_up": up,
-            "ollama_models": ollama_models(OLLAMA_URL) if up else [], "ram": ram, "vram": vram, "recommended": recommended_model(ram, vram),
+    whisper, whisper_model = whisper_available(), whisper_model_present(size)
+    say("toolkit")
+    tk = toolkit_dir(cfg)
+    say("model")
+    claude, ollama_bin, up = find_claude(quick=True), find_ollama(), ollama_answers(OLLAMA_URL)
+    ram, vram = ram_mb(), vram_mb()
+    models = ollama_models(OLLAMA_URL) if up else []
+    say("sound")
+    return {"ffmpeg": ff, "whisper": whisper, "size": size, "whisper_model": whisper_model,
+            "toolkit": tk, "claude": claude, "ollama_bin": ollama_bin, "ollama_up": up,
+            "ollama_models": models, "ram": ram, "vram": vram, "recommended": recommended_model(ram, vram),
             "sound_ready": bool(tk) and python_has(toolkit_python(), TOOLKIT_PACKAGES["sound"]),
             "ffmpeg_named": bool(_own_tool("ffmpeg") and _own_tool("ffprobe") and _own_tool("ffmpeg-static")) if sys.platform == "darwin"
             else bool(shutil.which("ffmpeg") and shutil.which("ffprobe")) or bool(_own_tool("ffmpeg") and _own_tool("ffprobe"))}
@@ -6504,163 +6740,208 @@ class Main(QtWidgets.QMainWindow):
         self.home = home
         self.views.addWidget(home)
 
-    # ---- getting started: a wizard, one step per screen, each checked by a real test, each with the
-    # button that does it. The two steps of the edit first, then a question (go on or not), then the
-    # three optional steps of the toolkit, then « done ».
-    SETUP_STEPS = ("edit", "transcribe", "ask", "toolkit", "model", "sound", "done")
+    # ---- getting started: a wizard as installers have them. On the left, the steps and where each
+    # one is (ready, to do, optional, working, error); on the right, one step: what it is for, what
+    # it will download and where, its state and the button that does it; under it, while something
+    # works, a bar (with its percentage when it is known), what is being done, the time since the
+    # start and the details as they come. The logic of each step (checks, installs, real tests) is
+    # _fill_setup_rows's and fill_model_row's.
+    SETUP_STEPS = ("intro", "edit", "transcribe", "toolkit", "model", "sound", "done")
+    SETUP_WORK = ("edit", "transcribe", "toolkit", "model", "sound")
+    SETUP_OPTIONAL = ("toolkit", "model", "sound")
+
+    def _setup_titles(self):
+        return {"intro": _("Welcome"), "edit": _("Editing"), "transcribe": _("Transcription"), "toolkit": _("Translation toolkit"),
+                "model": _("Language model"), "sound": _("Improved sound"), "done": _("Summary")}
 
     def _build_setup(self):
-        page = QtWidgets.QScrollArea()
-        page.setWidgetResizable(True)
-        page.setFrameShape(QtWidgets.QFrame.NoFrame)
+        page = QtWidgets.QWidget()
+        page.setObjectName("setuppage")
+        hl = QtWidgets.QHBoxLayout(page)
+        hl.setContentsMargins(0, 0, 0, 0)
+        hl.setSpacing(0)
+        titles = self._setup_titles()
+
+        # -- the steps, on the left
+        side = QtWidgets.QFrame()
+        side.setObjectName("setupside")
+        side.setFixedWidth(250)
+        side.setStyleSheet(f"QFrame#setupside {{ background: {C_PANEL}; border-right: 1px solid {C_BORDER}; }}")
+        sv = QtWidgets.QVBoxLayout(side)
+        sv.setContentsMargins(18, 26, 18, 18)
+        sv.setSpacing(4)
+        head = QtWidgets.QLabel(_("Getting started"))
+        head.setStyleSheet("font-size: 15pt; font-weight: 700;")
+        sv.addWidget(head)
+        sv.addSpacing(14)
+        self.setup_side = {}
+        for k in self.SETUP_STEPS:
+            b = QtWidgets.QPushButton()
+            b.setFlat(True)
+            b.setCursor(QtCore.Qt.PointingHandCursor)
+            b.setStyleSheet("QPushButton { text-align: left; padding: 7px 10px; border: none; border-radius: 8px; background: transparent; }"
+                            f"QPushButton:hover {{ background: {C_PANEL2}; }}")
+            b.clicked.connect(lambda _c, i=self.SETUP_STEPS.index(k): self.setup_go(i))
+            sv.addWidget(b)
+            self.setup_side[k] = b
+        sv.addStretch(1)
+        self.b_setup_quit = self._btn(_("Close the getting started"), self.leave_setup)
+        sv.addWidget(self.b_setup_quit)
+        hl.addWidget(side)
+
+        # -- the step, on the right: scrolls if needed, the buttons of the way through stay at the bottom
+        right = QtWidgets.QVBoxLayout()
+        right.setContentsMargins(0, 0, 0, 0)
+        right.setSpacing(0)
+        scroll = QtWidgets.QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setFrameShape(QtWidgets.QFrame.NoFrame)
         inner = QtWidgets.QWidget()
-        outer = QtWidgets.QVBoxLayout(inner)
-        outer.setContentsMargins(24, 28, 24, 40)
+        iv = QtWidgets.QVBoxLayout(inner)
+        iv.setContentsMargins(36, 30, 36, 24)
         card = QtWidgets.QWidget()
-        card.setObjectName("card")
-        card.setMaximumWidth(760)
+        card.setMaximumWidth(680)
         v = QtWidgets.QVBoxLayout(card)
         v.setContentsMargins(0, 0, 0, 0)
-        v.setSpacing(12)
-        title = QtWidgets.QLabel(_("Getting started"))
-        title.setObjectName("h1")
-        v.addWidget(title)
-        # where we are: the steps' short names, the current one in bold, the ready ones ticked
-        self.setup_trail = QtWidgets.QLabel("")
-        self.setup_trail.setTextFormat(QtCore.Qt.RichText)
-        self.setup_trail.setWordWrap(True)
-        self.setup_trail.setObjectName("muted")
-        v.addWidget(self.setup_trail)
-        self.setup_rows = {}
-        self.setup_busy = QtWidgets.QLabel("")  # while a step works: which one, the others wait
-        self.setup_busy.setWordWrap(True)
-        self.setup_busy.setStyleSheet(f"color: {C_ACCENT};")
-        self.setup_busy.hide()
-        v.addWidget(self.setup_busy)
-        self.setup_pages = []  # one widget per step, only the current one shown
-
-        def screen(level_title, sub):
+        v.setSpacing(14)
+        self.setup_eyebrow = QtWidgets.QLabel("")
+        self.setup_eyebrow.setObjectName("muted")
+        v.addWidget(self.setup_eyebrow)
+        self.setup_title = QtWidgets.QLabel("")
+        self.setup_title.setObjectName("h1")
+        v.addWidget(self.setup_title)
+        self.setup_rows, self.setup_pages, self.setup_facts = {}, [], {}
+        why = {
+            "intro": _("This assistant prepares the app, one step at a time. Only the first two steps matter for editing a video; the three next ones are optional and only serve the translation, the subtitles and the improved sound. Each step says what it is for and what it downloads, then checks itself with a real test. You can skip any step and come back later: « Getting started… » on the home page."),
+            "edit": _("The heart of the app: open a video or a recording, highlight the text to keep, produce the edit. It needs ffmpeg, which comes with the app."),
+            "transcribe": _("Turns the speech into text, word by word with its timing: this text is what you edit. The model runs on this computer, nothing is sent anywhere. A larger model writes better but is slower and heavier."),
+            "toolkit": _("Optional. The traduction toolkit translates the text, cuts the subtitles by its rules and improves the sound. If you only edit, skip it, and the two steps after it."),
+            "model": _("Optional. The translation is written by a language model. Choose where it runs: Claude Code on your own Claude plan, Claude with an API key paid by the call, or Ollama on this computer (free, private, slower)."),
+            "sound": _("Optional. When the edit is produced, removes the background noise and the hum and levels the voice. Needs the toolkit."),
+            "done": _("Here is where each step stands. What you skipped can be set up later: « Getting started… » on the home page, or Project ▾ › Getting started… while editing."),
+        }
+        for k in self.SETUP_STEPS:
             w = QtWidgets.QWidget()
             lv = QtWidgets.QVBoxLayout(w)
-            lv.setContentsMargins(0, 6, 0, 0)
+            lv.setContentsMargins(0, 0, 0, 0)
             lv.setSpacing(12)
-            if level_title:
-                h = QtWidgets.QLabel(f"<b>{level_title}</b><br><span style='color:{C_MUTED}'>{sub}</span>")
-                h.setTextFormat(QtCore.Qt.RichText)
-                h.setWordWrap(True)
-                lv.addWidget(h)
+            lead = QtWidgets.QLabel(why[k])
+            lead.setObjectName("lead")
+            lead.setWordWrap(True)
+            lv.addWidget(lead)
+            facts = QtWidgets.QLabel("")
+            facts.setTextFormat(QtCore.Qt.RichText)
+            facts.setWordWrap(True)
+            facts.setObjectName("muted")
+            facts.hide()
+            lv.addWidget(facts)
+            self.setup_facts[k] = facts
+            if k in self.SETUP_WORK:
+                self.setup_rows[k] = self._setup_row(lv)
             w.hide()
             v.addWidget(w)
             self.setup_pages.append(w)
-            return lv
-        lvl1 = (_("Level 1 · Editing"), _("The whole point of the app: open, highlight, produce. Nothing to install."))
-        lvl2 = (_("Level 2 · Translation and subtitles — optional"), _("Only if you want to translate the text, or to cut subtitles with the toolkit's rules. Otherwise skip this level entirely."))
-        lvl3 = (_("Level 3 · Improved sound — optional"), _("Only if you want the edit's sound cleaned and levelled on the way out. Needs the toolkit of level 2 (not the model)."))
-        self.setup_rows["edit"] = self._setup_row(screen(*lvl1), 1, _("Cut a video by its text"))
-        self.setup_rows["transcribe"] = self._setup_row(screen(*lvl1), 1, _("Transcribe the speech"))
-        ask = screen(_("Translation, subtitles, improved sound?"), _("The editing is ready. What follows is optional: only to translate the text, to cut subtitles with the toolkit's rules, or to clean and level the sound. Several hundred MB, a few minutes."))
-        ask_row = QtWidgets.QHBoxLayout()
-        ask_row.addWidget(self._btn(_("No: start editing"), self.leave_setup, kind="strong"))
-        ask_row.addWidget(self._btn(_("Yes: set them up"), lambda: self.setup_go(3)))
-        ask_row.addStretch(1)
-        ask.addLayout(ask_row)
-        self.setup_rows["toolkit"] = self._setup_row(screen(*lvl2), 2, _("Translate and subtitle: the toolkit"))
-        self.setup_rows["model"] = self._setup_row(screen(*lvl2), 2, _("Translate and subtitle: the language model"))
-        self.setup_rows["sound"] = self._setup_row(screen(*lvl3), 3, _("Improve the sound"))
-        done = screen(_("That is all"), _("You can come back here any time: « Getting started… » on the home page, or Project ▾ › Getting started… while editing."))
-        done_row = QtWidgets.QHBoxLayout()
-        done_row.addWidget(self._btn(_("Start editing"), self.leave_setup, kind="strong"))
-        done_row.addStretch(1)
-        done.addLayout(done_row)
-        # the way through: back, check again, skip / next
-        nav = QtWidgets.QHBoxLayout()
+
+        # -- what is running: bar, what is being done, the time, the details
+        self.setup_progress = QtWidgets.QFrame()
+        self.setup_progress.setObjectName("setuprow")
+        pv = QtWidgets.QVBoxLayout(self.setup_progress)
+        pv.setContentsMargins(14, 12, 14, 12)
+        pv.setSpacing(8)
+        top = QtWidgets.QHBoxLayout()
+        self.setup_doing = QtWidgets.QLabel("")
+        self.setup_doing.setWordWrap(True)
+        top.addWidget(self.setup_doing, 1)
+        self.setup_elapsed = QtWidgets.QLabel("")
+        self.setup_elapsed.setObjectName("muted")
+        top.addWidget(self.setup_elapsed)
+        pv.addLayout(top)
+        self.setup_bar = QtWidgets.QProgressBar()
+        self.setup_bar.setRange(0, 0)
+        self.setup_bar.setTextVisible(False)
+        self.setup_bar.setFixedHeight(6)
+        pv.addWidget(self.setup_bar)
+        self.setup_wait = QtWidgets.QLabel("")
+        self.setup_wait.setObjectName("muted")
+        self.setup_wait.setWordWrap(True)
+        pv.addWidget(self.setup_wait)
+        dl = QtWidgets.QHBoxLayout()
+        self.b_setup_details = QtWidgets.QPushButton(_("Show the details"))
+        self.b_setup_details.setFlat(True)
+        self.b_setup_details.setCursor(QtCore.Qt.PointingHandCursor)
+        self.b_setup_details.setStyleSheet(f"QPushButton {{ color: {C_MUTED}; border: none; background: transparent; padding: 0; text-decoration: underline; }}")
+        self.b_setup_details.clicked.connect(self._setup_toggle_log)
+        dl.addWidget(self.b_setup_details)
+        dl.addStretch(1)
+        pv.addLayout(dl)
+        self.setup_log = QtWidgets.QPlainTextEdit()
+        self.setup_log.setReadOnly(True)
+        self.setup_log.setMaximumBlockCount(400)
+        self.setup_log.setFixedHeight(150)
+        self.setup_log.setStyleSheet(f"font-family: Menlo, monospace; font-size: 9pt; background: {C_PANEL2}; border: 1px solid {C_BORDER}; border-radius: 6px;")
+        self.setup_log.hide()
+        pv.addWidget(self.setup_log)
+        self.setup_progress.hide()
+        v.addWidget(self.setup_progress)
+        self.setup_clock = QtCore.QTimer(self)
+        self.setup_clock.setInterval(1000)
+        self.setup_clock.timeout.connect(self._setup_tick)
+        self.setup_run = None   # what runs: {"key", "start", "kind": "check" | "job"}
+
+        hc = QtWidgets.QHBoxLayout()
+        hc.addWidget(card, 1)
+        hc.addStretch(0)
+        iv.addLayout(hc)
+        iv.addStretch(1)
+        scroll.setWidget(inner)
+        right.addWidget(scroll, 1)
+
+        # -- the way through
+        foot = QtWidgets.QFrame()
+        foot.setStyleSheet(f"QFrame {{ border-top: 1px solid {C_BORDER}; }} QPushButton {{ border-top: none; }}")
+        nav = QtWidgets.QHBoxLayout(foot)
+        nav.setContentsMargins(36, 12, 36, 12)
         self.b_setup_back = self._btn(_("Back"), lambda: self.setup_go(self.setup_index - 1))
         nav.addWidget(self.b_setup_back)
         self.b_setup_refresh = self._btn(_("Check again"), self.refresh_setup)
         nav.addWidget(self.b_setup_refresh)
         nav.addStretch(1)
-        self.b_setup_leave = self._btn(_("Start editing"), self.leave_setup)
-        nav.addWidget(self.b_setup_leave)
-        self.b_setup_next = self._btn(_("Next"), lambda: self.setup_go(self.setup_index + 1), kind="strong")
+        self.b_setup_skipall = self._btn(_("Skip the optional steps"), lambda: self.setup_go(self.SETUP_STEPS.index("done")))
+        nav.addWidget(self.b_setup_skipall)
+        self.b_setup_next = self._btn(_("Continue"), self._setup_next, kind="strong")
         nav.addWidget(self.b_setup_next)
-        v.addLayout(nav)
-        hc = QtWidgets.QHBoxLayout()
-        hc.addStretch(1)
-        hc.addWidget(card, 20)
-        hc.addStretch(1)
-        outer.addLayout(hc)
-        outer.addStretch(1)
-        page.setWidget(inner)
+        right.addWidget(foot)
+        hl.addLayout(right, 1)
+
         self.setup = page
         self.views.addWidget(page)
+        self.setup_index = 0
         self.setup_go(0)
 
-    def setup_go(self, i):
-        """Shows the step `i` of the wizard and puts the buttons of the way through in order."""
-        i = max(0, min(i, len(self.SETUP_STEPS) - 1))
-        self.setup_index = i
-        for k, w in enumerate(self.setup_pages):
-            w.setVisible(k == i)
-        key = self.SETUP_STEPS[i]
-        row = self.setup_rows.get(key)
-        ready = row is not None and getattr(row, "state", "") == "ok"
-        self.b_setup_back.setVisible(i > 0)
-        self.b_setup_refresh.setVisible(row is not None)
-        self.b_setup_next.setVisible(key not in ("ask", "done"))
-        self.b_setup_leave.setVisible(key not in ("ask", "done", "edit", "transcribe"))
-        optional = key in ("transcribe", "toolkit", "model", "sound")
-        self.b_setup_next.setText(_("Next") if ready or not optional else _("Skip this step"))
-        self.b_setup_next.setProperty("kind", "strong" if ready or not optional else "")
-        self.b_setup_next.style().unpolish(self.b_setup_next)
-        self.b_setup_next.style().polish(self.b_setup_next)
-        names = {"edit": _("Editing"), "transcribe": _("Transcription"), "toolkit": _("Toolkit"), "model": _("Language model"), "sound": _("Sound")}
-        steps = [k for k in self.SETUP_STEPS if k in names]
-        parts = []
-        for k in steps:
-            r = self.setup_rows[k]
-            text = names[k] + (" ✓" if getattr(r, "state", "") == "ok" else "")
-            parts.append(f"<b style='color:{C_TEXT}'>{text}</b>" if k == key else text)
-        where = steps.index(key) + 1 if key in steps else None
-        self.setup_trail.setText((_("Step %1 of %2", where, len(steps)) + " · " if where else "") + "  ›  ".join(parts))
-
-    def setup_first_todo(self):
-        """Where the wizard opens: the first step of the edit not ready, else the question, or for
-        someone who already set up the toolkit, its first step not ready, else « done »."""
-        R = self.setup_rows
-        for k in ("edit", "transcribe"):
-            if getattr(R[k], "state", "") != "ok":
-                return self.SETUP_STEPS.index(k)
-        if getattr(R["toolkit"], "state", "") != "ok":
-            return self.SETUP_STEPS.index("ask")
-        for k in ("model", "sound"):
-            if getattr(R[k], "state", "") != "ok":
-                return self.SETUP_STEPS.index(k)
-        return self.SETUP_STEPS.index("done")
-
-    def _setup_row(self, v, level, name):
-        """A step: a coloured dot and its name on one line, a sentence of detail, a row for a
-        choice, a field when the step needs one, a row of buttons. Returns the row as a namespace."""
+    def _setup_row(self, lv):
+        """A step's state: a coloured dot and a word (Ready, To do…), a sentence of detail, a row for
+        a choice, a field when the step needs one, a row of buttons. Returns it as a namespace."""
         from types import SimpleNamespace
         box = QtWidgets.QFrame()
         box.setObjectName("setuprow")
         bv = QtWidgets.QVBoxLayout(box)
-        bv.setContentsMargins(14, 10, 14, 10)
-        bv.setSpacing(6)
+        bv.setContentsMargins(14, 12, 14, 12)
+        bv.setSpacing(8)
         head_row = QtWidgets.QHBoxLayout()
         head_row.setSpacing(8)
         dot = QtWidgets.QLabel("●")
-        dot.setObjectName("dot")
         head_row.addWidget(dot)
-        head = QtWidgets.QLabel(f"<b>{name}</b>")
-        head.setTextFormat(QtCore.Qt.RichText)
+        head = QtWidgets.QLabel("")
+        head.setStyleSheet("font-weight: 600;")
         head_row.addWidget(head, 1)
         bv.addLayout(head_row)
         detail = QtWidgets.QLabel("")
-        detail.setObjectName("muted")
         detail.setWordWrap(True)
         detail.setTextInteractionFlags(QtCore.Qt.TextSelectableByMouse)
         bv.addWidget(detail)
         choice = QtWidgets.QWidget()
+        choice.setObjectName("plain")
+        choice.setStyleSheet("QWidget#plain { background: transparent; }")
         ch = QtWidgets.QHBoxLayout(choice)
         ch.setContentsMargins(0, 0, 0, 0)
         choice.hide()
@@ -6669,20 +6950,28 @@ class Main(QtWidgets.QMainWindow):
         field.hide()
         bv.addWidget(field)
         buttons = QtWidgets.QWidget()
+        buttons.setObjectName("plain")
+        buttons.setStyleSheet("QWidget#plain { background: transparent; }")
         bh = QtWidgets.QHBoxLayout(buttons)
         bh.setContentsMargins(0, 0, 0, 0)
         bh.setSpacing(8)
         bh.addStretch(1)
         buttons.hide()
         bv.addWidget(buttons)
-        v.addWidget(box)
-        row = SimpleNamespace(box=box, dot=dot, detail=detail, choice=choice, choice_layout=ch, field=field, buttons=buttons, buttons_layout=bh, widgets=[])
+        lv.addWidget(box)
+        row = SimpleNamespace(box=box, dot=dot, head=head, detail=detail, choice=choice, choice_layout=ch, field=field,
+                              buttons=buttons, buttons_layout=bh, widgets=[], state="")
+        words = {"ok": _("Ready"), "todo": _("To do"), "busy": _("Working…"), "off": _("Not possible yet"), "opt": _("Not set up"), "bad": _("Something went wrong")}
 
         def set_state(state, text):
             colour = {"ok": C_OK, "todo": C_ACCENT, "busy": C_ACCENT, "off": C_MUTED, "opt": C_MUTED, "bad": C_DANGER}[state]
             dot.setStyleSheet(f"color: {colour}; font-size: 14pt;")
-            detail.setText(text)
+            head.setText(words[state])
+            head.setStyleSheet(f"font-weight: 600; color: {colour if state in ('ok', 'bad') else C_TEXT};")
+            detail.setText(text.replace(_("Optional —") + " ", ""))
             row.state = state
+            if hasattr(self, "setup_side"):
+                self._setup_side_refresh()
 
         def set_buttons(items):
             for w in row.widgets:
@@ -6698,12 +6987,209 @@ class Main(QtWidgets.QMainWindow):
         row.set_buttons = set_buttons
         return row
 
+    def _setup_side_refresh(self):
+        """The list of the steps: a mark and a word for where each one is, the current one lit."""
+        titles = self._setup_titles()
+        words = {"ok": _("Ready"), "todo": _("To do"), "busy": _("Working…"), "off": _("Not possible yet"), "opt": _("Optional"), "bad": _("Something went wrong")}
+        cur = self.SETUP_STEPS[getattr(self, "setup_index", 0)]
+        running = (self.setup_run or {}).get("key") if getattr(self, "setup_run", None) else None
+        n = 0
+        for k in self.SETUP_STEPS:
+            b = self.setup_side[k]
+            if k in self.SETUP_WORK:
+                n += 1
+                st = "busy" if k == running and self.setup_run.get("kind") == "job" and not self.setup_run.get("over") else self.setup_rows[k].state
+                mark = {"ok": "✓", "bad": "!", "busy": "…"}.get(st, str(n))
+                sub = words.get(st, "")
+                if st == "opt" or (st in ("todo", "off") and k in self.SETUP_OPTIONAL):
+                    sub = _("Optional")
+                text = f"{mark}   {titles[k]}\n      {sub}" if sub else f"{mark}   {titles[k]}"
+            else:
+                text = ("•   " if k == "intro" else "★   ") + titles[k]
+            b.setText(text)
+            colour = C_OK if k in self.SETUP_WORK and self.setup_rows[k].state == "ok" else (C_TEXT if k == cur else C_MUTED)
+            weight = "700" if k == cur else "400"
+            bg = C_PANEL2 if k == cur else "transparent"
+            b.setStyleSheet(f"QPushButton {{ text-align: left; padding: 7px 10px; border: none; border-radius: 8px; background: {bg}; color: {colour}; font-weight: {weight}; }}"
+                            f"QPushButton:hover {{ background: {C_PANEL2}; }}")
+
+    def setup_go(self, i):
+        """Shows the step `i` and puts the buttons of the way through in order."""
+        i = max(0, min(i, len(self.SETUP_STEPS) - 1))
+        self.setup_index = i
+        key = self.SETUP_STEPS[i]
+        for k, w in enumerate(self.setup_pages):
+            w.setVisible(k == i)
+        titles = self._setup_titles()
+        self.setup_title.setText(titles[key])
+        if key in self.SETUP_WORK:
+            n = self.SETUP_WORK.index(key) + 1
+            self.setup_eyebrow.setText(_("Step %1 of %2", n, len(self.SETUP_WORK)) + (" · " + _("Optional") if key in self.SETUP_OPTIONAL else ""))
+        else:
+            self.setup_eyebrow.setText("")
+        if key == "done":
+            self._setup_summary()
+        row = self.setup_rows.get(key)
+        ready = row is not None and row.state == "ok"
+        self.b_setup_back.setVisible(i > 0)
+        self.b_setup_refresh.setVisible(row is not None)
+        self.b_setup_skipall.setVisible(key in self.SETUP_OPTIONAL)
+        if key == "intro":
+            self.b_setup_next.setText(_("Begin"))
+        elif key == "done":
+            self.b_setup_next.setText(_("Start editing"))
+        elif ready or row is None:
+            self.b_setup_next.setText(_("Continue"))
+        else:
+            self.b_setup_next.setText(_("Skip this step"))
+        strong = key in ("intro", "done") or ready
+        self.b_setup_next.setProperty("kind", "strong" if strong else "")
+        self.b_setup_next.style().unpolish(self.b_setup_next)
+        self.b_setup_next.style().polish(self.b_setup_next)
+        self._setup_side_refresh()
+        self._setup_progress_refresh()
+
+    def _setup_next(self):
+        if self.SETUP_STEPS[self.setup_index] == "done":
+            self.leave_setup()
+        else:
+            self.setup_go(self.setup_index + 1)
+
+    def _setup_summary(self):
+        titles = self._setup_titles()
+        lines = []
+        for k in self.SETUP_WORK:
+            st = self.setup_rows[k].state
+            if st == "ok":
+                lines.append(f"<span style='color:{C_OK}'>✓</span>&nbsp; <b>{titles[k]}</b> — {_('Ready')}")
+            else:
+                lines.append(f"<span style='color:{C_MUTED}'>–</span>&nbsp; <b>{titles[k]}</b> — "
+                             + (_("not set up (optional)") if k in self.SETUP_OPTIONAL else _("not ready")))
+        self.setup_facts["done"].setText("<br>".join(lines))
+        self.setup_facts["done"].show()
+
+    def setup_set_facts(self, p):
+        """What each step downloads and where it goes, from the check's results."""
+        size = p.get("size", "")
+        where = html.escape(DATA_DIR)
+        facts = {
+            "edit": _("Download: nothing, ffmpeg comes with the app."),
+            "transcribe": _("Download: the model « %1 », %2, once. Stored in: %3. Time: a few minutes, depending on the connection.", size, WHISPER_SIZES.get(size, ""), where),
+            "toolkit": _("Download: a few MB, once. Stored in: %1.", where),
+            "model": _("Download: depends on the choice. Claude Code: about 200 MB; an API key: nothing; Ollama: its app, then the model (5 to 20 GB)."),
+            "sound": _("Download: about 1 GB (PyTorch and the sound libraries), once, plus ffmpeg and ffprobe for Apple silicon on a Mac (2 × 28 MB). Time: 5 to 15 minutes."),
+        }
+        for k, text in facts.items():
+            self.setup_facts[k].setText(text)
+            self.setup_facts[k].show()
+
+    # -- what runs
+    def _setup_start(self, key, kind, what):
+        self.setup_run = {"key": key, "kind": kind, "start": time.time()}
+        self.setup_doing.setText(what)
+        self.setup_bar.setRange(0, 0)
+        if kind == "job":
+            self.setup_log.clear()
+        self._setup_log_line(what)
+        self.setup_clock.start()
+        self._setup_tick()
+        self._setup_progress_refresh()
+        self._setup_side_refresh()
+
+    def _setup_stop(self, keep=False):
+        """The end of what ran; with `keep` (a failure) its block stays, the details open, until
+        something else runs."""
+        self.setup_clock.stop()
+        if keep and self.setup_run:
+            self.setup_run["over"] = True
+            self.setup_bar.setRange(0, 100)
+            self.setup_bar.setValue(0)
+            self.setup_log.show()
+            self.b_setup_details.setText(_("Hide the details"))
+        else:
+            self.setup_run = None
+        self._setup_progress_refresh()
+        self._setup_side_refresh()
+
+    def _setup_progress_refresh(self):
+        """The block of what runs: shown while something runs; on another step than the one that
+        works, it says which one works and that the others wait for it."""
+        run = getattr(self, "setup_run", None)
+        if not run:
+            self.setup_progress.hide()
+            return
+        here = self.SETUP_STEPS[self.setup_index]
+        if run.get("over") and run["key"] != here:
+            self.setup_progress.hide()
+            return
+        self.setup_progress.show()
+        title = self._setup_titles().get(run["key"], run["key"])
+        if run["kind"] == "job" and run["key"] != here and not run.get("over"):
+            self.setup_wait.setText(_("« %1 » is working. The other steps wait until it is done: one at a time, so that two downloads do not slow each other down.", title))
+            self.setup_wait.show()
+        else:
+            self.setup_wait.hide()
+
+    def _setup_tick(self):
+        run = getattr(self, "setup_run", None)
+        if not run or run.get("over"):
+            return
+        t = int(time.time() - run["start"])
+        self.setup_elapsed.setText(_("Elapsed: %1", f"{t // 60} min {t % 60:02d} s" if t >= 60 else f"{t} s"))
+
+    def _setup_log_line(self, text):
+        """The details: each new message, the ones that only move a percentage replace their line."""
+        doc = self.setup_log
+        last = doc.document().lastBlock().text() if doc.document().blockCount() else ""
+        def bare(t):
+            return re.sub(r"[\d.,]+(\s*(min|s)\b)?", "", t)
+        if last and bare(last[10:]) == bare(text):
+            cur = doc.textCursor()
+            cur.movePosition(QtGui.QTextCursor.End)
+            cur.select(QtGui.QTextCursor.BlockUnderCursor)
+            cur.removeSelectedText()
+            doc.appendPlainText(time.strftime("%H:%M:%S  ") + text)
+        elif text and text != last[10:]:
+            doc.appendPlainText(time.strftime("%H:%M:%S  ") + text)
+
+    def _setup_toggle_log(self):
+        show = not self.setup_log.isVisible()
+        self.setup_log.setVisible(show)
+        self.b_setup_details.setText(_("Hide the details") if show else _("Show the details"))
+
+    def setup_say(self, text):
+        """A message of what runs: the line under the bar, the details, and the percentage when the
+        message has one (« … 42 % »)."""
+        if not self.setup_run or self.setup_run.get("over"):
+            return
+        self.setup_doing.setText(text)
+        m = re.search(r"(\d{1,3})\s?%", text)
+        if m:
+            self.setup_bar.setRange(0, 100)
+            self.setup_bar.setValue(min(100, int(m.group(1))))
+        self._setup_log_line(text)
+
     def show_setup(self):
         if self.thread:
             return
         self.views.setCurrentWidget(self.setup)
         self.setup_jump = True
         self.refresh_setup()
+
+    def setup_first_todo(self):
+        """Where the getting started opens: the welcome the first time; then the first step of the
+        edit not ready; else the first optional one not ready once the toolkit is there; else the summary."""
+        if not self.cfg.get("welcomed"):
+            return 0
+        R = self.setup_rows
+        for k in ("edit", "transcribe"):
+            if R[k].state != "ok":
+                return self.SETUP_STEPS.index(k)
+        if R["toolkit"].state == "ok":
+            for k in ("model", "sound"):
+                if R[k].state != "ok":
+                    return self.SETUP_STEPS.index(k)
+        return self.SETUP_STEPS.index("done")
 
     def leave_setup(self):
         if self.setup_active is not None:
@@ -6719,37 +7205,49 @@ class Main(QtWidgets.QMainWindow):
             r.set("busy", _("Checking…"))
             r.set_buttons([])
         self.b_setup_refresh.setEnabled(False)
+        titles = self._setup_titles()
+        self._setup_start(self.SETUP_STEPS[self.setup_index], "check", _("Checking: %1", titles["edit"]))
 
         def done(p):
+            self._setup_stop()
             self.setup_probe = p
             self.b_setup_refresh.setEnabled(True)
             self.fill_setup()
+            self.setup_set_facts(p)
             if getattr(self, "setup_jump", False):
                 self.setup_jump = False
                 self.setup_go(self.setup_first_todo())
             else:
                 self.setup_go(self.setup_index)
 
-        def failed(msg):
+        def failed(msg):  # no step left on « Checking… »: each says the check failed, and why
+            self._setup_stop()
             self.b_setup_refresh.setEnabled(True)
-            self.setup_rows["edit"].set("bad", msg)
-        self.run_in_background(lambda w: probe_setup(self.cfg), done, failed)
+            for r in self.setup_rows.values():
+                r.set("bad", _("The check failed: %1", msg))
+            self.setup_go(self.setup_index)
+        self.run_in_background(lambda w: probe_setup(self.cfg, lambda key: w.progress.emit(-1.0, _("Checking: %1", titles[key]))), done, failed)
 
     def setup_job(self, key, fn, after=None):
-        """Runs `fn(task)` in the background for the step `key`, its progress in the step's detail,
-        a Stop button meanwhile; then checks everything again."""
+        """Runs `fn(task, say)` in the background for the step `key`: its messages under the bar and
+        in the details, a Stop button meanwhile; then checks everything again."""
         if self.thread or self.setup_active is not None:
             return
         row = self.setup_rows[key]
         self.setup_active = row
-        names = {"edit": _("Editing"), "transcribe": _("Transcription"), "toolkit": _("Toolkit"), "model": _("Language model"), "sound": _("Sound")}
-        self.setup_busy.setText(_("« %1 » is working: the other steps wait until it is done (one at a time).", names.get(key, key)))
-        self.setup_busy.show()
         task = {"cancelled": False, "proc": None}
         for r in self.setup_rows.values():
             for b in r.widgets:
                 b.setEnabled(False)
+            r.choice.setEnabled(False)   # no other model or way chosen while it works
+            r.field.setEnabled(False)
         self.b_setup_refresh.setEnabled(False)
+        self.b_setup_quit.setEnabled(False)
+
+        def unlock():
+            for r in self.setup_rows.values():
+                r.choice.setEnabled(True)
+                r.field.setEnabled(True)
 
         def stop():
             task["cancelled"] = True
@@ -6760,23 +7258,36 @@ class Main(QtWidgets.QMainWindow):
                 except OSError:
                     pass
         row.set_buttons([(_("Stop"), stop, False)])
-        row.set("busy", _("Working…"))
+        row.set("busy", _("Working: the progress is below."))
+        self._setup_start(key, "job", _("Starting…"))
 
         def work(w):
-            return fn(task, lambda text: w.progress.emit(0.0, text))
+            return fn(task, lambda text: w.progress.emit(-1.0, text))
 
         def done(result):
             self.setup_active = None
-            self.setup_busy.hide()
+            unlock()
+            self.b_setup_quit.setEnabled(True)
+            self._setup_stop()
             if after:
                 after(result)
             self.refresh_setup()
 
         def failed(msg):
             self.setup_active = None
-            self.setup_busy.hide()
+            unlock()
+            self.b_setup_quit.setEnabled(True)
+            self.b_setup_refresh.setEnabled(True)
+            if task["cancelled"]:   # Stop: not an error, the step is as it was (what was downloaded is kept)
+                self._setup_stop()
+                self.refresh_setup()
+                return
+            self._setup_log_line(msg or _("Cancelled."))
+            self.setup_doing.setText(_("Stopped: %1", msg or _("Cancelled.")))
+            self._setup_stop(keep=True)
             self.fill_setup()
-            row.set("bad", msg or _("Cancelled."))
+            row.set("bad", (msg or _("Cancelled.")) + " " + _("What happened is in the details below. You can try again, or skip this step."))
+            self.setup_go(self.setup_index)
         self.run_in_background(work, done, failed)
 
     def fill_setup(self):
@@ -7891,8 +8402,8 @@ class Main(QtWidgets.QMainWindow):
         self.thread.start()
 
     def on_progress(self, fraction, text):
-        if self.setup_active is not None:
-            self.setup_active.detail.setText(text)
+        if getattr(self, "setup_run", None) and self.views.currentWidget() is self.setup:
+            self.setup_say(text)   # the getting started: under its bar and in its details
             return
         if self.task and self.task.get("download"):
             self.h_gauge.setValue(int(fraction * 1000))
@@ -9436,6 +9947,7 @@ def self_test_setup(steps):
         d = install_toolkit(say, task)
         if not toolkit_dir():
             raise RuntimeError("not found after the install")
+        probe_setup(load_config())  # the getting started's check, with the toolkit there and its Python not yet
         return d
 
     def ffmpeg_tools():
