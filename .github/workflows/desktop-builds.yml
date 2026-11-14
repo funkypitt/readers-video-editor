@@ -99,6 +99,8 @@ jobs:
             --collect-data certifi \
             --hidden-import PyQt5.QtMultimedia --hidden-import PyQt5.QtMultimediaWidgets \
             readers_video_editor.py
+          plutil -replace CFBundleShortVersionString -string "$VERSION" "dist/Readers Video Editor.app/Contents/Info.plist"
+          plutil -replace CFBundleVersion -string "$VERSION" "dist/Readers Video Editor.app/Contents/Info.plist"
           codesign --force --deep --sign - "dist/Readers Video Editor.app"
           codesign --verify --deep --strict "dist/Readers Video Editor.app"
           mkdir -p dmg out
