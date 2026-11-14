@@ -3402,9 +3402,17 @@ def download_whisper_model(size, task=None, say=None):
         except BaseException as ex:  # noqa: BLE001 - told by the waiting thread
             outcome["error"] = ex
         outcome["done"] = True
+    blobs = glob.glob(os.path.join(MODELS_DIR, f"models--*--faster-whisper-{size}", "blobs"))
+    for d in blobs:  # parts left by downloads given up long ago (each try starts a file of its own)
+        for f in glob.glob(os.path.join(d, "*.incomplete")):
+            try:
+                if time.time() - os.path.getmtime(f) > 3600:
+                    os.remove(f)
+            except OSError:
+                pass
+    started = time.time()
     threading.Thread(target=fetch, daemon=True).start()
     total = _size_bytes(WHISPER_SIZES.get(size, ""))
-    blobs = glob.glob(os.path.join(MODELS_DIR, f"models--*--faster-whisper-{size}", "blobs"))
     while not outcome.get("done"):
         time.sleep(0.5)
         if task is not None and task.get("cancelled"):
@@ -3415,7 +3423,9 @@ def download_whisper_model(size, task=None, say=None):
             for d in blobs:
                 for f in os.listdir(d):
                     try:
-                        got += os.path.getsize(os.path.join(d, f))
+                        path = os.path.join(d, f)
+                        if not f.endswith(".incomplete") or os.path.getmtime(path) >= started - 5:
+                            got += os.path.getsize(path)
                     except OSError:
                         pass
             if total:
