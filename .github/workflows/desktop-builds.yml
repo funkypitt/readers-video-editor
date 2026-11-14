@@ -122,6 +122,17 @@ jobs:
           sleep 30
           kill "$PID" && echo "it started and was still running"
 
+      # The getting-started page's downloads and installs, run by the built app itself in an empty
+      # home with the Finder's PATH (what a new Mac has): ffmpeg, the transcription model, the
+      # toolkit, the app's own Python and its environment, ffmpeg/ffprobe, yt-dlp, the API's certificates,
+      # the improved sound on a voice spoken by `say`.
+      - name: Does the getting started work? (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          H="$RUNNER_TEMP/fresh-home"; mkdir -p "$H"
+          env -i HOME="$H" USER="$USER" SHELL=/bin/zsh TMPDIR="$RUNNER_TEMP" LANG=en_US.UTF-8 PATH=/usr/bin:/bin:/usr/sbin:/sbin \
+            "dist/Readers Video Editor.app/Contents/MacOS/Readers Video Editor" --self-test-setup=probe,ffmpeg,whisper,transcription,toolkit,claude-env,ffmpeg-tools,ytdlp,anthropic,sound
+
       - name: Does it start? (Windows)
         if: runner.os == 'Windows'
         shell: pwsh

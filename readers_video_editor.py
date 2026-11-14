@@ -28,7 +28,7 @@ from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 APP = "readers-video-editor"
-VERSION = "1.12.0"
+VERSION = "1.12.1"
 
 
 def _app_dirs():
@@ -1725,6 +1725,17 @@ _TR_ADS = {
 for _code, _more in _TR_ADS.items():
     _TR.setdefault(_code, {}).update(_more)
 
+# 1.12.1: the macOS build fetches a Python of its own for the toolkit
+_TR_PY = {
+ "fr": {"Fetching Python for the toolkit (once, 27 MB)…": "Récupération de Python pour la boîte à outils (une fois, 27 Mo)…"},
+ "de": {"Fetching Python for the toolkit (once, 27 MB)…": "Python für das Toolkit wird geholt (einmalig, 27 MB)…"},
+ "es": {"Fetching Python for the toolkit (once, 27 MB)…": "Descargando Python para el toolkit (una vez, 27 MB)…"},
+ "pt": {"Fetching Python for the toolkit (once, 27 MB)…": "Baixando o Python para o toolkit (uma vez, 27 MB)…"},
+ "ru": {"Fetching Python for the toolkit (once, 27 MB)…": "Загрузка Python для набора (один раз, 27 МБ)…"},
+}
+for _code, _more in _TR_PY.items():
+    _TR.setdefault(_code, {}).update(_more)
+
 
 def _lang():
     for var in ("LC_ALL", "LC_MESSAGES", "LANG"):
@@ -1815,47 +1826,107 @@ FFMPEG_MAC_PAGE = "https://ffmpeg.martin-riedl.de/"
 FFMPEG_MAC_LINK = r'href="(/download/macos/arm64/[^"]+/%s\.zip)"'
 
 
-def ensure_ffmpeg_tools(progress, task):
-    """ffmpeg and ffprobe reachable by name for the toolkit: the system's, or copies fetched into
-    the app's bin folder (macOS). Returns the folder to put first on the PATH, or None."""
-    if shutil.which("ffmpeg") and shutil.which("ffprobe"):
-        return None
-    own = os.path.join(DATA_DIR, "bin")
-    if _own_tool("ffmpeg") and _own_tool("ffprobe"):
-        return own
-    if sys.platform != "darwin":
-        raise RuntimeError(_("ffmpeg and ffprobe were not found on this computer: install ffmpeg."))
+# The toolkit was written against the ffmpeg of the Linux distributions (6, 7). On a Mac it is
+# handed a small `ffmpeg` of the app's own, in front of the real one, that mends two things:
+# - soxr (aresample=resampler=soxr:precision=28), which no ffmpeg for the Mac has, neither the
+#   static builds nor Homebrew's: ffmpeg's own resampler does the same work at a high quality;
+# - finaliser.py's measure `-map 0:a:0 -filter_complex ebur128=…`, refused since ffmpeg 8 (the
+#   mapped stream no longer feeds an unlabeled pad): the same filter as `-af`, the same summary.
+FFMPEG_WRAPPER = """#!/bin/bash
+# Reader's Video Editor: the traduction toolkit's ffmpeg commands mended for this ffmpeg.
+shopt -s extglob
+SOXR=%d
+real="%s"
+mapped=0
+for a in "$@"; do [ "$a" = "-map" ] && mapped=1; done
+args=()
+prev=
+for a in "$@"; do
+  if [ "$SOXR" = 0 ]; then
+    a="${a//resampler=soxr:precision=+([0-9])/resampler=swr:filter_size=256:phase_shift=20:cutoff=0.97}"
+    a="${a//resampler=soxr/resampler=swr}"
+  fi
+  if [ "$mapped" = 1 ] && [ "$prev" = "-filter_complex" ] && [[ "$a" == ebur128* ]] && [[ "$a" != *"["* ]]; then
+    args[${#args[@]}-1]="-af"
+  fi
+  args+=("$a")
+  prev="$a"
+done
+exec "$real" "${args[@]}"
+"""
+
+
+def ffmpeg_has_soxr(exe):
+    try:
+        r = subprocess.run([exe, "-hide_banner", "-buildconf"], capture_output=True, text=True, timeout=30, **_RUN_FLAGS)
+        return "libsoxr" in (r.stdout + r.stderr)
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+
+
+def _fetch_mac_tool(name, target, page, progress, task):
+    """One of martin-riedl.de's static builds for Apple silicon, unpacked to `target`."""
     import urllib.request
     import zipfile
-    os.makedirs(own, exist_ok=True)
-    req = urllib.request.Request(FFMPEG_MAC_PAGE, headers={"User-Agent": APP + "/" + VERSION})
-    with https_open(req, timeout=60) as r:
-        page = r.read().decode("utf-8", "replace")
-    for name in ("ffmpeg", "ffprobe"):
-        if _own_tool(name):
-            continue
-        m = re.search(FFMPEG_MAC_LINK % name, page)
-        if not m:
+    links = re.findall(FFMPEG_MAC_LINK % name, page)
+    if not links:
+        raise RuntimeError(_("%1 could not be fetched.", name))
+    # a release (…/1789931890_9.0.2/…) rather than the nightly snapshot listed first
+    link = next((l for l in links if re.search(r"/\d+_\d+\.\d+(\.\d+)?/", l)), links[0])
+    progress(_("Fetching %1 (once)…", name))
+    zpath = target + ".zip"
+    req = urllib.request.Request(FFMPEG_MAC_PAGE.rstrip("/") + link, headers={"User-Agent": APP + "/" + VERSION})
+    with https_open(req, timeout=300) as r, open(zpath, "wb") as f:
+        while True:
+            if task.get("cancelled"):
+                raise Cancelled()
+            chunk = r.read(1 << 16)
+            if not chunk:
+                break
+            f.write(chunk)
+    with zipfile.ZipFile(zpath) as z:
+        member = next((m for m in z.namelist() if m.rstrip("/").split("/")[-1] == name), None)
+        if member is None:
             raise RuntimeError(_("%1 could not be fetched.", name))
-        progress(_("Fetching %1 (once)…", name))
-        zpath = os.path.join(own, name + ".zip")
-        req = urllib.request.Request(FFMPEG_MAC_PAGE.rstrip("/") + m.group(1), headers={"User-Agent": APP + "/" + VERSION})
-        with https_open(req, timeout=300) as r, open(zpath, "wb") as f:
-            while True:
-                if task.get("cancelled"):
-                    raise Cancelled()
-                chunk = r.read(1 << 16)
-                if not chunk:
-                    break
-                f.write(chunk)
-        with zipfile.ZipFile(zpath) as z:
-            member = next((m for m in z.namelist() if m.rstrip("/").split("/")[-1] == name), None)
-            if member is None:
-                raise RuntimeError(_("%1 could not be fetched.", name))
-            with z.open(member) as src, open(os.path.join(own, name), "wb") as dst:
-                shutil.copyfileobj(src, dst)
-        os.chmod(os.path.join(own, name), 0o755)
-        os.unlink(zpath)
+        with z.open(member) as src, open(target + ".part", "wb") as dst:
+            shutil.copyfileobj(src, dst)
+    os.chmod(target + ".part", 0o755)
+    os.replace(target + ".part", target)
+    os.unlink(zpath)
+
+
+def ensure_ffmpeg_tools(progress, task):
+    """ffmpeg and ffprobe reachable by name for the toolkit: the system's (Linux, Windows), or on
+    a Mac static builds fetched into the app's bin folder, ffmpeg behind FFMPEG_WRAPPER. Returns
+    the folder to put first on the PATH, or None."""
+    if sys.platform != "darwin":
+        if shutil.which("ffmpeg") and shutil.which("ffprobe"):
+            return None
+        own = os.path.join(DATA_DIR, "bin")
+        if _own_tool("ffmpeg") and _own_tool("ffprobe"):
+            return own
+        raise RuntimeError(_("ffmpeg and ffprobe were not found on this computer: install ffmpeg."))
+    own = os.path.join(DATA_DIR, "bin")
+    os.makedirs(own, exist_ok=True)
+    real, wrapper, probe = os.path.join(own, "ffmpeg-static"), os.path.join(own, "ffmpeg"), os.path.join(own, "ffprobe")
+    # 1.12.0 and before kept the static build itself as bin/ffmpeg
+    if os.path.isfile(wrapper) and not os.path.isfile(real):
+        with open(wrapper, "rb") as f:
+            if f.read(2) != b"#!":
+                os.replace(wrapper, real)
+    page = None
+    for name, target in (("ffmpeg", real), ("ffprobe", probe)):
+        if not os.path.isfile(target):
+            if page is None:
+                import urllib.request
+                req = urllib.request.Request(FFMPEG_MAC_PAGE, headers={"User-Agent": APP + "/" + VERSION})
+                with https_open(req, timeout=60) as r:
+                    page = r.read().decode("utf-8", "replace")
+            _fetch_mac_tool(name, target, page, progress, task)
+    with open(wrapper + ".part", "w", encoding="utf-8") as f:
+        f.write(FFMPEG_WRAPPER % (1 if ffmpeg_has_soxr(real) else 0, real.replace('"', '\\"')))
+    os.chmod(wrapper + ".part", 0o755)
+    os.replace(wrapper + ".part", wrapper)
     return own
 
 
@@ -2798,8 +2869,13 @@ def lang_label(code):
 TOOLKIT_DIR_APP = os.path.join(DATA_DIR, "toolkit")        # the copy the app downloads for itself (1.7.0)
 TOOLKIT_ZIP = "https://github.com/funkypitt/traduction-toolkit/archive/refs/heads/main.zip"
 TOOLKIT_VENV = os.path.join(DATA_DIR, "toolkit-venv")      # the app's own environment for the toolkit's libraries
-TOOLKIT_PACKAGES = {"claude": ["anthropic"], "sound": ["deepfilternet", "pyloudnorm", "speechmos"]}
-TOOLKIT_IMPORTS = {"deepfilternet": "df"}                  # pip name → module name, when they differ
+# The sound: what finaliser.py and nettoyer.py import, named for pip. DeepFilterNet 0.5.6 needs a
+# torchaudio that still has torchaudio.backend (removed in 2.9) and does not declare torch itself;
+# speechmos's DNSMOS runs on onnxruntime.
+TOOLKIT_PACKAGES = {"claude": ["anthropic"],
+                    "sound": ["torch==2.8.0", "torchaudio==2.8.0", "deepfilternet", "pyloudnorm", "speechmos", "onnxruntime",
+                              "librosa", "soundfile", "scipy"]}
+TOOLKIT_IMPORTS = {"deepfilternet": "df.enhance", "torch==2.8.0": "torch", "torchaudio==2.8.0": "torchaudio.backend.common"}  # pip name → module
 
 
 def toolkit_dir(cfg=None):
@@ -2826,11 +2902,75 @@ def toolkit_python():
     return system_python()
 
 
+# A Python of the app's own for the macOS build (python-build-standalone, the build uv uses):
+# /usr/bin/python3 on a Mac is only a stub until the Command Line Tools are installed, and
+# calling it opens Apple's install dialog; where they are, it is a Python 3.9 that the sound's
+# libraries no longer support. 3.11: the newest Python DeepFilterLib has Apple-silicon wheels for
+# (newer ones would need Rust to build it). A release at least two weeks old, checked by its SHA-256.
+PYTHON_MAC_URL = ("https://github.com/astral-sh/python-build-standalone/releases/download/20261026/"
+                  "cpython-3.11.18+20261026-aarch64-apple-darwin-install_only.tar.gz")
+PYTHON_MAC_SHA256 = "cba3455e18516fbe8668cff2820c9b6a53447c552d612443c2b2fb60d390a908"
+PYTHON_DIR_APP = os.path.join(DATA_DIR, "python")
+
+
+def _own_python():
+    exe = os.path.join(PYTHON_DIR_APP, "bin", "python3")
+    return exe if os.path.isfile(exe) and os.access(exe, os.X_OK) else None
+
+
+def fetch_python(progress, task):
+    """Downloads and unpacks the app's own Python (macOS, 27 MB, once). Returns its interpreter."""
+    import hashlib
+    import tarfile
+    import urllib.request
+    os.makedirs(DATA_DIR, exist_ok=True)
+    progress(_("Fetching Python for the toolkit (once, 27 MB)…"))
+    tpath = os.path.join(DATA_DIR, "python.tar.gz")
+    digest = hashlib.sha256()
+    req = urllib.request.Request(PYTHON_MAC_URL, headers={"User-Agent": APP + "/" + VERSION})
+    with https_open(req, timeout=300) as r, open(tpath, "wb") as f:
+        while True:
+            if task.get("cancelled"):
+                raise Cancelled()
+            chunk = r.read(1 << 16)
+            if not chunk:
+                break
+            digest.update(chunk)
+            f.write(chunk)
+    if digest.hexdigest() != PYTHON_MAC_SHA256:
+        os.unlink(tpath)
+        raise RuntimeError(_("%1 could not be fetched.", "Python") + " (SHA-256)")
+    fresh = PYTHON_DIR_APP + ".new"
+    shutil.rmtree(fresh, ignore_errors=True)
+    os.makedirs(fresh)
+    with tarfile.open(tpath) as tar:
+        for m in tar.getmembers():
+            if m.name.startswith("/") or ".." in m.name.split("/"):
+                raise RuntimeError("archive")
+        tar.extractall(fresh)
+    src = os.path.join(fresh, "python")
+    if not os.path.isfile(os.path.join(src, "bin", "python3")):
+        shutil.rmtree(fresh, ignore_errors=True)
+        raise RuntimeError(_("%1 could not be fetched.", "Python"))
+    shutil.rmtree(PYTHON_DIR_APP, ignore_errors=True)
+    shutil.move(src, PYTHON_DIR_APP)
+    shutil.rmtree(fresh, ignore_errors=True)
+    os.unlink(tpath)
+    exe = _own_python()
+    r = subprocess.run([exe, "-c", "import ssl, venv"], capture_output=True, text=True, timeout=120)
+    if r.returncode != 0:
+        raise RuntimeError(_("%1 could not be fetched.", "Python") + ": " + (r.stderr or "")[-200:])
+    return exe
+
+
 def system_python():
     """A Python outside the bundle, to make environments with: the one running the app, or the
-    system's (python3 of the Xcode tools on macOS, py or python on Windows)."""
+    system's (py or python on Windows). The macOS build uses only its own (fetch_python), never
+    /usr/bin/python3, whose mere call may open the Command Line Tools dialog; None until fetched."""
     if not getattr(sys, "frozen", False):
         return sys.executable
+    if sys.platform == "darwin":
+        return _own_python()
     for name in (("py", "python", "python3") if sys.platform == "win32" else ("python3", "python")):
         found = shutil.which(name)
         if found:
@@ -2897,8 +3037,19 @@ def prepare_toolkit_python(packages, progress, task):
     if py and python_has(py, packages):
         return py
     vpy = _toolkit_venv_python()
+    if os.path.exists(vpy) and getattr(sys, "frozen", False) and sys.platform == "darwin":
+        # an environment made by an earlier version from /usr/bin/python3 (3.9): made again on the app's own Python
+        cfg_text = ""
+        try:
+            cfg_text = Path(TOOLKIT_VENV, "pyvenv.cfg").read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            pass
+        if PYTHON_DIR_APP not in cfg_text:
+            shutil.rmtree(TOOLKIT_VENV, ignore_errors=True)
     if not os.path.exists(vpy):
         base = system_python()
+        if not base and getattr(sys, "frozen", False) and sys.platform == "darwin":
+            base = fetch_python(progress, task)
         if not base:
             raise RuntimeError(_("No Python was found to set the toolkit up with."))
         progress(_("Preparing the toolkit's environment (once)…"))
@@ -2907,7 +3058,7 @@ def prepare_toolkit_python(packages, progress, task):
             raise RuntimeError(_("The toolkit's environment could not be made: %1", (r.stdout or "")[-300:].strip() or "venv"))
     if python_has(vpy, packages):
         return vpy
-    what = ", ".join(packages)
+    what = ", ".join(re.split(r"[=<>]", p)[0] for p in packages)
     progress(_("Installing %1 (once)…", what))
     cmd = [vpy, "-m", "pip", "install", "--upgrade", "--disable-pip-version-check", "--progress-bar", "off"] + packages
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, errors="replace", **_RUN_FLAGS)
@@ -3059,8 +3210,14 @@ def open_terminal(command):
     """Opens the person's terminal on `command` (the sign-in of Claude Code is interactive).
     Returns False when no terminal was found."""
     if sys.platform == "darwin":
-        script = 'tell application "Terminal" to do script "%s"' % command.replace('"', '\\"')
-        return subprocess.run(["osascript", "-e", script, "-e", 'tell application "Terminal" to activate'], capture_output=True).returncode == 0
+        # a .command file opened by Terminal: no Apple Events (the build may not ask macOS for them)
+        import shlex
+        os.makedirs(WORK_DIR, exist_ok=True)
+        path = os.path.join(WORK_DIR, "sign-in.command")
+        with open(path, "w", encoding="utf-8") as f:
+            f.write("#!/bin/zsh -l\ncd ~\n" + shlex.quote(command) + "\n")
+        os.chmod(path, 0o755)
+        return subprocess.run(["open", "-a", "Terminal", path], capture_output=True).returncode == 0
     for term, args in (("x-terminal-emulator", ["-e"]), ("cosmic-term", ["--"]), ("gnome-terminal", ["--"]), ("konsole", ["-e"]),
                        ("xfce4-terminal", ["-x"]), ("kitty", []), ("alacritty", ["-e"]), ("xterm", ["-e"])):
         exe = shutil.which(term)
@@ -3100,13 +3257,13 @@ def ollama_models(url):
 def ollama_start(exe):
     """Starts Ollama: the Mac app when it is there, else `ollama serve` detached. Waits up to 10 s."""
     try:
-        if sys.platform == "darwin" and os.path.isdir("/Applications/Ollama.app"):
+        if sys.platform == "darwin" and (os.path.isdir("/Applications/Ollama.app") or os.path.isdir(os.path.expanduser("~/Applications/Ollama.app"))):
             subprocess.Popen(["open", "-a", "Ollama"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         else:
             subprocess.Popen([exe, "serve"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
     except OSError:
         return False
-    for _k in range(20):
+    for _k in range(60):      # the Mac app takes longer the first time
         time.sleep(0.5)
         if ollama_answers(OLLAMA_URL):
             return True
@@ -3224,7 +3381,8 @@ def probe_setup(cfg):
             "toolkit": tk, "claude": find_claude(quick=True), "ollama_bin": find_ollama(), "ollama_up": up,
             "ollama_models": ollama_models(OLLAMA_URL) if up else [], "ram": ram, "vram": vram, "recommended": recommended_model(ram, vram),
             "sound_ready": bool(tk) and python_has(toolkit_python(), TOOLKIT_PACKAGES["sound"]),
-            "ffmpeg_named": bool(shutil.which("ffmpeg") and shutil.which("ffprobe")) or bool(_own_tool("ffmpeg") and _own_tool("ffprobe"))}
+            "ffmpeg_named": bool(_own_tool("ffmpeg") and _own_tool("ffprobe") and _own_tool("ffmpeg-static")) if sys.platform == "darwin"
+            else bool(shutil.which("ffmpeg") and shutil.which("ffprobe")) or bool(_own_tool("ffmpeg") and _own_tool("ffprobe"))}
 
 
 # What runs in the toolkit's Python: traduire.py's passes, in the order of its main(). Its own
@@ -8936,7 +9094,151 @@ class Main(QtWidgets.QMainWindow):
         super().closeEvent(e)
 
 
+def self_test_setup(steps):
+    """`--self-test-setup[=step,step…]`: the getting-started steps run without a window, each one
+    reported on a line, for the builds (CI) and for a Mac where the page fails. Steps: probe,
+    ffmpeg, whisper (the tiny model), transcription (a voice from `say`), toolkit, claude-env (anthropic), ffmpeg-tools, ytdlp,
+    anthropic (a refused key must be refused, not fail on the certificates), sound (torch, long),
+    claude-install. Exit code 1 when one step failed."""
+    import traceback
+    task = {"cancelled": False, "proc": None}
+    say = lambda text: print("   …", text, flush=True)
+    failed = []
+
+    def step(name, fn):
+        if steps and name not in steps:
+            return
+        t0 = time.time()
+        print(f"== {name}", flush=True)
+        try:
+            result = fn()
+            print(f"OK {name} ({time.time() - t0:.0f} s): {str(result)[:300]}", flush=True)
+        except Exception as ex:
+            traceback.print_exc()
+            print(f"FAILED {name} ({time.time() - t0:.0f} s): {type(ex).__name__}: {ex}", flush=True)
+            failed.append(name)
+
+    def check_ffmpeg():
+        exe = ffmpeg_exe()
+        if not exe:
+            raise RuntimeError("no ffmpeg")
+        r = subprocess.run([exe, "-hide_banner", "-version"], capture_output=True, text=True, timeout=60)
+        if r.returncode != 0:
+            raise RuntimeError(r.stderr[-300:])
+        return exe + " · " + r.stdout.splitlines()[0]
+
+    def whisper():
+        if not whisper_available():
+            raise RuntimeError("faster-whisper missing")
+        if not download_whisper_model("tiny"):
+            raise RuntimeError("the model is not where it should be")
+        return MODELS_DIR
+
+    def transcription():
+        """A voice spoken by `say` (macOS), heard by the tiny model: the words must come back."""
+        import tempfile
+        if sys.platform != "darwin":
+            return "skipped (macOS only)"
+        folder = tempfile.mkdtemp(prefix="rve-words-")
+        voice, wav = os.path.join(folder, "voice.aiff"), os.path.join(folder, "voice.wav")
+        subprocess.run(["say", "-o", voice, "The quick brown fox jumps over the lazy dog."], check=True, timeout=120)
+        info = probe(voice)
+        extract_audio(voice, wav)
+        words, language, _heard = transcribe(wav, None, "tiny", info.get("duration") or 5, lambda f: None, lambda: False)
+        text = " ".join(w[0] for w in words)
+        if "fox" not in text.lower():
+            raise RuntimeError(f"heard: {text!r}")
+        return f"{language}: {text}"
+
+    def toolkit():
+        d = install_toolkit(say, task)
+        if not toolkit_dir():
+            raise RuntimeError("not found after the install")
+        return d
+
+    def ffmpeg_tools():
+        own = ensure_ffmpeg_tools(say, task)
+        for name in ("ffmpeg", "ffprobe"):
+            exe = os.path.join(own, name) if own else shutil.which(name)
+            r = subprocess.run([exe, "-hide_banner", "-version"], capture_output=True, text=True, timeout=60)
+            if r.returncode != 0:
+                raise RuntimeError(f"{exe}: {r.stderr[-300:]}")
+        # the toolkit's resampling, as finaliser.py and nettoyer.py ask for it
+        exe = os.path.join(own, "ffmpeg") if own else shutil.which("ffmpeg")
+        r = subprocess.run([exe, "-v", "error", "-f", "lavfi", "-i", "sine=f=440:d=1:sample_rate=44100", "-af",
+                            "aresample=resampler=soxr:precision=28:out_sample_rate=48000", "-f", "null", "-"],
+                           capture_output=True, text=True, timeout=60)
+        if r.returncode != 0:
+            raise RuntimeError(f"soxr: {r.stderr[-300:]}")
+        return own or "the system's"
+
+    def ytdlp():
+        exe = fetch_ytdlp(lambda f: None, lambda: False)
+        r = subprocess.run([exe, "--version"], capture_output=True, text=True, timeout=120)
+        if r.returncode != 0:
+            raise RuntimeError(r.stderr[-300:])
+        return exe + " " + r.stdout.strip()
+
+    def anthropic():
+        ok, msg = anthropic_key_test("sk-ant-self-test-not-a-key")
+        if ok or msg != _("The key is refused by Anthropic."):
+            raise RuntimeError(msg)
+        return msg
+
+    def sound():
+        """The libraries, then finaliser.py on a voice with hum and noise (macOS: spoken by `say`)."""
+        import tempfile
+        tk = toolkit_dir() or install_toolkit(say, task)
+        own = ensure_ffmpeg_tools(say, task)
+        py = prepare_toolkit_python(TOOLKIT_PACKAGES["sound"], say, task)
+        folder = tempfile.mkdtemp(prefix="rve-sound-")
+        voice, src = os.path.join(folder, "voice.aiff"), os.path.join(folder, "test.wav")
+        text = "This is a short test of the improved sound. " * 3
+        if sys.platform == "darwin":
+            subprocess.run(["say", "-o", voice, text], check=True, timeout=120)
+        else:
+            subprocess.run([ffmpeg_exe(), "-v", "error", "-f", "lavfi", "-i", "sine=f=220:d=8", voice + ".wav"], check=True)
+            voice += ".wav"
+        subprocess.run([ffmpeg_exe(), "-v", "error", "-y", "-i", voice, "-f", "lavfi", "-i", "anoisesrc=a=0.02:d=12",
+                        "-f", "lavfi", "-i", "sine=f=50:d=12", "-filter_complex",
+                        "[0]aresample=48000[v];[1]aresample=48000[n];[2]aresample=48000,volume=0.05[h];[v][n][h]amix=inputs=3:duration=first",
+                        "-ar", "48000", "-ac", "1", src], check=True, timeout=120)
+        done, report = finish_sound(task, tk, src, "wav", 1, folder, python=py, path_first=own)
+        return f"{done} · " + "; ".join(sound_summary(report))
+
+    def claude_install():
+        exe = find_claude() or install_claude(say, task)
+        r = subprocess.run([exe, "--version"], capture_output=True, text=True, timeout=120, env=claude_child_env())
+        return exe + " " + r.stdout.strip()
+
+    print("self test", APP, VERSION, sys.platform, platform.machine(), "frozen" if getattr(sys, "frozen", False) else "source",
+          "data:", DATA_DIR, flush=True)
+    step("probe", lambda: probe_setup(load_config()))
+    step("ffmpeg", check_ffmpeg)
+    step("whisper", whisper)
+    step("transcription", transcription)
+    step("toolkit", toolkit)
+    step("claude-env", lambda: prepare_toolkit_python(TOOLKIT_PACKAGES["claude"], say, task))
+    step("ffmpeg-tools", ffmpeg_tools)
+    step("ytdlp", ytdlp)
+    step("anthropic", anthropic)
+    if steps:     # long, or touching the person's home: only when asked by name
+        step("sound", sound)
+        step("claude-install", claude_install)
+    print("self test:", "FAILED " + ", ".join(failed) if failed else "all passed", flush=True)
+    return 1 if failed else 0
+
+
 def main():
+    # The Windows and macOS builds: a child that multiprocessing starts (its resource tracker,
+    # which faster-whisper's libraries bring up) runs this same program; without this it would
+    # start a second app, and the first one would wait for it when it quits.
+    import multiprocessing
+    multiprocessing.freeze_support()
+    for a in sys.argv[1:]:
+        if a.startswith("--self-test-setup"):
+            steps = [s for s in a.partition("=")[2].split(",") if s]
+            sys.exit(self_test_setup(steps))
     try:
         locale.setlocale(locale.LC_TIME, "")
     except locale.Error:
