@@ -28,7 +28,7 @@ from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 APP = "readers-video-editor"
-VERSION = "1.12.2"
+VERSION = "1.12.3"
 
 
 def _app_dirs():
@@ -1559,6 +1559,108 @@ _TR_MODEL = {
  "ru": {"Downloading the model « %1 »: %2 of about %3 (%4 %).": "Загрузка модели «%1»: %2 из примерно %3 (%4 %)."},
 }
 for _code, _more in _TR_MODEL.items():
+    _TR.setdefault(_code, {}).update(_more)
+
+
+# The strings of 1.12.3: the getting started as a wizard, one step per screen
+_TR_WIZARD = {
+ "fr": {
+  '« %1 » is working: the other steps wait until it is done (one at a time).': "« %1 » est en cours : les autres étapes attendent qu'elle soit finie (une à la fois).",
+  'Needs the toolkit: the step « Toolkit », before this one.': "Demande la boîte à outils : l'étape « Boîte à outils », avant celle-ci.",
+  'Translation, subtitles, improved sound?': 'Traduction, sous-titres, son amélioré ?',
+  "The editing is ready. What follows is optional: only to translate the text, to cut subtitles with the toolkit's rules, or to clean and level the sound. Several hundred MB, a few minutes.": 'Le montage est prêt. La suite est facultative : seulement pour traduire le texte, découper des sous-titres selon les règles de la boîte à outils, ou nettoyer et niveler le son. Quelques centaines de Mo, quelques minutes.',
+  'No: start editing': 'Non : commencer à monter',
+  'Yes: set them up': 'Oui : les mettre en place',
+  'That is all': 'Terminé',
+  'You can come back here any time: « Getting started… » on the home page, or Project ▾ › Getting started… while editing.': "Vous pouvez revenir ici à tout moment : « Prise en main… » sur la page d'accueil, ou Projet ▾ › Prise en main… pendant le montage.",
+  'Back': 'Retour',
+  'Next': 'Suivant',
+  'Skip this step': 'Passer cette étape',
+  'Editing': 'Montage',
+  'Transcription': 'Transcription',
+  'Toolkit': 'Boîte à outils',
+  'Language model': 'Modèle de langue',
+  'Sound': 'Son',
+  'Step %1 of %2': 'Étape %1 sur %2',
+ },
+ "de": {
+  '« %1 » is working: the other steps wait until it is done (one at a time).': '„%1“ läuft: die anderen Schritte warten, bis er fertig ist (einer nach dem anderen).',
+  'Needs the toolkit: the step « Toolkit », before this one.': 'Braucht den Werkzeugkasten: den Schritt „Werkzeugkasten“ davor.',
+  'Translation, subtitles, improved sound?': 'Übersetzung, Untertitel, verbesserter Ton?',
+  "The editing is ready. What follows is optional: only to translate the text, to cut subtitles with the toolkit's rules, or to clean and level the sound. Several hundred MB, a few minutes.": 'Der Schnitt ist bereit. Was folgt, ist freiwillig: nur um den Text zu übersetzen, Untertitel nach den Regeln des Werkzeugkastens zu schneiden oder den Ton zu säubern und anzugleichen. Einige hundert MB, ein paar Minuten.',
+  'No: start editing': 'Nein: mit dem Schneiden beginnen',
+  'Yes: set them up': 'Ja: einrichten',
+  'That is all': 'Fertig',
+  'You can come back here any time: « Getting started… » on the home page, or Project ▾ › Getting started… while editing.': 'Sie können jederzeit hierher zurückkehren: „Erste Schritte…“ auf der Startseite oder Projekt ▾ › Erste Schritte… beim Schneiden.',
+  'Back': 'Zurück',
+  'Next': 'Weiter',
+  'Skip this step': 'Diesen Schritt überspringen',
+  'Editing': 'Schnitt',
+  'Transcription': 'Transkription',
+  'Toolkit': 'Werkzeugkasten',
+  'Language model': 'Sprachmodell',
+  'Sound': 'Ton',
+  'Step %1 of %2': 'Schritt %1 von %2',
+ },
+ "es": {
+  '« %1 » is working: the other steps wait until it is done (one at a time).': '« %1 » está en curso: los otros pasos esperan a que termine (uno a la vez).',
+  'Needs the toolkit: the step « Toolkit », before this one.': 'Necesita la caja de herramientas: el paso « Caja de herramientas », antes de este.',
+  'Translation, subtitles, improved sound?': '¿Traducción, subtítulos, sonido mejorado?',
+  "The editing is ready. What follows is optional: only to translate the text, to cut subtitles with the toolkit's rules, or to clean and level the sound. Several hundred MB, a few minutes.": 'El montaje está listo. Lo que sigue es opcional: solo para traducir el texto, cortar subtítulos con las reglas de la caja de herramientas, o limpiar y nivelar el sonido. Unos cientos de MB, unos minutos.',
+  'No: start editing': 'No: empezar a montar',
+  'Yes: set them up': 'Sí: configurarlos',
+  'That is all': 'Terminado',
+  'You can come back here any time: « Getting started… » on the home page, or Project ▾ › Getting started… while editing.': 'Puede volver aquí en cualquier momento: « Primeros pasos… » en la página de inicio, o Proyecto ▾ › Primeros pasos… durante el montaje.',
+  'Back': 'Atrás',
+  'Next': 'Siguiente',
+  'Skip this step': 'Saltar este paso',
+  'Editing': 'Montaje',
+  'Transcription': 'Transcripción',
+  'Toolkit': 'Caja de herramientas',
+  'Language model': 'Modelo de lenguaje',
+  'Sound': 'Sonido',
+  'Step %1 of %2': 'Paso %1 de %2',
+ },
+ "pt": {
+  '« %1 » is working: the other steps wait until it is done (one at a time).': '« %1 » está em curso: os outros passos esperam que termine (um de cada vez).',
+  'Needs the toolkit: the step « Toolkit », before this one.': 'Precisa da caixa de ferramentas: o passo « Caixa de ferramentas », antes deste.',
+  'Translation, subtitles, improved sound?': 'Tradução, legendas, som melhorado?',
+  "The editing is ready. What follows is optional: only to translate the text, to cut subtitles with the toolkit's rules, or to clean and level the sound. Several hundred MB, a few minutes.": 'A montagem está pronta. O que se segue é opcional: só para traduzir o texto, cortar legendas com as regras da caixa de ferramentas, ou limpar e nivelar o som. Algumas centenas de MB, alguns minutos.',
+  'No: start editing': 'Não: começar a montar',
+  'Yes: set them up': 'Sim: configurá-los',
+  'That is all': 'Concluído',
+  'You can come back here any time: « Getting started… » on the home page, or Project ▾ › Getting started… while editing.': 'Pode voltar aqui a qualquer momento: « Primeiros passos… » na página inicial, ou Projeto ▾ › Primeiros passos… durante a montagem.',
+  'Back': 'Voltar',
+  'Next': 'Seguinte',
+  'Skip this step': 'Saltar este passo',
+  'Editing': 'Montagem',
+  'Transcription': 'Transcrição',
+  'Toolkit': 'Caixa de ferramentas',
+  'Language model': 'Modelo de linguagem',
+  'Sound': 'Som',
+  'Step %1 of %2': 'Passo %1 de %2',
+ },
+ "ru": {
+  '« %1 » is working: the other steps wait until it is done (one at a time).': '«%1» выполняется: остальные шаги ждут его завершения (по одному).',
+  'Needs the toolkit: the step « Toolkit », before this one.': 'Нужен набор инструментов: шаг «Набор инструментов» перед этим.',
+  'Translation, subtitles, improved sound?': 'Перевод, субтитры, улучшенный звук?',
+  "The editing is ready. What follows is optional: only to translate the text, to cut subtitles with the toolkit's rules, or to clean and level the sound. Several hundred MB, a few minutes.": 'Монтаж готов. Дальнейшее необязательно: только чтобы переводить текст, нарезать субтитры по правилам набора инструментов или очистить и выровнять звук. Несколько сотен МБ, несколько минут.',
+  'No: start editing': 'Нет: начать монтаж',
+  'Yes: set them up': 'Да: настроить',
+  'That is all': 'Готово',
+  'You can come back here any time: « Getting started… » on the home page, or Project ▾ › Getting started… while editing.': 'Сюда можно вернуться в любой момент: «Первые шаги…» на главной странице или Проект ▾ › Первые шаги… во время монтажа.',
+  'Back': 'Назад',
+  'Next': 'Далее',
+  'Skip this step': 'Пропустить этот шаг',
+  'Editing': 'Монтаж',
+  'Transcription': 'Транскрипция',
+  'Toolkit': 'Набор инструментов',
+  'Language model': 'Языковая модель',
+  'Sound': 'Звук',
+  'Step %1 of %2': 'Шаг %1 из %2',
+ },
+}
+for _code, _more in _TR_WIZARD.items():
     _TR.setdefault(_code, {}).update(_more)
 
 
@@ -6402,7 +6504,11 @@ class Main(QtWidgets.QMainWindow):
         self.home = home
         self.views.addWidget(home)
 
-    # ---- getting started: five steps, each checked by a real test, each with the button that does it ----
+    # ---- getting started: a wizard, one step per screen, each checked by a real test, each with the
+    # button that does it. The two steps of the edit first, then a question (go on or not), then the
+    # three optional steps of the toolkit, then « done ».
+    SETUP_STEPS = ("edit", "transcribe", "ask", "toolkit", "model", "sound", "done")
+
     def _build_setup(self):
         page = QtWidgets.QScrollArea()
         page.setWidgetResizable(True)
@@ -6419,36 +6525,65 @@ class Main(QtWidgets.QMainWindow):
         title = QtWidgets.QLabel(_("Getting started"))
         title.setObjectName("h1")
         v.addWidget(title)
-        lead = QtWidgets.QLabel(_("Three levels. Level 1 is all you need to cut a video: it works as soon as the app is installed. Levels 2 and 3 are optional extras; if you never translate, skip them, nothing there is needed for the editing. One step at a time, each checked by a real test, each with the button that does the work. You can come back here any time: « Getting started… » on the home page, or Project ▾ › Getting started… while editing."))
-        lead.setObjectName("lead")
-        lead.setWordWrap(True)
-        v.addWidget(lead)
+        # where we are: the steps' short names, the current one in bold, the ready ones ticked
+        self.setup_trail = QtWidgets.QLabel("")
+        self.setup_trail.setTextFormat(QtCore.Qt.RichText)
+        self.setup_trail.setWordWrap(True)
+        self.setup_trail.setObjectName("muted")
+        v.addWidget(self.setup_trail)
         self.setup_rows = {}
+        self.setup_busy = QtWidgets.QLabel("")  # while a step works: which one, the others wait
+        self.setup_busy.setWordWrap(True)
+        self.setup_busy.setStyleSheet(f"color: {C_ACCENT};")
+        self.setup_busy.hide()
+        v.addWidget(self.setup_busy)
+        self.setup_pages = []  # one widget per step, only the current one shown
 
-        def heading(text, sub):
-            h = QtWidgets.QLabel(f"<b>{text}</b><br><span style='color:{C_MUTED}'>{sub}</span>")
-            h.setTextFormat(QtCore.Qt.RichText)
-            h.setWordWrap(True)
-            h.setContentsMargins(0, 10, 0, 0)
-            v.addWidget(h)
-        heading(_("Level 1 · Editing"), _("The whole point of the app: open, highlight, produce. Nothing to install."))
-        self.setup_rows["edit"] = self._setup_row(v, 1, _("Cut a video by its text"))
-        self.setup_rows["transcribe"] = self._setup_row(v, 1, _("Transcribe the speech"))
-        go1 = QtWidgets.QHBoxLayout()
-        go1.addWidget(self._btn(_("That is enough for me: start editing"), self.leave_setup, kind="strong"))
-        go1.addStretch(1)
-        v.addLayout(go1)
-        heading(_("Level 2 · Translation and subtitles — optional"), _("Only if you want to translate the text, or to cut subtitles with the toolkit's rules. Otherwise skip this level entirely."))
-        self.setup_rows["toolkit"] = self._setup_row(v, 2, _("Translate and subtitle: the toolkit"))
-        self.setup_rows["model"] = self._setup_row(v, 2, _("Translate and subtitle: the language model"))
-        heading(_("Level 3 · Improved sound — optional"), _("Only if you want the edit's sound cleaned and levelled on the way out. Needs the toolkit of level 2 (not the model)."))
-        self.setup_rows["sound"] = self._setup_row(v, 3, _("Improve the sound"))
-        bottom = QtWidgets.QHBoxLayout()
+        def screen(level_title, sub):
+            w = QtWidgets.QWidget()
+            lv = QtWidgets.QVBoxLayout(w)
+            lv.setContentsMargins(0, 6, 0, 0)
+            lv.setSpacing(12)
+            if level_title:
+                h = QtWidgets.QLabel(f"<b>{level_title}</b><br><span style='color:{C_MUTED}'>{sub}</span>")
+                h.setTextFormat(QtCore.Qt.RichText)
+                h.setWordWrap(True)
+                lv.addWidget(h)
+            w.hide()
+            v.addWidget(w)
+            self.setup_pages.append(w)
+            return lv
+        lvl1 = (_("Level 1 · Editing"), _("The whole point of the app: open, highlight, produce. Nothing to install."))
+        lvl2 = (_("Level 2 · Translation and subtitles — optional"), _("Only if you want to translate the text, or to cut subtitles with the toolkit's rules. Otherwise skip this level entirely."))
+        lvl3 = (_("Level 3 · Improved sound — optional"), _("Only if you want the edit's sound cleaned and levelled on the way out. Needs the toolkit of level 2 (not the model)."))
+        self.setup_rows["edit"] = self._setup_row(screen(*lvl1), 1, _("Cut a video by its text"))
+        self.setup_rows["transcribe"] = self._setup_row(screen(*lvl1), 1, _("Transcribe the speech"))
+        ask = screen(_("Translation, subtitles, improved sound?"), _("The editing is ready. What follows is optional: only to translate the text, to cut subtitles with the toolkit's rules, or to clean and level the sound. Several hundred MB, a few minutes."))
+        ask_row = QtWidgets.QHBoxLayout()
+        ask_row.addWidget(self._btn(_("No: start editing"), self.leave_setup, kind="strong"))
+        ask_row.addWidget(self._btn(_("Yes: set them up"), lambda: self.setup_go(3)))
+        ask_row.addStretch(1)
+        ask.addLayout(ask_row)
+        self.setup_rows["toolkit"] = self._setup_row(screen(*lvl2), 2, _("Translate and subtitle: the toolkit"))
+        self.setup_rows["model"] = self._setup_row(screen(*lvl2), 2, _("Translate and subtitle: the language model"))
+        self.setup_rows["sound"] = self._setup_row(screen(*lvl3), 3, _("Improve the sound"))
+        done = screen(_("That is all"), _("You can come back here any time: « Getting started… » on the home page, or Project ▾ › Getting started… while editing."))
+        done_row = QtWidgets.QHBoxLayout()
+        done_row.addWidget(self._btn(_("Start editing"), self.leave_setup, kind="strong"))
+        done_row.addStretch(1)
+        done.addLayout(done_row)
+        # the way through: back, check again, skip / next
+        nav = QtWidgets.QHBoxLayout()
+        self.b_setup_back = self._btn(_("Back"), lambda: self.setup_go(self.setup_index - 1))
+        nav.addWidget(self.b_setup_back)
         self.b_setup_refresh = self._btn(_("Check again"), self.refresh_setup)
-        bottom.addWidget(self.b_setup_refresh)
-        bottom.addStretch(1)
-        bottom.addWidget(self._btn(_("Start editing"), self.leave_setup, kind="strong"))
-        v.addLayout(bottom)
+        nav.addWidget(self.b_setup_refresh)
+        nav.addStretch(1)
+        self.b_setup_leave = self._btn(_("Start editing"), self.leave_setup)
+        nav.addWidget(self.b_setup_leave)
+        self.b_setup_next = self._btn(_("Next"), lambda: self.setup_go(self.setup_index + 1), kind="strong")
+        nav.addWidget(self.b_setup_next)
+        v.addLayout(nav)
         hc = QtWidgets.QHBoxLayout()
         hc.addStretch(1)
         hc.addWidget(card, 20)
@@ -6458,6 +6593,49 @@ class Main(QtWidgets.QMainWindow):
         page.setWidget(inner)
         self.setup = page
         self.views.addWidget(page)
+        self.setup_go(0)
+
+    def setup_go(self, i):
+        """Shows the step `i` of the wizard and puts the buttons of the way through in order."""
+        i = max(0, min(i, len(self.SETUP_STEPS) - 1))
+        self.setup_index = i
+        for k, w in enumerate(self.setup_pages):
+            w.setVisible(k == i)
+        key = self.SETUP_STEPS[i]
+        row = self.setup_rows.get(key)
+        ready = row is not None and getattr(row, "state", "") == "ok"
+        self.b_setup_back.setVisible(i > 0)
+        self.b_setup_refresh.setVisible(row is not None)
+        self.b_setup_next.setVisible(key not in ("ask", "done"))
+        self.b_setup_leave.setVisible(key not in ("ask", "done", "edit", "transcribe"))
+        optional = key in ("transcribe", "toolkit", "model", "sound")
+        self.b_setup_next.setText(_("Next") if ready or not optional else _("Skip this step"))
+        self.b_setup_next.setProperty("kind", "strong" if ready or not optional else "")
+        self.b_setup_next.style().unpolish(self.b_setup_next)
+        self.b_setup_next.style().polish(self.b_setup_next)
+        names = {"edit": _("Editing"), "transcribe": _("Transcription"), "toolkit": _("Toolkit"), "model": _("Language model"), "sound": _("Sound")}
+        steps = [k for k in self.SETUP_STEPS if k in names]
+        parts = []
+        for k in steps:
+            r = self.setup_rows[k]
+            text = names[k] + (" ✓" if getattr(r, "state", "") == "ok" else "")
+            parts.append(f"<b style='color:{C_TEXT}'>{text}</b>" if k == key else text)
+        where = steps.index(key) + 1 if key in steps else None
+        self.setup_trail.setText((_("Step %1 of %2", where, len(steps)) + " · " if where else "") + "  ›  ".join(parts))
+
+    def setup_first_todo(self):
+        """Where the wizard opens: the first step of the edit not ready, else the question, or for
+        someone who already set up the toolkit, its first step not ready, else « done »."""
+        R = self.setup_rows
+        for k in ("edit", "transcribe"):
+            if getattr(R[k], "state", "") != "ok":
+                return self.SETUP_STEPS.index(k)
+        if getattr(R["toolkit"], "state", "") != "ok":
+            return self.SETUP_STEPS.index("ask")
+        for k in ("model", "sound"):
+            if getattr(R[k], "state", "") != "ok":
+                return self.SETUP_STEPS.index(k)
+        return self.SETUP_STEPS.index("done")
 
     def _setup_row(self, v, level, name):
         """A step: a coloured dot and its name on one line, a sentence of detail, a row for a
@@ -6473,7 +6651,7 @@ class Main(QtWidgets.QMainWindow):
         dot = QtWidgets.QLabel("●")
         dot.setObjectName("dot")
         head_row.addWidget(dot)
-        head = QtWidgets.QLabel(f"<span style='color:{C_MUTED}'>{level} ·</span> <b>{name}</b>")
+        head = QtWidgets.QLabel(f"<b>{name}</b>")
         head.setTextFormat(QtCore.Qt.RichText)
         head_row.addWidget(head, 1)
         bv.addLayout(head_row)
@@ -6504,6 +6682,7 @@ class Main(QtWidgets.QMainWindow):
             colour = {"ok": C_OK, "todo": C_ACCENT, "busy": C_ACCENT, "off": C_MUTED, "opt": C_MUTED, "bad": C_DANGER}[state]
             dot.setStyleSheet(f"color: {colour}; font-size: 14pt;")
             detail.setText(text)
+            row.state = state
 
         def set_buttons(items):
             for w in row.widgets:
@@ -6523,6 +6702,7 @@ class Main(QtWidgets.QMainWindow):
         if self.thread:
             return
         self.views.setCurrentWidget(self.setup)
+        self.setup_jump = True
         self.refresh_setup()
 
     def leave_setup(self):
@@ -6544,6 +6724,11 @@ class Main(QtWidgets.QMainWindow):
             self.setup_probe = p
             self.b_setup_refresh.setEnabled(True)
             self.fill_setup()
+            if getattr(self, "setup_jump", False):
+                self.setup_jump = False
+                self.setup_go(self.setup_first_todo())
+            else:
+                self.setup_go(self.setup_index)
 
         def failed(msg):
             self.b_setup_refresh.setEnabled(True)
@@ -6557,6 +6742,9 @@ class Main(QtWidgets.QMainWindow):
             return
         row = self.setup_rows[key]
         self.setup_active = row
+        names = {"edit": _("Editing"), "transcribe": _("Transcription"), "toolkit": _("Toolkit"), "model": _("Language model"), "sound": _("Sound")}
+        self.setup_busy.setText(_("« %1 » is working: the other steps wait until it is done (one at a time).", names.get(key, key)))
+        self.setup_busy.show()
         task = {"cancelled": False, "proc": None}
         for r in self.setup_rows.values():
             for b in r.widgets:
@@ -6579,12 +6767,14 @@ class Main(QtWidgets.QMainWindow):
 
         def done(result):
             self.setup_active = None
+            self.setup_busy.hide()
             if after:
                 after(result)
             self.refresh_setup()
 
         def failed(msg):
             self.setup_active = None
+            self.setup_busy.hide()
             self.fill_setup()
             row.set("bad", msg or _("Cancelled."))
         self.run_in_background(work, done, failed)
@@ -6603,14 +6793,13 @@ class Main(QtWidgets.QMainWindow):
             R["edit"].set_buttons([])
         else:
             R["edit"].set("todo", _("ffmpeg is missing. On Linux: sudo apt install ffmpeg, then « Check again »."))
-            R["edit"].set_buttons([(_("Check again"), self.refresh_setup, False)])
+            R["edit"].set_buttons([])
         # 1 · the transcription: the model chosen here is the one of the home page
         size = p["size"]
         tr = R["transcribe"]
-        for i in reversed(range(tr.choice_layout.count())):
-            w = tr.choice_layout.itemAt(i).widget()
+        while tr.choice_layout.count():  # the widgets and the stretch of the last time
+            w = tr.choice_layout.takeAt(0).widget()
             if w:
-                tr.choice_layout.removeWidget(w)
                 w.deleteLater()
         lab = QtWidgets.QLabel(_("Model"))
         lab.setObjectName("muted")
@@ -6647,7 +6836,7 @@ class Main(QtWidgets.QMainWindow):
         self.fill_model_row()
         # 3 · the sound
         if not p["toolkit"]:
-            R["sound"].set("off", _("Needs the toolkit (step 2)."))
+            R["sound"].set("off", _("Needs the toolkit: the step « Toolkit », before this one."))
             R["sound"].set_buttons([])
         elif p["sound_ready"] and p["ffmpeg_named"]:
             R["sound"].set("ok", _("Ready: the libraries of finaliser.py are here. « Sound: improved » in the production block uses them."))
@@ -6667,10 +6856,9 @@ class Main(QtWidgets.QMainWindow):
         p, row = self.setup_probe, self.setup_rows["model"]
         llm = self.cfg.get("llm") or "local"
         # the three ways, as a segmented control
-        for i in reversed(range(row.choice_layout.count())):
-            w = row.choice_layout.itemAt(i).widget()
+        while row.choice_layout.count():  # the widgets and the stretch of the last time
+            w = row.choice_layout.takeAt(0).widget()
             if w:
-                row.choice_layout.removeWidget(w)
                 w.deleteLater()
         buttons, kinds = [], ("local", "claude_code", "claude")
         for kind, text in zip(kinds, (_("Ollama, on this computer"), _("Claude Code, your own plan"), _("Claude, an API key"))):
@@ -6691,10 +6879,10 @@ class Main(QtWidgets.QMainWindow):
             gb = f"{p['ram'] / 1024:.0f}"
             if not p["ollama_bin"] and not p["ollama_up"]:
                 row.set("opt", _("Optional —") + " " + _("Ollama runs the model on this computer. It is not installed: get it from ollama.com (the app on a Mac, one command on Linux), open it, then « Check again »."))
-                row.set_buttons([(_("Get Ollama"), lambda: QtGui.QDesktopServices.openUrl(QtCore.QUrl(OLLAMA_DOWNLOAD)), True), (_("Check again"), self.refresh_setup, False)])
+                row.set_buttons([(_("Get Ollama"), lambda: QtGui.QDesktopServices.openUrl(QtCore.QUrl(OLLAMA_DOWNLOAD)), True)])
             elif not p["ollama_up"]:
                 row.set("opt", _("Optional —") + " " + _("Ollama is installed but not running."))
-                row.set_buttons([(_("Start Ollama"), lambda: self.setup_job("model", lambda t, say: ollama_start(p["ollama_bin"])), True), (_("Check again"), self.refresh_setup, False)])
+                row.set_buttons([(_("Start Ollama"), lambda: self.setup_job("model", lambda t, say: ollama_start(p["ollama_bin"])), True)])
             elif not have:
                 if p["recommended"] is None and not self.cfg.get("ollama_model"):
                     row.set("opt", _("Optional —") + " " + _("Ollama answers, but this computer (%1 GB of memory) is too small for a model of the toolkit's family: choose Claude.", gb))
@@ -6707,7 +6895,7 @@ class Main(QtWidgets.QMainWindow):
                     def pull(t, say, m=wanted):
                         ollama_pull(url, m, say, t)
                         return m
-                    row.set_buttons([(_("Download %1", wanted), lambda: self.setup_job("model", pull, lambda m: self.cfg.update(ollama_model=m)), True), (_("Check again"), self.refresh_setup, False)])
+                    row.set_buttons([(_("Download %1", wanted), lambda: self.setup_job("model", pull, lambda m: self.cfg.update(ollama_model=m)), True)])
             elif self.setup_ok.get("ollama") == wanted:
                 row.set("ok", _("Ready: Ollama answers and « %1 » replied to a test.", wanted))
                 row.set_buttons([])
@@ -6726,7 +6914,7 @@ class Main(QtWidgets.QMainWindow):
             exe = p["claude"]
             if not exe:
                 row.set("opt", _("Optional —") + " " + _("Claude Code is the claude command, on your own Claude plan: no key, no bill by the call. It is not installed; the app can run its installer (from claude.ai).") + ways)
-                row.set_buttons([(_("Install Claude Code"), lambda: self.setup_job("model", lambda t, say: install_claude(say, t)), True), (_("Check again"), self.refresh_setup, False)])
+                row.set_buttons([(_("Install Claude Code"), lambda: self.setup_job("model", lambda t, say: install_claude(say, t)), True)])
             elif self.setup_ok.get("claude_code") == exe:
                 row.set("ok", _("Ready: Claude Code answers (%1).", exe))
                 row.set_buttons([])
