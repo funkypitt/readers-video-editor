@@ -291,6 +291,9 @@ coupe**.
 - **Double clic** sur un mot : toute la phrase.
 - **Maj + clic** : étend le surlignage du dernier mot marqué jusqu'à celui-là. Pour un long
   passage, cliquez son premier mot, puis son dernier avec Maj.
+- **Rayer** (en mode *garde* seulement, bouton *Rayer* ou touche **X**) : dans un passage jaune,
+  rayez de rose un mot ou un bout de phrase pour le retirer du montage. Il reste visible à sa
+  place, barré, dans le passage gardé.
 - **La gomme** (bouton *Gomme*, ou touche **G**, ou Alt + glisser) efface ; **S** revient au
   stabilo.
 - **Annuler** / **Rétablir** : Ctrl+Z / Ctrl+Y.
@@ -313,11 +316,9 @@ lecteur, la croix à sa droite le retire.
 En bas à gauche :
 
 - **Produire** : *Une vidéo (MP4)*, ou *Le son seul* en MP3, M4A ou WAV.
-- **Fondu à chaque coupe** : *Aucun*, *Bref (0,2 s)*, *Normal (0,5 s)*, *Lent (1 s)*, *Très lent (1,5 s)*.
-  Le son entre et sort en fondu à chaque morceau.
-- **fondu au noir de l'image** : l'image passe au noir seulement là où une seconde ou plus est
-  enlevée, et jamais au tout début du montage : sa première image est la vignette que X et les
-  autres réseaux affichent.
+- Les coupes sont **franches** à l'image (aucun fondu au noir) ; le son a seulement un fondu
+  très court (3 centièmes de seconde) pour éviter les claquements : on peut ainsi retirer un
+  seul mot d'une phrase.
 - **Image** : *Tel quel*, ou *Carré (1:1), centré* pour les réseaux sociaux : le centre de
   l'image, le petit côté comme côté du carré ; les sous-titres incrustés sont dimensionnés pour
   ce carré. Grisé quand on produit le son seul.

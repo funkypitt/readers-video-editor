@@ -27,10 +27,15 @@ each word by its length, the ends of sentences on the voice's pauses; those posi
 
 For each kept range the start is moved back and the end forward into the quietest instant
 within the margins (before: 0.6 × fade, 0.15–0.5 s; after: 0.8 × fade, 0.25–0.6 s), never past
-the neighbouring word (0.04 s of overrun when keeping, none when cutting). Two kept ranges whose
-margins overlap are joined by one cut in the middle of what is removed. Fades: sound in and out
-per piece (`afade`, hsin, shortened when the cut is tight, 0.01 s at least); picture fade to
-black only where ≥ 1 s is removed. MP4: one x264 intermediate per piece (crf 18, pcm sound),
+the neighbouring word (0.04 s of overrun when keeping, none when cutting or next to a word struck
+out inside what is kept). Two kept ranges whose margins overlap are joined by one cut in the
+middle of what is removed. Fades (1.13.0, user: « pas de fondu au noir, un fondu minimaliste du
+son, il faut pouvoir enlever un seul mot »): no picture fade, sound `afade` hsin of
+`SOUND_FADE` = 0.03 s in and out per piece (the Fade combo and the fade-to-black box are gone;
+older projects' `fade`/`image_fade` are ignored). Keep mode + strike out: `sel` value
+`STRUCK` = 2 (highlighted then struck with the other pen); `ranges()` = value 1 only,
+`struck_ranges()` saved in selection.json as `struck` (`struck_times` across views); switching
+to the cut mode drops the struck marks (they become kept, as the highlighting flips). MP4: one x264 intermediate per piece (crf 18, pcm sound),
 then a concat with the picture copied and the sound encoded once (AAC 192k). MP3/M4A/WAV: the
 sound is decoded once from start to end and the pieces are taken on the fly, to the sample,
 with raised-cosine fades.

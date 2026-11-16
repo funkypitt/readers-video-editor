@@ -12,6 +12,9 @@ that download.
 
 ## Key points
 
+- **Keep, and strike out inside what is kept** (1.13.0): in « I highlight what I keep », the pen
+  *Strike out* (X) marks in pink, inside a yellow passage, a word or a passage to take out. The
+  cuts no longer fade: no fade to black, a 0.03 s sound fade only, against clicks.
 - **The getting started, as installers have it** (1.12.4): the steps on the left (ready ✓, to do, optional, working, error), one step on the right with what it is for, what it downloads, how big and where; a welcome and a summary. While a step works: a bar with its percentage, the speed and the time left when it is a download, what is being done, the time since the start, and the details as they come (« Show the details »). Stop is not an error. The transcription model is now downloaded the plain way (Hugging Face's Xet transfer wrote the file only at the end, so nothing could be measured and a download given up started again). Fixed: once the toolkit was installed in the macOS app, the check that follows failed and every step stayed on « Checking… ».
 - **Getting started, one step per screen** (1.12.3): a wizard instead of one long page — editing, transcription, then a question (translate, subtitle, improve the sound? « No » starts the editing), then the toolkit, the language model and the sound, with Back / Next / Skip this step and a trail of the steps (ticked when ready). It opens at the first step not ready. While a step works, a line says which one and that the others wait for it (one at a time), instead of buttons greyed out without a word.
 - **The transcription model's download tells how far it is** (1.12.2): the getting-started page shows the gigabytes received and the percentage (large-v3 is 3 GB, long without a sign of life), its Stop button stops it (the part already there is kept for the next try), and the model is no longer loaded into memory just to be downloaded. The other steps wait until it is done: one at a time.
@@ -49,11 +52,12 @@ that download.
   takes the sentence; Shift + click extends from the last word; Alt or the eraser removes. The
   passages without words (music, silence, a dropped bit) are tokens too, marked by one click.
 - **Keep or cut**: « I highlight what I keep » makes the edit of the highlighted passages;
-  « I highlight what I cut » removes them and keeps all the rest.
-- **The cuts** are placed in the quietest instant near each boundary, never on a word; the sound
-  fades in and out at each piece (0 to 3 s), the picture fades to black only where a second or
-  more is removed, and never at the very start of the edit: its first frame is the thumbnail
-  the social networks show. The log (.txt) says what was kept and removed, word for word; the edit list
+  « I highlight what I cut » removes them and keeps all the rest. In the keep mode a second pen,
+  **Strike out** (X), takes a word or a passage out of what is kept: it stays in its yellow
+  passage, struck through in pink (1.13.0).
+- **The cuts** are placed in the quietest instant near each boundary, never on a word; every
+  join is a straight cut in the picture, with the shortest sound fade that keeps it from
+  clicking (0.03 s), so one word can be taken out of a sentence (1.13.0). The log (.txt) says what was kept and removed, word for word; the edit list
   (.edl, CMX 3600) reopens the cut in a video editor.
 - **Watch the edit** plays it, jumping over what is removed. **Produce the edit** writes MP4
   (picture re-encoded once, x264), or MP3 / M4A / WAV from the sound alone, beside the original,

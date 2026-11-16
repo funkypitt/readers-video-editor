@@ -184,7 +184,8 @@ class Passages(unittest.TestCase):
         self.assertEqual(int(cut.sum()), b - a + 1)
         keep = r.with_cuts(sel, "keep", [(a, b)])
         self.assertTrue(r.is_cut(keep, "keep", a, b))
-        self.assertEqual(int(keep.sum()), n - (b - a + 1))
+        self.assertEqual(int((keep == 1).sum()), n - (b - a + 1))
+        self.assertEqual(int((keep == r.STRUCK).sum()), b - a + 1)     # struck out where it was, still visible
         partly = np.zeros(n, dtype=np.uint8)
         partly[0:3] = 1
         self.assertTrue(r.is_cut(partly, "keep", a, b))

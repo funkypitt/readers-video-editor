@@ -34,7 +34,7 @@ from PyQt5.QtMultimediaWidgets import QVideoWidget
 os.environ.setdefault("HF_HUB_DISABLE_XET", "1")
 
 APP = "readers-video-editor"
-VERSION = "1.12.4"
+VERSION = "1.13.0"
 
 
 def _app_dirs():
@@ -60,12 +60,10 @@ PAUSE_GAP = 2.0
 # At the very start and end of the file the marker appears from EDGE_GAP on: that is where the
 # microphone noises one wants to remove sit.
 EDGE_GAP = 0.3
-FADE_DEFAULT = 0.5
-FADE_MAX = 3.0
-FADES = [0.0, 0.2, 0.5, 1.0, 1.5]
-# A join that removes less than this (a word, a hesitation) is a straight cut in the picture: a
-# fade to black there would make the screen blink.
-IMAGE_FADE_MIN = 1.0
+# Every join is a straight cut in the picture (no fade to black) with the shortest sound fade that
+# keeps it from clicking: one word can be taken out of a sentence and the sentence still flows.
+SOUND_FADE = 0.03
+IMAGE_FADE_MIN = 1.0        # (older projects' logs) a fade to black only where this much is removed
 ANTI_CLICK = 0.01           # the shortest fade, even with "fade = 0"
 ESTIMATED_PLAY = 0.25       # words placed from subtitles: the quiet point is looked for on both sides
 PAUSE_SPEECH = 0.15         # below, a dip is part of the speech
@@ -107,6 +105,9 @@ _TR = {
   "what I cut": "ce que je coupe",
   "Highlighter": "Stabilo",
   "Eraser": "Gomme",
+  "Strike out": "Rayer",
+  "Strikes out a word or a passage inside what you keep": "Raye un mot ou un passage dans ce que vous gardez",
+  "To take a word or a passage out of what you keep, strike it out with the other pen.": "Pour retirer un mot ou un passage de ce que vous gardez, rayez-le avec l'autre stylo.",
   "Undo": "Annuler",
   "Redo": "Rétablir",
   "Another file": "Autre fichier",
@@ -231,6 +232,9 @@ _TR = {
   "what I cut": "was wegfällt",
   "Highlighter": "Marker",
   "Eraser": "Radierer",
+  "Strike out": "Streichen",
+  "Strikes out a word or a passage inside what you keep": "Streicht ein Wort oder eine Stelle in dem, was bleibt",
+  "To take a word or a passage out of what you keep, strike it out with the other pen.": "Um ein Wort oder eine Stelle aus dem Behaltenen zu nehmen, streichen Sie es mit dem anderen Stift.",
   "Undo": "Rückgängig",
   "Redo": "Wiederholen",
   "Another file": "Andere Datei",
@@ -355,6 +359,9 @@ _TR = {
   "what I cut": "lo que quito",
   "Highlighter": "Marcador",
   "Eraser": "Goma",
+  "Strike out": "Tachar",
+  "Strikes out a word or a passage inside what you keep": "Tacha una palabra o un pasaje dentro de lo que guarda",
+  "To take a word or a passage out of what you keep, strike it out with the other pen.": "Para quitar una palabra o un pasaje de lo que guarda, táchelo con el otro rotulador.",
   "Undo": "Deshacer",
   "Redo": "Rehacer",
   "Another file": "Otro archivo",
@@ -479,6 +486,9 @@ _TR = {
   "what I cut": "o que retiro",
   "Highlighter": "Marcador",
   "Eraser": "Borracha",
+  "Strike out": "Riscar",
+  "Strikes out a word or a passage inside what you keep": "Risca uma palavra ou uma passagem dentro do que fica",
+  "To take a word or a passage out of what you keep, strike it out with the other pen.": "Para tirar uma palavra ou uma passagem do que fica, risque-a com a outra caneta.",
   "Undo": "Anular",
   "Redo": "Refazer",
   "Another file": "Outro ficheiro",
@@ -603,6 +613,9 @@ _TR = {
   "what I cut": "то, что убираю",
   "Highlighter": "Маркер",
   "Eraser": "Ластик",
+  "Strike out": "Зачеркнуть",
+  "Strikes out a word or a passage inside what you keep": "Зачёркивает слово или отрывок внутри того, что остаётся",
+  "To take a word or a passage out of what you keep, strike it out with the other pen.": "Чтобы убрать слово или отрывок из того, что остаётся, зачеркните его другим маркером.",
   "Undo": "Отменить",
   "Redo": "Вернуть",
   "Another file": "Другой файл",
@@ -4409,8 +4422,9 @@ def complement(clean, n):
     return rest
 
 
-def compute_cuts(wav, tokens, ranges, fade, duration, inverse=False, estimated=False):
-    """Ranges of tokens [i, j] → pieces kept {d, f, fi, fo, vi, vo, range} in seconds."""
+def compute_cuts(wav, tokens, ranges, fade, duration, inverse=False, estimated=False, removed=None):
+    """Ranges of tokens [i, j] → pieces kept {d, f, fi, fo, vi, vo, range} in seconds. `removed`
+    marks the tokens struck out on purpose inside what is kept: a piece never runs into them."""
     n = len(tokens)
     clean = clean_ranges(ranges, n)
     if inverse:
@@ -4436,13 +4450,15 @@ def compute_cuts(wav, tokens, ranges, fade, duration, inverse=False, estimated=F
             while k >= 0 and tokens[k][0] is None:
                 k -= 1
             prev_end = tokens[k][2] if k >= 0 else 0.0
+            ov_before = 0.0 if removed is not None and any(removed[max(k, 0):i]) else overrun
             k = j + 1
             while k < n and tokens[k][0] is None:
                 k += 1
             next_start = tokens[k][1] if k < n else end_media
-            a = max(0.0, prev_end - overrun - play, d_raw - reach)
+            ov_after = 0.0 if removed is not None and any(removed[j + 1:min(k, n - 1) + 1]) else overrun
+            a = max(0.0, prev_end - ov_before - play, d_raw - reach)
             d = quiet_point(sound, min(a, d_raw), min(d_raw + play, f_raw), d_raw - aim_before)
-            b = min(end_media, next_start + overrun + play, f_raw + reach)
+            b = min(end_media, next_start + ov_after + play, f_raw + reach)
             f = quiet_point(sound, max(f_raw - play, d), max(b, f_raw), f_raw + aim_after)
             if inverse and i == 0:
                 d = 0.0
@@ -4935,7 +4951,7 @@ def log_text(out, project, tokens, cuts, mode, fade, image_fade, fmt, square=Fal
          f"{_('Edit produced'):<18}: {out}",
          f"{'':<18}  " + _("duration %1, on %2", hmsm(kept), time.strftime("%Y-%m-%d %H:%M")),
          f"{_('Setting'):<18}: " + (_("the marked text is removed, all the rest is kept") if mode == "cut" else _("the marked text is kept")),
-         f"{_('Fade asked'):<18}: {_secs(fade, 1)} " + _("(the sound fade never bites a word: it is shorter when the cut is tight)")]
+         f"{_('Fade asked'):<18}: {_secs(fade, 2)} " + _("(the sound fade never bites a word: it is shorter when the cut is tight)")]
     if video:
         L.append(f"{_('Picture'):<18}: " + (_("straight cuts") if not (image_fade and fade > 0)
                                            else _("fade to black where %1 or more is removed, straight cut elsewhere", _secs(IMAGE_FADE_MIN, 0))))
@@ -5332,27 +5348,34 @@ def ad_ranges(tokens, items):
     return out
 
 
+# The page's marks, one per token: 0 = nothing, 1 = highlighted (kept in the keep mode, struck in the
+# cut mode), STRUCK = struck out inside what is kept (the keep mode only: highlighted, then taken out
+# with the other pen, so it stays visible in its passage).
+STRUCK = 2
+
+
 def is_cut(sel, mode, a, b):
     """True when [a, b] is already out of the edit: struck in the cut mode, not highlighted in the keep mode
     (once something is highlighted)."""
     part = sel[a:b + 1]
     if mode == "cut":
-        return bool(part.all())
-    return bool(sel.any()) and not part.any()
+        return bool((part == 1).all())
+    return bool((sel == 1).any()) and not (part == 1).any()
 
 
 def with_cuts(sel, mode, ranges):
     """The highlighting once the passages are cut, as an ordinary cut would leave it. In the keep mode with
-    nothing highlighted yet, everything else is kept."""
+    nothing highlighted yet, everything else is kept; what is cut inside a kept passage is struck out there."""
     out = sel.copy()
     if mode == "cut":
         for a, b in ranges:
             out[a:b + 1] = 1
     else:
-        if not out.any():
+        if not (out == 1).any():
             out[:] = 1
         for a, b in ranges:
-            out[a:b + 1] = 0
+            part = out[a:b + 1]
+            part[part == 1] = STRUCK
     return out
 
 
@@ -5367,8 +5390,8 @@ def load_config():
     # the spoken language is found by listening for every new file: the one used last time is
     # not kept (a French talk after an English one came back as a translation)
     cfg.pop("language", None)
-    cfg.setdefault("fade", FADE_DEFAULT)
-    cfg.setdefault("image_fade", True)
+    cfg.pop("fade", None)
+    cfg.pop("image_fade", None)
     cfg.setdefault("llm", "local")             # the translation: a local model (Ollama) or Claude
     cfg.setdefault("ollama_model", LLM_LOCAL_MODEL)
     cfg.setdefault("review", True)
@@ -5496,14 +5519,15 @@ class Page(QtWidgets.QTextEdit):
         self.pending_seek = None
 
     # ---- building the document ----
-    def set_tokens(self, tokens, ranges, origin=""):
+    def set_tokens(self, tokens, ranges, origin="", struck=()):
         self.tokens = tokens
         self.origin = origin
         self.sel = np.zeros(len(tokens), dtype=np.uint8)
         self.proposed = np.zeros(len(tokens), dtype=np.uint8)
         self.proposed_labels = []
-        for a, b in ranges:
-            self.sel[max(0, a):min(len(tokens) - 1, b) + 1] = 1
+        for value, rr in ((1, ranges), (STRUCK, struck if self.mode == "keep" else ())):
+            for a, b in rr:
+                self.sel[max(0, a):min(len(tokens) - 1, b) + 1] = value
         self.history, self.future = [], []
         self.last = -1
         self.current = -1
@@ -5620,6 +5644,7 @@ class Page(QtWidgets.QTextEdit):
         pt = self.main.page_pt + (2 if self.main.reading else 0)
         cut = self.mode == "cut"
         erase = self.erase_gesture
+        striking = self.pen() == STRUCK
         sel, spans, painted = self.sel, self.spans, self.painted
         proposed = self.proposed if len(self.proposed) == n else np.zeros(n, dtype=np.uint8)
         editing = False
@@ -5627,15 +5652,18 @@ class Page(QtWidgets.QTextEdit):
             span = spans[i]
             if not span:
                 continue
-            selected = sel[i] == 1
+            value = int(sel[i])
+            selected = value != 0
             in_preview = pa <= i <= pb
             nxt = spans[i + 1] if i + 1 < n else None
             joined = bool(nxt and nxt[0] == span[1] + 1
-                          and ((selected and sel[i + 1] == 1 and not in_preview) or (in_preview and i + 1 <= pb)))
+                          and ((selected and sel[i + 1] == value and not in_preview) or (in_preview and i + 1 <= pb)))
             marked = selected or in_preview
+            # pink and struck through: everything marked in the cut mode, the other pen in the keep mode
+            pink = (cut or striking) if in_preview else (selected and (cut or value == STRUCK))
             ad = bool(proposed[i])
             ad_joined = bool(ad and not joined and nxt and nxt[0] == span[1] + 1 and proposed[i + 1] and not marked and not sel[i + 1])
-            key = (bool(selected), in_preview, in_preview and erase, marked and cut, i == self.current, joined, ad, ad_joined)
+            key = (value, in_preview, in_preview and erase, marked and pink, i == self.current, joined, ad, ad_joined)
             if painted[i] == key:
                 continue
             painted[i] = key
@@ -5658,9 +5686,11 @@ class Page(QtWidgets.QTextEdit):
                     fmt.setBackground(QtGui.QColor(GOMME))
                     fmt.setForeground(QtGui.QColor(INK2))
                 else:
-                    fmt.setBackground(QtGui.QColor(RAYE_PRE if cut else STABILO_PRE))
+                    fmt.setBackground(QtGui.QColor(RAYE_PRE if pink else STABILO_PRE))
+                    if striking and not pause:
+                        fmt.setFontStrikeOut(True)
             elif selected:
-                if cut:
+                if pink:
                     fmt.setBackground(QtGui.QColor(RAYE))
                     fmt.setForeground(QtGui.QColor(RAYE_INK))
                     fmt.setFontStrikeOut(not pause)
@@ -5701,7 +5731,27 @@ class Page(QtWidgets.QTextEdit):
 
     def set_mode(self, mode):
         self.mode = mode
+        if mode == "cut" and len(self.sel):
+            # what was struck out of a kept passage is kept once the highlighting means "cut"
+            self.sel[self.sel == STRUCK] = 0
         self.paint(0, len(self.tokens) - 1)
+
+    def pen(self):
+        """The mark a stroke leaves: the other pen strikes out of what is kept (the keep mode only)."""
+        return STRUCK if self.tool == "strike" and self.mode == "keep" else 1
+
+    def struck_ranges(self):
+        """The passages struck out inside what is kept, [first, last] each."""
+        r, a = [], -1
+        n = len(self.tokens)
+        for i in range(n + 1):
+            s = i < n and self.sel[i] == STRUCK
+            if s and a < 0:
+                a = i
+            if not s and a >= 0:
+                r.append([a, i - 1])
+                a = -1
+        return r
 
     def set_proposed(self, items):
         """The passages proposed as cuts: [(first, last, label)], painted tinted with a dotted line."""
@@ -5862,7 +5912,7 @@ class Page(QtWidgets.QTextEdit):
             return
         self.erase_gesture = (self.tool == "erase") != bool(e.modifiers() & QtCore.Qt.AltModifier)
         if e.modifiers() & QtCore.Qt.ShiftModifier and self.last >= 0:
-            self.change(self.last, i, 0 if self.erase_gesture else 1)
+            self.change(self.last, i, 0 if self.erase_gesture else self.pen())
             self.last = i
             return
         self.anchor = self.tail = i
@@ -5915,11 +5965,12 @@ class Page(QtWidgets.QTextEdit):
         if pa >= 0:
             self.paint(pa, pb)
         if dragged:
-            self.change(a, b, 0 if self.erase_gesture else 1)
+            self.change(a, b, 0 if self.erase_gesture else self.pen())
             self.last = b
         elif self.tokens[a][0] is None:
             self.last = a
-            self.change(a, a, 0 if self.sel[a] else 1)
+            pen = self.pen()
+            self.change(a, a, 0 if (self.erase_gesture or self.sel[a] == pen) else pen)
         else:
             self.last = a
             # a double click must not start the sound: the click waits for the second one
@@ -5942,8 +5993,9 @@ class Page(QtWidgets.QTextEdit):
             a -= 1
         while b < len(self.tokens) - 1 and self.tokens[b + 1][3] == self.tokens[i][3] and self.tokens[b + 1][0] is not None:
             b += 1
-        full = all(self.sel[k] for k in range(a, b + 1))
-        self.change(a, b, 0 if (full or self.tool == "erase") else 1)
+        pen = self.pen()
+        full = all(self.sel[k] == pen for k in range(a, b + 1))
+        self.change(a, b, 0 if (full or self.tool == "erase") else pen)
 
     def wheelEvent(self, e):
         super().wheelEvent(e)
@@ -6617,6 +6669,7 @@ class Main(QtWidgets.QMainWindow):
         sc("Right", lambda: self.go(self.player.position() / 1000.0 + 5, None))
         sc("S", lambda: self.choose_tool("highlight"))
         sc("G", lambda: self.choose_tool("erase"))
+        sc("X", lambda: self.choose_tool("strike") if self.mode_value == "keep" else None)
         sc("Ctrl+E", self.produce_or_stop)
         sc("Ctrl+R", lambda: self.b_read.click())
         sc("Ctrl+S", self.save_text)
@@ -7522,9 +7575,11 @@ class Main(QtWidgets.QMainWindow):
         self.b_keep.setChecked(True)
         h.addWidget(self._segment([self.b_keep, self.b_cut]))
         self.b_highlight = self._btn(_("Highlighter"), lambda: self.choose_tool("highlight"), tip="S")
+        self.b_strike = self._btn(_("Strike out"), lambda: self.choose_tool("strike"), kind="cut",
+                                  tip=_("Strikes out a word or a passage inside what you keep") + " (X)")
         self.b_erase = self._btn(_("Eraser"), lambda: self.choose_tool("erase"), kind="erase", tip="G")
         self.b_highlight.setChecked(True)
-        h.addWidget(self._segment([self.b_highlight, self.b_erase]))
+        h.addWidget(self._segment([self.b_highlight, self.b_strike, self.b_erase]))
         self.b_undo = self._btn(_("Undo"), self.undo, tip="Ctrl+Z")
         self.b_redo = self._btn(_("Redo"), self.redo, tip="Ctrl+Y")
         h.addWidget(self.b_undo)
@@ -7669,21 +7724,7 @@ class Main(QtWidgets.QMainWindow):
         lab.setObjectName("label")
         g.addWidget(lab, 0, 0)
         self.format = QtWidgets.QComboBox()
-        g.addWidget(self.format, 1, 0)
-        lab = QtWidgets.QLabel(_("Fade at each cut"))
-        lab.setObjectName("label")
-        g.addWidget(lab, 0, 1)
-        self.fade = QtWidgets.QComboBox()
-        for f, name in zip(FADES, (_("None"), _("Brief (0.2 s)"), _("Normal (0.5 s)"), _("Slow (1 s)"), _("Very slow (1.5 s)"))):
-            self.fade.addItem(name, f)
-        idx = [i for i in range(self.fade.count()) if abs(self.fade.itemData(i) - float(self.cfg.get("fade", FADE_DEFAULT))) < 1e-6]
-        self.fade.setCurrentIndex(idx[0] if idx else FADES.index(FADE_DEFAULT))
-        self.fade.currentIndexChanged.connect(lambda _i: self.on_selection())
-        g.addWidget(self.fade, 1, 1)
-        self.image_fade = QtWidgets.QCheckBox(_("fade the picture to black"))
-        self.image_fade.setChecked(bool(self.cfg.get("image_fade", True)))
-        self.image_fade.toggled.connect(lambda _c: self.on_selection())
-        g.addWidget(self.image_fade, 2, 0, 1, 2)
+        g.addWidget(self.format, 1, 0, 1, 2)
         self.l_frame = QtWidgets.QLabel(_("Picture"))
         self.l_frame.setObjectName("label")
         g.addWidget(self.l_frame, 3, 0)
@@ -8093,7 +8134,7 @@ class Main(QtWidgets.QMainWindow):
         self.apply_style()
 
     def enable(self, loaded):
-        for w in (self.fade, self.image_fade, self.format, self.b_preview, self.b_clear, self.b_silences, self.b_read, self.b_subs, self.b_text, self.b_undo, self.b_redo,
+        for w in (self.format, self.b_preview, self.b_clear, self.b_silences, self.b_read, self.b_subs, self.b_text, self.b_undo, self.b_redo,
                   self.b_project, self.subs, self.srt_files, self.lang_box, self.sound):
             w.setEnabled(loaded)
         self.caption_style.setEnabled(loaded and (self.subs.currentData() or "none") != "none")
@@ -8490,10 +8531,8 @@ class Main(QtWidgets.QMainWindow):
         save_config(self.cfg)
         # what was highlighted stays, by time, when the text is made again
         if self.tokens:
-            clean = clean_ranges(self.page.ranges(), len(self.tokens))
             sel = read_json(d / "selection.json", {}) or {}
-            sel["times"] = [[self.tokens[i][1], self.tokens[j][2]] for i, j in clean]
-            sel.pop("ranges", None)
+            self.selection_by_times(sel)
             write_json(d / "selection.json", sel)
 
         def work(w):
@@ -8568,6 +8607,14 @@ class Main(QtWidgets.QMainWindow):
         self.h_lang.setCurrentIndex(0)
         self.show_view(view if view in self.texts else "src", first=True)
 
+    def selection_by_times(self, sel):
+        """The highlighting kept in seconds, for a text whose words are about to change."""
+        n = len(self.tokens)
+        sel["times"] = [[self.tokens[i][1], self.tokens[j][2]] for i, j in clean_ranges(self.page.ranges(), n)]
+        sel["struck_times"] = [[self.tokens[i][1], self.tokens[j][2]] for i, j in clean_ranges(self.page.struck_ranges(), n)]
+        sel.pop("ranges", None)
+        sel.pop("struck", None)
+
     def show_view(self, key, first=False):
         """The page shows the original text or a translation. The highlighting is kept in
         seconds and finds its words in the other text (the rule of monter.py)."""
@@ -8576,19 +8623,18 @@ class Main(QtWidgets.QMainWindow):
         d = Path(self.project["dir"])
         sel = read_json(d / "selection.json", {}) or {}
         if not first and self.tokens:
-            clean = clean_ranges(self.page.ranges(), len(self.tokens))
-            sel["times"] = [[self.tokens[i][1], self.tokens[j][2]] for i, j in clean]
-            sel.pop("ranges", None)
+            self.selection_by_times(sel)
         text = self.texts[key]
         tokens = text["tokens"]
         if sel.get("times") and "ranges" not in sel:
             sel["ranges"] = ranges_from_times(tokens, sel.pop("times"))
+            sel["struck"] = ranges_from_times(tokens, sel.pop("struck_times", None) or [])
         sel["view"] = key
         write_json(d / "selection.json", sel)
         self.view = key
         self.tokens, self.origin, self.estimated = tokens, text["origin"], text["estimated"]
         self.set_mode(sel.get("mode", "keep"), quiet=True)
-        self.page.set_tokens(tokens, sel.get("ranges", []), text["origin"])
+        self.page.set_tokens(tokens, sel.get("ranges", []), text["origin"], sel.get("struck") or [])
         self.rebuild_language_switch()
         self.rebuild_subtitle_options()
         self.enable(True)
@@ -9025,12 +9071,6 @@ class Main(QtWidgets.QMainWindow):
         sel = dict(project.get("selection") or {})
         sel.pop("times", None)
         write_json(d / "selection.json", sel)
-        if "fade" in sel:
-            idx = [i for i in range(self.fade.count()) if abs(self.fade.itemData(i) - float(sel["fade"])) < 1e-6]
-            if idx:
-                self.fade.setCurrentIndex(idx[0])
-        if "image_fade" in sel:
-            self.image_fade.setChecked(bool(sel["image_fade"]))
         out = project.get("output") or {}
         if "burn" in out:
             self.cfg["burn"] = out["burn"]
@@ -9061,7 +9101,7 @@ class Main(QtWidgets.QMainWindow):
                 "cues": {k: c for k, c in self.cues.items() if k == "src" or k in self.texts},
                 "ads": self.ads,
                 "selection": {"view": self.view, "ranges": [list(p) for p in clean], "mode": self.mode_value,
-                              "fade": float(self.fade.currentData()), "image_fade": self.image_fade.isChecked()},
+                              "struck": self.page.struck_ranges() if self.mode_value == "keep" else []},
                 "output": {"format": self.format.currentData(), "burn": self.subs.currentData() or "none", "srt_files": self.srt_files.isChecked(),
                            "frame": self.frame.currentData() or "as_is", "sound": self.sound.currentData() or "as_is",
                            "caption_style": self.caption_style.currentData() or "subtitles"}}
@@ -9537,6 +9577,7 @@ class Main(QtWidgets.QMainWindow):
     def choose_tool(self, tool):
         self.page.tool = tool
         self.b_highlight.setChecked(tool == "highlight")
+        self.b_strike.setChecked(tool == "strike")
         self.b_erase.setChecked(tool == "erase")
 
     def set_mode(self, mode, quiet=False):
@@ -9544,6 +9585,10 @@ class Main(QtWidgets.QMainWindow):
         self.b_keep.setChecked(mode == "keep")
         self.b_cut.setChecked(mode == "cut")
         self.b_silences.setVisible(mode == "cut")
+        # the second pen only makes sense over what is kept
+        self.b_strike.setVisible(mode == "keep")
+        if mode == "cut" and self.page.tool == "strike":
+            self.choose_tool("highlight")
         self.page.set_mode(mode)
         if not quiet:
             self.on_selection()
@@ -9555,15 +9600,15 @@ class Main(QtWidgets.QMainWindow):
             return
         d = Path(self.project["dir"])
         ranges = self.page.ranges()
-        fade = float(self.fade.currentData())
         mode = self.mode_value
-        self.cfg["fade"], self.cfg["image_fade"] = fade, self.image_fade.isChecked()
-        write_json(d / "selection.json", {"ranges": ranges, "fade": fade, "mode": mode, "view": self.view})
+        struck = self.page.struck_ranges() if mode == "keep" else []
+        write_json(d / "selection.json", {"ranges": ranges, "struck": struck, "mode": mode, "view": self.view})
         if mode == "cut" and not clean_ranges(ranges, len(self.tokens)):
             self.cuts = []
         else:
-            self.cuts = compute_cuts(d / "audio16k.wav", self.tokens, ranges, fade, self.project["duration"],
-                                     inverse=(mode == "cut"), estimated=self.estimated)
+            self.cuts = compute_cuts(d / "audio16k.wav", self.tokens, ranges, SOUND_FADE, self.project["duration"],
+                                     inverse=(mode == "cut"), estimated=self.estimated,
+                                     removed=(self.page.sel == STRUCK) if struck else None)
         self.stop_preview()
         self.update_summary()
         self.refresh_ads()
@@ -9590,7 +9635,8 @@ class Main(QtWidgets.QMainWindow):
             self.l_big.setText(_("Nothing struck") if mode == "cut" else _("Nothing highlighted"))
             self.l_small.setText("")
             self.hint.setText((_("Drag over the text to strike what you remove: the edit keeps all the rest.") if mode == "cut"
-                               else _("Drag over the text to highlight what you keep.")) + " "
+                               else _("Drag over the text to highlight what you keep.") + " "
+                               + _("To take a word or a passage out of what you keep, strike it out with the other pen.")) + " "
                               + _("A click on a word plays from there. A click on a passage without words marks it. A double click takes the whole sentence. For a long passage, click its first word, then its last one with Shift held."))
             self.list_stack.setCurrentWidget(self.hint)
             return
@@ -9734,8 +9780,7 @@ class Main(QtWidgets.QMainWindow):
             k += 1
             out = src.with_name(f"{src.stem}_edit-{k}.{fmt}")
         cuts = [dict(c) for c in self.cuts]
-        fade = float(self.fade.currentData())
-        image_fade = self.image_fade.isChecked()
+        fade, image_fade = SOUND_FADE, False
         mode = self.mode_value
         project = dict(self.project)
         tokens = list(self.tokens)
