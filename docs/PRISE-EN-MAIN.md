@@ -33,7 +33,9 @@ sous-titres. Rien ne part sur Internet, sauf dans trois cas que vous choisissez 
 - vous ouvrez une vidéo par son **adresse** (YouTube, X…) : la vidéo est téléchargée ;
 - vous **traduisez** ou **raccourcissez des sous-titres** en choisissant **Claude (API)** plutôt
   que le modèle local : le texte est envoyé à l'API d'Anthropic ;
-- la première transcription télécharge un modèle de reconnaissance de la parole (une fois).
+- la première transcription télécharge un modèle de reconnaissance de la parole (une fois) ;
+- le premier montage qui retire quelque chose télécharge le modèle qui place les mots sur le son,
+  pour la langue de la vidéo (environ 320 Mo, une fois).
 
 ### Ce dont chaque fonction a besoin
 
@@ -41,6 +43,7 @@ sous-titres. Rien ne part sur Internet, sauf dans trois cas que vous choisissez 
 |---|---|---|---|---|
 | Ouvrir, surligner, monter, lire | l'application et ffmpeg | ffmpeg installé par le paquet | inclus dans l'app | inclus dans l'app |
 | Transcrire la parole | faster-whisper + un modèle | s'installe seul au premier usage (≈ 300 Mo) | inclus dans l'app | inclus dans l'app |
+| Couper exactement entre deux mots (anglais, français, allemand, espagnol, portugais) | onnxruntime (vient avec faster-whisper) + un modèle par langue | téléchargé seul au premier montage (≈ 320 Mo) | idem | **non** : les coupes suivent les temps de la transcription |
 | Ouvrir une vidéo par son adresse | yt-dlp | téléchargé seul au premier usage (40 Mo) | idem | idem |
 | Traduire, raccourcir des sous-titres (**facultatif**) | le **traduction toolkit** (l'app l'installe) + Ollama ou une clé Anthropic | oui | oui | **non** (voir § 5) |
 | Améliorer le son du montage (**facultatif**) | le **traduction toolkit** et ses bibliothèques (l'app installe les deux) | oui | oui | **non** (voir § 3.5) |
@@ -320,6 +323,13 @@ En bas à gauche :
   coupe **franche** à l'image ; le son a seulement un fondu très court (3 centièmes de seconde)
   pour éviter les claquements : on peut ainsi retirer un seul mot d'une phrase. Les deux côtés
   de la coupe se chevauchent brièvement (fondu enchaîné) : pas de trou dans l'ambiance.
+- Au moment de produire, les quelques mots autour de chaque coupe sont **placés sur le son**
+  (en anglais, français, allemand, espagnol et portugais) : la transcription donne l'heure des
+  mots à un ou deux dixièmes de seconde près, assez pour couper une syllabe du mot voisin ; le
+  modèle d'alignement trouve où chaque mot commence et finit vraiment, et la coupe se fait entre
+  les deux. La première fois, il est téléchargé (environ 320 Mo par langue). Sans lui (pas de
+  réseau, une autre langue, Windows), les coupes suivent les temps de la transcription. Le
+  journal dit combien de coupes ont été placées ainsi ; l'aperçu les suit après le premier export.
 - L'export a besoin, à côté du montage, de place pour deux copies du son (environ 0,7 Go par
   demi-heure chacune), libérée à la fin.
 - **Entre deux passages gardés** (en mode *garde*, dès qu'il y a deux passages séparés) :

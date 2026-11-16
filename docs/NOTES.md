@@ -25,6 +25,27 @@ each word by its length, the ends of sentences on the voice's pauses; those posi
 
 ## Cuts
 
+**1.14.0 — forced alignment of the words at the cuts.** 1.13.4 did not fix « de diplomate »: the
+aligner shows whisper 0.15–0.4 s early on the whole stretch (position 933.52–934.00, de
+934.04–934.10, diplomate 934.16–934.78; the dips at 933.50 and 934.30 are the closures of the « p »
+of *position* and *di-plomate*): 1.13.3 cut before the « p » (whole word lost), 1.13.4 between
+« posi » and « tion ». Now, at the export: `cut_joins` → the joins between two words, `place_joins`
+aligns ALIGN_CONTEXT words each side (never across a token without words: across a 10 s pause the
+model put « est » 10 s late), the result is refused when the end/start lands more than 1 s from
+whisper's, cached in the project's align.json (key: index, the two words, the time) and used by
+`compute_cuts(bounds=)`: end cut in [end + ALIGN_END_MARGIN, start of next], start cut in
+[end of previous, start − ALIGN_START_MARGIN], quietest point (cut_point). CTC marks the letters on
+a few spiky frames: the onset consonant comes before the first marked frame, hence the larger
+margin before a start. Models: jonatasgrosman/wav2vec2-large-xlsr-53-{en,fr,de,es,pt}
+(Apache-2.0), exported with log_softmax, int8 dynamic quantisation (317 MB; same word ends as the
+float model within a frame; 0.2–0.3 s per join on the CPU), served from the GitHub release
+`align-models-1`, SHA-256 checked. MMS_FA (torchaudio, one model for all languages) placed the
+words the same but is CC-BY-NC 4.0: not used. Judge: faster-whisper large-v3 on splices
+(2 s + 2 s) of 2 × 200 random removals of 1–2 words in the Dana file, word edits against the kept
+text: 1.13.4 758 / 725 → 648 / 695 (fr model, app code). Margins tried (MMS): end 0.04 / start
+0.04, 0.12, 0.22 and 0.08 / 0.12: 0.04 / 0.12 best on both draws. Russian left out (Cyrillic
+model not converted). Windows: onnxruntime is out of the exe → no alignment there.
+
 **1.13.4 — no cut in the closure of a consonant inside a kept word.** The 1.13.2 search may look
 into the kept word (whisper's word ends are often early: « position » ends at 933.6 for whisper,
 at ~933.78 in the sound) and took the 40 ms closure of the « t » of « posi|tion » (−35 dB) as the

@@ -21,6 +21,7 @@ import tempfile
 import textwrap
 import threading
 import time
+import unicodedata
 from pathlib import Path
 
 import numpy as np
@@ -34,7 +35,7 @@ from PyQt5.QtMultimediaWidgets import QVideoWidget
 os.environ.setdefault("HF_HUB_DISABLE_XET", "1")
 
 APP = "readers-video-editor"
-VERSION = "1.13.4"
+VERSION = "1.14.0"
 
 
 def _app_dirs():
@@ -202,7 +203,7 @@ _TR = {
   "%1 cut": "%1 coupe", "%1 cuts": "%1 coupes", "%1 less out of %2": "%1 en moins sur %2",
   "Without words": "Sans paroles", "Start": "Début", "Fin": "Fin", "End": "Fin", "without words": "sans paroles",
   "Export the edit": "Exporter le montage", "Piece %1 of %2": "Passage %1 sur %2", "Joining": "Assemblage",
-  "Taking the passages": "Prélèvement des passages", "Reading the sound": "Lecture du son", "Encoding": "Encodage", "Exporting… %1 %": "Exportation… %1 %",
+  "Taking the passages": "Prélèvement des passages", "Reading the sound": "Lecture du son", "Downloading the model that places the words (%1, once)… %2 %": "Téléchargement du modèle qui place les mots (%1, une fois)… %2 %", "Placing the cuts on the words… %1 / %2": "Placement des coupes sur les mots… %1 / %2", "Cuts": "Coupes", "%1 placed between the words as the sound says them": "%1 placées entre les mots tels que le son les dit", "on the word times of the transcription": "sur les temps des mots de la transcription", "Encoding": "Encodage", "Exporting… %1 %": "Exportation… %1 %",
   "Done: %1 (%2). Beside it, the log of the cuts (.txt) and the edit list (.edl).": "Fait : %1 (%2). À côté, le journal des coupes (.txt) et la liste de montage (.edl).",
   "The edit could not be made: %1": "Le montage n'a pas pu être produit : %1", "Cancelled.": "Annulé.",
   "white on black / black on white": "blanc sur noir / noir sur blanc", "larger text": "texte plus grand", "smaller text": "texte plus petit",
@@ -333,7 +334,7 @@ _TR = {
   "%1 cut": "%1 Schnitt", "%1 cuts": "%1 Schnitte", "%1 less out of %2": "%1 weniger von %2",
   "Without words": "Ohne Worte", "Start": "Anfang", "End": "Ende", "without words": "ohne Worte",
   "Export the edit": "Schnitt exportieren", "Piece %1 of %2": "Stück %1 von %2", "Joining": "Zusammenfügen",
-  "Taking the passages": "Stellen werden entnommen", "Reading the sound": "Ton wird gelesen", "Encoding": "Kodierung", "Exporting… %1 %": "Export… %1 %",
+  "Taking the passages": "Stellen werden entnommen", "Reading the sound": "Ton wird gelesen", "Downloading the model that places the words (%1, once)… %2 %": "Das Modell, das die Wörter setzt, wird geladen (%1, einmal)… %2 %", "Placing the cuts on the words… %1 / %2": "Die Schnitte werden auf die Wörter gesetzt… %1 / %2", "Cuts": "Schnitte", "%1 placed between the words as the sound says them": "%1 zwischen die Wörter gesetzt, wie der Ton sie spricht", "on the word times of the transcription": "nach den Wortzeiten der Transkription", "Encoding": "Kodierung", "Exporting… %1 %": "Export… %1 %",
   "Done: %1 (%2). Beside it, the log of the cuts (.txt) and the edit list (.edl).": "Fertig: %1 (%2). Daneben das Schnittprotokoll (.txt) und die Schnittliste (.edl).",
   "The edit could not be made: %1": "Der Schnitt konnte nicht erstellt werden: %1", "Cancelled.": "Abgebrochen.",
   "white on black / black on white": "weiss auf schwarz / schwarz auf weiss", "larger text": "grösserer Text", "smaller text": "kleinerer Text",
@@ -464,7 +465,7 @@ _TR = {
   "%1 cut": "%1 corte", "%1 cuts": "%1 cortes", "%1 less out of %2": "%1 menos de %2",
   "Without words": "Sin palabras", "Start": "Inicio", "End": "Fin", "without words": "sin palabras",
   "Export the edit": "Exportar el montaje", "Piece %1 of %2": "Pasaje %1 de %2", "Joining": "Ensamblado",
-  "Taking the passages": "Tomando los pasajes", "Reading the sound": "Leyendo el sonido", "Encoding": "Codificación", "Exporting… %1 %": "Exportando… %1 %",
+  "Taking the passages": "Tomando los pasajes", "Reading the sound": "Leyendo el sonido", "Downloading the model that places the words (%1, once)… %2 %": "Descargando el modelo que sitúa las palabras (%1, una vez)… %2 %", "Placing the cuts on the words… %1 / %2": "Situando los cortes en las palabras… %1 / %2", "Cuts": "Cortes", "%1 placed between the words as the sound says them": "%1 situados entre las palabras tal como el sonido las dice", "on the word times of the transcription": "según los tiempos de las palabras de la transcripción", "Encoding": "Codificación", "Exporting… %1 %": "Exportando… %1 %",
   "Done: %1 (%2). Beside it, the log of the cuts (.txt) and the edit list (.edl).": "Hecho: %1 (%2). Al lado, el registro de cortes (.txt) y la lista de montaje (.edl).",
   "The edit could not be made: %1": "No se pudo producir el montaje: %1", "Cancelled.": "Cancelado.",
   "white on black / black on white": "blanco sobre negro / negro sobre blanco", "larger text": "texto más grande", "smaller text": "texto más pequeño",
@@ -595,7 +596,7 @@ _TR = {
   "%1 cut": "%1 corte", "%1 cuts": "%1 cortes", "%1 less out of %2": "%1 a menos de %2",
   "Without words": "Sem palavras", "Start": "Início", "End": "Fim", "without words": "sem palavras",
   "Export the edit": "Exportar a montagem", "Piece %1 of %2": "Passagem %1 de %2", "Joining": "Junção",
-  "Taking the passages": "A recolher as passagens", "Reading the sound": "A ler o som", "Encoding": "Codificação", "Exporting… %1 %": "A exportar… %1 %",
+  "Taking the passages": "A recolher as passagens", "Reading the sound": "A ler o som", "Downloading the model that places the words (%1, once)… %2 %": "A descarregar o modelo que situa as palavras (%1, uma vez)… %2 %", "Placing the cuts on the words… %1 / %2": "A situar os cortes nas palavras… %1 / %2", "Cuts": "Cortes", "%1 placed between the words as the sound says them": "%1 situados entre as palavras tal como o som as diz", "on the word times of the transcription": "segundo os tempos das palavras da transcrição", "Encoding": "Codificação", "Exporting… %1 %": "A exportar… %1 %",
   "Done: %1 (%2). Beside it, the log of the cuts (.txt) and the edit list (.edl).": "Feito: %1 (%2). Ao lado, o registo dos cortes (.txt) e a lista de montagem (.edl).",
   "The edit could not be made: %1": "A montagem não pôde ser produzida: %1", "Cancelled.": "Cancelado.",
   "white on black / black on white": "branco sobre preto / preto sobre branco", "larger text": "texto maior", "smaller text": "texto menor",
@@ -726,7 +727,7 @@ _TR = {
   "%1 cut": "%1 вырезка", "%1 cuts": "вырезок: %1", "%1 less out of %2": "минус %1 из %2",
   "Without words": "Без слов", "Start": "Начало", "End": "Конец", "without words": "без слов",
   "Export the edit": "Экспортировать монтаж", "Piece %1 of %2": "Отрезок %1 из %2", "Joining": "Сборка",
-  "Taking the passages": "Извлечение отрезков", "Reading the sound": "Чтение звука", "Encoding": "Кодирование", "Exporting… %1 %": "Экспорт… %1 %",
+  "Taking the passages": "Извлечение отрезков", "Reading the sound": "Чтение звука", "Downloading the model that places the words (%1, once)… %2 %": "Загрузка модели, размещающей слова (%1, один раз)… %2 %", "Placing the cuts on the words… %1 / %2": "Размещение склеек по словам… %1 / %2", "Cuts": "Склейки", "%1 placed between the words as the sound says them": "%1 размещены между словами так, как их произносит звук", "on the word times of the transcription": "по временам слов расшифровки", "Encoding": "Кодирование", "Exporting… %1 %": "Экспорт… %1 %",
   "Done: %1 (%2). Beside it, the log of the cuts (.txt) and the edit list (.edl).": "Готово: %1 (%2). Рядом журнал вырезок (.txt) и монтажный лист (.edl).",
   "The edit could not be made: %1": "Монтаж не удался: %1", "Cancelled.": "Отменено.",
   "white on black / black on white": "белым по чёрному / чёрным по белому", "larger text": "крупнее", "smaller text": "мельче",
@@ -4519,7 +4520,253 @@ def _into(token, side_pause_reach=CUT_REACH_PAUSE):
     return min(CUT_REACH, length / 2.0)
 
 
-def compute_cuts(wav, tokens, ranges, fade, duration, inverse=False, estimated=False, removed=None, passage_fade=0.0):
+# The words at the cuts, placed on the sound. Whisper's word times are often early or late by a
+# tenth of a second or more, so a cut between two words can take a syllable of the kept one
+# (« position » lost its « -tion »). At the export, the few words around each cut are aligned on
+# the sound by a wav2vec2 model (CTC, one per language, Apache-2.0, converted to ONNX and int8):
+# the cut is then searched between the true end of one word and the true start of the next,
+# ALIGN_END_MARGIN after the end of a kept word and ALIGN_START_MARGIN before its start (the
+# start of a word needs more: its first consonant comes before the frame the model marks).
+# Measured on 2 × 200 removals judged by whisper large-v3 (docs/NOTES.md): 13 % and 5 % fewer
+# word errors around the joins. Without the model or onnxruntime, the cuts are those of 1.13.4.
+ALIGN_RELEASE = "https://github.com/funkypitt/readers-video-editor/releases/download/align-models-1/"
+# language → (file stem, SHA-256 of the .onnx): jonatasgrosman/wav2vec2-large-xlsr-53-<language>
+# (Apache-2.0), exported to ONNX and quantised to int8 (tools/export_align_model.py)
+ALIGN_MODELS = {
+    "en": ("wav2vec2-xlsr53-en-int8", "6ce94799436b9475164fab6164f4124b2531294705b8ac7725e3610ef469457d"),
+    "fr": ("wav2vec2-xlsr53-fr-int8", "25f947c2e9549652c418660eee596081b19187407700580ccafbb492768cbaed"),
+    "de": ("wav2vec2-xlsr53-de-int8", "59591f5fb3ac85945014c0cd46cf943724976edc14ba01da0ef34bdf2e66dff6"),
+    "es": ("wav2vec2-xlsr53-es-int8", "f6dded210832f301cae63634be57a4ffb04d804b8c1fadf53135b02d8239303c"),
+    "pt": ("wav2vec2-xlsr53-pt-int8", "abdc4a6a073d793932dc2110d369866bdd3362d4b365920bbd6d2e990441aa27"),
+}
+ALIGN_SIZE = "320 MB"
+ALIGN_DIR = os.path.join(MODELS_DIR, "align")
+ALIGN_END_MARGIN = 0.04
+ALIGN_START_MARGIN = 0.12
+ALIGN_CONTEXT = 4          # words on each side of the cut given to the model
+ALIGN_STRIDE = 320         # samples of 16 kHz sound per frame of the model
+
+
+def align_runtime():
+    """onnxruntime, from the Python at hand or the app's own environment (faster-whisper brings it)."""
+    whisper_available()
+    try:
+        import onnxruntime  # noqa: F401
+        return True
+    except Exception:
+        return False
+
+
+def align_files(lang):
+    stem = (ALIGN_MODELS.get(lang) or (None,))[0]
+    if not stem:
+        return None
+    return os.path.join(ALIGN_DIR, stem + ".onnx"), os.path.join(ALIGN_DIR, stem + ".json")
+
+
+def align_ready(lang):
+    files = align_files(lang)
+    return bool(files) and all(os.path.isfile(f) for f in files) and align_runtime()
+
+
+def download_align_model(lang, task=None, say=None):
+    """The model of a language, once, from the app's GitHub release; checked by its SHA-256."""
+    files = align_files(lang)
+    if not files:
+        return False
+    os.makedirs(ALIGN_DIR, exist_ok=True)
+    import urllib.request
+    stem, sha = ALIGN_MODELS[lang]
+    for path in (files[1], files[0]):
+        if os.path.isfile(path):
+            continue
+        part = path + ".part"
+        req = urllib.request.Request(ALIGN_RELEASE + os.path.basename(path), headers={"User-Agent": APP + "/" + VERSION})
+        h = hashlib.sha256()
+        with https_open(req, timeout=120) as r, open(part, "wb") as f:
+            total = int(r.headers.get("Content-Length") or 0)
+            got = 0
+            while True:
+                if task is not None and task.get("cancelled"):
+                    raise Cancelled()
+                chunk = r.read(1 << 20)
+                if not chunk:
+                    break
+                f.write(chunk)
+                h.update(chunk)
+                got += len(chunk)
+                if say and total > 1e6:
+                    say(_("Downloading the model that places the words (%1, once)… %2 %", ALIGN_SIZE, int(got * 100 / total)))
+        if path.endswith(".onnx") and h.hexdigest() != sha:
+            os.unlink(part)
+            raise RuntimeError("SHA-256")
+        os.replace(part, path)
+    return True
+
+
+class WordAligner:
+    """Forced alignment of a few words on a stretch of 16 kHz sound."""
+
+    def __init__(self, lang):
+        import onnxruntime as ort
+        onnx, cfg = align_files(lang)
+        with open(cfg, encoding="utf-8") as f:
+            c = json.load(f)
+        self.blank = c["blank"]
+        self.index = {ch: k for k, ch in enumerate(c["labels"]) if ch and len(ch) == 1 and k != self.blank}
+        o = ort.SessionOptions()
+        o.intra_op_num_threads = max(1, min(4, (os.cpu_count() or 2) - 1))
+        self.session = ort.InferenceSession(onnx, o, providers=["CPUExecutionProvider"])
+
+    def letters(self, word):
+        out = []
+        for c in word.lower().replace("’", "'"):
+            for d in (c,) if c in self.index else {"œ": "oe", "æ": "ae", "ß": "ss"}.get(c, unicodedata.normalize("NFKD", c)):
+                if d in self.index and d not in "|-":
+                    out.append(self.index[d])
+        return out
+
+    def viterbi(self, lp, seq):
+        T, S = lp.shape[0], 2 * len(seq) + 1
+        ext = np.full(S, self.blank)
+        ext[1::2] = seq
+        neg = -1e30
+        skip = np.zeros(S, bool)
+        for s in range(3, S, 2):
+            skip[s] = ext[s] != ext[s - 2]
+        dp = np.full(S, neg)
+        dp[0] = lp[0, self.blank]
+        dp[1] = lp[0, ext[1]]
+        back = np.zeros((T, S), np.int8)
+        cols = np.arange(S)
+        for t in range(1, T):
+            b = np.concatenate([[neg], dp[:-1]])
+            c = np.where(skip, np.concatenate([[neg, neg], dp[:-2]]), neg)
+            m = np.stack([dp, b, c])
+            k = m.argmax(0)
+            dp = m[k, cols] + lp[t, ext]
+            back[t] = k
+        s = S - 1 if dp[S - 1] >= dp[S - 2] else S - 2
+        path = np.zeros(T, int)
+        for t in range(T - 1, -1, -1):
+            path[t] = s
+            s -= int(back[t, s])
+        return path
+
+    def align(self, wave, words):
+        """(start, end) in seconds inside `wave` for each word, None where it has no letter."""
+        bar = self.index.get("|")
+        seq, owner = [], []
+        for wi, w in enumerate(words):
+            s = self.letters(w)
+            if not s:
+                continue
+            if bar is not None and seq:
+                seq.append(bar)
+                owner.append(-1)
+            seq += s
+            owner += [wi] * len(s)
+        if not seq:
+            return [None] * len(words)
+        x = (wave - wave.mean()) / (wave.std() + 1e-5)
+        lp = self.session.run(None, {"wave": x[None].astype(np.float32)})[0][0]
+        if lp.shape[0] < 2 * len(seq) + 1:
+            return [None] * len(words)
+        first, last = {}, {}
+        for t, st in enumerate(self.viterbi(lp, seq)):
+            if st % 2 == 1 and owner[(st - 1) // 2] >= 0:
+                wi = owner[(st - 1) // 2]
+                first.setdefault(wi, t)
+                last[wi] = t
+        fr = ALIGN_STRIDE / 16000.0
+        return [(first[k] * fr, (last[k] + 1) * fr) if k in first else None for k in range(len(words))]
+
+
+def cut_joins(tokens, ranges, inverse=False):
+    """The k where a cut falls between word k and word k + 1 (two words, one kept and one not)."""
+    n = len(tokens)
+    clean = clean_ranges(ranges, n)
+    if inverse:
+        clean = complement(clean, n)
+    out = set()
+    for i, j in clean:
+        if i > 0 and tokens[i - 1][0] and tokens[i][0]:
+            out.add(i - 1)
+        if j < n - 1 and tokens[j][0] and tokens[j + 1][0]:
+            out.add(j)
+    return sorted(out)
+
+
+def _join_key(tokens, k):
+    return f"{k}|{tokens[k][0]}|{tokens[k + 1][0]}|{tokens[k][1]:.2f}"
+
+
+def load_bounds(project_dir, tokens, lang):
+    """The joins already placed for this project: {k: (end of word k, start of word k + 1)}."""
+    try:
+        with open(Path(project_dir) / "align.json", encoding="utf-8") as f:
+            saved = json.load(f)
+    except Exception:
+        return {}
+    if saved.get("language") != lang or saved.get("model") != (ALIGN_MODELS.get(lang) or ("",))[0]:
+        return {}
+    out = {}
+    for k in range(len(tokens) - 1):
+        v = saved.get("joins", {}).get(_join_key(tokens, k)) if tokens[k][0] and tokens[k + 1][0] else None
+        if v:
+            out[k] = tuple(v)
+    return out
+
+
+def place_joins(project_dir, wav, tokens, ks, lang, task=None, say=None):
+    """Aligns the words around the joins `ks` not placed yet; keeps them in align.json."""
+    path = Path(project_dir) / "align.json"
+    try:
+        with open(path, encoding="utf-8") as f:
+            saved = json.load(f)
+    except Exception:
+        saved = {}
+    model = ALIGN_MODELS[lang][0]
+    if saved.get("language") != lang or saved.get("model") != model:
+        saved = {"language": lang, "model": model, "joins": {}}
+    todo = [k for k in ks if _join_key(tokens, k) not in saved["joins"]]
+    if todo:
+        import soundfile as sf
+        aligner = WordAligner(lang)
+        with sf.SoundFile(str(wav)) as snd:
+            sr = snd.samplerate
+            for n, k in enumerate(todo):
+                if task is not None and task.get("cancelled"):
+                    raise Cancelled()
+                if say:
+                    say(_("Placing the cuts on the words… %1 / %2", n + 1, len(todo)))
+                # the words that follow each other around the join, never across a passage without words
+                lo_m = k
+                while lo_m > 0 and k - lo_m < ALIGN_CONTEXT and tokens[lo_m - 1][0]:
+                    lo_m -= 1
+                hi_m = k + 1
+                while hi_m < len(tokens) - 1 and hi_m - k - 1 < ALIGN_CONTEXT and tokens[hi_m + 1][0]:
+                    hi_m += 1
+                idx = list(range(lo_m, hi_m + 1))
+                a = max(0.0, tokens[idx[0]][1] - 0.4)
+                b = tokens[idx[-1]][2] + 0.4
+                snd.seek(int(a * sr))
+                x = snd.read(max(1, int((b - a) * sr)), dtype="float32", always_2d=True).mean(axis=1)
+                if sr != 16000:
+                    continue
+                spans = dict(zip(idx, aligner.align(x, [tokens[m][0] for m in idx])))
+                e, s = spans.get(k), spans.get(k + 1)
+                # a sound that the model cannot place (music, another voice): no join, the usual search
+                if (e is not None and s is not None and e[1] <= s[0] + 0.3
+                        and abs(a + e[1] - tokens[k][2]) < 1.0 and abs(a + s[0] - tokens[k + 1][1]) < 1.0):
+                    saved["joins"][_join_key(tokens, k)] = [round(a + e[1], 3), round(a + s[0], 3)]
+                else:
+                    saved["joins"][_join_key(tokens, k)] = None
+        write_json(path, saved)
+    return load_bounds(project_dir, tokens, lang)
+
+
+def compute_cuts(wav, tokens, ranges, fade, duration, inverse=False, estimated=False, removed=None, passage_fade=0.0, bounds=None):
     """Ranges of tokens [i, j] → pieces kept {d, f, fi, fo, vi, vo, passage, range} in seconds.
     `removed` marks the tokens struck out on purpose inside what is kept: a join over struck words
     only is a removal. A join over text left unhighlighted (the keep mode) goes from one passage to
@@ -4568,6 +4815,12 @@ def compute_cuts(wav, tokens, ranges, fade, duration, inverse=False, estimated=F
                 air = margins(fade_before)[0]
                 aim = d_raw - (air if before[0] is None else min(air, gap))
                 d = cut_point(sound, lo, hi, aim, kept=None if tokens[i][0] is None else (d_raw, tokens[i][2]))
+                if bounds and (i - 1) in bounds:
+                    # the words placed on the sound: between the end of the one before and the start of this one
+                    e, s = bounds[i - 1]
+                    hi = s - ALIGN_START_MARGIN
+                    lo = min(hi, e)
+                    d = cut_point(sound, lo, hi, (lo + hi) / 2.0)
             # the end, the same way after the last kept token
             if j == n - 1:
                 f = end_media
@@ -4579,6 +4832,11 @@ def compute_cuts(wav, tokens, ranges, fade, duration, inverse=False, estimated=F
                 air = margins(fade_after)[1]
                 aim = f_raw + (air if after[0] is None else min(air, gap))
                 f = cut_point(sound, lo, hi, aim, kept=None if tokens[j][0] is None else (tokens[j][1], f_raw))
+                if bounds and j in bounds:
+                    e, s = bounds[j]
+                    lo = e + ALIGN_END_MARGIN
+                    hi = max(lo, s)
+                    f = cut_point(sound, max(lo, d + 0.05), max(hi, d + 0.05), (lo + hi) / 2.0)
             if inverse and i == 0:
                 d = 0.0
             if inverse and j == n - 1:
@@ -5169,7 +5427,7 @@ def _para(text, indent):
     return textwrap.wrap(text, width=72, initial_indent=indent, subsequent_indent=indent) or [indent + _("(without words)")]
 
 
-def log_text(out, project, tokens, cuts, mode, fade, image_fade, fmt, square=False, sound=None, subtitles=None):
+def log_text(out, project, tokens, cuts, mode, fade, image_fade, fmt, square=False, sound=None, subtitles=None, aligned=None):
     duration = project.get("duration") or 0.0
     kept = sum(c["f"] - c["d"] for c in cuts)
     video = fmt == "mp4"
@@ -5181,6 +5439,9 @@ def log_text(out, project, tokens, cuts, mode, fade, image_fade, fmt, square=Fal
          f"{'':<18}  " + _("duration %1, on %2", hmsm(kept), time.strftime("%Y-%m-%d %H:%M")),
          f"{_('Setting'):<18}: " + (_("the marked text is removed, all the rest is kept") if mode == "cut" else _("the marked text is kept")),
          f"{_('Fade asked'):<18}: {_secs(SOUND_FADE, 2)} " + _("(the sound fade never bites a word: it is shorter when the cut is tight)")]
+    if aligned is not None:
+        L.append(f"{_('Cuts'):<18}: " + (_("%1 placed between the words as the sound says them", aligned) if aligned
+                                         else _("on the word times of the transcription")))
     if video:
         L.append(f"{_('Picture'):<18}: " + (_("straight cuts") if not (image_fade and fade > 0)
                                            else _("fade to black between two kept passages (%1), straight cut where something is removed", _secs(fade, 1))))
@@ -5277,11 +5538,11 @@ def log_edl(out, project, cuts, fmt):
     return "\n".join(L + notes) + "\n"
 
 
-def write_logs(out, project, tokens, cuts, mode, fade, image_fade, fmt, square=False, sound=None, subtitles=None):
+def write_logs(out, project, tokens, cuts, mode, fade, image_fade, fmt, square=False, sound=None, subtitles=None, aligned=None):
     image = image_fade and fade > 0
     cuts_edl = cuts if image else [dict(c, vi=False, vo=False) for c in cuts]
     written = []
-    for ext, content in (("txt", log_text(out, project, tokens, cuts, mode, fade, image_fade, fmt, square, sound, subtitles)),
+    for ext, content in (("txt", log_text(out, project, tokens, cuts, mode, fade, image_fade, fmt, square, sound, subtitles, aligned)),
                          ("edl", log_edl(out, project, cuts_edl, fmt))):
         path = out.with_suffix("." + ext)
         with open(path, "w", encoding="utf-8") as f:
@@ -9880,11 +10141,18 @@ class Main(QtWidgets.QMainWindow):
             self.cuts = compute_cuts(d / "audio16k.wav", self.tokens, ranges, SOUND_FADE, self.project["duration"],
                                      inverse=(mode == "cut"), estimated=self.estimated,
                                      removed=(self.page.sel == STRUCK) if struck else None,
-                                     passage_fade=PASSAGE_FADE if self.between == "fade" else 0.0)
+                                     passage_fade=PASSAGE_FADE if self.between == "fade" else 0.0,
+                                     bounds=load_bounds(d, self.tokens, self.src_lang) if self.align_language() else None)
         self.refresh_between()
         self.stop_preview()
         self.update_summary()
         self.refresh_ads()
+
+    def align_language(self):
+        """The language whose model places the words at the cuts, None when there is none to use."""
+        if self.view != "src" or self.src_lang not in ALIGN_MODELS or not self.project or self.project.get("type") is None:
+            return None
+        return self.src_lang
 
     def update_summary(self):
         self.passages.clear()
@@ -10061,6 +10329,12 @@ class Main(QtWidgets.QMainWindow):
         project = dict(self.project)
         tokens = list(self.tokens)
         d = Path(project["dir"])
+        # what is needed to make the cuts again once the words around them are placed on the sound
+        align_lang = self.align_language() if align_runtime() else None
+        recut = dict(ranges=self.page.ranges(), inverse=(mode == "cut"), estimated=self.estimated,
+                     removed=(self.page.sel == STRUCK).copy() if mode == "keep" and self.page.struck_ranges() else None,
+                     passage_fade=PASSAGE_FADE if self.between == "fade" else 0.0)
+        frames = (project.get("video") or {}).get("fps") or 0.0 if fmt == "mp4" and project["type"] == "video" else None
         # the subtitles of the edit: the ones drawn into the picture, the files beside it
         burn = self.subs.currentData() if fmt == "mp4" and project["type"] == "video" else "none"
         captions = burn in self.texts and self.caption_style.currentData() == "captions"
@@ -10106,6 +10380,23 @@ class Main(QtWidgets.QMainWindow):
                     stop.wait(0.4)
             threading.Thread(target=pump, daemon=True).start()
             try:
+                if align_lang:
+                    try:
+                        say = lambda t: task.update(message=t)  # noqa: E731
+                        if not align_ready(align_lang):
+                            download_align_model(align_lang, task, say)
+                        bounds = place_joins(d, d / "audio16k.wav", tokens, cut_joins(tokens, recut["ranges"], recut["inverse"]), align_lang, task, say)
+                        placed = compute_cuts(d / "audio16k.wav", tokens, recut["ranges"], SOUND_FADE, project["duration"], bounds=bounds, **{k: v for k, v in recut.items() if k != "ranges"})
+                        if frames is not None:
+                            placed = on_frames(placed, frames, project.get("duration") or 0.0)
+                        if placed:
+                            cuts[:] = placed
+                            task["aligned"] = len(bounds)
+                    except Cancelled:
+                        raise
+                    except Exception as ex:  # no network, no room: the cuts as they were
+                        task["aligned_error"] = str(ex)[:200]
+                    task["message"] = ""
                 paths = {}
                 if texts:
                     task["message"] = _("Making the subtitles…")
@@ -10134,12 +10425,15 @@ class Main(QtWidgets.QMainWindow):
                     produce_audio(task, project["source"], cuts, project["audio"], fmt, out, finish=finish)
             finally:
                 stop.set()
-            write_logs(out, project, tokens, cuts, mode, fade, image_fade, fmt, square=square, sound=task.get("sound"), subtitles=sub_line)
+            write_logs(out, project, tokens, cuts, mode, fade, image_fade, fmt, square=square, sound=task.get("sound"), subtitles=sub_line,
+                       aligned=task.get("aligned", 0) if align_lang else None)
             return out
 
         def done(path):
             self.task = None
             self.last_out = str(path)
+            if align_lang and self.project and Path(self.project["dir"]) == d:
+                self.on_selection()     # the preview too follows the words placed on the sound
             size = os.path.getsize(path)
             kept = sum(c["f"] - c["d"] for c in cuts)
             self.fin_detail.setText(f'<span style="color:{C_OK}; font-weight:700">' + _("Edit finished") + "</span> · " + plain(kept) + f" · {size / 1e6:.1f} MB")

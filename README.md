@@ -12,6 +12,13 @@ that download.
 
 ## Key points
 
+- **The cuts fall between the words as the sound says them** (1.14.0): at the export, the few
+  words around each cut are aligned on the sound by a wav2vec2 model of the language (English,
+  French, German, Spanish, Portuguese; Apache-2.0, ONNX int8, about 320 MB, downloaded once), and
+  the cut is made between the true end of one word and the true start of the next. Whisper's word
+  times are a tenth of a second or more off: removing « de diplomate » used to take the « -tion »
+  of « position ». Without the model (no network, another language, the Windows build) the cuts
+  are those of 1.13.4.
 - **A kept word is never cut into for the silence of a consonant** (1.13.4): inside a kept word,
   only a true silence (0.2 s) can draw a cut; the short silence before a « t » or a « p » no
   longer counts, so removing « de diplomate » keeps the end of « position ».
@@ -162,5 +169,5 @@ Licence MIT, voir `LICENSE`. The cutting method comes from the author's `monter.
 videos from addresses by [yt-dlp](https://github.com/yt-dlp/yt-dlp); translation and subtitle
 re-segmentation by the author's `traduire.py`, sound finishing by the author's `finaliser.py` and
 `nettoyer.py` (traduction toolkit; [DeepFilterNet](https://github.com/Rikorose/DeepFilterNet),
-pyloudnorm, DNSMOS). Fonts: Roboto (Apache 2.0), Montserrat (SIL OFL 1.1, the captions)
+pyloudnorm, DNSMOS). Word alignment: [jonatasgrosman/wav2vec2-large-xlsr-53-*](https://huggingface.co/jonatasgrosman) (Apache 2.0), converted to ONNX by `tools/export_align_model.py` and run by onnxruntime. Fonts: Roboto (Apache 2.0), Montserrat (SIL OFL 1.1, the captions)
 and Literata (SIL OFL 1.1), bundled in `packaging/fonts`.
