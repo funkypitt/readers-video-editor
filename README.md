@@ -12,6 +12,9 @@ that download.
 
 ## Key points
 
+- **Between two kept passages: straight cut or fade to black** (1.13.1): in the keep mode, once
+  there are two passages, the production block offers this one choice. What is removed (a word
+  struck out, anything in the cut mode) always stays a straight cut with a 0.03 s sound fade.
 - **Keep, and strike out inside what is kept** (1.13.0): in « I highlight what I keep », the pen
   *Strike out* (X) marks in pink, inside a yellow passage, a word or a passage to take out. The
   cuts no longer fade: no fade to black, a 0.03 s sound fade only, against clicks.
@@ -56,8 +59,10 @@ that download.
   **Strike out** (X), takes a word or a passage out of what is kept: it stays in its yellow
   passage, struck through in pink (1.13.0).
 - **The cuts** are placed in the quietest instant near each boundary, never on a word; every
-  join is a straight cut in the picture, with the shortest sound fade that keeps it from
-  clicking (0.03 s), so one word can be taken out of a sentence (1.13.0). The log (.txt) says what was kept and removed, word for word; the edit list
+  removal is a straight cut in the picture, with the shortest sound fade that keeps it from
+  clicking (0.03 s), so one word can be taken out of a sentence (1.13.0). Between two passages
+  kept apart, « Fade to black » (0.5 s, sound with it) may be chosen instead (1.13.1); never a
+  fade from black at the very start, whose frame is the thumbnail the social networks show. The log (.txt) says what was kept and removed, word for word; the edit list
   (.edl, CMX 3600) reopens the cut in a video editor.
 - **Watch the edit** plays it, jumping over what is removed. **Produce the edit** writes MP4
   (picture re-encoded once, x264), or MP3 / M4A / WAV from the sound alone, beside the original,

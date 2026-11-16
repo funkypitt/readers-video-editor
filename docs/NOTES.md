@@ -32,7 +32,12 @@ out inside what is kept). Two kept ranges whose margins overlap are joined by on
 middle of what is removed. Fades (1.13.0, user: « pas de fondu au noir, un fondu minimaliste du
 son, il faut pouvoir enlever un seul mot »): no picture fade, sound `afade` hsin of
 `SOUND_FADE` = 0.03 s in and out per piece (the Fade combo and the fade-to-black box are gone;
-older projects' `fade`/`image_fade` are ignored). Keep mode + strike out: `sel` value
+older projects' `fade`/`image_fade` are ignored). 1.13.1 (user: « je proposais de se passer du
+fondu au noir pour ce qu'on enlève, pas entre deux passages conservés… laisser le choix »):
+`compute_cuts(passage_fade=)` — a join whose gap holds unhighlighted text (keep mode) is a
+passage join (`passage` on the next piece); with « Between two kept passages: Fade to black »
+(`cfg/selection between` = fade) those joins and the end get `PASSAGE_FADE` 0.5 s (margins of
+0.5, vi/vo, picture fade), joins over struck words only stay straight. Keep mode + strike out: `sel` value
 `STRUCK` = 2 (highlighted then struck with the other pen); `ranges()` = value 1 only,
 `struck_ranges()` saved in selection.json as `struck` (`struck_times` across views); switching
 to the cut mode drops the struck marks (they become kept, as the highlighting flips). MP4: one x264 intermediate per piece (crf 18, pcm sound),

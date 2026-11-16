@@ -316,9 +316,12 @@ lecteur, la croix à sa droite le retire.
 En bas à gauche :
 
 - **Produire** : *Une vidéo (MP4)*, ou *Le son seul* en MP3, M4A ou WAV.
-- Les coupes sont **franches** à l'image (aucun fondu au noir) ; le son a seulement un fondu
-  très court (3 centièmes de seconde) pour éviter les claquements : on peut ainsi retirer un
-  seul mot d'une phrase.
+- Ce qu'on **retire** (un mot rayé, ou tout ce qui est coupé en mode *coupe*) donne toujours une
+  coupe **franche** à l'image ; le son a seulement un fondu très court (3 centièmes de seconde)
+  pour éviter les claquements : on peut ainsi retirer un seul mot d'une phrase.
+- **Entre deux passages gardés** (en mode *garde*, dès qu'il y a deux passages séparés) :
+  *Coupe franche* ou *Fondu au noir* (une demi-seconde, le son avec). Jamais de fondu depuis le
+  noir au tout début : la première image est la vignette que X et les autres réseaux affichent.
 - **Image** : *Tel quel*, ou *Carré (1:1), centré* pour les réseaux sociaux : le centre de
   l'image, le petit côté comme côté du carré ; les sous-titres incrustés sont dimensionnés pour
   ce carré. Grisé quand on produit le son seul.

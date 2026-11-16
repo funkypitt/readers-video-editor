@@ -34,7 +34,7 @@ from PyQt5.QtMultimediaWidgets import QVideoWidget
 os.environ.setdefault("HF_HUB_DISABLE_XET", "1")
 
 APP = "readers-video-editor"
-VERSION = "1.13.0"
+VERSION = "1.13.1"
 
 
 def _app_dirs():
@@ -60,10 +60,11 @@ PAUSE_GAP = 2.0
 # At the very start and end of the file the marker appears from EDGE_GAP on: that is where the
 # microphone noises one wants to remove sit.
 EDGE_GAP = 0.3
-# Every join is a straight cut in the picture (no fade to black) with the shortest sound fade that
-# keeps it from clicking: one word can be taken out of a sentence and the sentence still flows.
+# What is removed leaves a straight cut in the picture with the shortest sound fade that keeps it
+# from clicking: one word can be taken out of a sentence and the sentence still flows. Between two
+# passages kept apart (the keep mode), the user may ask for a fade to black instead (PASSAGE_FADE).
 SOUND_FADE = 0.03
-IMAGE_FADE_MIN = 1.0        # (older projects' logs) a fade to black only where this much is removed
+PASSAGE_FADE = 0.5
 ANTI_CLICK = 0.01           # the shortest fade, even with "fade = 0"
 ESTIMATED_PLAY = 0.25       # words placed from subtitles: the quiet point is looked for on both sides
 PAUSE_SPEECH = 0.15         # below, a dip is part of the speech
@@ -121,7 +122,11 @@ _TR = {
   "Strike the silence": "Rayer le silence",
   "Strike the %1 silences": "Rayer les %1 silences",
   "Produce": "Produire",
-  "Fade at each cut": "Fondu à chaque coupe",
+  "Between two kept passages": "Entre deux passages gardés",
+  "Straight cut": "Coupe franche",
+  "Fade to black": "Fondu au noir",
+  "Fade": "Fondu",
+  "What is removed (struck out or cut) always stays a straight cut.": "Ce qui est retiré (rayé ou coupé) reste toujours une coupe franche.",
   "None": "Aucun",
   "Brief (0.2 s)": "Bref (0,2 s)",
   "Normal (0.5 s)": "Normal (0,5 s)",
@@ -206,7 +211,7 @@ _TR = {
   "Edit produced": "Montage produit", "duration %1, on %2": "durée %1, le %2", "Setting": "Réglage",
   "the marked text is removed, all the rest is kept": "le texte marqué est retiré, tout le reste est gardé", "the marked text is kept": "le texte marqué est gardé",
   "Fade asked": "Fondu demandé", "(the sound fade never bites a word: it is shorter when the cut is tight)": "(le fondu du son ne mord jamais sur un mot : il est plus court quand la coupe est serrée)",
-  "Picture": "Image", "straight cuts": "coupes franches", "fade to black where %1 or more is removed, straight cut elsewhere": "fondu au noir là où %1 ou plus est retirée, coupe franche ailleurs",
+  "Picture": "Image", "straight cuts": "coupes franches", "fade to black between two kept passages (%1), straight cut where something is removed": "fondu au noir entre deux passages gardés (%1), coupe franche là où quelque chose est retiré",
   "Pieces kept": "Morceaux gardés", "Removed in all": "Retiré en tout", "Times are hours:minutes:seconds.thousandths.": "Les instants sont en heures:minutes:secondes.millièmes.",
   "REMOVED": "RETIRÉ", "(without words)": "(sans paroles)", "PIECE %1": "MORCEAU %1", "in the original": "dans l'origine", "in the edit": "dans le montage",
   "fade in %1, fade out %2": "fondu d'entrée %1, fondu de sortie %2", "fade in": "entrée en fondu", "straight in": "entrée franche",
@@ -248,7 +253,11 @@ _TR = {
   "Strike the silence": "Die Stille streichen",
   "Strike the %1 silences": "Die %1 Stillen streichen",
   "Produce": "Erzeugen",
-  "Fade at each cut": "Blende an jedem Schnitt",
+  "Between two kept passages": "Zwischen zwei behaltenen Stellen",
+  "Straight cut": "Harter Schnitt",
+  "Fade to black": "Schwarzblende",
+  "Fade": "Blende",
+  "What is removed (struck out or cut) always stays a straight cut.": "Was wegfällt (gestrichen oder geschnitten), bleibt immer ein harter Schnitt.",
   "None": "Keine",
   "Brief (0.2 s)": "Kurz (0,2 s)",
   "Normal (0.5 s)": "Normal (0,5 s)",
@@ -333,7 +342,7 @@ _TR = {
   "Edit produced": "Erstellter Schnitt", "duration %1, on %2": "Dauer %1, am %2", "Setting": "Einstellung",
   "the marked text is removed, all the rest is kept": "der markierte Text fällt weg, alles andere bleibt", "the marked text is kept": "der markierte Text bleibt",
   "Fade asked": "Gewünschte Blende", "(the sound fade never bites a word: it is shorter when the cut is tight)": "(die Tonblende schneidet nie in ein Wort: sie ist kürzer, wenn der Schnitt eng ist)",
-  "Picture": "Bild", "straight cuts": "harte Schnitte", "fade to black where %1 or more is removed, straight cut elsewhere": "Schwarzblende, wo %1 oder mehr wegfällt, sonst harter Schnitt",
+  "Picture": "Bild", "straight cuts": "harte Schnitte", "fade to black between two kept passages (%1), straight cut where something is removed": "Schwarzblende zwischen zwei behaltenen Stellen (%1), harter Schnitt, wo etwas wegfällt",
   "Pieces kept": "Behaltene Stücke", "Removed in all": "Insgesamt entfernt", "Times are hours:minutes:seconds.thousandths.": "Zeiten in Stunden:Minuten:Sekunden.Tausendstel.",
   "REMOVED": "ENTFERNT", "(without words)": "(ohne Worte)", "PIECE %1": "STÜCK %1", "in the original": "im Original", "in the edit": "im Schnitt",
   "fade in %1, fade out %2": "Einblende %1, Ausblende %2", "fade in": "Einblende", "straight in": "harter Einstieg",
@@ -375,7 +384,11 @@ _TR = {
   "Strike the silence": "Tachar el silencio",
   "Strike the %1 silences": "Tachar los %1 silencios",
   "Produce": "Producir",
-  "Fade at each cut": "Fundido en cada corte",
+  "Between two kept passages": "Entre dos pasajes guardados",
+  "Straight cut": "Corte seco",
+  "Fade to black": "Fundido a negro",
+  "Fade": "Fundido",
+  "What is removed (struck out or cut) always stays a straight cut.": "Lo que se quita (tachado o cortado) siempre queda como corte seco.",
   "None": "Ninguno",
   "Brief (0.2 s)": "Breve (0,2 s)",
   "Normal (0.5 s)": "Normal (0,5 s)",
@@ -460,7 +473,7 @@ _TR = {
   "Edit produced": "Montaje producido", "duration %1, on %2": "duración %1, el %2", "Setting": "Ajuste",
   "the marked text is removed, all the rest is kept": "el texto marcado se quita, todo lo demás se guarda", "the marked text is kept": "el texto marcado se guarda",
   "Fade asked": "Fundido pedido", "(the sound fade never bites a word: it is shorter when the cut is tight)": "(el fundido del sonido nunca muerde una palabra: es más corto cuando el corte es ajustado)",
-  "Picture": "Imagen", "straight cuts": "cortes secos", "fade to black where %1 or more is removed, straight cut elsewhere": "fundido a negro donde se quita %1 o más, corte seco en el resto",
+  "Picture": "Imagen", "straight cuts": "cortes secos", "fade to black between two kept passages (%1), straight cut where something is removed": "fundido a negro entre dos pasajes guardados (%1), corte seco donde se quita algo",
   "Pieces kept": "Pasajes guardados", "Removed in all": "Quitado en total", "Times are hours:minutes:seconds.thousandths.": "Los instantes van en horas:minutos:segundos.milésimas.",
   "REMOVED": "QUITADO", "(without words)": "(sin palabras)", "PIECE %1": "PASAJE %1", "in the original": "en el original", "in the edit": "en el montaje",
   "fade in %1, fade out %2": "entrada %1, salida %2", "fade in": "entrada en fundido", "straight in": "entrada seca",
@@ -502,7 +515,11 @@ _TR = {
   "Strike the silence": "Riscar o silêncio",
   "Strike the %1 silences": "Riscar os %1 silêncios",
   "Produce": "Produzir",
-  "Fade at each cut": "Fundido em cada corte",
+  "Between two kept passages": "Entre duas passagens guardadas",
+  "Straight cut": "Corte seco",
+  "Fade to black": "Fundido para preto",
+  "Fade": "Fundido",
+  "What is removed (struck out or cut) always stays a straight cut.": "O que sai (riscado ou cortado) fica sempre um corte seco.",
   "None": "Nenhum",
   "Brief (0.2 s)": "Breve (0,2 s)",
   "Normal (0.5 s)": "Normal (0,5 s)",
@@ -587,7 +604,7 @@ _TR = {
   "Edit produced": "Montagem produzida", "duration %1, on %2": "duração %1, em %2", "Setting": "Definição",
   "the marked text is removed, all the rest is kept": "o texto marcado é retirado, tudo o resto fica", "the marked text is kept": "o texto marcado fica",
   "Fade asked": "Fundido pedido", "(the sound fade never bites a word: it is shorter when the cut is tight)": "(o fundido do som nunca morde uma palavra: é mais curto quando o corte é apertado)",
-  "Picture": "Imagem", "straight cuts": "cortes secos", "fade to black where %1 or more is removed, straight cut elsewhere": "fundido para preto onde sai %1 ou mais, corte seco no resto",
+  "Picture": "Imagem", "straight cuts": "cortes secos", "fade to black between two kept passages (%1), straight cut where something is removed": "fundido para preto entre duas passagens guardadas (%1), corte seco onde algo sai",
   "Pieces kept": "Passagens guardadas", "Removed in all": "Retirado no total", "Times are hours:minutes:seconds.thousandths.": "Os instantes estão em horas:minutos:segundos.milésimos.",
   "REMOVED": "RETIRADO", "(without words)": "(sem palavras)", "PIECE %1": "PASSAGEM %1", "in the original": "no original", "in the edit": "na montagem",
   "fade in %1, fade out %2": "entrada %1, saída %2", "fade in": "entrada em fundido", "straight in": "entrada seca",
@@ -629,7 +646,11 @@ _TR = {
   "Strike the silence": "Вычеркнуть тишину",
   "Strike the %1 silences": "Вычеркнуть паузы (%1)",
   "Produce": "Создать",
-  "Fade at each cut": "Затухание на каждом стыке",
+  "Between two kept passages": "Между двумя оставленными отрывками",
+  "Straight cut": "Резкая склейка",
+  "Fade to black": "Затемнение",
+  "Fade": "Затухание",
+  "What is removed (struck out or cut) always stays a straight cut.": "Убранное (зачёркнутое или вырезанное) всегда остаётся резкой склейкой.",
   "None": "Нет",
   "Brief (0.2 s)": "Короткое (0,2 с)",
   "Normal (0.5 s)": "Обычное (0,5 с)",
@@ -714,7 +735,7 @@ _TR = {
   "Edit produced": "Готовый монтаж", "duration %1, on %2": "длительность %1, %2", "Setting": "Настройка",
   "the marked text is removed, all the rest is kept": "отмеченный текст вырезан, остальное оставлено", "the marked text is kept": "отмеченный текст оставлен",
   "Fade asked": "Запрошенное затухание", "(the sound fade never bites a word: it is shorter when the cut is tight)": "(затухание звука никогда не задевает слово: оно короче при тесной вырезке)",
-  "Picture": "Изображение", "straight cuts": "резкие склейки", "fade to black where %1 or more is removed, straight cut elsewhere": "затемнение там, где вырезано %1 и больше, иначе резкая склейка",
+  "Picture": "Изображение", "straight cuts": "резкие склейки", "fade to black between two kept passages (%1), straight cut where something is removed": "затемнение между двумя оставленными отрывками (%1), резкая склейка там, где что-то убрано",
   "Pieces kept": "Оставленных отрезков", "Removed in all": "Вырезано всего", "Times are hours:minutes:seconds.thousandths.": "Время в часах:минутах:секундах.тысячных.",
   "REMOVED": "ВЫРЕЗАНО", "(without words)": "(без слов)", "PIECE %1": "ОТРЕЗОК %1", "in the original": "в оригинале", "in the edit": "в монтаже",
   "fade in %1, fade out %2": "нарастание %1, затухание %2", "fade in": "вход с нарастанием", "straight in": "резкий вход",
@@ -4422,9 +4443,12 @@ def complement(clean, n):
     return rest
 
 
-def compute_cuts(wav, tokens, ranges, fade, duration, inverse=False, estimated=False, removed=None):
-    """Ranges of tokens [i, j] → pieces kept {d, f, fi, fo, vi, vo, range} in seconds. `removed`
-    marks the tokens struck out on purpose inside what is kept: a piece never runs into them."""
+def compute_cuts(wav, tokens, ranges, fade, duration, inverse=False, estimated=False, removed=None, passage_fade=0.0):
+    """Ranges of tokens [i, j] → pieces kept {d, f, fi, fo, vi, vo, passage, range} in seconds.
+    `removed` marks the tokens struck out on purpose inside what is kept: a piece never runs into
+    them, and a join over struck words only is a removal. A join over text left unhighlighted (the
+    keep mode) goes from one passage to another (`passage` on the piece after it); with
+    `passage_fade` > 0 those joins, and the end of the edit, fade to black (vi / vo)."""
     n = len(tokens)
     clean = clean_ranges(ranges, n)
     if inverse:
@@ -4432,8 +4456,13 @@ def compute_cuts(wav, tokens, ranges, fade, duration, inverse=False, estimated=F
     if not clean:
         return []
     end_media = duration if duration > 0 else tokens[-1][2]
-    aim_before, aim_after, reach = margins(fade)
     overrun = 0.0 if inverse else 0.04
+
+    def between(a, b):
+        """True when the tokens a..b (what lies between two kept ranges) hold unhighlighted text."""
+        if inverse or b < a:
+            return False
+        return removed is None or not all(removed[a:b + 1])
     play = ESTIMATED_PLAY if estimated else 0.0
     sound = None
     if wav and Path(wav).exists():
@@ -4444,8 +4473,15 @@ def compute_cuts(wav, tokens, ranges, fade, duration, inverse=False, estimated=F
             sound = None
     cuts = []
     try:
-        for i, j in clean:
+        for idx, (i, j) in enumerate(clean):
             d_raw, f_raw = tokens[i][1], tokens[j][2]
+            passage = idx > 0 and between(clean[idx - 1][1] + 1, i - 1)
+            fade_in = passage and passage_fade > 0
+            fade_out = passage_fade > 0 and not inverse and (idx == len(clean) - 1 or between(j + 1, clean[idx + 1][0] - 1))
+            fade_before = passage_fade if fade_in else fade
+            fade_after = passage_fade if fade_out else fade
+            aim_before, reach_before = margins(fade_before)[0], margins(fade_before)[2]
+            aim_after, reach_after = margins(fade_after)[1], margins(fade_after)[2]
             k = i - 1
             while k >= 0 and tokens[k][0] is None:
                 k -= 1
@@ -4456,9 +4492,9 @@ def compute_cuts(wav, tokens, ranges, fade, duration, inverse=False, estimated=F
                 k += 1
             next_start = tokens[k][1] if k < n else end_media
             ov_after = 0.0 if removed is not None and any(removed[j + 1:min(k, n - 1) + 1]) else overrun
-            a = max(0.0, prev_end - ov_before - play, d_raw - reach)
+            a = max(0.0, prev_end - ov_before - play, d_raw - reach_before)
             d = quiet_point(sound, min(a, d_raw), min(d_raw + play, f_raw), d_raw - aim_before)
-            b = min(end_media, next_start + ov_after + play, f_raw + reach)
+            b = min(end_media, next_start + ov_after + play, f_raw + reach_after)
             f = quiet_point(sound, max(f_raw - play, d), max(b, f_raw), f_raw + aim_after)
             if inverse and i == 0:
                 d = 0.0
@@ -4470,19 +4506,20 @@ def compute_cuts(wav, tokens, ranges, fade, duration, inverse=False, estimated=F
                 cuts[-1]["f"] = d = middle
             if f - d < 0.05:
                 continue
-            if fade > 0:
-                fi = min(max(d_raw - d, 0.03), fade)
-                fo = min(max(f - f_raw, 0.03), fade)
+            if fade_before > 0:
+                fi = min(max(d_raw - d, 0.03), fade_before)
             else:
-                fi = fo = ANTI_CLICK
-            cuts.append({"d": d, "f": f, "fi": fi, "fo": fo, "range": [i, j]})
+                fi = ANTI_CLICK
+            if fade_after > 0:
+                fo = min(max(f - f_raw, 0.03), fade_after)
+            else:
+                fo = ANTI_CLICK
+            # never a fade from black at the very start: the first frame is the thumbnail the social networks show
+            cuts.append({"d": d, "f": f, "fi": fi, "fo": fo, "range": [i, j], "passage": passage,
+                         "vi": bool(fade_in and cuts), "vo": bool(fade_out)})
     finally:
         if sound is not None:
             sound.close()
-    for k, c in enumerate(cuts):
-        # no fade from black at the very start: the first frame is the thumbnail the social networks show
-        c["vi"] = k > 0 and c["d"] - cuts[k - 1]["f"] >= IMAGE_FADE_MIN
-        c["vo"] = k == len(cuts) - 1 or cuts[k + 1]["d"] - c["f"] >= IMAGE_FADE_MIN
     for c in cuts:
         half = (c["f"] - c["d"]) / 2.0
         c["d"], c["f"] = round(c["d"], 3), round(c["f"], 3)
@@ -4951,10 +4988,10 @@ def log_text(out, project, tokens, cuts, mode, fade, image_fade, fmt, square=Fal
          f"{_('Edit produced'):<18}: {out}",
          f"{'':<18}  " + _("duration %1, on %2", hmsm(kept), time.strftime("%Y-%m-%d %H:%M")),
          f"{_('Setting'):<18}: " + (_("the marked text is removed, all the rest is kept") if mode == "cut" else _("the marked text is kept")),
-         f"{_('Fade asked'):<18}: {_secs(fade, 2)} " + _("(the sound fade never bites a word: it is shorter when the cut is tight)")]
+         f"{_('Fade asked'):<18}: {_secs(SOUND_FADE, 2)} " + _("(the sound fade never bites a word: it is shorter when the cut is tight)")]
     if video:
         L.append(f"{_('Picture'):<18}: " + (_("straight cuts") if not (image_fade and fade > 0)
-                                           else _("fade to black where %1 or more is removed, straight cut elsewhere", _secs(IMAGE_FADE_MIN, 0))))
+                                           else _("fade to black between two kept passages (%1), straight cut where something is removed", _secs(fade, 1))))
         if square:
             L.append(f"{_('Frame'):<18}: " + _("square (1:1), the centre of the picture"))
         if subtitles:
@@ -7725,6 +7762,30 @@ class Main(QtWidgets.QMainWindow):
         g.addWidget(lab, 0, 0)
         self.format = QtWidgets.QComboBox()
         g.addWidget(self.format, 1, 0, 1, 2)
+        # the joins between two passages kept apart: the only joins with a choice (what is removed
+        # is always a straight cut); shown in the keep mode once there are two passages
+        self.between_box = QtWidgets.QWidget()
+        self.between_box.setObjectName("between")
+        bb = QtWidgets.QVBoxLayout(self.between_box)
+        bb.setContentsMargins(0, 4, 0, 0)
+        bb.setSpacing(4)
+        lab = QtWidgets.QLabel(_("Between two kept passages"))
+        lab.setObjectName("label")
+        lab.setToolTip(_("What is removed (struck out or cut) always stays a straight cut."))
+        bb.addWidget(lab)
+        self.b_straight = self._btn(_("Straight cut"), lambda: self.set_between("straight"))
+        self.b_black = self._btn(_("Fade to black"), lambda: self.set_between("fade"))
+        seg = self._segment([self.b_straight, self.b_black])
+        seg.setToolTip(lab.toolTip())
+        row = QtWidgets.QHBoxLayout()
+        row.addWidget(seg)
+        row.addStretch(1)
+        bb.addLayout(row)
+        self.between = "fade" if self.cfg.get("between") == "fade" else "straight"
+        self.b_straight.setChecked(self.between == "straight")
+        self.b_black.setChecked(self.between == "fade")
+        self.between_box.hide()
+        g.addWidget(self.between_box, 2, 0, 1, 2)
         self.l_frame = QtWidgets.QLabel(_("Picture"))
         self.l_frame.setObjectName("label")
         g.addWidget(self.l_frame, 3, 0)
@@ -7943,7 +8004,7 @@ class Main(QtWidgets.QMainWindow):
             QWidget#bilan {{ background: {C_PANEL2}; border-bottom: 1px solid {C_BORDER}; }}
             QWidget#production {{ background: {C_PANEL2}; border-top: 1px solid {C_BORDER}; }}
             QFrame#setuprow {{ background: {C_PANEL}; border: 1px solid {C_BORDER}; border-radius: 10px; }}
-            QWidget#settings, QWidget#following, QWidget#finished {{ background: {C_PANEL2}; }}
+            QWidget#settings, QWidget#following, QWidget#finished, QWidget#between {{ background: {C_PANEL2}; }}
             QWidget#paper, QWidget#paper QWidget {{ background: {PAPER}; }}
             QWidget#paper QWidget#adsbar, QWidget#paper QWidget#adsbar QWidget {{ background: {AD_BAR}; }}
             QWidget#paper QWidget#adsbar {{ border-bottom: 1px solid #c9d2e8; }}
@@ -8703,6 +8764,7 @@ class Main(QtWidgets.QMainWindow):
         video = self.format.currentData() == "mp4" and bool(self.project) and bool(self.tokens)
         self.frame.setEnabled(video)
         self.l_frame.setEnabled(video)
+        self.refresh_between()
 
     def toolkit_for_sound(self):
         """The toolkit folder for finaliser.py: the one found, or asked for in a small dialog;
@@ -9071,6 +9133,8 @@ class Main(QtWidgets.QMainWindow):
         sel = dict(project.get("selection") or {})
         sel.pop("times", None)
         write_json(d / "selection.json", sel)
+        if sel.get("between") in ("straight", "fade"):
+            self.set_between(sel["between"])
         out = project.get("output") or {}
         if "burn" in out:
             self.cfg["burn"] = out["burn"]
@@ -9101,7 +9165,8 @@ class Main(QtWidgets.QMainWindow):
                 "cues": {k: c for k, c in self.cues.items() if k == "src" or k in self.texts},
                 "ads": self.ads,
                 "selection": {"view": self.view, "ranges": [list(p) for p in clean], "mode": self.mode_value,
-                              "struck": self.page.struck_ranges() if self.mode_value == "keep" else []},
+                              "struck": self.page.struck_ranges() if self.mode_value == "keep" else [],
+                              "between": self.between},
                 "output": {"format": self.format.currentData(), "burn": self.subs.currentData() or "none", "srt_files": self.srt_files.isChecked(),
                            "frame": self.frame.currentData() or "as_is", "sound": self.sound.currentData() or "as_is",
                            "caption_style": self.caption_style.currentData() or "subtitles"}}
@@ -9574,6 +9639,20 @@ class Main(QtWidgets.QMainWindow):
         self.run_in_background(work, done, failed)
 
     # ---- the selection and the cuts ----
+    def set_between(self, value):
+        self.between = value
+        self.b_straight.setChecked(value == "straight")
+        self.b_black.setChecked(value == "fade")
+        self.cfg["between"] = value
+        save_config(self.cfg)
+        self.on_selection()
+
+    def refresh_between(self):
+        """The choice for the joins between passages: only where there are such joins."""
+        video = self.format.currentData() == "mp4" and bool(self.project) and self.project.get("type") == "video"
+        self.b_black.setText(_("Fade to black") if video else _("Fade"))
+        self.between_box.setVisible(self.mode_value == "keep" and any(c.get("passage") for c in self.cuts))
+
     def choose_tool(self, tool):
         self.page.tool = tool
         self.b_highlight.setChecked(tool == "highlight")
@@ -9602,13 +9681,15 @@ class Main(QtWidgets.QMainWindow):
         ranges = self.page.ranges()
         mode = self.mode_value
         struck = self.page.struck_ranges() if mode == "keep" else []
-        write_json(d / "selection.json", {"ranges": ranges, "struck": struck, "mode": mode, "view": self.view})
+        write_json(d / "selection.json", {"ranges": ranges, "struck": struck, "mode": mode, "view": self.view, "between": self.between})
         if mode == "cut" and not clean_ranges(ranges, len(self.tokens)):
             self.cuts = []
         else:
             self.cuts = compute_cuts(d / "audio16k.wav", self.tokens, ranges, SOUND_FADE, self.project["duration"],
                                      inverse=(mode == "cut"), estimated=self.estimated,
-                                     removed=(self.page.sel == STRUCK) if struck else None)
+                                     removed=(self.page.sel == STRUCK) if struck else None,
+                                     passage_fade=PASSAGE_FADE if self.between == "fade" else 0.0)
+        self.refresh_between()
         self.stop_preview()
         self.update_summary()
         self.refresh_ads()
@@ -9780,7 +9861,8 @@ class Main(QtWidgets.QMainWindow):
             k += 1
             out = src.with_name(f"{src.stem}_edit-{k}.{fmt}")
         cuts = [dict(c) for c in self.cuts]
-        fade, image_fade = SOUND_FADE, False
+        image_fade = self.between == "fade" and self.mode_value == "keep" and any(c.get("vi") or c.get("vo") for c in self.cuts)
+        fade = PASSAGE_FADE if image_fade else SOUND_FADE
         mode = self.mode_value
         project = dict(self.project)
         tokens = list(self.tokens)
