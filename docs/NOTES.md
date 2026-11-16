@@ -25,6 +25,22 @@ each word by its length, the ends of sentences on the voice's pauses; those posi
 
 ## Cuts
 
+**1.13.2 — the cut looks for the dip of the sound** (user, removing « de diplomate »: « beaucoup
+moins propre que quand je le fais avec Shotcut »). Whisper's word times touch (the end of a word is
+the start of the next) and are off by 0.1–0.3 s; with no overrun in the cut mode the old search
+window had zero width, so the cut sat on Whisper's time, in the voice (933.600 s: −17.5 dB, the
+real dip −35 dB at 933.54; 934.620: −26 dB in the tail of « diplomate », silence at 934.78–934.9).
+Now `cut_point(lo, hi, aim)`: 10 ms levels smoothed over 30 ms, cost = max(dB, room floor + 4 dB)
++ 15 dB/s × |t − aim|, window from the middle of the token on one side to the middle of the token
+on the other (≤ 0.4 s into a word, ≤ 1 s into a pause or a silence between words), aim = Whisper's
+time, or a little air (0.15 s before / 0.25 s after) where there was a pause or a gap. Measured on
+that 30 min recording (bench: 120 one- or two-word removals, 60 kept sentences): cuts in the voice
+(> 15 dB above the room) 59 % → 23 % in the cut mode, 48 % → 12 % in the keep mode; median
+17 → 8 dB and 14.5 → 5.5 dB above the room. The rest is speech with no dip at all between the
+words (a crossfade of the two sides would be the next step). Shift from Whisper's bounds: median
+65 ms into the kept words, 45 ms into the removed ones. CUT_PULL 5–15 and CUT_REACH 0.3–0.5 give
+the same figures.
+
 For each kept range the start is moved back and the end forward into the quietest instant
 within the margins (before: 0.6 × fade, 0.15–0.5 s; after: 0.8 × fade, 0.25–0.6 s), never past
 the neighbouring word (0.04 s of overrun when keeping, none when cutting or next to a word struck

@@ -12,6 +12,11 @@ that download.
 
 ## Key points
 
+- **Cuts in the dip of the sound** (1.13.2): the transcription's word times are off by a tenth
+  of a second or more and touch each other; each cut now looks around them for the quietest
+  instant (half a word each side, more into a silence) instead of trusting them, in both modes.
+  On a 30-minute talk, cuts landing in the voice went from 59 % to 23 % (cut mode) and 48 % to
+  12 % (keep mode).
 - **Between two kept passages: straight cut or fade to black** (1.13.1): in the keep mode, once
   there are two passages, the production block offers this one choice. What is removed (a word
   struck out, anything in the cut mode) always stays a straight cut with a 0.03 s sound fade.

@@ -34,7 +34,7 @@ from PyQt5.QtMultimediaWidgets import QVideoWidget
 os.environ.setdefault("HF_HUB_DISABLE_XET", "1")
 
 APP = "readers-video-editor"
-VERSION = "1.13.1"
+VERSION = "1.13.2"
 
 
 def _app_dirs():
@@ -4443,12 +4443,69 @@ def complement(clean, n):
     return rest
 
 
+# Where a cut goes. The times of the words (Whisper's especially) are off by a tenth of a second
+# or more, and they touch: the end of a word is the start of the next. A cut placed on those times
+# lands in the voice. So each cut looks for the true dip of the sound around that time: from the
+# middle of the word on one side to the middle of the word on the other (at most CUT_REACH, more
+# into a passage without words), and takes the quietest instant there, a little closer to the
+# expected place when two are about as quiet (CUT_PULL dB per second away from it). Below the
+# room's own level (the floor of the few seconds around + CUT_FLOOR_ROOM), everything counts as
+# silence, so the nearest silent instant wins.
+CUT_REACH = 0.4
+CUT_REACH_PAUSE = 1.0
+CUT_PULL = 15.0
+CUT_FLOOR_ROOM = 4.0
+
+
+def _levels(sound, a, b, step=0.01):
+    """(times, dB) of the sound between a and b in frames of `step`, smoothed over three frames."""
+    sr = sound.samplerate
+    hop = max(1, int(sr * step))
+    start = max(0, int(a * sr))
+    end = min(sound.frames, int(b * sr))
+    if end - start < hop * 3:
+        return None, None
+    sound.seek(start)
+    x = sound.read(end - start, dtype="float32", always_2d=True).mean(axis=1)
+    n = len(x) // hop
+    e = (x[:n * hop].reshape(n, hop) ** 2).mean(axis=1)
+    e = np.convolve(e, np.ones(3) / 3.0, mode="same")
+    return (start + (np.arange(n) + 0.5) * hop) / sr, 10.0 * np.log10(e + 1e-12)
+
+
+def room_floor(sound, t):
+    """The level of the room around t: the 10th percentile of the 10 ms levels over 4 seconds."""
+    _t, db = _levels(sound, max(0.0, t - 2.0), t + 2.0)
+    return float(np.percentile(db, 10)) if db is not None else -90.0
+
+
+def cut_point(sound, lo, hi, aim):
+    """The quietest instant of [lo, hi], pulled towards `aim`; everything at the room's level is silence."""
+    aim = min(max(aim, lo), hi)
+    if sound is None or hi - lo < 0.03:
+        return aim
+    t, db = _levels(sound, lo, hi)
+    if t is None:
+        return aim
+    floor = room_floor(sound, aim) + CUT_FLOOR_ROOM
+    cost = np.maximum(db, floor) + CUT_PULL * np.abs(t - aim)
+    return float(t[int(np.argmin(cost))])
+
+
+def _into(token, side_pause_reach=CUT_REACH_PAUSE):
+    """How far a cut may look into this token: half a word (CUT_REACH at most), more into a pause."""
+    length = max(0.0, token[2] - token[1])
+    if token[0] is None:
+        return min(side_pause_reach, length)
+    return min(CUT_REACH, length / 2.0)
+
+
 def compute_cuts(wav, tokens, ranges, fade, duration, inverse=False, estimated=False, removed=None, passage_fade=0.0):
     """Ranges of tokens [i, j] → pieces kept {d, f, fi, fo, vi, vo, passage, range} in seconds.
-    `removed` marks the tokens struck out on purpose inside what is kept: a piece never runs into
-    them, and a join over struck words only is a removal. A join over text left unhighlighted (the
-    keep mode) goes from one passage to another (`passage` on the piece after it); with
-    `passage_fade` > 0 those joins, and the end of the edit, fade to black (vi / vo)."""
+    `removed` marks the tokens struck out on purpose inside what is kept: a join over struck words
+    only is a removal. A join over text left unhighlighted (the keep mode) goes from one passage to
+    another (`passage` on the piece after it); with `passage_fade` > 0 those joins, and the end of
+    the edit, fade to black (vi / vo)."""
     n = len(tokens)
     clean = clean_ranges(ranges, n)
     if inverse:
@@ -4456,7 +4513,6 @@ def compute_cuts(wav, tokens, ranges, fade, duration, inverse=False, estimated=F
     if not clean:
         return []
     end_media = duration if duration > 0 else tokens[-1][2]
-    overrun = 0.0 if inverse else 0.04
 
     def between(a, b):
         """True when the tokens a..b (what lies between two kept ranges) hold unhighlighted text."""
@@ -4480,28 +4536,38 @@ def compute_cuts(wav, tokens, ranges, fade, duration, inverse=False, estimated=F
             fade_out = passage_fade > 0 and not inverse and (idx == len(clean) - 1 or between(j + 1, clean[idx + 1][0] - 1))
             fade_before = passage_fade if fade_in else fade
             fade_after = passage_fade if fade_out else fade
-            aim_before, reach_before = margins(fade_before)[0], margins(fade_before)[2]
-            aim_after, reach_after = margins(fade_after)[1], margins(fade_after)[2]
-            k = i - 1
-            while k >= 0 and tokens[k][0] is None:
-                k -= 1
-            prev_end = tokens[k][2] if k >= 0 else 0.0
-            ov_before = 0.0 if removed is not None and any(removed[max(k, 0):i]) else overrun
-            k = j + 1
-            while k < n and tokens[k][0] is None:
-                k += 1
-            next_start = tokens[k][1] if k < n else end_media
-            ov_after = 0.0 if removed is not None and any(removed[j + 1:min(k, n - 1) + 1]) else overrun
-            a = max(0.0, prev_end - ov_before - play, d_raw - reach_before)
-            d = quiet_point(sound, min(a, d_raw), min(d_raw + play, f_raw), d_raw - aim_before)
-            b = min(end_media, next_start + ov_after + play, f_raw + reach_after)
-            f = quiet_point(sound, max(f_raw - play, d), max(b, f_raw), f_raw + aim_after)
+            # the start: between the middle of the token before and the middle of the first kept one;
+            # a little air is kept before the voice when there was some (a passage without words,
+            # or a silence between two words)
+            if i == 0:
+                d = 0.0
+            else:
+                before = tokens[i - 1]
+                gap = min(CUT_REACH_PAUSE, max(0.0, d_raw - before[2]))
+                lo = max(0.0, d_raw - gap - _into(before) - play)
+                hi = min(f_raw, d_raw + _into(tokens[i], 0.5 * CUT_REACH_PAUSE) + play)
+                air = margins(fade_before)[0]
+                aim = d_raw - (air if before[0] is None else min(air, gap))
+                d = cut_point(sound, lo, hi, aim)
+            # the end, the same way after the last kept token
+            if j == n - 1:
+                f = end_media
+            else:
+                after = tokens[j + 1]
+                gap = min(CUT_REACH_PAUSE, max(0.0, after[1] - f_raw))
+                lo = max(d, f_raw - _into(tokens[j], 0.5 * CUT_REACH_PAUSE) - play)
+                hi = min(end_media, f_raw + gap + _into(after) + play)
+                air = margins(fade_after)[1]
+                aim = f_raw + (air if after[0] is None else min(air, gap))
+                f = cut_point(sound, lo, hi, aim)
             if inverse and i == 0:
                 d = 0.0
             if inverse and j == n - 1:
                 f = end_media
             if cuts and d < cuts[-1]["f"]:
-                middle = (tokens[cuts[-1]["range"][1] + 1][1] + tokens[i - 1][2]) / 2.0
+                # the two cuts crossed over a short removal: one cut, at the quietest instant between them
+                lo, hi = d, cuts[-1]["f"]
+                middle = cut_point(sound, lo, hi, (lo + hi) / 2.0)
                 middle = min(max(middle, cuts[-1]["d"] + 0.05), f)
                 cuts[-1]["f"] = d = middle
             if f - d < 0.05:
