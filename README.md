@@ -12,6 +12,13 @@ that download.
 
 ## Key points
 
+- **One sound track, crossfaded at each join; sound and picture stay in sync** (1.13.3): the
+  sound of the edit is made in one go, the two sides of each straight join overlapping for
+  0.03 s (equal power), instead of a fade out and a fade in that left a hole in the room's
+  sound at every join (−31 dB measured, now −2 dB). The cuts are set on whole pictures, so the
+  edit lasts exactly what the log and the subtitles say; before, the sound gained about 14 ms on
+  the picture at each cut (0.7 s after 50 cuts), now less than a picture throughout. Exporting
+  needs room for two copies of the sound beside the edit (about 0.7 GB per half hour each), freed at the end.
 - **Cuts in the dip of the sound** (1.13.2): the transcription's word times are off by a tenth
   of a second or more and touch each other; each cut now looks around them for the quietest
   instant (half a word each side, more into a silence) instead of trusting them, in both modes.

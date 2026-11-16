@@ -318,7 +318,10 @@ En bas à gauche :
 - **Produire** : *Une vidéo (MP4)*, ou *Le son seul* en MP3, M4A ou WAV.
 - Ce qu'on **retire** (un mot rayé, ou tout ce qui est coupé en mode *coupe*) donne toujours une
   coupe **franche** à l'image ; le son a seulement un fondu très court (3 centièmes de seconde)
-  pour éviter les claquements : on peut ainsi retirer un seul mot d'une phrase.
+  pour éviter les claquements : on peut ainsi retirer un seul mot d'une phrase. Les deux côtés
+  de la coupe se chevauchent brièvement (fondu enchaîné) : pas de trou dans l'ambiance.
+- L'export a besoin, à côté du montage, de place pour deux copies du son (environ 0,7 Go par
+  demi-heure chacune), libérée à la fin.
 - **Entre deux passages gardés** (en mode *garde*, dès qu'il y a deux passages séparés) :
   *Coupe franche* ou *Fondu au noir* (une demi-seconde, le son avec). Jamais de fondu depuis le
   noir au tout début : la première image est la vignette que X et les autres réseaux affichent.

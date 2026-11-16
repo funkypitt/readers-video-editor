@@ -25,6 +25,21 @@ each word by its length, the ends of sentences on the voice's pauses; those posi
 
 ## Cuts
 
+**1.13.3 — one crossfaded sound track, cuts on whole pictures.** Before, each piece carried its
+own sound with a fade out and a fade in: a hole in the room's sound at every join (synthetic test:
+−31 dB median), and since each x264 piece made with `-t` is rounded up to whole pictures while its
+PCM was exact, the concat let the sound gain ~14 ms per cut (beep vs flash: −0.69 s after 50
+cuts). Now: `decode_sound` → the original as float RF64 WAV (NOT `-f w64`: ffmpeg tags float W64
+as integer PCM and libsndfile reads noise), pieces = pictures only (`-frames:v n` from a quarter
+picture before d), `on_frames(cuts, fps, duration)` puts d/f on whole pictures (≤ the last whole
+picture) BEFORE logs/subtitles are made, `piece_length` measures each piece and `edit_sound`
+writes the track with those lengths: equal-power sin/cos crossfade of SOUND_FADE centred on each
+straight join (`crossfades`: none where vo/vi, those keep fi/fo raised-cosine fades), length
+unchanged. Audio-only exports use the same `edit_sound` (lengths f − d). Measured: 50 joins,
+offset beep−flash 2 ms first / 5 ms last / 18 ms worst; room at the joins −2.2 dB median; the
+30-min Dana file → WAV in 7 s, 90 MB of memory. Bench script: scratchpad sync/ + synctest.py
+(flash + 1 kHz beep each second, pink room at −40 dB).
+
 **1.13.2 — the cut looks for the dip of the sound** (user, removing « de diplomate »: « beaucoup
 moins propre que quand je le fais avec Shotcut »). Whisper's word times touch (the end of a word is
 the start of the next) and are off by 0.1–0.3 s; with no overrun in the cut mode the old search

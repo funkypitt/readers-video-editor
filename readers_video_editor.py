@@ -34,7 +34,7 @@ from PyQt5.QtMultimediaWidgets import QVideoWidget
 os.environ.setdefault("HF_HUB_DISABLE_XET", "1")
 
 APP = "readers-video-editor"
-VERSION = "1.13.2"
+VERSION = "1.13.3"
 
 
 def _app_dirs():
@@ -202,7 +202,7 @@ _TR = {
   "%1 cut": "%1 coupe", "%1 cuts": "%1 coupes", "%1 less out of %2": "%1 en moins sur %2",
   "Without words": "Sans paroles", "Start": "Début", "Fin": "Fin", "End": "Fin", "without words": "sans paroles",
   "Export the edit": "Exporter le montage", "Piece %1 of %2": "Passage %1 sur %2", "Joining": "Assemblage",
-  "Taking the passages": "Prélèvement des passages", "Encoding": "Encodage", "Exporting… %1 %": "Exportation… %1 %",
+  "Taking the passages": "Prélèvement des passages", "Reading the sound": "Lecture du son", "Encoding": "Encodage", "Exporting… %1 %": "Exportation… %1 %",
   "Done: %1 (%2). Beside it, the log of the cuts (.txt) and the edit list (.edl).": "Fait : %1 (%2). À côté, le journal des coupes (.txt) et la liste de montage (.edl).",
   "The edit could not be made: %1": "Le montage n'a pas pu être produit : %1", "Cancelled.": "Annulé.",
   "white on black / black on white": "blanc sur noir / noir sur blanc", "larger text": "texte plus grand", "smaller text": "texte plus petit",
@@ -333,7 +333,7 @@ _TR = {
   "%1 cut": "%1 Schnitt", "%1 cuts": "%1 Schnitte", "%1 less out of %2": "%1 weniger von %2",
   "Without words": "Ohne Worte", "Start": "Anfang", "End": "Ende", "without words": "ohne Worte",
   "Export the edit": "Schnitt exportieren", "Piece %1 of %2": "Stück %1 von %2", "Joining": "Zusammenfügen",
-  "Taking the passages": "Stellen werden entnommen", "Encoding": "Kodierung", "Exporting… %1 %": "Export… %1 %",
+  "Taking the passages": "Stellen werden entnommen", "Reading the sound": "Ton wird gelesen", "Encoding": "Kodierung", "Exporting… %1 %": "Export… %1 %",
   "Done: %1 (%2). Beside it, the log of the cuts (.txt) and the edit list (.edl).": "Fertig: %1 (%2). Daneben das Schnittprotokoll (.txt) und die Schnittliste (.edl).",
   "The edit could not be made: %1": "Der Schnitt konnte nicht erstellt werden: %1", "Cancelled.": "Abgebrochen.",
   "white on black / black on white": "weiss auf schwarz / schwarz auf weiss", "larger text": "grösserer Text", "smaller text": "kleinerer Text",
@@ -464,7 +464,7 @@ _TR = {
   "%1 cut": "%1 corte", "%1 cuts": "%1 cortes", "%1 less out of %2": "%1 menos de %2",
   "Without words": "Sin palabras", "Start": "Inicio", "End": "Fin", "without words": "sin palabras",
   "Export the edit": "Exportar el montaje", "Piece %1 of %2": "Pasaje %1 de %2", "Joining": "Ensamblado",
-  "Taking the passages": "Tomando los pasajes", "Encoding": "Codificación", "Exporting… %1 %": "Exportando… %1 %",
+  "Taking the passages": "Tomando los pasajes", "Reading the sound": "Leyendo el sonido", "Encoding": "Codificación", "Exporting… %1 %": "Exportando… %1 %",
   "Done: %1 (%2). Beside it, the log of the cuts (.txt) and the edit list (.edl).": "Hecho: %1 (%2). Al lado, el registro de cortes (.txt) y la lista de montaje (.edl).",
   "The edit could not be made: %1": "No se pudo producir el montaje: %1", "Cancelled.": "Cancelado.",
   "white on black / black on white": "blanco sobre negro / negro sobre blanco", "larger text": "texto más grande", "smaller text": "texto más pequeño",
@@ -595,7 +595,7 @@ _TR = {
   "%1 cut": "%1 corte", "%1 cuts": "%1 cortes", "%1 less out of %2": "%1 a menos de %2",
   "Without words": "Sem palavras", "Start": "Início", "End": "Fim", "without words": "sem palavras",
   "Export the edit": "Exportar a montagem", "Piece %1 of %2": "Passagem %1 de %2", "Joining": "Junção",
-  "Taking the passages": "A recolher as passagens", "Encoding": "Codificação", "Exporting… %1 %": "A exportar… %1 %",
+  "Taking the passages": "A recolher as passagens", "Reading the sound": "A ler o som", "Encoding": "Codificação", "Exporting… %1 %": "A exportar… %1 %",
   "Done: %1 (%2). Beside it, the log of the cuts (.txt) and the edit list (.edl).": "Feito: %1 (%2). Ao lado, o registo dos cortes (.txt) e a lista de montagem (.edl).",
   "The edit could not be made: %1": "A montagem não pôde ser produzida: %1", "Cancelled.": "Cancelado.",
   "white on black / black on white": "branco sobre preto / preto sobre branco", "larger text": "texto maior", "smaller text": "texto menor",
@@ -726,7 +726,7 @@ _TR = {
   "%1 cut": "%1 вырезка", "%1 cuts": "вырезок: %1", "%1 less out of %2": "минус %1 из %2",
   "Without words": "Без слов", "Start": "Начало", "End": "Конец", "without words": "без слов",
   "Export the edit": "Экспортировать монтаж", "Piece %1 of %2": "Отрезок %1 из %2", "Joining": "Сборка",
-  "Taking the passages": "Извлечение отрезков", "Encoding": "Кодирование", "Exporting… %1 %": "Экспорт… %1 %",
+  "Taking the passages": "Извлечение отрезков", "Reading the sound": "Чтение звука", "Encoding": "Кодирование", "Exporting… %1 %": "Экспорт… %1 %",
   "Done: %1 (%2). Beside it, the log of the cuts (.txt) and the edit list (.edl).": "Готово: %1 (%2). Рядом журнал вырезок (.txt) и монтажный лист (.edl).",
   "The edit could not be made: %1": "Монтаж не удался: %1", "Cancelled.": "Отменено.",
   "white on black / black on white": "белым по чёрному / чёрным по белому", "larger text": "крупнее", "smaller text": "мельче",
@@ -4595,6 +4595,151 @@ def compute_cuts(wav, tokens, ranges, fade, duration, inverse=False, estimated=F
 
 
 # ------------------------------------------------------------------------------------------
+# The sound of the edit: one track, the pieces joined by a short crossfade
+# ------------------------------------------------------------------------------------------
+# Two pieces that each fade out and in leave a hole in the room's own sound at every join; an
+# editor crosses them instead. The sound of the edit is made in one go from the decoded sound of
+# the original: at each straight join the end of one piece and the start of the next overlap over
+# SOUND_FADE (equal power: sin / cos, no dip in level), centred on the join, so the length of the
+# edit does not change. A join with a fade (to black, between two passages) keeps its fades.
+
+def audio_offset(source):
+    """Where the sound starts against the file's own clock (the pictures' -ss), in seconds."""
+    try:
+        r = subprocess.run([ffprobe_exe(), "-v", "error", "-select_streams", "a:0", "-show_entries", "stream=start_time:format=start_time",
+                            "-of", "json", str(source)], capture_output=True, text=True, timeout=60, **_RUN_FLAGS)
+        info = json.loads(r.stdout or "{}")
+        a = float((info.get("streams") or [{}])[0].get("start_time") or 0.0)
+        f = float((info.get("format") or {}).get("start_time") or 0.0)
+        return max(-1.0, min(1.0, a - f))
+    except Exception:
+        return 0.0
+
+
+def decode_sound(task, source, target, rate=None, channels=None):
+    """The whole sound of the file as 32-bit float RF64 WAV (no 4 GB limit), to be read at any place.
+    (Not W64: ffmpeg labels its float W64 as integers, and libsndfile then reads noise.)"""
+    cmd = [ffmpeg_exe(), "-y", "-i", str(source), "-vn", "-map", "0:a:0", "-c:a", "pcm_f32le"]
+    if rate:
+        cmd += ["-ar", str(rate)]
+    if channels:
+        cmd += ["-ac", str(channels)]
+    cmd += ["-rf64", "always", "-f", "wav", str(target)]
+    _run_ffmpeg(cmd, task, str(Path(target).with_suffix(".log")))
+
+
+def crossfades(cuts, lengths, sr):
+    """Half the crossfade, in samples, at each join: none where a fade is asked (vo / vi)."""
+    out = []
+    for k in range(len(cuts) - 1):
+        if cuts[k].get("vo") or cuts[k + 1].get("vi"):
+            out.append(0)
+            continue
+        h = int(round(SOUND_FADE * sr / 2.0))
+        out.append(max(0, min(h, int(lengths[k] * sr) // 4, int(lengths[k + 1] * sr) // 4)))
+    return out
+
+
+def edit_sound(task, decoded, cuts, lengths, target, offset=0.0, share=(0.0, 1.0)):
+    """Writes the sound of the edit to `target` (float RF64 WAV): piece k is `lengths[k]` seconds of the
+    original from cuts[k]["d"], crossfaded with its neighbours (see crossfades) or faded in and out
+    (fi / fo, raised cosine) where the join has a fade."""
+    import soundfile as sf
+    with sf.SoundFile(str(decoded)) as src:
+        sr, ch, frames = src.samplerate, src.channels, src.frames
+        n = len(cuts)
+        half = crossfades(cuts, lengths, sr)
+        total = max(1, sum(int(round(L * sr)) for L in lengths))
+        written = 0
+        block = sr * 10
+
+        def read(a, b):
+            x = np.zeros((b - a, ch), dtype=np.float32)
+            lo, hi = max(a, 0), min(b, frames)
+            if hi > lo:
+                src.seek(lo)
+                x[lo - a:hi - a] = src.read(hi - lo, dtype="float32", always_2d=True)
+            return x
+
+        with sf.SoundFile(str(target), "w", samplerate=sr, channels=ch, subtype="FLOAT", format="RF64") as dst:
+            pending = None                      # the faded tail of the piece before, to lay under this head
+            for k, c in enumerate(cuts):
+                if task.get("cancelled"):
+                    raise Cancelled()
+                d = int(round((c["d"] - offset) * sr))
+                L = int(round(lengths[k] * sr))
+                hin = half[k - 1] if k > 0 else 0
+                hout = half[k] if k < n - 1 else 0
+                fi = max(1, int(c["fi"] * sr))
+                fo = max(1, int(c["fo"] * sr))
+                a, b = d - hin, d + L + hout
+                span = b - a
+                keep_from = span - 2 * hout     # from here the samples wait for the next piece
+                tail = np.zeros((2 * hout, ch), dtype=np.float32) if hout else None
+                pos = a
+                while pos < b:
+                    e = min(b, pos + block)
+                    x = read(pos, e)
+                    i = np.arange(pos - a, e - a, dtype=np.float64)
+                    if hin:
+                        g = np.sin(0.5 * np.pi * np.clip((i + 0.5) / (2 * hin), 0.0, 1.0))
+                    else:
+                        g = 0.5 - 0.5 * np.cos(np.pi * np.clip(i / fi, 0.0, 1.0))
+                    if hout:
+                        g *= np.sin(0.5 * np.pi * np.clip((span - i - 0.5) / (2 * hout), 0.0, 1.0))
+                    else:
+                        g *= 0.5 - 0.5 * np.cos(np.pi * np.clip((span - i) / fo, 0.0, 1.0))
+                    y = x * g[:, None].astype(np.float32)
+                    if pending is not None and i[0] < 2 * hin:
+                        m = int(min(len(y), 2 * hin - i[0]))
+                        y[:m] += pending[int(i[0]):int(i[0]) + m]
+                    now = i < keep_from
+                    dst.write(y[now])
+                    written += int(now.sum())
+                    if tail is not None and not now.all():
+                        rest = y[~now]
+                        start = int(i[~now][0] - keep_from)
+                        tail[start:start + len(rest)] = rest
+                    pos = e
+                    task["progress"] = share[0] + (share[1] - share[0]) * min(written / total, 1.0)
+                pending = tail
+
+
+def on_frames(cuts, fps, duration=0.0):
+    """The cuts moved to the nearest picture (a few hundredths of a second at most), so that each
+    piece holds a whole number of pictures: the edit then lasts exactly what the cuts say, and the
+    subtitles, the log and the edit list stay true to the end."""
+    if not fps or fps <= 0:
+        return cuts
+    out, last = [], 0
+    end = int(duration * fps + 1e-6) if duration > 0 else None      # the last whole picture
+    for c in cuts:
+        c = dict(c)
+        n = max(int(round(c["d"] * fps)), last)
+        e = int(round(c["f"] * fps))
+        if end is not None:
+            n, e = min(n, end - 1), min(e, end)
+        e = max(e, n + 1)
+        c["d"], c["f"] = round(n / fps, 6), round(e / fps, 6)
+        c["frames"], c["fps"] = e - n, fps
+        half = (c["f"] - c["d"]) / 2.0
+        c["fi"], c["fo"] = min(c["fi"], half), min(c["fo"], half)
+        out.append(c)
+        last = e
+    return out
+
+
+def piece_length(path):
+    """The length of an encoded piece as the join will count it."""
+    r = subprocess.run([ffprobe_exe(), "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(path)],
+                       capture_output=True, text=True, timeout=120, **_RUN_FLAGS)
+    try:
+        return float(r.stdout.strip())
+    except ValueError:
+        raise RuntimeError(_("This file cannot be read."))
+
+
+# ------------------------------------------------------------------------------------------
 # Producing the edit
 # ------------------------------------------------------------------------------------------
 
@@ -4824,6 +4969,10 @@ def produce_video(task, source, cuts, fade, image_fade, out, burn=None, tracks=(
         share *= 0.55
     sub = None
     try:
+        task["message"] = _("Reading the sound")
+        decoded = tmp / "original.wav"
+        decode_sound(task, source, decoded, 48000, 2)
+        offset = audio_offset(source)
         done, pieces = 0.0, []
         for k, c in enumerate(cuts):
             dur = c["f"] - c["d"]
@@ -4835,14 +4984,16 @@ def produce_video(task, source, cuts, fade, image_fade, out, burn=None, tracks=(
                     vf.append(f"fade=t=in:st=0:d={fv:.3f}")
                 if c.get("vo", True):
                     vf.append(f"fade=t=out:st={dur - fv:.3f}:d={fv:.3f}")
-            af = [f"afade=t=in:st=0:d={c['fi']:.3f}:curve=hsin",
-                  f"afade=t=out:st={max(0.0, dur - c['fo']):.3f}:d={c['fo']:.3f}:curve=hsin"]
             piece = tmp / f"piece_{k:04d}.mkv"
-            cmd = [ff, "-y", "-ss", f"{c['d']:.3f}", "-i", source, "-t", f"{dur:.3f}", "-map", "0:v:0", "-map", "0:a:0"]
+            if c.get("frames"):
+                # a whole number of pictures from the one at d (sought a quarter of a picture before it)
+                cmd = [ff, "-y", "-ss", f"{max(0.0, c['d'] - 0.25 / c['fps']):.6f}", "-i", source,
+                       "-frames:v", str(c["frames"]), "-map", "0:v:0", "-an"]
+            else:
+                cmd = [ff, "-y", "-ss", f"{c['d']:.3f}", "-i", source, "-t", f"{dur:.3f}", "-map", "0:v:0", "-an"]
             if vf:
                 cmd += ["-vf", ",".join(vf)]
-            cmd += ["-af", ",".join(af), "-c:v", "libx264", "-crf", "18", "-preset", "medium", "-pix_fmt", "yuv420p",
-                    "-c:a", "pcm_s16le", "-ar", "48000", "-ac", "2", str(piece)]
+            cmd += ["-c:v", "libx264", "-crf", "18", "-preset", "medium", "-pix_fmt", "yuv420p", str(piece)]
             base = done
 
             def advance(t, base=base, dur=dur):
@@ -4851,21 +5002,25 @@ def produce_video(task, source, cuts, fade, image_fade, out, burn=None, tracks=(
             _run_ffmpeg(cmd, task, str(tmp / "ffmpeg.log"), advance)
             pieces.append(piece)
             done += dur
+        # the sound of each piece lasts exactly as long as its pictures: the join stays in sync
         task["message"] = _("Joining")
+        sound = tmp / "edit.wav"
+        edit_sound(task, decoded, cuts, [piece_length(p) for p in pieces], sound, offset, share=(share * 0.97, share))
+        decoded.unlink()
         lst = tmp / "list.txt"
         with open(lst, "w", encoding="utf-8") as f:
             for p in pieces:
                 f.write("file '" + str(p).replace("'", "'\\''") + "'\n")
         partial = out.with_name(out.stem + ".partial" + out.suffix)
         joined = tmp / "joined.mov" if finish else partial
-        cmd = [ff, "-y", "-f", "concat", "-safe", "0", "-i", str(lst)]
+        cmd = [ff, "-y", "-f", "concat", "-safe", "0", "-i", str(lst), "-i", str(sound)]
         if not finish:
             for _lang, srt in tracks:
                 cmd += ["-i", str(srt)]
-        cmd += ["-map", "0:v:0", "-map", "0:a:0"]
+        cmd += ["-map", "0:v:0", "-map", "1:a:0"]
         if not finish:
             for k in range(len(tracks)):
-                cmd += ["-map", f"{k + 1}:0"]
+                cmd += ["-map", f"{k + 2}:0"]
         if burn:
             # ffmpeg's filter parser is picky about paths: a copy with a plain name (as traduire.py)
             sub = Path(tempfile.mkdtemp(prefix="subs_")) / ("subs" + Path(burn[0]).suffix.lower())
@@ -4880,7 +5035,7 @@ def produce_video(task, source, cuts, fade, image_fade, out, burn=None, tracks=(
         else:
             cmd += ["-c:v", "copy"]
         if finish:
-            cmd += ["-c:a", "copy", str(joined)]
+            cmd += ["-c:a", "pcm_s16le", str(joined)]
         else:
             cmd += ["-c:a", "aac", "-b:a", "192k"]
             if tracks:
@@ -4920,86 +5075,38 @@ def produce_video(task, source, cuts, fade, image_fade, out, burn=None, tracks=(
 
 
 def produce_audio(task, source, cuts, audio, fmt, out, finish=None):
-    """The sound is decoded once from start to end and the pieces taken on the fly, to the sample.
-    With `finish` = {toolkit, channels} the pieces go to a raw WAV first, which finaliser.py
-    finishes and encodes in `fmt`."""
+    """The sound is decoded once, the edit made from it to the sample (see edit_sound), then
+    encoded. With `finish` = {toolkit, channels} the edit goes to finaliser.py first, which
+    finishes it and encodes it in `fmt`."""
     ff = ffmpeg_exe()
-    sr, ch = audio["rate"], audio["channels"]
     codec = {"mp3": ["-c:a", "libmp3lame", "-b:a", "192k"], "m4a": ["-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart"],
              "wav": ["-c:a", "pcm_s16le"]}[fmt]
     partial = out.with_name(out.stem + ".partial" + out.suffix)
-    tmp = Path(tempfile.mkdtemp(prefix="edit_", dir=str(out.parent))) if finish else None
-    target = tmp / "joined.wav" if finish else partial
-    if finish:
-        codec = ["-c:a", "pcm_f32le"]
+    tmp = Path(tempfile.mkdtemp(prefix="edit_", dir=str(out.parent)))
     taking = 0.55 if finish else 0.97
-    log = tempfile.NamedTemporaryFile(prefix="edit_", suffix=".log", delete=False)
-    raw = ["-f", "f32le", "-ar", str(sr), "-ac", str(ch)]
-    dec = subprocess.Popen([ff, "-nostdin", "-v", "error", "-i", source, "-vn", "-map", "0:a:0", "-acodec", "pcm_f32le"] + raw + ["-"],
-                           stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, **_RUN_FLAGS)
-    enc = subprocess.Popen([ff, "-nostdin", "-y", "-v", "error"] + raw + ["-i", "-"] + codec + [str(target)],
-                           stdin=subprocess.PIPE, stderr=log, **_RUN_FLAGS)
-    bounds = [(int(round(c["d"] * sr)), int(round(c["f"] * sr)), max(1, int(c["fi"] * sr)), max(1, int(c["fo"] * sr))) for c in cuts]
-    last = bounds[-1][1]
-    size = ch * 4
-    block = sr
-    pos, k = 0, 0
-    task["message"] = _("Taking the passages")
     try:
-        while k < len(bounds):
-            if task.get("cancelled"):
-                raise Cancelled()
-            data = dec.stdout.read(block * size)
-            if not data:
-                break
-            n = len(data) // size
-            x = np.frombuffer(data[:n * size], dtype="<f4").reshape(n, ch)
-            while k < len(bounds):
-                d, f, fi, fo = bounds[k]
-                if d >= pos + n:
-                    break
-                a, b = max(d, pos), min(f, pos + n)
-                if b > a:
-                    idx = np.arange(a, b, dtype=np.float64)
-                    g = np.clip((idx - d) / fi, 0.0, 1.0) * np.clip((f - idx) / fo, 0.0, 1.0)
-                    g = 0.5 - 0.5 * np.cos(np.pi * g)
-                    piece = x[a - pos:b - pos] * g[:, None].astype(np.float32)
-                    enc.stdin.write(piece.astype("<f4").tobytes())
-                if f <= pos + n:
-                    k += 1
-                else:
-                    break
-            pos += n
-            task["progress"] = taking * min(pos / max(last, 1), 1.0)
+        task["message"] = _("Reading the sound")
+        decoded = tmp / "original.wav"
+        decode_sound(task, source, decoded, audio.get("rate") or None, audio.get("channels") or None)
+        task["message"] = _("Taking the passages")
+        sound = tmp / "edit.wav"
+        edit_sound(task, decoded, cuts, [c["f"] - c["d"] for c in cuts], sound, 0.0, share=(0.05, taking))
+        decoded.unlink()
         task["message"] = _("Encoding")
-        enc.stdin.close()
-        if enc.wait() != 0:
-            log.flush()
-            with open(log.name) as f:
-                raise RuntimeError(f.read()[-600:].strip() or "ffmpeg failed")
         if finish:
-            finished, report = finish_sound(task, finish["toolkit"], target, fmt, finish["channels"], tmp, share=(taking, 0.99),
+            joined = tmp / "joined.wav"
+            _run_ffmpeg([ff, "-y", "-i", str(sound), "-c:a", "pcm_f32le", str(joined)], task, str(tmp / "ffmpeg.log"))
+            finished, report = finish_sound(task, finish["toolkit"], joined, fmt, finish["channels"], tmp, share=(taking, 0.99),
                                             python=finish.get("python"), path_first=finish.get("path_first"))
             task["sound"] = report
             os.replace(finished, partial)
+        else:
+            _run_ffmpeg([ff, "-y", "-i", str(sound)] + codec + [str(partial)], task, str(tmp / "ffmpeg.log"))
         os.replace(partial, out)
-    except BrokenPipeError:
-        with open(log.name) as f:
-            raise RuntimeError(f.read()[-600:].strip() or "ffmpeg failed")
     finally:
-        for p in (dec, enc):
-            if p.poll() is None:
-                p.kill()
-        try:
-            dec.stdout.close()
-        except OSError:
-            pass
-        log.close()
-        os.unlink(log.name)
         if partial.exists():
             partial.unlink()
-        if tmp is not None:
-            shutil.rmtree(tmp, ignore_errors=True)
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
 # ------------------------------------------------------------------------------------------
@@ -9927,6 +10034,8 @@ class Main(QtWidgets.QMainWindow):
             k += 1
             out = src.with_name(f"{src.stem}_edit-{k}.{fmt}")
         cuts = [dict(c) for c in self.cuts]
+        if fmt == "mp4" and self.project["type"] == "video":
+            cuts = on_frames(cuts, (self.project.get("video") or {}).get("fps") or 0.0, self.project.get("duration") or 0.0)
         image_fade = self.between == "fade" and self.mode_value == "keep" and any(c.get("vi") or c.get("vo") for c in self.cuts)
         fade = PASSAGE_FADE if image_fade else SOUND_FADE
         mode = self.mode_value
