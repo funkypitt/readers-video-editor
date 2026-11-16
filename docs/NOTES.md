@@ -25,6 +25,18 @@ each word by its length, the ends of sentences on the voice's pauses; those posi
 
 ## Cuts
 
+**1.13.4 — no cut in the closure of a consonant inside a kept word.** The 1.13.2 search may look
+into the kept word (whisper's word ends are often early: « position » ends at 933.6 for whisper,
+at ~933.78 in the sound) and took the 40 ms closure of the « t » of « posi|tion » (−35 dB) as the
+dip: « -tion » was lost. `cut_point(..., kept=(a, b))`: inside the kept word's span the levels are
+replaced by a closing (max then min over CUT_KEPT_SILENCE = 0.20 s), so dips shorter than that are
+filled, true silences keep their level and edges. Applying it to the whole window (the removed
+side too) gains nothing. Judged by faster-whisper large-v3 on 2 × 200 random removals of 1–2
+words in the Dana file (splice 2.5 s + 2.5 s, kept word before / after recognised, on the cases
+that move): 0.08 s +7/+5, 0.12 s +11/+6 and +19/+4, 0.16 s +11/+4, 0.20 s +13/+5 and +23/+4. The
+level at the cut point rises (in speech 23 → ~30 %), as expected: many old « quiet » cuts were
+closures. Scripts: scratchpad judge_prep.py / judge_run.py.
+
 **1.13.3 — one crossfaded sound track, cuts on whole pictures.** Before, each piece carried its
 own sound with a fade out and a fade in: a hole in the room's sound at every join (synthetic test:
 −31 dB median), and since each x264 piece made with `-t` is rounded up to whole pictures while its

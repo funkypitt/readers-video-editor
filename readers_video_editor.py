@@ -34,7 +34,7 @@ from PyQt5.QtMultimediaWidgets import QVideoWidget
 os.environ.setdefault("HF_HUB_DISABLE_XET", "1")
 
 APP = "readers-video-editor"
-VERSION = "1.13.3"
+VERSION = "1.13.4"
 
 
 def _app_dirs():
@@ -4455,6 +4455,7 @@ CUT_REACH = 0.4
 CUT_REACH_PAUSE = 1.0
 CUT_PULL = 15.0
 CUT_FLOOR_ROOM = 4.0
+CUT_KEPT_SILENCE = 0.20
 
 
 def _levels(sound, a, b, step=0.01):
@@ -4479,14 +4480,32 @@ def room_floor(sound, t):
     return float(np.percentile(db, 10)) if db is not None else -90.0
 
 
-def cut_point(sound, lo, hi, aim):
-    """The quietest instant of [lo, hi], pulled towards `aim`; everything at the room's level is silence."""
+def cut_point(sound, lo, hi, aim, kept=None):
+    """The quietest instant of [lo, hi], pulled towards `aim`; everything at the room's level is silence.
+    `kept` (a, b): the span of a word that is kept. Inside it only a true silence counts (quiet over
+    CUT_KEPT_SILENCE): the closure of a consonant (the « t » of « posi-tion ») is a dip of a few
+    hundredths and would take the end of the word away."""
     aim = min(max(aim, lo), hi)
     if sound is None or hi - lo < 0.03:
         return aim
-    t, db = _levels(sound, lo, hi)
+    pad = CUT_KEPT_SILENCE if kept else 0.0
+    t, db = _levels(sound, max(0.0, lo - pad), hi + pad)
     if t is None:
         return aim
+    if kept:
+        w = int(round(CUT_KEPT_SILENCE / 0.01)) | 1
+        if len(db) >= w:
+            # a closing (highest then lowest over the window): dips shorter than the window are
+            # filled, longer silences keep their level and their edges
+            win = np.lib.stride_tricks.sliding_window_view
+            held = win(np.pad(db, w // 2, mode="edge"), w).max(axis=1)
+            held = win(np.pad(held, w // 2, mode="edge"), w).min(axis=1)
+            inside = (t > kept[0]) & (t < kept[1])
+            db = np.where(inside, held, db)
+    keep = (t >= lo) & (t <= hi)
+    if not keep.any():
+        return aim
+    t, db = t[keep], db[keep]
     floor = room_floor(sound, aim) + CUT_FLOOR_ROOM
     cost = np.maximum(db, floor) + CUT_PULL * np.abs(t - aim)
     return float(t[int(np.argmin(cost))])
@@ -4548,7 +4567,7 @@ def compute_cuts(wav, tokens, ranges, fade, duration, inverse=False, estimated=F
                 hi = min(f_raw, d_raw + _into(tokens[i], 0.5 * CUT_REACH_PAUSE) + play)
                 air = margins(fade_before)[0]
                 aim = d_raw - (air if before[0] is None else min(air, gap))
-                d = cut_point(sound, lo, hi, aim)
+                d = cut_point(sound, lo, hi, aim, kept=None if tokens[i][0] is None else (d_raw, tokens[i][2]))
             # the end, the same way after the last kept token
             if j == n - 1:
                 f = end_media
@@ -4559,7 +4578,7 @@ def compute_cuts(wav, tokens, ranges, fade, duration, inverse=False, estimated=F
                 hi = min(end_media, f_raw + gap + _into(after) + play)
                 air = margins(fade_after)[1]
                 aim = f_raw + (air if after[0] is None else min(air, gap))
-                f = cut_point(sound, lo, hi, aim)
+                f = cut_point(sound, lo, hi, aim, kept=None if tokens[j][0] is None else (tokens[j][1], f_raw))
             if inverse and i == 0:
                 d = 0.0
             if inverse and j == n - 1:

@@ -12,6 +12,9 @@ that download.
 
 ## Key points
 
+- **A kept word is never cut into for the silence of a consonant** (1.13.4): inside a kept word,
+  only a true silence (0.2 s) can draw a cut; the short silence before a « t » or a « p » no
+  longer counts, so removing « de diplomate » keeps the end of « position ».
 - **One sound track, crossfaded at each join; sound and picture stay in sync** (1.13.3): the
   sound of the edit is made in one go, the two sides of each straight join overlapping for
   0.03 s (equal power), instead of a fade out and a fade in that left a hole in the room's
