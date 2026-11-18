@@ -35,7 +35,7 @@ from PyQt5.QtMultimediaWidgets import QVideoWidget
 os.environ.setdefault("HF_HUB_DISABLE_XET", "1")
 
 APP = "readers-video-editor"
-VERSION = "1.14.0"
+VERSION = "1.14.1"
 
 
 def _app_dirs():
@@ -2303,7 +2303,8 @@ _RUN_FLAGS = {"creationflags": 0x08000000} if sys.platform == "win32" else {}   
 # ------------------------------------------------------------------------------------------
 # A video from an address: YouTube, X (Twitter) and the other sites yt-dlp knows. The app keeps
 # its own copy of the standalone yt-dlp in the data folder (fetched once, 40 MB) and lets it
-# update itself once a day: the sites change every few weeks and yt-dlp follows.
+# update itself once a day: the sites change every few weeks and yt-dlp follows. A yt-dlp the
+# system has is not used while the app can have its own: nobody keeps that one up to date.
 # ------------------------------------------------------------------------------------------
 
 BIN_DIR = os.path.join(DATA_DIR, "bin")
@@ -2326,11 +2327,9 @@ def ytdlp_managed():
 
 
 def ytdlp_exe():
-    """The app's own yt-dlp first; the system's one if the app's was never fetched."""
+    """The app's own yt-dlp, or None while it has not been fetched."""
     managed = ytdlp_managed()
-    if os.path.exists(managed):
-        return managed
-    return shutil.which("yt-dlp")
+    return managed if os.path.exists(managed) else None
 
 
 def is_url(text):
@@ -2362,20 +2361,34 @@ def fetch_ytdlp(progress, cancelled):
     return target
 
 
-def update_ytdlp(exe, progress):
-    """`yt-dlp -U` on the app's copy, at most once a day. A failure (no network) is not an error."""
+def _ytdlp_mark(exe):
+    """What tells one copy of the binary from the next: `-U` replaces the file."""
+    try:
+        st = os.stat(exe)
+        return st.st_size, st.st_mtime_ns
+    except OSError:
+        return None
+
+
+def update_ytdlp(exe, progress, force=False):
+    """`yt-dlp -U` on the app's copy, at most once a day — or now, with `force`, when a site has
+    just turned a download away. Returns whether a newer yt-dlp came. A failure (no network) is
+    not an error."""
     if exe != ytdlp_managed():
-        return
+        return False
     stamp = os.path.join(BIN_DIR, "yt-dlp-checked.json")
     last = (read_json(stamp, {}) or {}).get("time", 0)
-    if time.time() - last < YTDLP_CHECK_EVERY:
-        return
+    if not force and time.time() - last < YTDLP_CHECK_EVERY:
+        return False
     progress()
+    before = _ytdlp_mark(exe)
     try:
-        subprocess.run([exe, "-U"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=600, **_RUN_FLAGS)
+        done = subprocess.run([exe, "-U"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=600, **_RUN_FLAGS)
     except (OSError, subprocess.TimeoutExpired):
-        return
-    write_json(stamp, {"time": time.time()})
+        return False
+    if done.returncode == 0:      # written down only after a real answer: otherwise the next download asks again
+        write_json(stamp, {"time": time.time()})
+    return _ytdlp_mark(exe) != before
 
 
 def downloads_dir():
@@ -8713,9 +8726,21 @@ class Main(QtWidgets.QMainWindow):
                 except Cancelled:
                     raise
                 except Exception as ex:      # noqa: BLE001
-                    raise RuntimeError(_("yt-dlp could not be fetched (no network?): %1", str(ex)[:200]))
-            update_ytdlp(exe, lambda: w.progress.emit(0.1, _("Updating yt-dlp…")))
-            return download_media(task, exe, url, folder, language, lambda f, t: w.progress.emit(0.1 + 0.9 * f, t))
+                    exe = shutil.which("yt-dlp")      # the system's, as it is, rather than nothing
+                    if not exe:
+                        raise RuntimeError(_("yt-dlp could not be fetched (no network?): %1", str(ex)[:200]))
+            checked = update_ytdlp(exe, lambda: w.progress.emit(0.1, _("Updating yt-dlp…")))
+            fetch = lambda: download_media(task, exe, url, folder, language, lambda f, t: w.progress.emit(0.1 + 0.9 * f, t))
+            try:
+                return fetch()
+            except Cancelled:
+                raise
+            except Exception:      # noqa: BLE001
+                # Turned away: a yt-dlp newer than this morning's may have come out since. One more
+                # try if there is one; the first refusal is the one shown otherwise.
+                if checked or not update_ytdlp(exe, lambda: w.progress.emit(0.1, _("Updating yt-dlp…")), force=True):
+                    raise
+                return fetch()
 
         def done(result):
             self.task = None

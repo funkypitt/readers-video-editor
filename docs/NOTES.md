@@ -134,9 +134,12 @@ from the `[download]  12.3%` lines (`--newline`); an `ERROR:` line becomes the m
 
 The binary is the app's own copy in `<data>/bin` (`yt-dlp_linux`, `yt-dlp_linux_aarch64`,
 `yt-dlp.exe`, `yt-dlp_macos` from the latest GitHub release, fetched with urllib on first use),
-and `yt-dlp -U` runs on it at most once a day (`yt-dlp-checked.json`), quietly; without network
-the download simply proceeds with the copy at hand. A system `yt-dlp` is used only when the app's
-copy was never fetched. Since yt-dlp 2025.11 a JavaScript runtime (Deno) is recommended for
+and `yt-dlp -U` runs on it at most once a day (`yt-dlp-checked.json`, written only when `-U`
+answered), quietly; without network the download simply proceeds with the copy at hand. When a
+download fails and the day's check had already been made, `-U` runs once more, and the download
+is tried again if a newer yt-dlp came. Since 1.14.1 a system `yt-dlp` is used only when the app's
+own copy cannot be fetched: before, a machine that had one (the distribution's, months old) never
+got the app's self-updating copy. Since yt-dlp 2025.11 a JavaScript runtime (Deno) is recommended for
 YouTube; checked 2026-10-28 with 2026.10.26: no warning and the full format list (1080p) without
 any runtime, so none is managed. If YouTube downloads start to fail with a runtime warning, the
 next step is to fetch Deno the same way and pass `--js-runtimes deno:<path>`.
