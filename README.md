@@ -12,6 +12,14 @@ that download.
 
 ## Key points
 
+- **A getting started for everyone, Claude recommended** (1.16.0): the translation goes to
+  Claude by default, on your own Claude plan (Claude Code), and the step « Who translates » says so
+  first. One button installs Claude Code and opens the browser on claude.ai to sign in — no
+  terminal, no command to type; the app waits for the sign-in and goes on by itself (the terminal
+  stays as a second way). A setting never chosen by hand moves from Ollama to Claude, unless
+  Ollama is on the computer. The steps speak plainly: « Translation tools » and « Who
+  translates », sizes in MB/Mo, the folder written with `~`, no library names; the improved sound
+  installs the translation tools with it when they are missing.
 - **A video and its subtitle file, without transcription** (1.15.0): the home page has a second
   field, « Subtitles of this file (.srt), if you have them » — whatever the file is called and
   wherever it is; the button then says « Open · text from the subtitles ». Dropping the video and

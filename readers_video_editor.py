@@ -35,7 +35,7 @@ from PyQt5.QtMultimediaWidgets import QVideoWidget
 os.environ.setdefault("HF_HUB_DISABLE_XET", "1")
 
 APP = "readers-video-editor"
-VERSION = "1.15.0"
+VERSION = "1.16.0"
 
 
 def _app_dirs():
@@ -1771,7 +1771,7 @@ _TR_ONBOARD = {
   'Optional': 'Facultatif',
   'Optional. The traduction toolkit translates the text, cuts the subtitles by its rules and improves the sound. If you only edit, skip it, and the two steps after it.': 'Facultatif. La boîte à outils traduction traduit le texte, découpe les sous-titres selon ses règles et améliore le son. Si vous ne faites que monter, passez-la, ainsi que les deux étapes suivantes.',
   'Optional. The translation is written by a language model. Choose where it runs: Claude Code on your own Claude plan, Claude with an API key paid by the call, or Ollama on this computer (free, private, slower).': "Facultatif. La traduction est rédigée par un modèle de langue. Choisissez où il tourne : Claude Code avec votre abonnement Claude, Claude avec une clé API payée à l'appel, ou Ollama sur cet ordinateur (gratuit, privé, plus lent).",
-  'Optional. When the edit is produced, removes the background noise and the hum and levels the voice. Needs the toolkit.': 'Facultatif. À la production du montage, enlève le bruit de fond et le ronflement, et met la voix à niveau. Demande la boîte à outils.',
+  'Optional. When the edit is produced, removes the background noise and the hum and levels the voice. Needs the translation tools of step 3.': 'Facultatif. À la production du montage, enlève le bruit de fond et le ronflement, et met la voix à niveau. Demande les outils de traduction de l\'étape 3.',
   'Ready': 'Prêt',
   'Show the details': 'Afficher les détails',
   'Skip the optional steps': 'Passer les étapes facultatives',
@@ -1810,7 +1810,7 @@ _TR_ONBOARD = {
   'Optional': 'Freiwillig',
   'Optional. The traduction toolkit translates the text, cuts the subtitles by its rules and improves the sound. If you only edit, skip it, and the two steps after it.': 'Freiwillig. Der Übersetzungs-Werkzeugkasten übersetzt den Text, schneidet die Untertitel nach seinen Regeln und verbessert den Ton. Wenn Sie nur schneiden, überspringen Sie ihn und die beiden folgenden Schritte.',
   'Optional. The translation is written by a language model. Choose where it runs: Claude Code on your own Claude plan, Claude with an API key paid by the call, or Ollama on this computer (free, private, slower).': 'Freiwillig. Die Übersetzung schreibt ein Sprachmodell. Wählen Sie, wo es läuft: Claude Code mit Ihrem Claude-Abo, Claude mit einem API-Schlüssel, pro Aufruf bezahlt, oder Ollama auf diesem Computer (kostenlos, privat, langsamer).',
-  'Optional. When the edit is produced, removes the background noise and the hum and levels the voice. Needs the toolkit.': 'Freiwillig. Beim Erzeugen des Schnitts entfernt es Hintergrundrauschen und Brummen und gleicht die Stimme an. Braucht den Werkzeugkasten.',
+  'Optional. When the edit is produced, removes the background noise and the hum and levels the voice. Needs the translation tools of step 3.': 'Freiwillig. Beim Erzeugen des Schnitts entfernt es Hintergrundrauschen und Brummen und gleicht die Stimme an. Braucht die Übersetzungswerkzeuge aus Schritt 3.',
   'Ready': 'Bereit',
   'Show the details': 'Details anzeigen',
   'Skip the optional steps': 'Freiwillige Schritte überspringen',
@@ -1849,7 +1849,7 @@ _TR_ONBOARD = {
   'Optional': 'Opcional',
   'Optional. The traduction toolkit translates the text, cuts the subtitles by its rules and improves the sound. If you only edit, skip it, and the two steps after it.': 'Opcional. La caja de herramientas de traducción traduce el texto, corta los subtítulos según sus reglas y mejora el sonido. Si solo monta, sáltela, y también los dos pasos siguientes.',
   'Optional. The translation is written by a language model. Choose where it runs: Claude Code on your own Claude plan, Claude with an API key paid by the call, or Ollama on this computer (free, private, slower).': 'Opcional. La traducción la redacta un modelo de lenguaje. Elija dónde se ejecuta: Claude Code con su suscripción a Claude, Claude con una clave API pagada por llamada, u Ollama en este ordenador (gratis, privado, más lento).',
-  'Optional. When the edit is produced, removes the background noise and the hum and levels the voice. Needs the toolkit.': 'Opcional. Al producir el montaje, quita el ruido de fondo y el zumbido y nivela la voz. Necesita la caja de herramientas.',
+  'Optional. When the edit is produced, removes the background noise and the hum and levels the voice. Needs the translation tools of step 3.': 'Opcional. Al producir el montaje, quita el ruido de fondo y el zumbido y nivela la voz. Necesita las herramientas de traducción del paso 3.',
   'Ready': 'Listo',
   'Show the details': 'Mostrar los detalles',
   'Skip the optional steps': 'Saltar los pasos opcionales',
@@ -1888,7 +1888,7 @@ _TR_ONBOARD = {
   'Optional': 'Opcional',
   'Optional. The traduction toolkit translates the text, cuts the subtitles by its rules and improves the sound. If you only edit, skip it, and the two steps after it.': 'Opcional. A caixa de ferramentas de tradução traduz o texto, corta as legendas segundo as suas regras e melhora o som. Se só monta, salte-a, e também os dois passos seguintes.',
   'Optional. The translation is written by a language model. Choose where it runs: Claude Code on your own Claude plan, Claude with an API key paid by the call, or Ollama on this computer (free, private, slower).': 'Opcional. A tradução é escrita por um modelo de linguagem. Escolha onde corre: Claude Code com a sua assinatura Claude, Claude com uma chave API paga por chamada, ou Ollama neste computador (grátis, privado, mais lento).',
-  'Optional. When the edit is produced, removes the background noise and the hum and levels the voice. Needs the toolkit.': 'Opcional. Ao produzir a montagem, retira o ruído de fundo e o zumbido e nivela a voz. Precisa da caixa de ferramentas.',
+  'Optional. When the edit is produced, removes the background noise and the hum and levels the voice. Needs the translation tools of step 3.': 'Opcional. Ao produzir a montagem, retira o ruído de fundo e o zumbido e nivela a voz. Precisa das ferramentas de tradução do passo 3.',
   'Ready': 'Pronto',
   'Show the details': 'Mostrar os detalhes',
   'Skip the optional steps': 'Saltar os passos opcionais',
@@ -1927,7 +1927,7 @@ _TR_ONBOARD = {
   'Optional': 'Необязательно',
   'Optional. The traduction toolkit translates the text, cuts the subtitles by its rules and improves the sound. If you only edit, skip it, and the two steps after it.': 'Необязательно. Набор инструментов перевода переводит текст, нарезает субтитры по своим правилам и улучшает звук. Если вы только монтируете, пропустите его и два следующих шага.',
   'Optional. The translation is written by a language model. Choose where it runs: Claude Code on your own Claude plan, Claude with an API key paid by the call, or Ollama on this computer (free, private, slower).': 'Необязательно. Перевод пишет языковая модель. Выберите, где она работает: Claude Code по вашей подписке Claude, Claude с ключом API с оплатой за вызов или Ollama на этом компьютере (бесплатно, приватно, медленнее).',
-  'Optional. When the edit is produced, removes the background noise and the hum and levels the voice. Needs the toolkit.': 'Необязательно. При создании монтажа убирает фоновый шум и гул и выравнивает голос. Нужен набор инструментов.',
+  'Optional. When the edit is produced, removes the background noise and the hum and levels the voice. Needs the translation tools of step 3.': 'Необязательно. При создании монтажа убирает фоновый шум и гул и выравнивает голос. Нужны инструменты перевода из шага 3.',
   'Ready': 'Готово',
   'Show the details': 'Показать подробности',
   'Skip the optional steps': 'Пропустить необязательные шаги',
@@ -1950,6 +1950,236 @@ _TR_ONBOARD = {
 }
 for _code, _more in _TR_ONBOARD.items():
     _TR.setdefault(_code, {}).update(_more)
+
+
+# The strings of 1.16.0: a getting started for everyone, Claude recommended for the translation
+_EASY_KEYS = [
+ "Welcome! This assistant prepares the app in a few steps. Each one says what it is for and what it downloads, shows the progress, and checks that it works.",
+ "To edit your videos, only the first two steps matter. The three next ones are optional: they translate, subtitle and improve the sound. For the translation we recommend Claude, with your Claude plan.",
+ "You can skip a step and come back to it later: « Getting started… » on the home page.",
+ "Translation tools",
+ "Who translates",
+ "Optional. The tools that translate the text, cut it into subtitles and improve the sound. If you only want to edit your videos, skip this step and the two after it.",
+ "Optional. The translation is written by an artificial intelligence. Recommended: Claude, with your Claude plan (Pro or Max): the best translations, nothing more to pay. Without a plan: an API key paid by use, or Ollama, free and private but slow, for powerful computers only.",
+ "Not on this computer yet. The app downloads them for you: a few MB, about a minute.",
+ "Install",
+ "The model « %1 » (%2) is downloaded at the first transcription, or now with the button below.",
+ "Ready: the model « %1 » is here. When a video comes with its subtitle file, that file is used instead.",
+ "recommended",
+ "Claude plan · recommended",
+ "Claude API key",
+ "Ollama, local",
+ "Claude writes the best translations: with your plan nothing more to pay, with an API key each translation is paid. Ollama keeps everything on this computer, but it is slower and its translations rougher.",
+ "Download: Claude Code, about 200 MB, once. Needs a Claude plan (Pro or Max). The text to translate is sent to Anthropic.",
+ "Download: nothing. Needs an API key from Anthropic, paid by use. The text to translate is sent to Anthropic.",
+ "Download: the Ollama app, then a model of 5 to 20 GB. Everything stays on this computer; needs a powerful one (16 GB of memory or more).",
+ "Recommended if you have a Claude plan (Pro or Max): the best translations, nothing more to pay. One button: the app installs Claude Code (about 200 MB), then your browser opens on claude.ai so that you sign in to your account.",
+ "Install and sign in",
+ "Claude Code is installed. One thing left: sign in to your Claude account. Your browser opens on claude.ai; accept there, then come back here.",
+ "Sign in to Claude",
+ "Sign in with the Terminal",
+ "Ready: signed in to your Claude account. The translations are written by Claude, on your plan.",
+ "Installing Claude Code (about 200 MB, once)…",
+ "Your browser opened on claude.ai: sign in to your Claude account and click « Authorize ». The app waits here, then goes on by itself.",
+ "If the browser did not open, copy this address into it: %1",
+ "The sign-in did not finish. Try again, or use « Sign in with the Terminal ».",
+ "The browser did not answer within 15 minutes. Try again.",
+ "Download: about 1 GB of sound tools, once. Time: 5 to 15 minutes.",
+ "Needs the translation tools first (step 3). This button installs both.",
+ "Install the tools and the sound",
+ "Ready: the sound tools are here. « Sound: improved », when you produce an edit, uses them.",
+ "The sound tools (about 1 GB) are installed the first time they are used, or now:",
+]
+_EASY = {
+ "fr": [
+  "Bienvenue ! Cet assistant prépare l'application en quelques étapes. Chacune dit à quoi elle sert et ce qu'elle télécharge, montre sa progression et vérifie que tout fonctionne.",
+  "Pour monter vos vidéos, seules les deux premières étapes comptent. Les trois suivantes sont facultatives : elles traduisent, sous-titrent et améliorent le son. Pour la traduction, nous recommandons Claude, avec votre abonnement Claude.",
+  "Vous pouvez passer une étape et y revenir plus tard : « Prise en main… » sur la page d'accueil.",
+  "Outils de traduction",
+  "Qui traduit",
+  "Facultatif. Les outils qui traduisent le texte, le découpent en sous-titres et améliorent le son. Si vous voulez seulement monter vos vidéos, passez cette étape et les deux suivantes.",
+  "Facultatif. La traduction est rédigée par une intelligence artificielle. Recommandé : Claude, avec votre abonnement Claude (Pro ou Max) : les meilleures traductions, rien de plus à payer. Sans abonnement : une clé API payée à l'usage, ou Ollama, gratuit et privé mais lent, réservé aux ordinateurs puissants.",
+  "Pas encore sur cet ordinateur. L'application les télécharge pour vous : quelques Mo, environ une minute.",
+  "Installer",
+  "Le modèle « %1 » (%2) se télécharge à la première transcription, ou dès maintenant avec le bouton ci-dessous.",
+  "Prêt : le modèle « %1 » est là. Quand une vidéo est accompagnée de son fichier de sous-titres, c'est ce fichier qui sert.",
+  "recommandé",
+  "Abonnement Claude · recommandé",
+  "Clé API Claude",
+  "Ollama, en local",
+  "Claude rédige les meilleures traductions : avec votre abonnement, rien de plus à payer ; avec une clé API, chaque traduction est payante. Ollama garde tout sur cet ordinateur, mais il est plus lent et ses traductions plus approximatives.",
+  "Téléchargement : Claude Code, environ 200 Mo, une fois. Demande un abonnement Claude (Pro ou Max). Le texte à traduire est envoyé à Anthropic.",
+  "Téléchargement : rien. Demande une clé API d'Anthropic, payée à l'usage. Le texte à traduire est envoyé à Anthropic.",
+  "Téléchargement : l'application Ollama, puis un modèle de 5 à 20 Go. Tout reste sur cet ordinateur ; il doit être puissant (16 Go de mémoire ou plus).",
+  "Recommandé si vous avez un abonnement Claude (Pro ou Max) : les meilleures traductions, rien de plus à payer. Un seul bouton : l'application installe Claude Code (environ 200 Mo), puis votre navigateur s'ouvre sur claude.ai pour que vous vous connectiez à votre compte.",
+  "Installer et se connecter",
+  "Claude Code est installé. Il reste une chose : vous connecter à votre compte Claude. Votre navigateur s'ouvre sur claude.ai ; acceptez, puis revenez ici.",
+  "Se connecter à Claude",
+  "Se connecter avec le Terminal",
+  "Prêt : connecté à votre compte Claude. Les traductions sont rédigées par Claude, sur votre abonnement.",
+  "Installation de Claude Code (environ 200 Mo, une fois)…",
+  "Votre navigateur s'est ouvert sur claude.ai : connectez-vous à votre compte Claude et cliquez sur « Autoriser ». L'application attend ici, puis continue toute seule.",
+  "Si le navigateur ne s'est pas ouvert, copiez-y cette adresse : %1",
+  "La connexion n'a pas abouti. Réessayez, ou utilisez « Se connecter avec le Terminal ».",
+  "Le navigateur n'a pas répondu en 15 minutes. Réessayez.",
+  "Téléchargement : environ 1 Go d'outils pour le son, une fois. Durée : 5 à 15 minutes.",
+  "Demande d'abord les outils de traduction (étape 3). Ce bouton installe les deux.",
+  "Installer les outils et le son",
+  "Prêt : les outils du son sont là. « Son : amélioré », quand vous produisez un montage, s'en sert.",
+  "Les outils du son (environ 1 Go) s'installent à leur première utilisation, ou dès maintenant :",
+ ],
+ "de": [
+  "Willkommen! Dieser Assistent richtet die App in wenigen Schritten ein. Jeder Schritt sagt, wozu er dient und was er herunterlädt, zeigt den Fortschritt und prüft, ob alles funktioniert.",
+  "Zum Schneiden Ihrer Videos zählen nur die ersten zwei Schritte. Die drei weiteren sind freiwillig: Sie übersetzen, untertiteln und verbessern den Ton. Für die Übersetzung empfehlen wir Claude mit Ihrem Claude-Abo.",
+  "Sie können einen Schritt überspringen und später zurückkommen: „Erste Schritte…“ auf der Startseite.",
+  "Übersetzungswerkzeuge",
+  "Wer übersetzt",
+  "Freiwillig. Die Werkzeuge, die den Text übersetzen, in Untertitel aufteilen und den Ton verbessern. Wenn Sie Ihre Videos nur schneiden möchten, überspringen Sie diesen Schritt und die zwei nächsten.",
+  "Freiwillig. Die Übersetzung schreibt eine künstliche Intelligenz. Empfohlen: Claude, mit Ihrem Claude-Abo (Pro oder Max): die besten Übersetzungen, nichts weiter zu bezahlen. Ohne Abo: ein API-Schlüssel, nach Verbrauch bezahlt, oder Ollama, kostenlos und privat, aber langsam, nur für leistungsstarke Computer.",
+  "Noch nicht auf diesem Computer. Die App lädt sie für Sie herunter: einige MB, etwa eine Minute.",
+  "Installieren",
+  "Das Modell „%1“ (%2) wird bei der ersten Transkription heruntergeladen, oder jetzt mit dem Knopf unten.",
+  "Bereit: Das Modell „%1“ ist da. Liegt einem Video seine Untertiteldatei bei, wird diese verwendet.",
+  "empfohlen",
+  "Claude-Abo · empfohlen",
+  "Claude-API-Schlüssel",
+  "Ollama, lokal",
+  "Claude schreibt die besten Übersetzungen: mit Ihrem Abo ohne weitere Kosten, mit einem API-Schlüssel wird jede Übersetzung bezahlt. Ollama behält alles auf diesem Computer, ist aber langsamer und übersetzt gröber.",
+  "Download: Claude Code, etwa 200 MB, einmalig. Erfordert ein Claude-Abo (Pro oder Max). Der zu übersetzende Text geht an Anthropic.",
+  "Download: nichts. Erfordert einen API-Schlüssel von Anthropic, nach Verbrauch bezahlt. Der zu übersetzende Text geht an Anthropic.",
+  "Download: die Ollama-App, dann ein Modell von 5 bis 20 GB. Alles bleibt auf diesem Computer; er muss leistungsstark sein (16 GB Arbeitsspeicher oder mehr).",
+  "Empfohlen, wenn Sie ein Claude-Abo haben (Pro oder Max): die besten Übersetzungen, nichts weiter zu bezahlen. Ein Knopf: Die App installiert Claude Code (etwa 200 MB), dann öffnet sich Ihr Browser auf claude.ai, damit Sie sich bei Ihrem Konto anmelden.",
+  "Installieren und anmelden",
+  "Claude Code ist installiert. Eines fehlt noch: die Anmeldung bei Ihrem Claude-Konto. Ihr Browser öffnet sich auf claude.ai; bestätigen Sie dort und kommen Sie dann hierher zurück.",
+  "Bei Claude anmelden",
+  "Über das Terminal anmelden",
+  "Bereit: bei Ihrem Claude-Konto angemeldet. Die Übersetzungen schreibt Claude, mit Ihrem Abo.",
+  "Claude Code wird installiert (etwa 200 MB, einmalig)…",
+  "Ihr Browser hat sich auf claude.ai geöffnet: Melden Sie sich bei Ihrem Claude-Konto an und klicken Sie auf „Autorisieren“. Die App wartet hier und macht dann von selbst weiter.",
+  "Falls sich der Browser nicht geöffnet hat, kopieren Sie diese Adresse hinein: %1",
+  "Die Anmeldung wurde nicht abgeschlossen. Versuchen Sie es erneut oder nutzen Sie „Über das Terminal anmelden“.",
+  "Der Browser hat innerhalb von 15 Minuten nicht geantwortet. Versuchen Sie es erneut.",
+  "Download: etwa 1 GB Tonwerkzeuge, einmalig. Dauer: 5 bis 15 Minuten.",
+  "Erfordert zuerst die Übersetzungswerkzeuge (Schritt 3). Dieser Knopf installiert beides.",
+  "Werkzeuge und Ton installieren",
+  "Bereit: Die Tonwerkzeuge sind da. „Ton: verbessert“ nutzt sie, wenn Sie einen Schnitt erstellen.",
+  "Die Tonwerkzeuge (etwa 1 GB) werden bei der ersten Verwendung installiert, oder jetzt:",
+ ],
+ "es": [
+  "¡Bienvenido! Este asistente prepara la aplicación en unos pocos pasos. Cada uno dice para qué sirve y qué descarga, muestra su progreso y comprueba que todo funciona.",
+  "Para editar sus vídeos solo cuentan los dos primeros pasos. Los tres siguientes son opcionales: traducen, subtitulan y mejoran el sonido. Para la traducción recomendamos Claude, con su suscripción a Claude.",
+  "Puede saltarse un paso y volver más tarde: « Primeros pasos… » en la página de inicio.",
+  "Herramientas de traducción",
+  "Quién traduce",
+  "Opcional. Las herramientas que traducen el texto, lo dividen en subtítulos y mejoran el sonido. Si solo quiere editar sus vídeos, sáltese este paso y los dos siguientes.",
+  "Opcional. La traducción la redacta una inteligencia artificial. Recomendado: Claude, con su suscripción a Claude (Pro o Max): las mejores traducciones, nada más que pagar. Sin suscripción: una clave API pagada por uso, u Ollama, gratuito y privado pero lento, solo para ordenadores potentes.",
+  "Todavía no está en este ordenador. La aplicación las descarga por usted: unos MB, alrededor de un minuto.",
+  "Instalar",
+  "El modelo « %1 » (%2) se descarga en la primera transcripción, o ahora con el botón de abajo.",
+  "Listo: el modelo « %1 » está aquí. Cuando un vídeo viene con su archivo de subtítulos, se usa ese archivo.",
+  "recomendado",
+  "Suscripción Claude · recomendado",
+  "Clave API de Claude",
+  "Ollama, local",
+  "Claude redacta las mejores traducciones: con su suscripción, nada más que pagar; con una clave API, cada traducción se paga. Ollama lo guarda todo en este ordenador, pero es más lento y sus traducciones más toscas.",
+  "Descarga: Claude Code, unos 200 MB, una vez. Requiere una suscripción a Claude (Pro o Max). El texto a traducir se envía a Anthropic.",
+  "Descarga: nada. Requiere una clave API de Anthropic, pagada por uso. El texto a traducir se envía a Anthropic.",
+  "Descarga: la aplicación Ollama y luego un modelo de 5 a 20 GB. Todo se queda en este ordenador; debe ser potente (16 GB de memoria o más).",
+  "Recomendado si tiene una suscripción a Claude (Pro o Max): las mejores traducciones, nada más que pagar. Un solo botón: la aplicación instala Claude Code (unos 200 MB) y luego su navegador se abre en claude.ai para que inicie sesión en su cuenta.",
+  "Instalar e iniciar sesión",
+  "Claude Code está instalado. Falta una cosa: iniciar sesión en su cuenta de Claude. Su navegador se abre en claude.ai; acepte allí y vuelva aquí.",
+  "Iniciar sesión en Claude",
+  "Iniciar sesión con el Terminal",
+  "Listo: sesión iniciada en su cuenta de Claude. Las traducciones las redacta Claude, con su suscripción.",
+  "Instalando Claude Code (unos 200 MB, una vez)…",
+  "Su navegador se ha abierto en claude.ai: inicie sesión en su cuenta de Claude y haga clic en « Autorizar ». La aplicación espera aquí y luego continúa sola.",
+  "Si el navegador no se abrió, copie en él esta dirección: %1",
+  "El inicio de sesión no terminó. Vuelva a intentarlo, o use « Iniciar sesión con el Terminal ».",
+  "El navegador no respondió en 15 minutos. Vuelva a intentarlo.",
+  "Descarga: alrededor de 1 GB de herramientas de sonido, una vez. Duración: de 5 a 15 minutos.",
+  "Requiere primero las herramientas de traducción (paso 3). Este botón instala ambas.",
+  "Instalar las herramientas y el sonido",
+  "Listo: las herramientas de sonido están aquí. « Sonido: mejorado », al producir una edición, las usa.",
+  "Las herramientas de sonido (alrededor de 1 GB) se instalan la primera vez que se usan, o ahora:",
+ ],
+ "pt": [
+  "Bem-vindo! Este assistente prepara a aplicação em poucos passos. Cada um diz para que serve e o que descarrega, mostra o progresso e verifica que tudo funciona.",
+  "Para editar os seus vídeos, só contam os dois primeiros passos. Os três seguintes são opcionais: traduzem, legendam e melhoram o som. Para a tradução, recomendamos o Claude, com a sua subscrição Claude.",
+  "Pode saltar um passo e voltar a ele mais tarde: « Primeiros passos… » na página inicial.",
+  "Ferramentas de tradução",
+  "Quem traduz",
+  "Opcional. As ferramentas que traduzem o texto, o dividem em legendas e melhoram o som. Se só quer editar os seus vídeos, salte este passo e os dois seguintes.",
+  "Opcional. A tradução é redigida por uma inteligência artificial. Recomendado: o Claude, com a sua subscrição Claude (Pro ou Max): as melhores traduções, nada mais a pagar. Sem subscrição: uma chave API paga por utilização, ou o Ollama, gratuito e privado mas lento, só para computadores potentes.",
+  "Ainda não está neste computador. A aplicação descarrega-as por si: alguns MB, cerca de um minuto.",
+  "Instalar",
+  "O modelo « %1 » (%2) é descarregado na primeira transcrição, ou agora com o botão abaixo.",
+  "Pronto: o modelo « %1 » está aqui. Quando um vídeo vem com o seu ficheiro de legendas, é esse ficheiro que é usado.",
+  "recomendado",
+  "Subscrição Claude · recomendado",
+  "Chave API Claude",
+  "Ollama, local",
+  "O Claude redige as melhores traduções: com a sua subscrição, nada mais a pagar; com uma chave API, cada tradução é paga. O Ollama mantém tudo neste computador, mas é mais lento e as traduções mais toscas.",
+  "Descarga: Claude Code, cerca de 200 MB, uma vez. Requer uma subscrição Claude (Pro ou Max). O texto a traduzir é enviado à Anthropic.",
+  "Descarga: nada. Requer uma chave API da Anthropic, paga por utilização. O texto a traduzir é enviado à Anthropic.",
+  "Descarga: a aplicação Ollama e depois um modelo de 5 a 20 GB. Tudo fica neste computador; tem de ser potente (16 GB de memória ou mais).",
+  "Recomendado se tem uma subscrição Claude (Pro ou Max): as melhores traduções, nada mais a pagar. Um só botão: a aplicação instala o Claude Code (cerca de 200 MB) e depois o seu navegador abre-se em claude.ai para iniciar sessão na sua conta.",
+  "Instalar e iniciar sessão",
+  "O Claude Code está instalado. Falta uma coisa: iniciar sessão na sua conta Claude. O seu navegador abre-se em claude.ai; aceite lá e depois volte aqui.",
+  "Iniciar sessão no Claude",
+  "Iniciar sessão com o Terminal",
+  "Pronto: sessão iniciada na sua conta Claude. As traduções são redigidas pelo Claude, na sua subscrição.",
+  "A instalar o Claude Code (cerca de 200 MB, uma vez)…",
+  "O seu navegador abriu-se em claude.ai: inicie sessão na sua conta Claude e clique em « Autorizar ». A aplicação espera aqui e depois continua sozinha.",
+  "Se o navegador não se abriu, copie para ele este endereço: %1",
+  "O início de sessão não terminou. Tente de novo, ou use « Iniciar sessão com o Terminal ».",
+  "O navegador não respondeu em 15 minutos. Tente de novo.",
+  "Descarga: cerca de 1 GB de ferramentas de som, uma vez. Duração: 5 a 15 minutos.",
+  "Requer primeiro as ferramentas de tradução (passo 3). Este botão instala ambas.",
+  "Instalar as ferramentas e o som",
+  "Pronto: as ferramentas de som estão aqui. « Som: melhorado », ao produzir uma edição, usa-as.",
+  "As ferramentas de som (cerca de 1 GB) são instaladas na primeira utilização, ou agora:",
+ ],
+ "ru": [
+  "Добро пожаловать! Этот помощник настроит приложение за несколько шагов. Каждый шаг объясняет, зачем он нужен и что загружает, показывает ход работы и проверяет, что всё работает.",
+  "Для монтажа видео важны только первые два шага. Три следующих необязательны: они переводят, делают субтитры и улучшают звук. Для перевода мы рекомендуем Claude с вашей подпиской Claude.",
+  "Шаг можно пропустить и вернуться к нему позже: «Первые шаги…» на главной странице.",
+  "Инструменты перевода",
+  "Кто переводит",
+  "Необязательно. Инструменты, которые переводят текст, делят его на субтитры и улучшают звук. Если вы хотите только монтировать видео, пропустите этот шаг и два следующих.",
+  "Необязательно. Перевод пишет искусственный интеллект. Рекомендуется: Claude с вашей подпиской Claude (Pro или Max): лучшие переводы, без доплат. Без подписки: ключ API с оплатой по использованию или Ollama — бесплатно и приватно, но медленно, только для мощных компьютеров.",
+  "Пока нет на этом компьютере. Приложение загрузит их само: несколько МБ, около минуты.",
+  "Установить",
+  "Модель «%1» (%2) загружается при первой расшифровке или сейчас — кнопкой ниже.",
+  "Готово: модель «%1» на месте. Если у видео есть свой файл субтитров, используется он.",
+  "рекомендуется",
+  "Подписка Claude · рекомендуется",
+  "Ключ API Claude",
+  "Ollama, локально",
+  "Claude пишет лучшие переводы: с подпиской — без доплат, с ключом API каждый перевод оплачивается. Ollama хранит всё на этом компьютере, но работает медленнее и переводит грубее.",
+  "Загрузка: Claude Code, около 200 МБ, один раз. Нужна подписка Claude (Pro или Max). Текст для перевода отправляется в Anthropic.",
+  "Загрузка: ничего. Нужен ключ API от Anthropic с оплатой по использованию. Текст для перевода отправляется в Anthropic.",
+  "Загрузка: приложение Ollama, затем модель от 5 до 20 ГБ. Всё остаётся на этом компьютере; он должен быть мощным (16 ГБ памяти или больше).",
+  "Рекомендуется, если у вас есть подписка Claude (Pro или Max): лучшие переводы, без доплат. Одна кнопка: приложение установит Claude Code (около 200 МБ), затем ваш браузер откроет claude.ai, чтобы вы вошли в свою учётную запись.",
+  "Установить и войти",
+  "Claude Code установлен. Осталось одно: войти в учётную запись Claude. Браузер откроет claude.ai; подтвердите там и вернитесь сюда.",
+  "Войти в Claude",
+  "Войти через Терминал",
+  "Готово: вход в учётную запись Claude выполнен. Переводы пишет Claude по вашей подписке.",
+  "Установка Claude Code (около 200 МБ, один раз)…",
+  "Браузер открыл claude.ai: войдите в учётную запись Claude и нажмите «Authorize». Приложение ждёт здесь и продолжит само.",
+  "Если браузер не открылся, скопируйте в него этот адрес: %1",
+  "Вход не завершён. Попробуйте ещё раз или используйте «Войти через Терминал».",
+  "Браузер не ответил за 15 минут. Попробуйте ещё раз.",
+  "Загрузка: около 1 ГБ инструментов для звука, один раз. Время: от 5 до 15 минут.",
+  "Сначала нужны инструменты перевода (шаг 3). Эта кнопка установит и то и другое.",
+  "Установить инструменты и звук",
+  "Готово: инструменты для звука на месте. «Звук: улучшенный» использует их при создании монтажа.",
+  "Инструменты для звука (около 1 ГБ) устанавливаются при первом использовании или сейчас:",
+ ],
+}
+for _code, _vals in _EASY.items():
+    assert len(_vals) == len(_EASY_KEYS), _code
+    _TR.setdefault(_code, {}).update(zip(_EASY_KEYS, _vals))
 
 
 # The strings of 1.10.0: the memory looked at before a heavy step
@@ -3620,6 +3850,11 @@ LOCAL_NOTES = {"gemma4:e4b": "small and fast; translations to be reread", "gemma
                "gemma4:26b-a4b": "good translations, fast on a Mac with 32 GB", "gemma4:31b": "the toolkit's best local model; slow without a big graphics card"}
 
 
+def size_text(text):
+    """« 460 MB » as the language writes it: Mo and Go in French."""
+    return text.replace(" MB", " Mo").replace(" GB", " Go") if _LANG == "fr" else text
+
+
 def claude_places():
     """Where Claude Code's installers put the command: the native installer, npm (global,
     Homebrew, nvm, volta), the distribution."""
@@ -3688,6 +3923,54 @@ def claude_test(exe):
         return False, (r.stderr or out or "claude")[-200:]
 
 
+def claude_signed_in(exe):
+    """True or False from `claude auth status` (a quick look, nothing sent to the model); None
+    when this Claude Code cannot say (one older than its `auth` command)."""
+    try:
+        r = subprocess.run([exe, "auth", "status", "--json"], capture_output=True, text=True, timeout=20,
+                           env=claude_child_env(), **_RUN_FLAGS)
+        data = json.loads(r.stdout or "")
+        return bool(data.get("loggedIn")) if isinstance(data, dict) and "loggedIn" in data else None
+    except (OSError, subprocess.TimeoutExpired, ValueError):
+        return None
+
+
+def claude_sign_in(exe, progress, task, wait=900):
+    """The sign-in of Claude Code without a terminal: `claude auth login` opens the browser on
+    claude.ai and waits there for the account to say yes. Returns `exe` once signed in."""
+    proc = subprocess.Popen([exe, "auth", "login", "--claudeai"], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                            stderr=subprocess.STDOUT, text=True, errors="replace", env=claude_child_env(), **_RUN_FLAGS)
+    task["proc"] = proc
+
+    waiting = _("Your browser opened on claude.ai: sign in to your Claude account and click « Authorize ». The app waits here, then goes on by itself.")
+
+    def read():   # its address, for a browser that did not open
+        for line in proc.stdout:
+            m = re.search(r"https://\S+", line)
+            if m:
+                progress(waiting + " " + _("If the browser did not open, copy this address into it: %1", m.group(0)))
+    threading.Thread(target=read, daemon=True).start()
+    progress(waiting)
+    t0 = time.time()
+    try:
+        while time.time() - t0 < wait:
+            if task.get("cancelled"):
+                raise Cancelled()
+            time.sleep(2)
+            if claude_signed_in(exe):
+                return exe
+            if proc.poll() is not None:
+                time.sleep(1)
+                if claude_signed_in(exe):
+                    return exe
+                raise RuntimeError(_("The sign-in did not finish. Try again, or use « Sign in with the Terminal »."))
+        raise RuntimeError(_("The browser did not answer within 15 minutes. Try again."))
+    finally:
+        if proc.poll() is None:
+            proc.kill()
+        task["proc"] = None
+
+
 def install_claude(progress, task):
     """The native installer of Claude Code, as its site says. Returns the command found after."""
     proc = subprocess.Popen(["bash", "-lc", CLAUDE_INSTALL], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, errors="replace",
@@ -3734,6 +4017,13 @@ def open_terminal(command):
             except OSError:
                 continue
     return False
+
+
+def ollama_installed_quick():
+    """Ollama in one of its usual places, without asking the login shell."""
+    return any(os.path.isfile(c) for c in ("/usr/local/bin/ollama", "/opt/homebrew/bin/ollama", "/usr/bin/ollama",
+                                            "/Applications/Ollama.app/Contents/Resources/ollama",
+                                            os.path.expanduser("~/Applications/Ollama.app/Contents/Resources/ollama"))) or bool(shutil.which("ollama"))
 
 
 def find_ollama():
@@ -3953,7 +4243,8 @@ def probe_setup(cfg, say=None):
     models = ollama_models(OLLAMA_URL) if up else []
     say("sound")
     return {"ffmpeg": ff, "whisper": whisper, "size": size, "whisper_model": whisper_model,
-            "toolkit": tk, "claude": claude, "ollama_bin": ollama_bin, "ollama_up": up,
+            "toolkit": tk, "claude": claude, "claude_auth": claude_signed_in(claude) if claude else None,
+            "ollama_bin": ollama_bin, "ollama_up": up,
             "ollama_models": models, "ram": ram, "vram": vram, "recommended": recommended_model(ram, vram),
             "sound_ready": bool(tk) and python_has(toolkit_python(), TOOLKIT_PACKAGES["sound"]),
             "ffmpeg_named": bool(_own_tool("ffmpeg") and _own_tool("ffprobe") and _own_tool("ffmpeg-static")) if sys.platform == "darwin"
@@ -6019,7 +6310,12 @@ def load_config():
     cfg.pop("language", None)
     cfg.pop("fade", None)
     cfg.pop("image_fade", None)
-    cfg.setdefault("llm", "local")             # the translation: a local model (Ollama) or Claude
+    # the translation: Claude Code on the person's own plan (the recommended way), Claude with an
+    # API key, or a local model (Ollama). Before 1.16 the default was Ollama: a choice never made
+    # by hand goes to Claude, unless Ollama is on this computer.
+    cfg.setdefault("llm", "claude_code")
+    if cfg["llm"] == "local" and not cfg.get("llm_chosen") and not ollama_installed_quick():
+        cfg["llm"] = "claude_code"
     cfg.setdefault("ollama_model", LLM_LOCAL_MODEL)
     cfg.setdefault("review", True)
     cfg.setdefault("target_lang", "fr")
@@ -7259,6 +7555,9 @@ class Main(QtWidgets.QMainWindow):
             b.setCheckable(True)
             b.setObjectName("segbtn")
             b.setProperty("side", "first" if k == 0 else ("last" if k == len(buttons) - 1 else "mid"))
+            bold = QtGui.QFont(b.font())   # the style sheet's weight, which the size hint does not count
+            bold.setWeight(QtGui.QFont.DemiBold)
+            b.setMinimumWidth(QtGui.QFontMetrics(bold).horizontalAdvance(b.text()) + 34)
             h.addWidget(b)
         return box
 
@@ -7446,8 +7745,8 @@ class Main(QtWidgets.QMainWindow):
     SETUP_OPTIONAL = ("toolkit", "model", "sound")
 
     def _setup_titles(self):
-        return {"intro": _("Welcome"), "edit": _("Editing"), "transcribe": _("Transcription"), "toolkit": _("Translation toolkit"),
-                "model": _("Language model"), "sound": _("Improved sound"), "done": _("Summary")}
+        return {"intro": _("Welcome"), "edit": _("Editing"), "transcribe": _("Transcription"), "toolkit": _("Translation tools"),
+                "model": _("Who translates"), "sound": _("Improved sound"), "done": _("Summary")}
 
     def _build_setup(self):
         page = QtWidgets.QWidget()
@@ -7507,12 +7806,14 @@ class Main(QtWidgets.QMainWindow):
         v.addWidget(self.setup_title)
         self.setup_rows, self.setup_pages, self.setup_facts = {}, [], {}
         why = {
-            "intro": _("This assistant prepares the app, one step at a time. Only the first two steps matter for editing a video; the three next ones are optional and only serve the translation, the subtitles and the improved sound. Each step says what it is for and what it downloads, then checks itself with a real test. You can skip any step and come back later: « Getting started… » on the home page."),
+            "intro": _("Welcome! This assistant prepares the app in a few steps. Each one says what it is for and what it downloads, shows the progress, and checks that it works.") + "\n\n"
+                     + _("To edit your videos, only the first two steps matter. The three next ones are optional: they translate, subtitle and improve the sound. For the translation we recommend Claude, with your Claude plan.") + "\n\n"
+                     + _("You can skip a step and come back to it later: « Getting started… » on the home page."),
             "edit": _("The heart of the app: open a video or a recording, highlight the text to keep, produce the edit. It needs ffmpeg, which comes with the app."),
             "transcribe": _("Turns the speech into text, word by word with its timing: this text is what you edit. The model runs on this computer, nothing is sent anywhere. A larger model writes better but is slower and heavier."),
-            "toolkit": _("Optional. The traduction toolkit translates the text, cuts the subtitles by its rules and improves the sound. If you only edit, skip it, and the two steps after it."),
-            "model": _("Optional. The translation is written by a language model. Choose where it runs: Claude Code on your own Claude plan, Claude with an API key paid by the call, or Ollama on this computer (free, private, slower)."),
-            "sound": _("Optional. When the edit is produced, removes the background noise and the hum and levels the voice. Needs the toolkit."),
+            "toolkit": _("Optional. The tools that translate the text, cut it into subtitles and improve the sound. If you only want to edit your videos, skip this step and the two after it."),
+            "model": _("Optional. The translation is written by an artificial intelligence. Recommended: Claude, with your Claude plan (Pro or Max): the best translations, nothing more to pay. Without a plan: an API key paid by use, or Ollama, free and private but slow, for powerful computers only."),
+            "sound": _("Optional. When the edit is produced, removes the background noise and the hum and levels the voice. Needs the translation tools of step 3."),
             "done": _("Here is where each step stands. What you skipped can be set up later: « Getting started… » on the home page, or Project ▾ › Getting started… while editing."),
         }
         for k in self.SETUP_STEPS:
@@ -7671,6 +7972,7 @@ class Main(QtWidgets.QMainWindow):
         def set_buttons(items):
             for w in row.widgets:
                 bh.removeWidget(w)
+                w.hide()   # at once: deleteLater waits for the event loop
                 w.deleteLater()
             row.widgets = []
             for k, (text, fn, strong) in enumerate(items):
@@ -7766,13 +8068,12 @@ class Main(QtWidgets.QMainWindow):
     def setup_set_facts(self, p):
         """What each step downloads and where it goes, from the check's results."""
         size = p.get("size", "")
-        where = html.escape(DATA_DIR)
+        where = html.escape(DATA_DIR.replace(os.path.expanduser("~"), "~", 1))
         facts = {
             "edit": _("Download: nothing, ffmpeg comes with the app."),
-            "transcribe": _("Download: the model « %1 », %2, once. Stored in: %3. Time: a few minutes, depending on the connection.", size, WHISPER_SIZES.get(size, ""), where),
+            "transcribe": _("Download: the model « %1 », %2, once. Stored in: %3. Time: a few minutes, depending on the connection.", size, size_text(WHISPER_SIZES.get(size, "")), where),
             "toolkit": _("Download: a few MB, once. Stored in: %1.", where),
-            "model": _("Download: depends on the choice. Claude Code: about 200 MB; an API key: nothing; Ollama: its app, then the model (5 to 20 GB)."),
-            "sound": _("Download: about 1 GB (PyTorch and the sound libraries), once, plus ffmpeg and ffprobe for Apple silicon on a Mac (2 × 28 MB). Time: 5 to 15 minutes."),
+            "sound": _("Download: about 1 GB of sound tools, once. Time: 5 to 15 minutes."),
         }
         for k, text in facts.items():
             self.setup_facts[k].setText(text)
@@ -8011,7 +8312,7 @@ class Main(QtWidgets.QMainWindow):
         lab.setObjectName("muted")
         combo = QtWidgets.QComboBox()
         for m in MODELS:
-            combo.addItem(f"{m} · {WHISPER_SIZES.get(m, '')}", m)
+            combo.addItem(f"{m} · {size_text(WHISPER_SIZES.get(m, ''))}" + (" · " + _("recommended") if m == MODEL_DEFAULT else ""), m)
         combo.setCurrentIndex(max(0, combo.findData(size)))
         combo.currentIndexChanged.connect(lambda i: self.setup_pick_whisper(combo.itemData(i)))
         tr.choice_layout.addWidget(lab)
@@ -8027,47 +8328,47 @@ class Main(QtWidgets.QMainWindow):
                 R["transcribe"].set("todo", _("faster-whisper is not installed yet: the app installs it in a folder of its own (about 300 MB, once)."))
                 R["transcribe"].set_buttons([(_("Install the transcription"), lambda: self.setup_job("transcribe", lambda t, say: install_whisper(say, lambda: t.get("cancelled"))), True)])
         elif not p["whisper_model"]:
-            R["transcribe"].set("todo", _("faster-whisper is here. The model « %1 » (%2) is downloaded at the first transcription; or now:", size, WHISPER_SIZES.get(size, "")) + note)
-            R["transcribe"].set_buttons([(_("Download the model now"), lambda: self.setup_job("transcribe", lambda t, say: (say(_("Downloading the model « %1 » (%2)…", size, WHISPER_SIZES.get(size, ""))), download_whisper_model(size, t, say))), True)])
+            R["transcribe"].set("todo", _("The model « %1 » (%2) is downloaded at the first transcription, or now with the button below.", size, size_text(WHISPER_SIZES.get(size, ""))) + note)
+            R["transcribe"].set_buttons([(_("Download the model now"), lambda: self.setup_job("transcribe", lambda t, say: (say(_("Downloading the model « %1 » (%2)…", size, size_text(WHISPER_SIZES.get(size, "")))), download_whisper_model(size, t, say))), True)])
         else:
-            R["transcribe"].set("ok", _("Ready: faster-whisper and the model « %1 ». A subtitle file beside the video is used instead when there is one.", size) + note)
+            R["transcribe"].set("ok", _("Ready: the model « %1 » is here. When a video comes with its subtitle file, that file is used instead.", size) + note)
             R["transcribe"].set_buttons([])
         # 2 · the toolkit
         if p["toolkit"]:
             R["toolkit"].set("ok", _("Found: %1", p["toolkit"]))
             R["toolkit"].set_buttons([])
         else:
-            R["toolkit"].set("opt", _("Optional —") + " " + _("The traduction toolkit does the translation, the subtitles and the sound. It is not on this computer: the app can download it (a few MB, no git)."))
-            R["toolkit"].set_buttons([(_("Install it here"), lambda: self.setup_job("toolkit", lambda t, say: install_toolkit(say, t)), True)])
+            R["toolkit"].set("opt", _("Not on this computer yet. The app downloads them for you: a few MB, about a minute."))
+            R["toolkit"].set_buttons([(_("Install"), lambda: self.setup_job("toolkit", lambda t, say: install_toolkit(say, t)), True)])
         self.fill_model_row()
         # 3 · the sound
+        def install_sound(t, say, with_toolkit=False):
+            if with_toolkit:
+                install_toolkit(say, t)
+            ensure_ffmpeg_tools(say, t)
+            return prepare_toolkit_python(TOOLKIT_PACKAGES["sound"], say, t)
         if not p["toolkit"]:
-            R["sound"].set("off", _("Needs the toolkit: the step « Toolkit », before this one."))
-            R["sound"].set_buttons([])
+            R["sound"].set("opt", _("Needs the translation tools first (step 3). This button installs both."))
+            R["sound"].set_buttons([(_("Install the tools and the sound"), lambda: self.setup_job("sound", lambda t, say: install_sound(t, say, True)), True)])
         elif p["sound_ready"] and p["ffmpeg_named"]:
-            R["sound"].set("ok", _("Ready: the libraries of finaliser.py are here. « Sound: improved » in the production block uses them."))
+            R["sound"].set("ok", _("Ready: the sound tools are here. « Sound: improved », when you produce an edit, uses them."))
             R["sound"].set_buttons([])
         else:
-            R["sound"].set("opt", _("Optional —") + " " + _("The libraries (deepfilternet, pyloudnorm, speechmos, with torch: about 500 MB) are installed at the first use, in an environment of the app's own. Or now:")
-                           + " " + _("Speed: about the length of the edit on a processor, much less with a graphics card; the length and the picture do not change.")
-                           + ("" if p["ffmpeg_named"] else " " + _("On this Mac, ffmpeg and ffprobe for Apple silicon are fetched too (2 × 28 MB).")))
-
-            def install_sound(t, say):
-                ensure_ffmpeg_tools(say, t)
-                return prepare_toolkit_python(TOOLKIT_PACKAGES["sound"], say, t)
+            R["sound"].set("opt", _("The sound tools (about 1 GB) are installed the first time they are used, or now:")
+                           + " " + _("Speed: about the length of the edit on a processor, much less with a graphics card; the length and the picture do not change."))
             R["sound"].set_buttons([(_("Install now"), lambda: self.setup_job("sound", install_sound), True)])
 
     def fill_model_row(self):
         """Step 2, the model: three ways, the one chosen in the settings; the buttons of that way."""
         p, row = self.setup_probe, self.setup_rows["model"]
-        llm = self.cfg.get("llm") or "local"
-        # the three ways, as a segmented control
+        llm = self.cfg.get("llm") or "claude_code"
+        # the three ways, as a segmented control, the recommended one first
         while row.choice_layout.count():  # the widgets and the stretch of the last time
             w = row.choice_layout.takeAt(0).widget()
             if w:
                 w.deleteLater()
-        buttons, kinds = [], ("local", "claude_code", "claude")
-        for kind, text in zip(kinds, (_("Ollama, on this computer"), _("Claude Code, your own plan"), _("Claude, an API key"))):
+        buttons, kinds = [], ("claude_code", "claude", "local")
+        for kind, text in zip(kinds, (_("Claude plan · recommended"), _("Claude API key"), _("Ollama, local"))):
             b = QtWidgets.QPushButton(text)
             b.clicked.connect(lambda _c, k=kind: self.setup_choose(k))
             buttons.append(b)
@@ -8078,7 +8379,13 @@ class Main(QtWidgets.QMainWindow):
         row.choice.show()
         row.field.hide()
         url = OLLAMA_URL
-        ways = " " + _("Quality and cost: Claude gives the best translations; Claude Code costs nothing beyond your plan, the API key pays by the call, both send the text to Anthropic. A local model keeps everything on this computer, slower, and the smaller the model, the rougher the translation.")
+        ways = " " + _("Claude writes the best translations: with your plan nothing more to pay, with an API key each translation is paid. Ollama keeps everything on this computer, but it is slower and its translations rougher.")
+        self.setup_facts["model"].setText({
+            "claude_code": _("Download: Claude Code, about 200 MB, once. Needs a Claude plan (Pro or Max). The text to translate is sent to Anthropic."),
+            "claude": _("Download: nothing. Needs an API key from Anthropic, paid by use. The text to translate is sent to Anthropic."),
+            "local": _("Download: the Ollama app, then a model of 5 to 20 GB. Everything stays on this computer; needs a powerful one (16 GB of memory or more)."),
+        }.get(llm, ""))
+        self.setup_facts["model"].show()
         if llm == "local":
             wanted = self.cfg.get("ollama_model") or (p["recommended"][0] if p["recommended"] else LLM_LOCAL_MODEL)
             have = wanted in p["ollama_models"] or wanted + ":latest" in p["ollama_models"]
@@ -8117,14 +8424,33 @@ class Main(QtWidgets.QMainWindow):
                     return m
                 row.set_buttons([(_("Test"), lambda: self.memory_ok(ollama_need_mb(url, wanted)) and self.setup_job("model", test, lambda m: self.setup_ok.update(ollama=m) or self.cfg.update(ollama_model=m)), True)])
         elif llm == "claude_code":
-            exe = p["claude"]
+            exe, auth = p["claude"], p.get("claude_auth")
+
+            def connect(t, say, e=exe):
+                if not e:
+                    say(_("Installing Claude Code (about 200 MB, once)…"))
+                    e = install_claude(say, t)
+                if claude_signed_in(e):
+                    return e
+                return claude_sign_in(e, say, t)
+
+            def connected(e):
+                self.setup_ok["claude_code"] = e
+
+            def sign_in():
+                if not open_terminal(exe):
+                    row.set("bad", _("No terminal was found: open one yourself, type claude, then /login."))
             if not exe:
-                row.set("opt", _("Optional —") + " " + _("Claude Code is the claude command, on your own Claude plan: no key, no bill by the call. It is not installed; the app can run its installer (from claude.ai).") + ways)
-                row.set_buttons([(_("Install Claude Code"), lambda: self.setup_job("model", lambda t, say: install_claude(say, t)), True)])
-            elif self.setup_ok.get("claude_code") == exe:
-                row.set("ok", _("Ready: Claude Code answers (%1).", exe))
+                row.set("opt", _("Recommended if you have a Claude plan (Pro or Max): the best translations, nothing more to pay. One button: the app installs Claude Code (about 200 MB), then your browser opens on claude.ai so that you sign in to your account."))
+                row.set_buttons([(_("Install and sign in"), lambda: self.setup_job("model", connect, connected), True)])
+            elif auth or self.setup_ok.get("claude_code") == exe:
+                row.set("ok", _("Ready: signed in to your Claude account. The translations are written by Claude, on your plan."))
                 row.set_buttons([])
-            else:
+            elif auth is False:
+                row.set("opt", _("Claude Code is installed. One thing left: sign in to your Claude account. Your browser opens on claude.ai; accept there, then come back here."))
+                row.set_buttons([(_("Sign in to Claude"), lambda: self.setup_job("model", connect, connected), True),
+                                 (_("Sign in with the Terminal"), sign_in, False)])
+            else:   # a Claude Code too old to say whether it is signed in: the terminal, then a test
                 row.set("opt", _("Optional —") + " " + _("Claude Code found: %1. Sign in once with your Claude account (a terminal opens: type /login and follow the browser), then test.", exe))
 
                 def test(t, say, e=exe):
@@ -8133,11 +8459,7 @@ class Main(QtWidgets.QMainWindow):
                     if not ok:
                         raise RuntimeError(msg)
                     return e
-
-                def sign_in():
-                    if not open_terminal(exe):
-                        row.set("bad", _("No terminal was found: open one yourself, type claude, then /login."))
-                row.set_buttons([(_("Sign in"), sign_in, False), (_("Test"), lambda: self.setup_job("model", test, lambda e: self.setup_ok.update(claude_code=e)), True)])
+                row.set_buttons([(_("Sign in"), sign_in, False), (_("Test"), lambda: self.setup_job("model", test, connected), True)])
         else:
             row.field.setEchoMode(QtWidgets.QLineEdit.Password)
             row.field.setPlaceholderText("sk-ant-…")
@@ -8176,7 +8498,7 @@ class Main(QtWidgets.QMainWindow):
         self.fill_setup()
 
     def setup_choose(self, kind):
-        self.cfg["llm"] = kind
+        self.cfg["llm"], self.cfg["llm_chosen"] = kind, True
         save_config(self.cfg)
         self.fill_model_row()
 
@@ -9601,9 +9923,9 @@ class Main(QtWidgets.QMainWindow):
         Claude, and which Ollama model. Returns the two widgets."""
         llm = QtWidgets.QComboBox()
         llm.addItem(_("On this computer (Ollama)"), "local")
-        llm.addItem(_("Claude Code (your own plan)"), "claude_code")
+        llm.addItem(_("Claude Code (your own plan)") + " · " + _("recommended"), "claude_code")
         llm.addItem(_("Claude (API key)") + " · " + LLM_CLAUDE_MODEL, "claude")
-        llm.setCurrentIndex(max(0, llm.findData(self.cfg.get("llm") or "local")))
+        llm.setCurrentIndex(max(0, llm.findData(self.cfg.get("llm") or "claude_code")))
         model = QtWidgets.QLineEdit(self.cfg.get("ollama_model") or LLM_LOCAL_MODEL)
         model.setPlaceholderText(LLM_LOCAL_MODEL)
         llm.currentIndexChanged.connect(lambda i: model.setEnabled(i == 0))
@@ -9716,7 +10038,7 @@ class Main(QtWidgets.QMainWindow):
             if llm.currentData() == "claude_code" and not find_claude(quick=True):
                 error.setText(_("Claude Code is not installed: « Getting started » on the home page installs it."))
                 return
-            self.cfg["llm"], self.cfg["ollama_model"] = llm.currentData(), model.text().strip() or LLM_LOCAL_MODEL
+            self.cfg["llm"], self.cfg["ollama_model"], self.cfg["llm_chosen"] = llm.currentData(), model.text().strip() or LLM_LOCAL_MODEL, True
             self.cfg["review"], self.cfg["target_lang"] = review.isChecked(), tgt.currentData()
             self.cfg["analysis_by_claude"] = analysis.isChecked()
             save_config(self.cfg)
@@ -10285,7 +10607,7 @@ class Main(QtWidgets.QMainWindow):
             if llm.currentData() == "claude_code" and not find_claude(quick=True):
                 error.setText(_("Claude Code is not installed: « Getting started » on the home page installs it."))
                 return
-            self.cfg["llm"], self.cfg["ollama_model"] = llm.currentData(), model.text().strip() or LLM_LOCAL_MODEL
+            self.cfg["llm"], self.cfg["ollama_model"], self.cfg["llm_chosen"] = llm.currentData(), model.text().strip() or LLM_LOCAL_MODEL, True
             save_config(self.cfg)
             dlg.accept()
             self.start_shorten(where, rows, llm.currentData(), self.cfg["ollama_model"])
