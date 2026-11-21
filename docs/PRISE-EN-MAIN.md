@@ -269,6 +269,15 @@ La transcription se fait sur le processeur. Le modèle est téléchargé une foi
 *Téléchargement du modèle…*, *Transcription…*). Si un fichier `.srt` du même nom est posé à côté
 de la vidéo, il est lu tout de suite, sans transcription.
 
+**Vous avez déjà les sous-titres de la vidéo ?** Sur la page d'accueil, le second champ
+(*Sous-titres de ce fichier (.srt), si vous en avez*, avec son bouton **Parcourir…**) reçoit le
+fichier `.srt`, quel que soit son nom et où qu'il soit ; le bouton devient *Ouvrir · texte des
+sous-titres*. On peut aussi glisser la vidéo et le `.srt` ensemble sur la fenêtre. Rien n'est
+transcrit : le texte vient du fichier, mis en paragraphes comme une transcription, et se
+surligne de la même façon. Les sous-titres du fichier restent ceux du projet, tels quels, dans
+l'éditeur de sous-titres (§ 6). Un nom comme `ma-video.fr.srt` indique la langue ; sinon,
+choisissez-la dans *Langue parlée* si vous comptez traduire.
+
 Si la transcription échoue, la page propose de **recommencer** avec une autre langue ou un
 autre modèle, ou d'**ouvrir des sous-titres** à la place.
 

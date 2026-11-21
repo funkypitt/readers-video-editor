@@ -35,7 +35,7 @@ from PyQt5.QtMultimediaWidgets import QVideoWidget
 os.environ.setdefault("HF_HUB_DISABLE_XET", "1")
 
 APP = "readers-video-editor"
-VERSION = "1.14.1"
+VERSION = "1.15.0"
 
 
 def _app_dirs():
@@ -1709,6 +1709,46 @@ _TR_WIZARD = {
 for _code, _more in _TR_WIZARD.items():
     _TR.setdefault(_code, {}).update(_more)
 
+_TR_SRT = {
+ "fr": {
+  "Subtitles of this file (.srt), if you have them": "Sous-titres de ce fichier (.srt), si vous en avez",
+  "With a subtitle file, the text comes from it: nothing is transcribed.": "Avec un fichier de sous-titres, le texte vient de lui : rien n'est transcrit.",
+  "Open · text from the subtitles": "Ouvrir · texte des sous-titres",
+  "This is a subtitle file: give the video or the recording it goes with as well.": "C'est un fichier de sous-titres : indiquez aussi la vidéo ou l'enregistrement qui va avec.",
+  "These subtitles are those of the file you opened. Cut them again from the text and lose them?": "Ces sous-titres sont ceux du fichier que vous avez ouvert. Les redécouper d'après le texte et les perdre ?",
+ },
+ "de": {
+  "Subtitles of this file (.srt), if you have them": "Untertitel dieser Datei (.srt), falls vorhanden",
+  "With a subtitle file, the text comes from it: nothing is transcribed.": "Mit einer Untertiteldatei kommt der Text aus ihr: Es wird nichts transkribiert.",
+  "Open · text from the subtitles": "Öffnen · Text aus den Untertiteln",
+  "This is a subtitle file: give the video or the recording it goes with as well.": "Das ist eine Untertiteldatei: Geben Sie auch das Video oder die Aufnahme an, zu der sie gehört.",
+  "These subtitles are those of the file you opened. Cut them again from the text and lose them?": "Diese Untertitel stammen aus der Datei, die Sie geöffnet haben. Neu aus dem Text schneiden und sie verlieren?",
+ },
+ "es": {
+  "Subtitles of this file (.srt), if you have them": "Subtítulos de este archivo (.srt), si los tiene",
+  "With a subtitle file, the text comes from it: nothing is transcribed.": "Con un archivo de subtítulos, el texto sale de él: no se transcribe nada.",
+  "Open · text from the subtitles": "Abrir · texto de los subtítulos",
+  "This is a subtitle file: give the video or the recording it goes with as well.": "Es un archivo de subtítulos: indique también el vídeo o la grabación que lo acompaña.",
+  "These subtitles are those of the file you opened. Cut them again from the text and lose them?": "Estos subtítulos son los del archivo que abrió. ¿Cortarlos de nuevo a partir del texto y perderlos?",
+ },
+ "pt": {
+  "Subtitles of this file (.srt), if you have them": "Legendas deste ficheiro (.srt), se as tiver",
+  "With a subtitle file, the text comes from it: nothing is transcribed.": "Com um ficheiro de legendas, o texto vem dele: nada é transcrito.",
+  "Open · text from the subtitles": "Abrir · texto das legendas",
+  "This is a subtitle file: give the video or the recording it goes with as well.": "É um ficheiro de legendas: indique também o vídeo ou a gravação a que pertence.",
+  "These subtitles are those of the file you opened. Cut them again from the text and lose them?": "Estas legendas são as do ficheiro que abriu. Cortá-las de novo a partir do texto e perdê-las?",
+ },
+ "ru": {
+  "Subtitles of this file (.srt), if you have them": "Субтитры этого файла (.srt), если они есть",
+  "With a subtitle file, the text comes from it: nothing is transcribed.": "С файлом субтитров текст берётся из него: ничего не расшифровывается.",
+  "Open · text from the subtitles": "Открыть · текст из субтитров",
+  "This is a subtitle file: give the video or the recording it goes with as well.": "Это файл субтитров: укажите также видео или запись, к которым он относится.",
+  "These subtitles are those of the file you opened. Cut them again from the text and lose them?": "Это субтитры из открытого вами файла. Нарезать их заново по тексту и потерять их?",
+ },
+}
+for _code, _more in _TR_SRT.items():
+    _TR.setdefault(_code, {}).update(_more)
+
 
 # The strings of 1.12.4: the getting started as an assistant (steps on the left, progress, details)
 _TR_ONBOARD = {
@@ -2640,8 +2680,50 @@ def read_srt(path):
     return cues
 
 
-def speech_moments(x, sr):
-    """A voice alone → [[start, end], …]: when it speaks, between its pauses."""
+def srt_language(path):
+    """'talk.fr.srt' → 'fr': the language a subtitle file names before its extension, '' without one."""
+    parts = Path(path).name.lower().split(".")
+    code = re.split(r"[-_]", parts[-2])[0] if len(parts) >= 3 else ""
+    return code if code and any(code == c for c, _n in LANGUAGES) else ""
+
+
+def media_beside(srt):
+    """The video or the recording a subtitle file goes with: same name beside it ('talk.mp4' for
+    'talk.srt' or 'talk.fr.srt'), None when there is none."""
+    p = Path(srt)
+    stems = [p.stem] + ([p.stem.rsplit(".", 1)[0]] if srt_language(srt) else [])
+    try:
+        files = sorted(f for f in p.parent.iterdir() if f.is_file() and f.suffix.lower() in EXT_VIDEO | EXT_AUDIO)
+    except OSError:
+        return None
+    for stem in stems:
+        for kinds in (EXT_VIDEO, EXT_AUDIO):
+            found = next((f for f in files if f.stem == stem and f.suffix.lower() in kinds), None)
+            if found:
+                return str(found)
+    return None
+
+
+def voice_threshold(x, sr):
+    """The level above which a recording speaks, from the whole of it: a little above its room
+    (the quietest tenth of its 10 ms levels), never under 3 % of its loud passages nor over a
+    quarter of them. In a real room the pauses of a voice are far from silent: measured against
+    the loud passages alone, they were taken for speech and the text came out without pauses."""
+    step = max(1, int(sr * 0.010))
+    n = len(x) // step
+    if n < 5:
+        return None
+    e = np.sqrt((x[:n * step].reshape(n, step) ** 2).mean(axis=1))
+    e = e[e > 1e-5]
+    if len(e) < 5:
+        return None
+    loud, room = float(np.percentile(e, 95)), float(np.percentile(e, 10))
+    return min(max(loud * 0.03, room * 10 ** (VOICE_OVER_ROOM_DB / 20.0), 1e-4), max(loud * 0.25, 1e-4))
+
+
+def speech_moments(x, sr, threshold=None):
+    """A voice alone → [[start, end], …]: when it speaks, between its pauses. `threshold`: the
+    level found for the whole recording (voice_threshold); without it, 3 % of this passage's loud."""
     total = len(x) / float(sr)
     step = max(1, int(sr * 0.010))
     n = len(x) // step
@@ -2651,7 +2733,9 @@ def speech_moments(x, sr):
     loud = float(np.percentile(e, 95))
     if loud <= 1e-5:
         return [[0.0, total]]
-    speaking = e > max(loud * 0.03, 1e-4)
+    speaking = e > (threshold or max(loud * 0.03, 1e-4))
+    if not speaking.any():
+        return [[0.0, total]]
     moments, start = [], None
     for i in range(n + 1):
         on = i < n and bool(speaking[i])
@@ -2756,20 +2840,60 @@ def spread_words(words, moments):
     return placed
 
 
+VOICE_OVER_ROOM_DB = 12.0    # a voice speaks from this much above the room of its recording
+SRT_SENTENCE_WORDS = 60     # subtitles with fewer sentence ends than one per 60 words are taken as unpunctuated
+
+
 def tokens_from_srt(cues, wav, duration):
     """Subtitle cues → tokens: the words of each cue spread over the moments the voice speaks
     inside the cue (measured in the sound), the ends of sentences on its pauses."""
     x, sr = read_wav(wav)
-    words, sentence = [], 0
-    for start, end, text in cues:
+    # Sentences end where the text says so, as in a transcription: a cue that stops in the middle
+    # of a sentence does not end it (the paragraphs of the page would break there at the first
+    # pause). Subtitles written without punctuation have nothing else: there each cue is one.
+    texts = [words_of(text) for _start, _end, text in cues]
+    count = sum(len(ws) for ws in texts)
+    punctuated = sum(1 for ws in texts for w in ws if _strength(w) == 2) * SRT_SENTENCE_WORDS >= count
+    words, sentence, since = [], 0, 0      # since: the words written since the last end of a sentence
+    level = voice_threshold(x, sr)
+    for (start, end, _text), ws in zip(cues, texts):
         a, b = max(0, int(start * sr)), min(len(x), int(end * sr))
-        moments = [[start + m0, start + m1] for m0, m1 in speech_moments(x[a:b], sr)] if b - a > sr // 10 else [[start, end]]
-        for w, d, f in spread_words(words_of(text), moments):
+        moments = [[start + m0, start + m1] for m0, m1 in speech_moments(x[a:b], sr, level)] if b - a > sr // 10 else [[start, end]]
+        ended = False
+        for w, d, f in spread_words(ws, moments):
             words.append([w, d, f, sentence])
-            if _strength(w) == 2:
+            ended = _strength(w) == 2
+            since = 0 if ended else since + 1
+            if ended:
                 sentence += 1
-        sentence += 1
-    return tokens_from_words(words, duration)
+        # a long stretch without a full stop in a punctuated text: the end of a cue is one there too
+        if not ended and (not punctuated or since >= SRT_SENTENCE_WORDS):
+            sentence += 1
+            since = 0
+    return tokens_from_words(breathe(words), duration)
+
+
+def breathe(words):
+    """Words placed from subtitles → the same, with the breath the page's paragraphs need. A
+    transcription hears a pause after nearly every sentence; subtitles only give the pauses the
+    sound lets one measure, and a speaker over music or in a noisy room gives none: the page was
+    one block. Where the paragraph rule (starts_paragraph) has 900 characters written and a
+    sentence ends without a measured pause, the estimated end of its last word is drawn back to
+    leave the 0.25 s the rule asks for (never more than 60 % of the word, the rest taken from the
+    start of the next one): the paragraphs then are those of a transcription of a fast speaker."""
+    chars, need = 0, 0.25
+    for i, w in enumerate(words):
+        if i:
+            prev = words[i - 1]
+            gap, new_sentence = max(0.0, w[1] - prev[2]), w[3] != prev[3]
+            if new_sentence and chars >= 900 and gap < need:
+                prev[2] -= min(need - gap, 0.6 * (prev[2] - prev[1]))
+                w[1] += min(max(0.0, need + 0.001 - (w[1] - prev[2])), 0.6 * (w[2] - w[1]))
+                gap = w[1] - prev[2]
+            if gap >= PAUSE_GAP or starts_paragraph(gap, new_sentence, chars):
+                chars = 0
+        chars += len(w[0]) + 1
+    return words
 
 
 # ------------------------------------------------------------------------------------------
@@ -7213,6 +7337,20 @@ class Main(QtWidgets.QMainWindow):
         row.addWidget(self.h_field, 1)
         row.addWidget(self._btn(_("Browse…"), self.ask_open))
         v.addLayout(row)
+        # subtitles the person already has: the text comes from them, nothing is transcribed
+        row = QtWidgets.QHBoxLayout()
+        row.setSpacing(8)
+        self.h_srt = QtWidgets.QLineEdit()
+        self.h_srt.setPlaceholderText(_("Subtitles of this file (.srt), if you have them"))
+        self.h_srt.returnPressed.connect(self.home_open)
+        self.h_srt.setToolTip(_("With a subtitle file, the text comes from it: nothing is transcribed."))
+        row.addWidget(self.h_srt, 1)
+        row.addWidget(self._btn(_("Browse…"), self.ask_home_srt))
+        v.addLayout(row)
+        hint = QtWidgets.QLabel(_("With a subtitle file, the text comes from it: nothing is transcribed."))
+        hint.setObjectName("muted")
+        hint.setWordWrap(True)
+        v.addWidget(hint)
         row = QtWidgets.QHBoxLayout()
         row.setSpacing(8)
         self.h_lang = QtWidgets.QComboBox()
@@ -7236,8 +7374,9 @@ class Main(QtWidgets.QMainWindow):
         self.h_open = self._btn(_("Open"), self.home_open, kind="strong")
         row.addWidget(self.h_open)
         # the language the transcription will be made in, on the button that starts it
-        self.h_lang.currentIndexChanged.connect(lambda _i: self.h_open.setText(_("Open · language: %1", spoken_name(self.h_lang.currentData()))))
-        self.h_open.setText(_("Open · language: %1", spoken_name("")))
+        self.h_lang.currentIndexChanged.connect(lambda _i: self.name_home_open())
+        self.h_srt.textChanged.connect(lambda _t: self.name_home_open())
+        self.name_home_open()
         v.addLayout(row)
         self.h_sponsor = QtWidgets.QCheckBox(_("Ask SponsorBlock which passages of a YouTube video are ads"))
         self.h_sponsor.setChecked(bool(self.cfg.get("sponsorblock", True)))
@@ -8592,17 +8731,65 @@ class Main(QtWidgets.QMainWindow):
                 break
         self.h_resume.setVisible(bool(seen))
 
+    def name_home_open(self):
+        """The button that opens says where the text will come from: the subtitles given, or a
+        transcription in the language named."""
+        if self.h_srt.text().strip():
+            self.h_open.setText(_("Open · text from the subtitles"))
+        else:
+            self.h_open.setText(_("Open · language: %1", spoken_name(self.h_lang.currentData())))
+
+    def home_srt(self):
+        """The subtitle file given on the home page: its path, None without one, False (and the
+        reason shown) when it holds no subtitle."""
+        srt = self.h_srt.text().strip()
+        if not srt:
+            return None
+        if not os.path.isfile(srt):
+            self.h_error.setText(_("This file cannot be read."))
+            return False
+        if not read_srt(srt):
+            self.h_error.setText(_("No subtitle in this file."))
+            return False
+        return srt
+
+    def ask_home_srt(self):
+        if self.thread:
+            return
+        text = self.h_field.text().strip()
+        start = str(Path(text).parent) if os.path.isfile(text) else (self.cfg.get("last_dir") or os.path.expanduser("~"))
+        path, _f = QtWidgets.QFileDialog.getOpenFileName(self, _("Open the subtitles of this file"), start, _("Subtitles (*.srt)"))
+        if path:
+            self.h_srt.setText(path)
+            if not text and media_beside(path):
+                self.h_field.setText(media_beside(path))
+
     def home_open(self):
         text = self.h_field.text().strip()
+        self.h_error.setText("")
         if not text:
             self.h_error.setText(_("Give a file or an address."))
             return
+        if os.path.isfile(text) and text.lower().endswith(".srt"):
+            # the subtitles given where the video goes: the video of the same name beside them
+            media = media_beside(text)
+            if not media:
+                self.h_srt.setText(text)
+                self.h_field.clear()
+                self.h_error.setText(_("This is a subtitle file: give the video or the recording it goes with as well."))
+                return
+            self.h_srt.setText(text)
+            self.h_field.setText(media)
+            text = media
+        srt = self.home_srt()
+        if srt is False:
+            return
         if is_url(text):
-            self.open_url(text)
+            self.open_url(text, srt)
         elif os.path.isfile(text) and text.endswith(PROJECT_EXT):
             self.open_project_file(text)
         elif os.path.isfile(text):
-            self.open_source(text, None)
+            self.open_source(text, srt)
         else:
             self.h_error.setText(_("This file cannot be read."))
 
@@ -8688,9 +8875,19 @@ class Main(QtWidgets.QMainWindow):
         if project:
             self.open_project_file(project)
         elif media:
+            if not srt and self.views.currentWidget() is self.home:
+                srt = self.home_srt()       # the subtitles already given on the home page
+                if srt is False:
+                    return
             self.open_source(media, srt)
         elif srt and self.project:
             self.load_srt(srt)
+        elif srt:
+            # subtitles alone, nothing open: kept on the home page, with the video of the same name beside them
+            self.show_home()
+            self.h_srt.setText(srt)
+            if not self.h_field.text().strip() and media_beside(srt):
+                self.h_field.setText(media_beside(srt))
         elif link:
             self.open_url(link)
 
@@ -8704,7 +8901,8 @@ class Main(QtWidgets.QMainWindow):
         self.h_field.setFocus()
         self.h_field.selectAll()
 
-    def open_url(self, url):
+    def open_url(self, url, given=None):
+        """`given`: subtitles of the person's own, used in place of the ones the site has."""
         if self.thread or not is_url(url):
             return
         if not ffmpeg_exe():
@@ -8747,7 +8945,7 @@ class Main(QtWidgets.QMainWindow):
             self.h_follow.hide()
             self.h_open.setEnabled(True)
             media, srt = result
-            self.open_source(media, srt)
+            self.open_source(media, given or srt, own=bool(given))
             vid = youtube_id(url)
             if vid and self.project and self.project["source"] == os.path.abspath(media) and self.ads.get("video") != vid:
                 self.ads = {"video": vid, "dismissed": self.ads.get("dismissed") or []}
@@ -8828,9 +9026,11 @@ class Main(QtWidgets.QMainWindow):
         self.h_model.setCurrentText(self.p_model.currentText())
         self.start_transcription()
 
-    def open_source(self, path, srt, project=None):
+    def open_source(self, path, srt, project=None, own=True):
         """Opens a video or a recording; with `project` (the content of a project file) its text,
-        translations and highlighting take the place of what the project folder holds."""
+        translations and highlighting take the place of what the project folder holds. With `srt`
+        the text comes from these subtitles, without transcription; `own` False for the ones a
+        site gave with a download (their cutting is not kept)."""
         if self.thread:
             return
         if not ffmpeg_exe():
@@ -8890,8 +9090,9 @@ class Main(QtWidgets.QMainWindow):
         # a text already made for this file, or subtitles beside it
         saved = read_json(d / "transcription.json")
         beside = Path(path).with_suffix(".srt")
+        self.h_srt.clear()
         if srt:
-            self.load_srt(srt)
+            self.load_srt(srt, own=own)
         elif saved and saved.get("tokens"):
             self.show_tokens(saved["tokens"], saved.get("origin", "transcription"), bool(saved.get("estimated")), saved.get("language", ""))
         elif beside.exists():
@@ -8995,14 +9196,40 @@ class Main(QtWidgets.QMainWindow):
             self.p_gauge.setValue(int(fraction * 1000))
             self.p_detail.setText(text)
 
-    def load_srt(self, path):
+    def selection_to_times(self, d):
+        """Before another text takes the place of the project's: what was highlighted is kept in
+        seconds, from the text on the page or, when the file is only being opened, the saved one."""
+        sel = read_json(d / "selection.json", {}) or {}
+        if self.tokens:
+            self.selection_by_times(sel)
+        elif "ranges" in sel:
+            view = sel.get("view", "src")
+            saved = read_json(d / ("transcription.json" if view == "src" else f"translation-{view}.json"), {}) or {}
+            old = saved.get("tokens") or []
+            n = len(old)
+            sel["times"] = [[old[i][1], old[j][2]] for i, j in clean_ranges(sel.get("ranges") or [], n)]
+            sel["struck_times"] = [[old[i][1], old[j][2]] for i, j in clean_ranges(sel.get("struck") or [], n)]
+            sel.pop("ranges", None)
+            sel.pop("struck", None)
+        else:
+            return
+        write_json(d / "selection.json", sel)
+
+    def load_srt(self, path, own=True):
+        """The text of the project read from a subtitle file, its words placed on the sound; no
+        transcription. `own`: the person's file, whose cues stay the subtitles of the project as
+        they are (the subtitle editor shows them, « Save the subtitles… » writes them back)."""
         if self.thread or not self.project:
             return
         cues = read_srt(path)
         if not cues:
             self.say(_("No subtitle in this file."))
+            if not self.tokens:
+                self.wait(_("The transcription failed."), _("No subtitle in this file."), failed=True)
             return
+        # the language: named by the file ('talk.fr.srt'), chosen by hand, or the one of the text these subtitles replace
         d = Path(self.project["dir"])
+        language = srt_language(path) or self.h_lang.currentData() or (read_json(d / "transcription.json", {}) or {}).get("language", "")
         wav = d / "audio16k.wav"
         duration = self.project["duration"]
         src = self.project["source"]
@@ -9014,9 +9241,13 @@ class Main(QtWidgets.QMainWindow):
             return tokens_from_srt(cues, wav, duration)
 
         def done(tokens):
+            self.selection_to_times(d)
             self.forget_cues("src")
-            write_json(d / "transcription.json", {"tokens": tokens, "origin": "subtitles", "estimated": True, "language": ""})
-            self.show_tokens(tokens, "subtitles", True)
+            write_json(d / "transcription.json", {"tokens": tokens, "origin": "subtitles", "estimated": True, "language": language})
+            if own:
+                write_json(d / "cues-src.json", {"language": language, "edited": False, "file": True,
+                                                 "cues": [[round(a, 3), round(b, 3), two_lines(text)] for a, b, text in cues]})
+            self.show_tokens(tokens, "subtitles", True, language)
 
         def failed(msg):
             self.wait(_("The transcription failed."), msg or _("Cancelled."), failed=True)
@@ -9138,7 +9369,8 @@ class Main(QtWidgets.QMainWindow):
             c = read_json(f)
             key = f.stem[5:]
             if c and isinstance(c.get("cues"), list) and (key == "src" or key in self.texts):
-                self.cues[key] = {"language": c.get("language", ""), "cues": [list(x) for x in c["cues"]], "edited": bool(c.get("edited"))}
+                self.cues[key] = {"language": c.get("language", ""), "cues": [list(x) for x in c["cues"]], "edited": bool(c.get("edited")),
+                                  "file": bool(c.get("file"))}
         sel = read_json(d / "selection.json", {}) or {}
         view = sel.get("view", "src")
         self.show_project_name()
@@ -9919,7 +10151,9 @@ class Main(QtWidgets.QMainWindow):
 
     def store_cues(self, key, cues, edited):
         code = self.src_lang if key == "src" else key
-        self.cues[key] = {"language": code, "cues": [list(c) for c in cues], "edited": bool(edited)}
+        # `file`: the cues of a subtitle file the person opened, kept as long as they are not cut again from the text
+        self.cues[key] = {"language": code, "cues": [list(c) for c in cues], "edited": bool(edited),
+                          "file": bool(edited and (self.cues.get(key) or {}).get("file"))}
         write_json(Path(self.project["dir"]) / f"cues-{key}.json", self.cues[key])
         self.refresh_overlay()
 
@@ -9942,6 +10176,11 @@ class Main(QtWidgets.QMainWindow):
         if c and c.get("edited"):
             answer = QtWidgets.QMessageBox.question(self, _("Re-cut from the text"),
                                                     _("The subtitles were edited by hand. Cut them again from the text and lose these changes?"))
+            if answer != QtWidgets.QMessageBox.Yes:
+                return
+        elif c and c.get("file"):
+            answer = QtWidgets.QMessageBox.question(self, _("Re-cut from the text"),
+                                                    _("These subtitles are those of the file you opened. Cut them again from the text and lose them?"))
             if answer != QtWidgets.QMessageBox.Yes:
                 return
         self.ensure_cues(self.view, self.show_editor, fresh=True)

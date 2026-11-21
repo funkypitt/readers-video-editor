@@ -12,6 +12,17 @@ that download.
 
 ## Key points
 
+- **A video and its subtitle file, without transcription** (1.15.0): the home page has a second
+  field, « Subtitles of this file (.srt), if you have them » — whatever the file is called and
+  wherever it is; the button then says « Open · text from the subtitles ». Dropping the video and
+  the `.srt` together, or a `.srt` of the same name beside the video, work as before. The cues of
+  your file stay the subtitles of the project (the subtitle editor shows them as they are, until
+  you ask to cut them again from the text); `talk.fr.srt` names the language, so the words at the
+  cuts are aligned on the sound as for a transcription. The page gets the paragraphs of a
+  transcription: sentences follow the punctuation and not the cues, the pauses of the voice are
+  measured against the room of the recording (they used to be missed in any room that is not
+  silent), and a long passage without a measured pause is still cut into paragraphs at the ends
+  of sentences.
 - **The cuts fall between the words as the sound says them** (1.14.0): at the export, the few
   words around each cut are aligned on the sound by a wav2vec2 model of the language (English,
   French, German, Spanish, Portuguese; Apache-2.0, ONNX int8, about 320 MB, downloaded once), and
@@ -65,7 +76,8 @@ that download.
   Someone who never translates skips levels 2 and 3 entirely.
 - **Open** a video or a recording (MP4, MKV, MOV, WebM, MP3, M4A, WAV, FLAC…) from the home
   page, or drop it on the window; the home page lists the files to resume. A `.srt` beside it
-  with the same name is read at once; otherwise the words are transcribed here (faster-whisper,
+  with the same name is read at once, and any other subtitle file can be given in the second
+  field of the home page (or dropped with the video); otherwise the words are transcribed here (faster-whisper,
   CPU; the model is downloaded once). On Linux the transcription installs itself on first use
   (about 300 MB, once); the Windows and macOS builds carry it.
 - **Address…** (Ctrl+L) takes the address of a video on YouTube, X (Twitter) or any site

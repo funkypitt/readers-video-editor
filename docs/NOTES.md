@@ -551,3 +551,40 @@ Storage: `ads.json` in the project folder `{video, sponsorblock, checked, dismis
 `sponsorblock_ready` signal so only the UI thread writes ads.json) and again at opening while `checked`
 is missing. Setting `cfg["sponsorblock"]` (default on), checkbox on the home page. The text's passages
 are found on the original text and mapped by time onto a translation's tokens.
+
+## A video with its subtitle file (1.15.0)
+
+The request: a `.srt` and a video as the source, without the app's transcription, editable as
+usual, with the paragraphs of a transcription.
+
+- **Where**: the second field of the home page (`h_srt`, `home_srt`, `ask_home_srt`), a `.srt`
+  dropped alone (kept in that field, `media_beside` fills the video of the same name), the pair
+  dropped together, the command line. `open_source(path, srt, own=)`: `own` False only for the
+  subtitles a site gave with a download.
+- **The file's cues are the project's subtitles** (`cues-src.json` with `file: true`): the
+  subtitle editor shows them, « Re-cut from the text » asks first. Before, they were cut again
+  from the words by the toolkit's rules, and what came out of « Save the subtitles… » was not the
+  file that went in.
+- **Language**: `srt_language` (`talk.fr.srt`), else the one chosen by hand, else the one of the
+  text these subtitles replace. With a language, `align_language` works for subtitles too; the
+  aligner refuses a join more than 1 s away from the estimated times, so nothing is risked.
+- **The highlighting** of a project whose text is replaced is kept by time (`selection_to_times`);
+  it used to stay on the word numbers of the old text.
+- **Paragraphs** (measured on five real projects, their transcription written as 9-word cues that
+  last until the next one, then read back; Dana talk: 8 paragraphs, the longest 6 460 characters,
+  where the transcription has 70):
+  - `speech_moments` judged the pauses against 3 % of the loud passages of each cue: in a real
+    room a pause is not that quiet, so no pause was found and the words were spread evenly.
+    `voice_threshold`: the room of the whole recording (10th percentile of its 10 ms levels)
+    + `VOICE_OVER_ROOM_DB` 12 dB, between 3 % and 25 % of the loud passages. 6 dB found 6 of 30
+    sentence pauses, 12 dB 19, 15 dB 20.
+  - a cue end was a sentence end; now only the punctuation is (or a cue end after
+    `SRT_SENTENCE_WORDS` 60 words without a full stop; every cue in a file without punctuation).
+  - `breathe`: where 900 characters are written and a sentence ends without a measured pause
+    (music, compressed podcasts: nothing to measure), 0.25 s are taken from the estimated word
+    times around it, so the rule of the page (`starts_paragraph`, unchanged) breaks there.
+  - after: Dana 48 paragraphs (median 186, longest 1 175); the four others 24 to 146 paragraphs,
+    longest 1 100 to 1 600 characters (transcription: 1 100 to 2 400). Paragraphs start after a
+    full stop; a transcription's often start inside a sentence (Whisper's segments).
+- Not done: the home page's Open button is narrower than its text in the off-screen captures
+  (200 px for 348 wanted, before this version too); to look at on a real screen.
